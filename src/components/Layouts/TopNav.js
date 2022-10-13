@@ -23,7 +23,7 @@ const TopNav = (props) => {
 	const router = useRouter()
 
 	const { logout } = useAuth()
-
+	
 	const [menu, setMenu] = useState("")
 	const [bottomMenu, setBottomMenu] = useState("")
 	const [avatarVisibility, setAvatarVisibility] = useState("none")

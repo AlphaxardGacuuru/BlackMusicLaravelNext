@@ -2,7 +2,7 @@ const LoadingAudioMedia = () => {
 	return (
 		<div className="d-flex p-2">
 			<div
-				className="thumbnail gradient"
+				className="audio-thumbnail gradient"
 				style={{
 					width: "50px",
 					height: "50px"

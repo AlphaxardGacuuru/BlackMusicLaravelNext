@@ -22,8 +22,7 @@ const VideoMedia = (props) => {
 					{!props.video.hasBoughtVideo && !props.hasBoughtVideo ?
 						props.video.inCart ?
 							<div>
-								<button
-									className="btn text-light mb-1 rounded-0"
+								<button className="btn text-light mb-1 rounded-0"
 									style={{
 										minWidth: "90px",
 										height: "33px",
@@ -52,6 +51,19 @@ const VideoMedia = (props) => {
 				</div>
 			</div>
 			<div className="d-flex" style={{ maxWidth: "220em" }}>
+				<div className="p-2">
+					<Link href={`/${props.video.username}`}>
+						<a>
+							<Img
+								src={props.video.pp}
+								className="rounded-circle"
+								width="30px"
+								height="30px"
+								alt="user"
+								loading="lazy" />
+						</a>
+					</Link>
+				</div>
 				<div className="px-1">
 					<Link href={`/video-show/${props.video.id}`}>
 						<a>

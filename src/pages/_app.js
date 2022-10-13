@@ -47,7 +47,8 @@ const App = ({ Component, pageProps }) => {
 
 	// Declare states
 	const [login, setLogin] = useState()
-	const [auth, setAuth] = useState(getLocalStorageAuth("auth"))
+	// const [auth, setAuth] = useState(getLocalStorageAuth("auth"))
+	const [auth, setAuth] = useState(user ? user : [])
 	const [messages, setMessages] = useState([])
 	const [errors, setErrors] = useState([])
 
@@ -212,10 +213,11 @@ const App = ({ Component, pageProps }) => {
 	// All states
 	const GLOBAL_STATE = {
 		getLocalStorage, setLocalStorage,
-		user,
+		// user,
 		login, setLogin,
 		url,
-		auth, setAuth,
+		auth, 
+		// setAuth,
 		messages, setMessages,
 		errors, setErrors,
 		audios, setAudios,

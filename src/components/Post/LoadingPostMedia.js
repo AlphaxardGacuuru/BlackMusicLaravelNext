@@ -6,41 +6,28 @@ import HeartSVG from '../../svgs/HeartSVG'
 
 const LoadingPostMedia = () => {
 	return (
-		<div className='media p-2'>
-			<div className='media-left'>
-				<div className="avatar-thumbnail-xs" style={{ borderRadius: "50%" }}></div>
-			</div>
-			<div className='media-body'>
-				<h6 className="media-heading m-0"
+		<div className="d-flex mb-3">
+			<div className="p-2">
+				<div className="gradient rounded-circle"
 					style={{
-						width: "100%",
-						whiteSpace: "nowrap",
-						overflow: "hidden",
-						textOverflow: "clip"
+						width: "3.5em",
+						height: "3.5em"
 					}}>
-					<b className="gradient" style={{ color: "#232323" }}>post.name</b>
-					<small className="gradient" style={{ color: "#232323" }}>post.username</small>
-					<span className="ml-1 gradient" style={{ color: "#232323" }}>
-						<DecoSVG />
-						<small className="ml-1" style={{ color: "#232323" }}>post.decos</small>
-					</span>
-					<small>
-						<i className="float-right mr-1 gradient" style={{ color: "#232323" }}>post.created_at</i>
-					</small>
+				</div>
+			</div>
+			<div className="flex-grow-1 p-2">
+				<div className="p-1 flex-grow-1">
+					<h6 className="loading-text gradient w-100"
+						style={{ color: "#232323" }}>
+						video
+					</h6>
+				</div>
+				<p className="my-2 loading-text gradient w-100 h-50" style={{ color: "#232323" }}>post.text</p>
+
+				<h6 className="loading-text gradient w-50 mt-3"
+					style={{ color: "#232323" }}>
+					content
 				</h6>
-				<p className="my-2 gradient" style={{ color: "#232323" }}>post.text</p>
-
-				{/* Post likes */}
-				<a href="#" className="gradient" style={{ color: "#232323" }}>
-					<HeartSVG />
-					<small className="ml-1" style={{ color: "#232323" }}>po</small>
-				</a>
-
-				{/* Post comments */}
-				<span className="gradient" style={{ color: "#232323" }}>
-					<CommentSVG />
-					<small className="ml-1" style={{ color: "#232323" }}>post.comments</small>
-				</span>
 			</div>
 		</div>
 	)

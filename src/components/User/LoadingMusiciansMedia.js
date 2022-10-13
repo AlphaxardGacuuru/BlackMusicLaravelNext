@@ -1,16 +1,25 @@
 const LoadingMusiciansMedia = () => {
 	return (
-		<div className='media p-2'>
-			<div className='media-left'>
-				<div className="rounded-circle" style={{ width: "30px", height: "30px", color: "#232323" }}>G</div>
+		<div className="d-flex">
+			<div className="p-2">
+				<div className="gradient rounded-circle"
+					style={{
+						width: "2.5em",
+						height: "2.5em"
+					}}>
+				</div>
 			</div>
-			<div className='media-body'>
-				<b className="bg-light gradient" style={{ color: "#232323" }}>namename</b>
-				<small className="bg-light text-light gradient ml-1">
-					<i style={{ color: "#232323" }}>usernameusename</i>
-				</small>
-				<button className="btn float-right rounded-0 text-light"
-					style={{ minWidth: '90px', height: '33px', backgroundColor: "#232323" }}></button>
+			<div className='flex-grow-1 p-2'>
+				<h6 className="loading-text gradient w-100 mt-2"
+					style={{ color: "#232323" }}>
+					video
+				</h6>
+			</div>
+			<div className='p-2'>
+				<button
+					className="gradient btn rounded-pill float-start mt-1"
+					style={{ minWidth: '90px', height: '33px', backgroundColor: "#232323" }}>
+				</button>
 			</div>
 		</div>
 	)

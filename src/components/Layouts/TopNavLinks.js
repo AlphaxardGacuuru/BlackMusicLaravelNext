@@ -12,11 +12,10 @@ import SettingsSVG from '@/svgs/SettingsSVG'
 import StudioSVG from '@/svgs/StudioSVG'
 
 const TopNavLinks = (props) => {
-
 	return (
 		<>
 			{/* Admin */}
-			{props.auth.username == "@blackmusic" &&
+			{props.auth?.username == "@blackmusic" &&
 				<Link href="/admin">
 					<a className="me-2">
 						<PersonSVG />
@@ -138,7 +137,7 @@ const TopNavLinks = (props) => {
 					data-bs-toggle="dropdown"
 					aria-expanded="false">
 					<Img
-						src={props.auth.pp}
+						src={props.auth?.pp}
 						className="rounded-circle"
 						width="25px"
 						height="25px"
@@ -148,12 +147,12 @@ const TopNavLinks = (props) => {
 				<span
 					className="anti-hidden mt-2"
 					onClick={() => {
-						props.setBottomMenu("menu-open")
+						props.setBottomMenu(props.bottomMenu == "menu-open" ? "" : "menu-open")
 						props.setAvatarVisibility("block")
 						props.setNotificationVisibility("none")
 					}}>
 					<Img
-						src={props.auth.pp}
+						src={props.auth?.pp}
 						className="rounded-circle anti-hidden"
 						width="25px"
 						height="25px"
@@ -161,21 +160,21 @@ const TopNavLinks = (props) => {
 				</span>
 				<div
 					style={{ backgroundColor: "#232323" }}
-					className="dropdown-menu m-0 p-0">
-					<Link href={`/${props.auth.username}`}>
+					className="dropdown-menu rounded-0 m-0 p-0">
+					<Link href={`/${props.auth?.username}`}>
 						<a className="p-3 dropdown-item border-bottom border-dark">
 							<div className="d-flex">
 								<div>
 									<Img
-										src={props.auth.pp}
+										src={props.auth?.pp}
 										className="rounded-circle"
 										width="25px"
 										height="25px"
 										alt="Avatar" />
 								</div>
 								<div className="pl-2">
-									<h5>{props.auth.name}</h5>
-									<h6>{props.auth.username}</h6>
+									<h5>{props.auth?.name}</h5>
+									<h6>{props.auth?.username}</h6>
 								</div>
 							</div>
 						</a>

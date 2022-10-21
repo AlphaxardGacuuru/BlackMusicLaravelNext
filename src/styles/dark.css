@@ -68,7 +68,7 @@ a:focus {
     color: #2f2f2f;
     font-size: 12px;
     letter-spacing: 1px;
-    border-radius: 20px;
+    /* border-radius: 20px; */
     line-height: 64px;
     padding: 0;
     background-color: rgba(220,220,220,1);
@@ -150,10 +150,10 @@ a:focus {
     color: #2f2f2f;
     font-size: 12px;
     letter-spacing: 1px;
-    border-radius: 20px;
     line-height: 32px;
     padding: 0 10px;
     background-color: #ffffff;
+    /* border-radius: 20px; */
 }
 
 .mysonar-btn:hover,
@@ -913,8 +913,7 @@ a:focus {
 /* card */
 .card {
     /* Add shadows to create the "card" effect */
-    /* box-shadow: 0 4px 8px 0 rgba(255, 215, 0, 1); */
-    box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 1);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 1);
     transition: 0.3s;
     margin: 3%;
 }
@@ -1326,10 +1325,10 @@ div.hidden-scroll span {
 .video-thumbnail {
     width: 320px;
     height: 180px;
-	border-top-left-radius: 50px;
-	border-top-right-radius: 50px;
-	border-bottom-left-radius: 50px;
-	border-bottom-right-radius: 50px;
+	/* border-top-left-radius: 50px; */
+	/* border-top-right-radius: 50px; */
+	/* border-bottom-left-radius: 50px; */
+	/* border-bottom-right-radius: 50px; */
     overflow: hidden;
 }
 
@@ -1340,10 +1339,10 @@ div.hidden-scroll span {
 .audio-thumbnail {
     width: 50px;
     height: 50px;
-	border-top-left-radius: 15px;
-	border-top-right-radius: 15px;
-	border-bottom-left-radius: 15px;
-	border-bottom-right-radius: 15px;
+	/* border-top-left-radius: 15px; */
+	/* border-top-right-radius: 15px; */
+	/* border-bottom-left-radius: 15px; */
+	/* border-bottom-right-radius: 15px; */
     overflow: hidden;
 }
 
@@ -1441,7 +1440,7 @@ div.hidden-scroll span {
     text-align: center;
 	padding: 10px 10px;
 	margin: 2%;
-	border-radius: 20px;
+	/* border-radius: 20px; */
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
     -ms-flex-direction: column;

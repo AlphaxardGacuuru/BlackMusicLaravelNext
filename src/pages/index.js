@@ -79,7 +79,7 @@ export default function Home(props) {
 	return (
 		<>
 			{/* Post button */}
-			{props.auth.account_type == 'musician' &&
+			{props.auth?.account_type == 'musician' &&
 				<Link href="post-create">
 					<a id="floatBtn"
 						className={`${!checkLocation && "mb-5"}`}>
@@ -102,9 +102,9 @@ export default function Home(props) {
 					<div className="d-flex">
 						<div className="p-2">
 							<div className="avatar-thumbnail-sm" style={{ borderRadius: "50%" }}>
-								<Link href={`${props.auth.username}`}>
+								<Link href={`/${props.auth?.username}`}>
 									<a>
-										<Img src={props.auth.pp}
+										<Img src={props.auth?.pp}
 											width="100px"
 											height="100px"
 											alt="avatar" />
@@ -120,7 +120,7 @@ export default function Home(props) {
 									overflow: "hidden",
 									textOverflow: "clip"
 								}}>
-								{props.auth.name}
+								{props.auth?.name}
 							</h5>
 							<h6 className="m-0 p-0"
 								style={{
@@ -129,12 +129,12 @@ export default function Home(props) {
 									overflow: "hidden",
 									textOverflow: "clip"
 								}}>
-								<small>{props.auth.username}</small>
+								<small>{props.auth?.username}</small>
 							</h6>
 							<span style={{ color: "gold" }} className="pr-1">
 								<DecoSVG />
 								<small className="ml-1" style={{ color: "inherit" }}>
-									{props.auth.decos}
+									{props.auth?.decos}
 								</small>
 							</span>
 						</div>
@@ -143,14 +143,14 @@ export default function Home(props) {
 						<div className="p-2 flex-fill">
 							<h6>Posts</h6>
 							<span style={{ color: "rgba(220, 220, 220, 1)" }}>
-								{props.auth.posts}
+								{props.auth?.posts}
 							</span>
 							<br />
 						</div>
 						<div className="p-2 flex-fill">
 							<h6>Fans</h6>
 							<span style={{ color: "rgba(220, 220, 220, 1)" }}>
-								{props.auth.fans}
+								{props.auth?.fans}
 							</span>
 							<br />
 						</div>
@@ -174,7 +174,7 @@ export default function Home(props) {
 						{/* Musicians */}
 						{props.users
 							.filter((user) => user.account_type == "musician" &&
-								user.username != props.auth.username &&
+								user.username != props.auth?.username &&
 								user.username != "@blackmusic")
 							.slice(0, 10)
 							.map((user, key) => (

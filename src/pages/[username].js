@@ -17,7 +17,7 @@ import PostOptions from '../components/Post/PostOptions';
 const VideoMedia = React.lazy(() => import('../components/Video/VideoMedia'))
 const AudioMedia = React.lazy(() => import('../components/Audio/AudioMedia'))
 
-const Index = (props) => {
+const Profile = (props) => {
 
 	const router = useRouter()
 
@@ -116,7 +116,7 @@ const Index = (props) => {
 					<br className="anti-hidden" />
 					{/* Check whether user has bought at least one song from musician */}
 					{/* Check whether user has followed musician and display appropriate Btn */}
-					{profile.username == props.auth.username ?
+					{profile.username == props.auth?.username ?
 						<Link href="/profile-edit">
 							<Btn className="float-end mysonar-btn white-btn">edit profile</Btn>
 						</Link>
@@ -317,4 +317,4 @@ const Index = (props) => {
 	)
 }
 
-export default Index
+export default Profile

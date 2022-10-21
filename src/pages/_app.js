@@ -1,13 +1,15 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import '@/styles/dark.css'
 import('next').NextConfig
+
+import { useAuth } from '@/hooks/auth'
+
+import LoginPopUp from '@/components/Auth/LoginPopUp';
 import TopNav from '@/components/Layouts/TopNav'
 import BottomNav from '@/components/Layouts/BottomNav'
 
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios';
-
-import { useAuth } from '@/hooks/auth'
 
 const App = ({ Component, pageProps }) => {
 
@@ -43,12 +45,11 @@ const App = ({ Component, pageProps }) => {
 
 	const url = process.env.NEXT_PUBLIC_BACKEND_URL
 
-	const { user } = useAuth({ middleware: 'guest' })
+	const { auth } = useAuth()
 
 	// Declare states
 	const [login, setLogin] = useState()
 	// const [auth, setAuth] = useState(getLocalStorageAuth("auth"))
-	const [auth, setAuth] = useState(user ? user : [])
 	const [messages, setMessages] = useState([])
 	const [errors, setErrors] = useState([])
 
@@ -90,10 +91,10 @@ const App = ({ Component, pageProps }) => {
 		}
 
 		// Fetch Auth
-		axios.get(`/api/home`)
+		axios.get(`/api/auth`)
 			.then((res) => {
-				setAuth(res.data)
-				setLocalStorage("auth", res.data)
+				// setAuth(res.data)
+				// setLocalStorage("auth", res.data)
 			}).catch(() => setErrors(["Failed to fetch auth"]))
 
 		// Fetch Audios
@@ -213,7 +214,6 @@ const App = ({ Component, pageProps }) => {
 	// All states
 	const GLOBAL_STATE = {
 		getLocalStorage, setLocalStorage,
-		// user,
 		login, setLogin,
 		url,
 		auth, 
@@ -241,6 +241,7 @@ const App = ({ Component, pageProps }) => {
 
 	return (
 		<div>
+			<LoginPopUp {...GLOBAL_STATE} />
 			<TopNav {...GLOBAL_STATE} />
 			<Component {...pageProps} {...GLOBAL_STATE} />
 			{/* <BottomNav {...GLOBAL_STATE} /> */}

@@ -53,8 +53,8 @@ const Bottomnav = (props) => {
 		router.pathname.match("/karaoke-create")
 
 	// Get number of items in video cart
-	const vidCartItems = props.cartVideos.filter((cartVideo) => cartVideo.username == props.auth.username).length
-	const audCartItems = props.cartAudios.filter((cartAudio) => cartAudio.username == props.auth.username).length
+	const vidCartItems = props.cartVideos.filter((cartVideo) => cartVideo.username == props.auth?.username).length
+	const audCartItems = props.cartAudios.filter((cartAudio) => cartAudio.username == props.auth?.username).length
 	const cartItems = vidCartItems + audCartItems
 
 	return (

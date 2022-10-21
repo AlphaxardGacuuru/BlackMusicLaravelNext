@@ -184,7 +184,7 @@ const PostMedia = (props) => {
 
 				{/* Total votes */}
 				{props.post.parameter_1 ?
-					props.post.username == props.auth.username || !props.post.isWithin24Hrs ?
+					props.post.username == props.auth?.username || !props.post.isWithin24Hrs ?
 						<small style={{ color: "grey" }}>
 							<i>Total votes: {props.post.totalVotes}</i>
 							<br />
@@ -241,7 +241,7 @@ const PostMedia = (props) => {
 					</a>
 					<div className="dropdown-menu dropdown-menu-right"
 						style={{ borderRadius: "0", backgroundColor: "#232323" }}>
-						{props.post.username != props.auth.username ?
+						{props.post.username != props.auth?.username ?
 							props.post.username != "@blackmusic" &&
 							<a href="#" className="dropdown-item" onClick={(e) => {
 								e.preventDefault()
@@ -277,7 +277,7 @@ const PostMedia = (props) => {
 						className="text-secondary"
 						onClick={() => {
 							console.log("clicked")
-							if (props.post.username != props.auth.username) {
+							if (props.post.username != props.auth?.username) {
 								if (props.post.username != "@blackmusic") {
 									props.setBottomMenu("menu-open")
 									props.setUserToUnfollow(props.post.username)

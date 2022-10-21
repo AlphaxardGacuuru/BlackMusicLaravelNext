@@ -1,116 +1,215 @@
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
+import axios from '@/lib/axios'
+
 import Btn from '@/components/Btn'
-import GuestLayout from '@/components/Layouts/GuestLayout'
-import Input from '@/components/Input'
-import InputError from '@/components/InputError'
-import Label from '@/components/Label'
-import Link from 'next/link'
-import { useAuth } from '@/hooks/auth'
-import { useState } from 'react'
 
-const Register = () => {
-    const { register } = useAuth({
-        middleware: 'guest',
-        redirectIfAuthenticated: '/dashboard',
-    })
+const Register = (props) => {
 
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [passwordConfirmation, setPasswordConfirmation] = useState('')
-    const [errors, setErrors] = useState([])
+	const router = useRouter()
 
-    const submitForm = event => {
-        event.preventDefault()
+	var { name, email, avatar } = router.query;
 
-        register({ name, email, password, password_confirmation: passwordConfirmation, setErrors })
-    }
+	const [username, setUsername] = useState("")
+	const [phone, setPhone] = useState('07')
 
-    return (
-        <GuestLayout>
+	var referer
+	var page
 
-                <form onSubmit={submitForm}>
-                    {/* Name */}
-                    <div>
-                        <Label htmlFor="name">Name</Label>
+	// Remove all spaces from avatar
+	avatar = avatar?.replace(/\s/g, "/")
 
-                        <Input
-                            id="name"
-                            type="text"
-                            value={name}
-                            className="block mt-1 w-full"
-                            onChange={event => setName(event.target.value)}
-                            required
-                            autoFocus
-                        />
+	// Show error on space in username
+	useEffect(() => {
 
-                        <InputError messages={errors.name} className="mt-2" />
-                    </div>
+		// Get referer
+		referer = sessionStorage.getItem("referer")
+		page = sessionStorage.getItem("page")
 
-                    {/* Email Address */}
-                    <div className="mt-4">
-                        <Label htmlFor="email">Email</Label>
+		username.indexOf(" ") > -1 &&
+			props.setErrors(['Username cannot have spaces'])
+	}, [username])
 
-                        <Input
-                            id="email"
-                            type="email"
-                            value={email}
-                            className="block mt-1 w-full"
-                            onChange={event => setEmail(event.target.value)}
-                            required
-                        />
+	const onUpdate = () => {
+		// Get user id
+		const id = props.users.find((user) => user.username == username).id
 
-                        <InputError messages={errors.email} className="mt-2" />
-                    </div>
+		axios.get('/sanctum/csrf-cookie').then(() => {
+			axios.post(`${props.url}/login`, {
+				id: id,
+				name: name,
+				email: email,
+				avatar: avatar,
+				username: username,
+				phone: phone,
+				password: phone,
+			}).then((res) => {
+				props.setMessages(["Account Updated"])
+				// Update Auth
+				axios.get(`${props.url}/api/home`)
+					.then((res) => props.setAuth(res.data))
+				setTimeout(() => router.push('/'), 1000)
+			}).catch((err) => {
+				const resErrors = err.response.data.errors
 
-                    {/* Password */}
-                    <div className="mt-4">
-                        <Label htmlFor="password">Password</Label>
+				var resError
+				var newError = []
+				for (resError in resErrors) {
+					newError.push(resErrors[resError])
+				}
+				// Get other errors
+				newError.push((err).response.data.message)
+				props.setErrors(newError)
+			});
+		});
+	}
 
-                        <Input
-                            id="password"
-                            type="password"
-                            value={password}
-                            className="block mt-1 w-full"
-                            onChange={event => setPassword(event.target.value)}
-                            required
-                            autoComplete="new-password"
-                        />
+	const onRegister = () => {
+		axios.get('/sanctum/csrf-cookie').then(() => {
+			// Register User
+			axios.post(`${props.url}/register`, {
+				name: name,
+				email: email,
+				avatar: avatar,
+				username: username,
+				phone: phone,
+				password: phone,
+				password_confirmation: phone
+				// remember_token: 'true'
+			}).then((res) => {
+				// Add referer if there's one
+				referer &&
+					axios.post(`${props.url}/api/referrals`, {
+						referer: referer,
+						username: username
+					})
 
-                        <InputError messages={errors.password} className="mt-2" />
-                    </div>
+				props.setMessages(["Account created"])
+				// Update auth data
+				// axios.get(`${props.url}/auth`)
+					// .then((res) => props.setAuth(res.data))
+				// Redirect user
+				setTimeout(() => router.push(page ? page : '/'), 1000)
+				// Clear sessionStorage
+				sessionStorage.clear("referer")
+				sessionStorage.clear("page")
+			}).catch(err => {
+				console.log(err.response)
+				const resErrors = err.response.data.errors
+				var resError
+				var newError = []
+				for (resError in resErrors) {
+					newError.push(resErrors[resError])
+				}
+				// Get other errors
+				newError.push(err.response.data.message)
+				props.setErrors(newError)
+			});
+		});
+	}
 
-                    {/* Confirm Password */}
-                    <div className="mt-4">
-                        <Label htmlFor="passwordConfirmation">
-                            Confirm Password
-                        </Label>
+	const onSubmit = (e) => {
+		e.preventDefault()
 
-                        <Input
-                            id="passwordConfirmation"
-                            type="password"
-                            value={passwordConfirmation}
-                            className="block mt-1 w-full"
-                            onChange={event =>
-                                setPasswordConfirmation(event.target.value)
-                            }
-                            required
-                        />
+		// Check if phone exists
+		if (props.users.some((user) => user.phone == phone)) {
+			// onUpdate()
+			onRegister()
+		} else if (props.users.some((user) => user.username == username && user.id < 235)) {
+			// If user in older than id 100 allow
+			// onUpdate()
+			onRegister()
+		} else {
+			onRegister()
+		}
+	}
 
-                        <InputError messages={errors.password_confirmation} className="mt-2" />
-                    </div>
+	return (
+		<div
+			className="sonar-call-to-action-area section-padding-0-100"
+			style={{ background: "rgba(0, 0, 0, 1)" }}>
+			<div className="backEnd-content">
+				<h2 style={{ color: "rgba(255, 255, 255, 0.1)" }}>Black Music</h2>
+			</div>
+			<div className="container">
+				<div className="row">
+					<div className="col-12">
+						<div className="call-to-action-content wow fadeInUp" data-wow-delay="0.5s">
+							<h2 className="mt-2" style={{ color: "#FFD700" }}>Register</h2>
 
-                    <div className="flex items-center justify-end mt-4">
-                        <Link href="/login">
-                            <a className="underline text-sm text-gray-600 hover:text-gray-900">
-                                Already registered?
-                            </a>
-                        </Link>
+							<div className="card-body contact-form">
+								<form method="POST" action="" onSubmit={onSubmit}>
+									<div className="form-group row">
+										<label htmlFor="username" className="col-md-4 col-form-label text-md-right">
+											<p style={{ color: "#FFD700" }}>Create a unique username</p>
+										</label>
 
-                        <Btn className="ml-4">Register</Btn>
-                    </div>
-                </form>
-        </GuestLayout>
-    )
+										<div className="col-md-6">
+											<input
+												id="username"
+												type="text"
+												className="form-control"
+												style={{ color: "#FFD700", borderColor: "#FFD700" }}
+												name="username"
+												placeholder="@johndoe"
+												onChange={(e) => setUsername(e.target.value)}
+												// required
+												autoFocus />
+										</div>
+									</div>
+
+									<div className="form-group row">
+										<label htmlFor="phone" className="col-md-4 col-form-label text-md-right">
+											<p style={{ color: "#FFD700" }}>Enter your Safaricom number</p>
+										</label>
+
+										<div className="col-md-6">
+											<input
+												id="phone"
+												type="text"
+												className="form-control"
+												style={{ color: "#FFD700", borderColor: "#FFD700" }}
+												name="phone"
+												value={phone}
+												onChange={(e) => setPhone(e.target.value)}
+												required />
+										</div>
+									</div>
+
+									<div className="form-group row mb-0">
+										<label htmlFor="phone" className="col-md-4 col-form-label text-md-right"></label>
+										<div className="col-md-6">
+											<Btn
+												type="submit"
+												btnClass="sonar-btn gold-btn float-end"
+												btnText="register" />
+											<br />
+											<br />
+											<br />
+											<br />
+											<br />
+											<br />
+											<br />
+											<br />
+											<br />
+											<br />
+											<br />
+											<br />
+											<br />
+											<br />
+											<br />
+											<br />
+
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	)
 }
 
 export default Register

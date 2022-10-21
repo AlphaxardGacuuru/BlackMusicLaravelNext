@@ -17,7 +17,7 @@ const LoadingMusiciansMedia = () => {
 			</div>
 			<div className='p-2'>
 				<button
-					className="gradient btn rounded-pill float-start mt-1"
+					className="gradient btn rounded-0 float-start mt-1"
 					style={{ minWidth: '90px', height: '33px', backgroundColor: "#232323" }}>
 				</button>
 			</div>

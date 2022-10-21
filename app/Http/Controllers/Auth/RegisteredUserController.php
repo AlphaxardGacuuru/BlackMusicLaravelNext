@@ -24,19 +24,40 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'username' => [
+				'required',
+                'string',
+                'startsWith:@',
+                'min:2',
+                'max:15',
+                'unique:users',
+                'regex:/^\S+$/',
+            ],
+            'phone' => [
+				'required',
+                'string',
+                'startsWith:0',
+                'min:10',
+                'max:10',
+                'unique:users',
+            ],
+			'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+			'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
             'name' => $request->name,
+            'username' => $request->username,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make($request->phone),
+            'phone' => $request->phone,
+            'pp' => $request->avatar,
+            'withdrawal' => '1000',
         ]);
 
         event(new Registered($user));
 
-        Auth::login($user);
+        Auth::login($user, $remember = true);
 
         return response()->noContent();
     }

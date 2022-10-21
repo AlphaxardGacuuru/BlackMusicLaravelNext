@@ -43,7 +43,7 @@ const VideoMedia = (props) => {
 								</div>
 								<div>
 									<Button
-										btnClass="btn mysonar-btn green-btn btn-2"
+										btnClass="mysonar-btn green-btn btn-2"
 										btnText="KES 20"
 										onClick={() => props.onBuyVideos(props.video.id)} />
 								</div>
@@ -66,7 +66,7 @@ const VideoMedia = (props) => {
 				</div>
 				<div className="px-1">
 					<Link href={`/video-show/${props.video.id}`}>
-						<a>
+						<a style={{ textAlign: "left" }}>
 							<h6 className="m-0 pt-2 px-1"
 								style={{
 									width: "100%",

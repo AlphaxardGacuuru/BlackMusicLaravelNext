@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useAuth } from '@/hooks/auth'
 import axios from '@/lib/axios'
 
 import TopnavLinks from "./TopNavLinks"
@@ -22,8 +21,9 @@ const TopNav = (props) => {
 
 	const router = useRouter()
 
-	const { logout } = useAuth()
-	
+	// const { logout } = useAuth()
+	const logout = []
+
 	const [menu, setMenu] = useState("")
 	const [bottomMenu, setBottomMenu] = useState("")
 	const [avatarVisibility, setAvatarVisibility] = useState("none")
@@ -51,7 +51,7 @@ const TopNav = (props) => {
 	// 		axios.post(`${props.url}/api/logout`)
 	// 			.then((res) => {
 	// 				// Remove phone from localStorage
-	// 				localStorage.removeItem("auth")
+	// 				localStorage.removeItem("auth?")
 	// 				props.setMessages(["Logged out"])
 	// 				// Update Auth
 	// 				props.setAuth({
@@ -87,7 +87,8 @@ const TopNav = (props) => {
 	var display
 
 	// Hide TopNav from various pages
-	router.pathname.match("/karaoke-show") ||
+	router.pathname.match("/404") ||
+		router.pathname.match("/karaoke-show") ||
 		router.pathname.match("/karaoke-create") ||
 		router.pathname.match("/privacy-policy") ||
 		router.pathname.match("/download-app") ||
@@ -135,7 +136,7 @@ const TopNav = (props) => {
 									<div className="menu-content-area d-flex align-items-center">
 										{/* <!-- Header Social Area --> */}
 										<div className="header-social-area d-flex align-items-center">
-											{props.auth.username == "@guest" ?
+											{props.auth?.username == "@guest" ?
 												<Link href="#">
 													<a className="display-4" onClick={() => props.setLogin(true)}>
 														Login
@@ -327,20 +328,20 @@ const TopNav = (props) => {
 
 					{/* Avatar Bottom */}
 					<div className="m-0 p-0" style={{ display: avatarVisibility }}>
-						<Link href={`/${props.auth.username}`}>
+						<Link href={`/${props.auth?.username}`}>
 							<a style={{ padding: "0px", margin: "0px" }}
 								className="border-bottom text-start"
 								onClick={() => setBottomMenu("")}>
 								<h5>
 									<span className="ms-3 me-3">
 										<Img
-											src={props.auth.pp}
+											src={props.auth?.pp}
 											className="rounded-circle"
 											width="25px"
 											height="25px"
 											alt="Avatar" />
 									</span>
-									{props.auth.name} <small>{props.auth.username}</small>
+									{props.auth?.name} <small>{props.auth?.username}</small>
 								</h5>
 							</a>
 						</Link>

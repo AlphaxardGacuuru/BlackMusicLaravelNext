@@ -32,7 +32,7 @@ const MusiciansMedia = (props) => {
 
 				{/* Check whether user has bought at least one song from user */}
 				{/* Check whether user has followed user and display appropriate button */}
-				{props.user.hasBought1 || props.auth.username == "@blackmusic" ?
+				{props.user.hasBought1 || props.auth?.username == "@blackmusic" ?
 					props.user.hasFollowed ?
 						<button
 							className={'btn float-right rounded-0 text-light'}

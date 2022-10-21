@@ -77,7 +77,7 @@ const AudioMedia = (props) => {
 						</div>
 						<div className="ms-2">
 							<Btn
-								btnClass={'btn mysonar-btn green-btn btn-2 float-right'}
+								btnClass="mysonar-btn green-btn btn-2 float-right"
 								btnText={'KES 10'}
 								onClick={() => props.onBuyAudios(props.audio.id)} />
 						</div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import axios from '@/lib/axios'
+import { useAuth } from '@/hooks/auth'
 
 import TopnavLinks from "./TopNavLinks"
 import Img from '@/components/Img'
@@ -21,8 +22,7 @@ const TopNav = (props) => {
 
 	const router = useRouter()
 
-	// const { logout } = useAuth()
-	const logout = []
+	const { logout } = useAuth({setLogin: props.setLogin})
 
 	const [menu, setMenu] = useState("")
 	const [bottomMenu, setBottomMenu] = useState("")
@@ -136,7 +136,7 @@ const TopNav = (props) => {
 									<div className="menu-content-area d-flex align-items-center">
 										{/* <!-- Header Social Area --> */}
 										<div className="header-social-area d-flex align-items-center">
-											{props.auth?.username == "@guest" ?
+											{!props.auth?.username ?
 												<Link href="#">
 													<a className="display-4" onClick={() => props.setLogin(true)}>
 														Login
@@ -278,15 +278,14 @@ const TopNav = (props) => {
 			<div className={bottomMenu}>
 				<div className="bottomMenu">
 					<div
-						className="d-flex align-items-center justify-content-between border-bottom border-dark"
-						style={{ height: "3em" }}>
+						className="d-flex align-items-center justify-content-between border-bottom border-dark">
 						<div></div>
 						<div className="dropdown-header text-white">
 							<h5 style={{ margin: "0px", display: notificationVisibility }}>Notifications</h5>
 						</div>
 						{/* <!-- Close Icon --> */}
 						<div
-							className="closeIcon p-2 float-end"
+							className="closeIcon float-end mr-3"
 							style={{ fontSize: "0.8em" }}
 							onClick={() => setBottomMenu("")}>
 							<CloseSVG />

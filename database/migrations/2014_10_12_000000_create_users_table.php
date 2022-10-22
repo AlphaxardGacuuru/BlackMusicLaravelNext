@@ -27,7 +27,6 @@ return new class extends Migration
             $table->string('pb')->nullable();
             $table->string('bio')->nullable();
             $table->string('dob')->nullable();
-            $table->string('account_type')->nullable();
             $table->string('location')->nullable();
             $table->string('withdrawal')->nullable();
             $table->timestamps();

@@ -25,19 +25,6 @@ const App = ({ Component, pageProps }) => {
 		}
 	}
 
-	const getLocalStorageAuth = (state) => {
-		if (typeof window !== "undefined" && localStorage.getItem(state)) {
-			return JSON.parse(localStorage.getItem(state))
-		} else {
-			return {
-				"name": "Guest",
-				"username": "@guest",
-				"pp": "/storage/profile-pics/male_avatar.png",
-				"account_type": "normal"
-			}
-		}
-	}
-
 	// Function to set local storage
 	const setLocalStorage = (state, data) => {
 		localStorage.setItem(state, JSON.stringify(data))
@@ -49,7 +36,6 @@ const App = ({ Component, pageProps }) => {
 
 	// Declare states
 	const [login, setLogin] = useState()
-	// const [auth, setAuth] = useState(getLocalStorageAuth("auth"))
 	const [messages, setMessages] = useState([])
 	const [errors, setErrors] = useState([])
 
@@ -210,14 +196,13 @@ const App = ({ Component, pageProps }) => {
 			})
 		}
 	}
-
+	
 	// All states
 	const GLOBAL_STATE = {
 		getLocalStorage, setLocalStorage,
 		login, setLogin,
 		url,
 		auth, 
-		// setAuth,
 		messages, setMessages,
 		errors, setErrors,
 		audios, setAudios,

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import axios from '@/lib/axios'
 import { useAuth } from '@/hooks/auth'
 
@@ -13,12 +14,20 @@ import {
 	TwitterLoginButton
 } from "react-social-login-buttons";
 
-const LoginPopUp2 = (props) => {
+const LoginPopUp = (props) => {
 
-	const { register } = useAuth({
+	const { register, authenticated } = useAuth({
 		middleware: 'guest',
 		redirectIfAuthenticated: '/',
 	})
+
+	const { login } = useAuth({
+		middleware: 'guest',
+		redirectIfAuthenticated: '/',
+		setLogin: props.setLogin
+	})
+
+	const router = useRouter()
 
 	const [name, setName] = useState('Alphaxard Gacuuru')
 	const [username, setUsername] = useState('@alphaxardG')
@@ -26,6 +35,8 @@ const LoginPopUp2 = (props) => {
 	const [phone, setPhone] = useState('0700364446')
 	const [password, setPassword] = useState('0700364446')
 	const [passwordConfirmation, setPasswordConfirmation] = useState('0700364446')
+	const [shouldRemember, setShouldRemember] = useState()
+	const [status, setStatus] = useState()
 	const [errors, setErrors] = useState([])
 
 	const onSocial = (website) => {
@@ -34,7 +45,9 @@ const LoginPopUp2 = (props) => {
 		// axios.get(`${props.url}/api/login/${website}`)
 		// .then((res) => console.log(res.data))
 
-		register({ name, username, email, phone, password, password_confirmation: passwordConfirmation, setErrors })
+		// register({ name, username, email, phone, password, password_confirmation: passwordConfirmation, setErrors })
+
+		login({ username, phone, email, password, remember: shouldRemember, setErrors, setStatus })
 	}
 
 	// const [phone, setPhone] = useState('07')
@@ -75,14 +88,16 @@ const LoginPopUp2 = (props) => {
 		setPhone('07')
 	}
 
+	console.log("login " + props.login)
+
 	return (
 		<>
-			<div id="preloader" style={{ display: "none" }}>
+			<div id="preloader" style={{ display: props.login ? "block" : "none" }}>
 				<div className="preload-content">
 					{/* <div id="sonar-load"></div> */}
 				</div>
 			</div>
-			<div className="menu-open" style={{ display: "none" }}>
+			<div className="menu-open" style={{ display: props.login ? "block" : "none" }}>
 				<div className="bottomMenu">
 					<div className="d-flex align-items-center justify-content-between">
 						{/* <!-- Logo Area --> */}
@@ -91,11 +106,13 @@ const LoginPopUp2 = (props) => {
 						</div>
 						{/* <!-- Close Icon --> */}
 						<div
-							className="p-2"
-							style={{ fontSize: "1em" }}>
-							<Link href="/" style={{ color: "#fff" }}>
-								<CloseSVG />
-							</Link>
+							className="closeIcon float-end"
+							style={{ fontSize: "1em" }}
+							onClick={() => {
+								props.setLogin(false)
+								router.push("/")
+							}}>
+							<CloseSVG />
 						</div>
 					</div>
 					<div className="p-2">
@@ -152,4 +169,4 @@ const LoginPopUp2 = (props) => {
 	)
 }
 
-export default LoginPopUp2
+export default LoginPopUp

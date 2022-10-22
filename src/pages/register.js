@@ -89,7 +89,7 @@ const Register = (props) => {
 				// axios.get(`${props.url}/auth`)
 					// .then((res) => props.setAuth(res.data))
 				// Redirect user
-				setTimeout(() => router.push(page ? page : '/'), 1000)
+				// setTimeout(() => router.push(page ? page : '/'), 1000)
 				// Clear sessionStorage
 				sessionStorage.clear("referer")
 				sessionStorage.clear("page")

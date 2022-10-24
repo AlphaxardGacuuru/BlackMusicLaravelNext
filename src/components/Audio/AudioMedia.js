@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 import Img from 'next/image'
-import Btn from '../Btn'
+import Btn from '../core/Btn'
 import CartSVG from '../../svgs/CartSVG'
 
 const AudioMedia = (props) => {

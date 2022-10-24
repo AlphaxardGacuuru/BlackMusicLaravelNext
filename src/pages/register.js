@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import axios from '@/lib/axios'
 
-import Btn from '@/components/Btn'
+import Btn from '@/components/core/Btn'
 
 const Register = (props) => {
 
@@ -87,7 +87,7 @@ const Register = (props) => {
 				props.setMessages(["Account created"])
 				// Update auth data
 				// axios.get(`${props.url}/auth`)
-					// .then((res) => props.setAuth(res.data))
+				// .then((res) => props.setAuth(res.data))
 				// Redirect user
 				// setTimeout(() => router.push(page ? page : '/'), 1000)
 				// Clear sessionStorage

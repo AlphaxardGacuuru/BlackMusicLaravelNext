@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 import Img from 'next/image'
-import Button from '../Btn'
+import Button from '../core/Btn'
 
 import CartSVG from '../../svgs/CartSVG'
 

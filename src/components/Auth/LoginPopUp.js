@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import axios from '@/lib/axios'
 import { useAuth } from '@/hooks/auth'
 
-import Btn from '@/components/Btn'
+import Btn from '@/components/core/Btn'
 
 import CloseSVG from '@/svgs/CloseSVG';
 
@@ -87,8 +87,6 @@ const LoginPopUp = (props) => {
 
 		setPhone('07')
 	}
-
-	console.log("login " + props.login)
 
 	return (
 		<>

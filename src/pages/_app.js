@@ -4,9 +4,9 @@ import('next').NextConfig
 
 import { useAuth } from '@/hooks/auth'
 
-import LoginPopUp from '@/components/Auth/LoginPopUp';
-import TopNav from '@/components/Layouts/TopNav'
-import BottomNav from '@/components/Layouts/BottomNav'
+import LoginPopUp from '@/components/auth/LoginPopUp';
+import TopNav from '@/components/layouts/TopNav'
+import BottomNav from '@/components/layouts/BottomNav'
 
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios';
@@ -196,13 +196,13 @@ const App = ({ Component, pageProps }) => {
 			})
 		}
 	}
-	
+
 	// All states
 	const GLOBAL_STATE = {
 		getLocalStorage, setLocalStorage,
 		login, setLogin,
 		url,
-		auth, 
+		auth,
 		messages, setMessages,
 		errors, setErrors,
 		audios, setAudios,

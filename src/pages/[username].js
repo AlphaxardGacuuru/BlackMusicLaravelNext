@@ -4,18 +4,18 @@ import Link from 'next/link'
 import axios from '@/lib/axios'
 
 import Img from 'next/image'
-import Btn from '../components/Btn'
-import LoadingVideoMedia from '../components/Video/LoadingVideoMedia'
-import LoadingAudioMedia from '../components/Audio/LoadingAudioMedia'
+import Btn from '../components/core/Btn'
+import LoadingVideoMedia from '../components/video/LoadingVideoMedia'
+import LoadingAudioMedia from '../components/audio/LoadingAudioMedia'
 
 import CheckSVG from '../svgs/CheckSVG';
 import DecoSVG from '../svgs/DecoSVG';
-import LoadingPostMedia from '../components/Post/LoadingPostMedia';
-import PostMedia from '../components/Post/PostMedia';
-import PostOptions from '../components/Post/PostOptions';
+import LoadingPostMedia from '../components/post/LoadingPostMedia';
+import PostMedia from '../components/post/PostMedia';
+import PostOptions from '../components/post/PostOptions';
 
-const VideoMedia = React.lazy(() => import('../components/Video/VideoMedia'))
-const AudioMedia = React.lazy(() => import('../components/Audio/AudioMedia'))
+const VideoMedia = React.lazy(() => import('../components/video/VideoMedia'))
+const AudioMedia = React.lazy(() => import('../components/audio/AudioMedia'))
 
 const Profile = (props) => {
 

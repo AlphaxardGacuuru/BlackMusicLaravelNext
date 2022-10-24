@@ -5,7 +5,7 @@ import axios from '@/lib/axios'
 import { useAuth } from '@/hooks/auth'
 
 import TopnavLinks from "./TopNavLinks"
-import Img from '@/components/Img'
+import Img from '@/components/core/Img'
 
 import CloseSVG from '@/svgs/CloseSVG'
 import LogoutSVG from '@/svgs/LogoutSVG'

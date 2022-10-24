@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import Img from '@/components/Img'
+import Img from '@/components/core/Img'
 
 import PersonSVG from '@/svgs/PersonSVG'
 import CartSVG from '@/svgs/CartSVG'

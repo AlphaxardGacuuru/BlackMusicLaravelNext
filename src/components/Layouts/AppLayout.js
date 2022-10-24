@@ -1,4 +1,4 @@
-import Navigation from '@/components/Layouts/TopNav'
+import Navigation from '@/components/layouts/TopNav'
 import { useAuth } from '@/hooks/auth'
 
 const AppLayout = ({ header, children }) => {

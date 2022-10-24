@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from '@/lib/axios'
 
-import Btn from '@/components/Btn'
+import Btn from '@/components/core/Btn'
 
 import PersonSVG from '@/svgs/PersonSVG'
 

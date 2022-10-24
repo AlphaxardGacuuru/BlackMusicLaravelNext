@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Img from 'next/image'
-import Btn from '../Btn'
+import Btn from '../core/Btn'
 
 import CheckSVG from '../../svgs/CheckSVG'
 

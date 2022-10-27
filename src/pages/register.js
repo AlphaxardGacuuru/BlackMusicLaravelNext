@@ -45,9 +45,6 @@ const Register = (props) => {
 				password: phone,
 			}).then((res) => {
 				props.setMessages(["Account Updated"])
-				// Update Auth
-				axios.get(`${props.url}/api/home`)
-					.then((res) => props.setAuth(res.data))
 				setTimeout(() => router.push('/'), 1000)
 			}).catch((err) => {
 				const resErrors = err.response.data.errors
@@ -75,7 +72,6 @@ const Register = (props) => {
 				phone: phone,
 				password: phone,
 				password_confirmation: phone
-				// remember_token: 'true'
 			}).then((res) => {
 				// Add referer if there's one
 				referer &&
@@ -85,11 +81,8 @@ const Register = (props) => {
 					})
 
 				props.setMessages(["Account created"])
-				// Update auth data
-				// axios.get(`${props.url}/auth`)
-				// .then((res) => props.setAuth(res.data))
 				// Redirect user
-				// setTimeout(() => router.push(page ? page : '/'), 1000)
+				setTimeout(() => router.push(page ? page : '/'), 500)
 				// Clear sessionStorage
 				sessionStorage.clear("referer")
 				sessionStorage.clear("page")

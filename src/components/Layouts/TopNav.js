@@ -37,11 +37,11 @@ const TopNav = (props) => {
 
 	useEffect(() => {
 		// Fetch Notifications
-		axios.get(`/api/notifications`)
-			.then((res) => {
-				setNotifications(res.data)
-				props.setLocalStorage("notifications", res.data)
-			}).catch(() => props.setErrors(['Failed to fetch notifications']))
+		// axios.get(`/api/notifications`)
+		// 	.then((res) => {
+		// 		setNotifications(res.data)
+		// 		props.setLocalStorage("notifications", res.data)
+		// 	}).catch(() => props.setErrors(['Failed to fetch notifications']))
 	}, [])
 
 	// const logout = (e) => {

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('video_comment_likes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('video_comments_id')
+            $table->foreignId('video_comment_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');

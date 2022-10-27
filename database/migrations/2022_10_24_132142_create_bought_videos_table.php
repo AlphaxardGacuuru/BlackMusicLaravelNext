@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('bought_videos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('videos_id')
+            $table->foreignId('video_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->string('price')->nullable();
-            $table->foreignId('users_id')
+            $table->foreignId('user_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');

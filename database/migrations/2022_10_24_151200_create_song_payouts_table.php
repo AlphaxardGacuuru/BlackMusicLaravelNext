@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('song_payouts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('users_id')
+            $table->foreignId('user_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');

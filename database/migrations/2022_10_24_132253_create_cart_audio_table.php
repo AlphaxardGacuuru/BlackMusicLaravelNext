@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('cart_audios', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('audios_id')
-                ->constrained()
+            $table->foreignId('audio_id')
+                ->constrained('audios')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->foreignId('users_id')
+            $table->foreignId('user_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cart_audio');
+        Schema::dropIfExists('cart_audios');
     }
 };

@@ -1438,8 +1438,8 @@ div.hidden-scroll span {
     background-color: #232323;
     z-index: 1000001;
     text-align: center;
-	/* padding: 10px 10px; */
-	/* margin: 2%; */
+	padding: 10px 10px;
+	margin: 2%;
 	/* border-radius: 20px; */
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;

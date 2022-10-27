@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('karaoke_comment_likes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('karaoke_comments_id')
+            $table->foreignId('karaoke_comment_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->foreignId('users_id')
+            $table->foreignId('user_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');

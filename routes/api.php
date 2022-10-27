@@ -57,8 +57,6 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Auth::routes();
-
 // Social logins
 Route::get('login/{website}', 'Auth\LoginController@redirectToProvider');
 Route::get('login/{website}/callback', 'Auth\LoginController@handleProviderCallback');

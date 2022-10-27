@@ -17,12 +17,12 @@ return new class extends Migration
             $table->id();
             $table->string('audio')->nullable();
             $table->string('name')->nullable();
-            $table->foreignId('users_id')
+            $table->foreignId('user_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->string('ft')->nullable();
-            $table->foreignId('audio_albums_id')
+            $table->foreignId('audio_album_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
@@ -47,6 +47,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('audio');
+        Schema::dropIfExists('audios');
     }
 };

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('follows', function (Blueprint $table) {
             $table->id();
             $table->string('followed')->nullable();
-            $table->foreignId('users_id')
+            $table->foreignId('user_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');

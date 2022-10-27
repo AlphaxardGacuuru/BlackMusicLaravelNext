@@ -32,7 +32,7 @@ return new class extends Migration
             $table->string('sender_first_name')->nullable();
             $table->string('sender_middle_name')->nullable();
             $table->string('sender_last_name')->nullable();
-            $table->foreignId('users_id')
+            $table->foreignId('user_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');

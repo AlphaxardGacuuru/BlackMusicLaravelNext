@@ -17,12 +17,12 @@ return new class extends Migration
             $table->id();
             $table->string('audio')->nullable();
             $table->string('name')->nullable();
-            $table->foreignId('users_id')
+            $table->foreignId('user_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->string('ft')->nullable();
-            $table->foreignId('video_albums_id')
+            $table->foreignId('video_album_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');

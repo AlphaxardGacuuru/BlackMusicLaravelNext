@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('audio_likes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('audios_id')
-                ->constrained()
+            $table->foreignId('audio_id')
+                ->constrained('audios')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->foreignId('users_id')
+            $table->foreignId('user_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');

@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('karaoke_comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('karaokes_id')
+            $table->foreignId('karaoke_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->string('text')->nullable();
-            $table->foreignId('users_id')
+            $table->foreignId('user_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');

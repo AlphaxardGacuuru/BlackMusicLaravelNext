@@ -7,9 +7,9 @@ export const useAuth = ({ middleware, redirectIfAuthenticated, setLogin } = {}) 
 
 	const router = useRouter()
 
-	var { data: auth, error, mutate } = useSWR('/api/user', () =>
+	var { data: auth, error, mutate } = useSWR('/api/auth', () =>
 		axios
-			.get('/api/user')
+			.get('/api/auth')
 			.then(res => res.data)
 			.catch(error => {
 				if (error.response.status !== 409) throw error
@@ -29,7 +29,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated, setLogin } = {}) 
 			.post('/register', props)
 			.then(() => {
 				mutate()
-				router.push("/")
+				// router.push("/")
 			}).catch(error => {
 				if (error.response.status !== 422) throw error
 

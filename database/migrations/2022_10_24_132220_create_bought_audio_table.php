@@ -15,25 +15,13 @@ return new class extends Migration
     {
         Schema::create('bought_audios', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('audio_id')
-                ->constrained('audios')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->unsignedBigInteger('audio_id');
             $table->string('reference')->nullable();
             $table->string('price')->nullable();
-            $table->foreignId('user_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->string('username')->nullable();
             $table->string('name')->nullable();
             $table->string('artist')->nullable();
             $table->timestamps();
-
-            $table->foreign('artist')
-                ->references('username')
-                ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
         });
     }
 

@@ -15,15 +15,9 @@ return new class extends Migration
     {
         Schema::create('audio_comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('audio_id')
-                ->constrained('audios')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->unsignedBigInteger('audio_id');
             $table->string('text')->nullable();
-            $table->foreignId('user_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+			$table->string('username');
             $table->timestamps();
         });
     }

@@ -15,14 +15,8 @@ return new class extends Migration
     {
         Schema::create('karaoke_audios', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('audio_id')
-                ->constrained('audios')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-            $table->foreignId('user_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->unsignedBigInteger('audio_id');
+            $table->string('username');
             $table->timestamps();
         });
     }

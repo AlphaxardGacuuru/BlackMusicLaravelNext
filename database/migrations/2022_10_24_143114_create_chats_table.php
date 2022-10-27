@@ -15,20 +15,11 @@ return new class extends Migration
     {
         Schema::create('chats', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->string('username')->nullable();
             $table->string('to')->nullable();
             $table->string('text')->nullable();
             $table->string('media')->nullable();
             $table->timestamps();
-
-            $table->foreign('to')
-                ->references('username')
-                ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
         });
     }
 

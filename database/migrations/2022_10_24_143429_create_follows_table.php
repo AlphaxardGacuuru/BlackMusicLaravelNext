@@ -16,19 +16,10 @@ return new class extends Migration
         Schema::create('follows', function (Blueprint $table) {
             $table->id();
             $table->string('followed')->nullable();
-            $table->foreignId('user_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->string('username')->nullable();
             $table->string('muted')->nullable();
             $table->string('blocked')->nullable();
             $table->timestamps();
-
-            $table->foreign('followed')
-                ->references('username')
-                ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
         });
     }
 

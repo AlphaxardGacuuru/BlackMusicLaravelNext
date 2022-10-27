@@ -15,10 +15,7 @@ return new class extends Migration
     {
         Schema::create('kopokopo_recipients', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->string('username')->nullable();
             $table->string('destination_reference')->nullable();
             $table->timestamps();
         });

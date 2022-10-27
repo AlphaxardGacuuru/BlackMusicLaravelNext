@@ -17,26 +17,14 @@ return new class extends Migration
             $table->id();
             $table->string('audio')->nullable();
             $table->string('name')->nullable();
-            $table->foreignId('user_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->string('username')->nullable();
             $table->string('ft')->nullable();
-            $table->foreignId('video_album_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->unsignedBigInteger('video_album_id');
             $table->string('genre')->nullable();
             $table->string('thumbnail')->nullable();
             $table->string('description')->nullable();
             $table->string('released')->nullable();
             $table->timestamps();
-
-            $table->foreign('ft')
-                ->references('username')
-                ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
         });
     }
 

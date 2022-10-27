@@ -85,13 +85,8 @@ const App = ({ Component, pageProps }) => {
 		if (unsecureUrl) {
 			window.location.href = 'https://music.black.co.ke'
 		}
-
-		// Fetch Auth
-		axios.get(`/api/auth`)
-			.then((res) => {
-				// setAuth(res.data)
-				// setLocalStorage("auth", res.data)
-			}).catch(() => setErrors(["Failed to fetch auth"]))
+		
+		get("audios", setAudios, "audios")
 
 		// // Fetch Audios
 		// axios.get(`/api/audios`)
@@ -206,7 +201,7 @@ const App = ({ Component, pageProps }) => {
 			})
 		}
 	}
-console.log(auth)
+
 	// All states
 	const GLOBAL_STATE = {
 		getLocalStorage, setLocalStorage,

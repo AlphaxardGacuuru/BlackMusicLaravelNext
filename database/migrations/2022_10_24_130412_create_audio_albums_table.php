@@ -15,10 +15,7 @@ return new class extends Migration
     {
         Schema::create('audio_albums', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->string('username')->nullable();
             $table->string('name')->nullable();
             $table->string('cover')->nullable();
             $table->string('released')->nullable();

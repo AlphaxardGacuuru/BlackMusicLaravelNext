@@ -15,14 +15,8 @@ return new class extends Migration
     {
         Schema::create('karaoke_comment_likes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('karaoke_comment_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-            $table->foreignId('user_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->unsignedBigInteger('karaoke_comment_id');
+            $table->string('username');
             $table->timestamps();
         });
     }

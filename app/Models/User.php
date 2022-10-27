@@ -58,166 +58,166 @@ class User extends Authenticatable
 
     public function audios()
     {
-        return $this->hasMany(Audio::class);
+        return $this->hasMany(Audio::class, 'username');
     }
 
     public function audioAlbums()
     {
-        return $this->hasMany(AudioAlbum::class);
+        return $this->hasMany(AudioAlbum::class, 'username');
     }
 
     public function audioComments()
     {
-        return $this->hasMany(AudioComment::class);
+        return $this->hasMany(AudioComment::class, 'username');
     }
 
     public function audioCommentLikes()
     {
-        return $this->hasMany(AudioCommentLike::class);
+        return $this->hasMany(AudioCommentLike::class, 'username');
     }
 
     public function audioLikes()
     {
-        return $this->hasMany(AudioLike::class);
+        return $this->hasMany(AudioLike::class, 'username');
     }
 
     public function boughtAudios()
     {
-        return $this->hasMany(AudioLike::class);
+        return $this->hasMany(AudioLike::class, 'username');
     }
 
     public function boughtVideos()
     {
-        return $this->hasMany(AudioLike::class);
+        return $this->hasMany(AudioLike::class, 'username');
     }
 
     public function cartAudios()
     {
-        return $this->hasMany(AudioLike::class);
+        return $this->hasMany(AudioLike::class, 'username');
     }
 
     public function cartVideos()
     {
-        return $this->hasMany(AudioLike::class);
+        return $this->hasMany(AudioLike::class, 'username');
     }
 
     public function chats()
     {
-        return $this->hasMany(Chat::class);
+        return $this->hasMany(Chat::class, 'username');
     }
 
     public function decos()
     {
-        return $this->hasMany(Deco::class);
+        return $this->hasMany(Deco::class, 'username');
     }
 
     public function follows()
     {
-        return $this->hasMany(Follow::class);
+        return $this->hasMany(Follow::class, 'username');
     }
 
     public function karaokes()
     {
-        return $this->hasMany(Karaoke::class);
+        return $this->hasMany(Karaoke::class, 'username');
     }
 
     public function karaokeAudios()
     {
-        return $this->hasMany(KaraokeAudio::class);
+        return $this->hasMany(KaraokeAudio::class, 'username');
     }
 
     public function karaokeComment()
     {
-        return $this->hasMany(KaraokeComment::class);
+        return $this->hasMany(KaraokeComment::class, 'username');
     }
 
     public function karaokeCommentLikes()
     {
-        return $this->hasMany(KaraokeCommentLike::class);
+        return $this->hasMany(KaraokeCommentLike::class, 'username');
     }
 
     public function karaokeLikes()
     {
-        return $this->hasMany(KaraokeLike::class);
+        return $this->hasMany(KaraokeLike::class, 'username');
     }
 
     public function kopokopos()
     {
-        return $this->hasMany(Kopokopo::class);
+        return $this->hasMany(Kopokopo::class, 'username');
     }
 
     public function kopokopoRecipients()
     {
-        return $this->hasMany(KopokopoRecipient::class);
+        return $this->hasMany(KopokopoRecipient::class, 'username');
     }
 
     public function polls()
     {
-        return $this->hasMany(Poll::class);
+        return $this->hasMany(Poll::class, 'username');
     }
 
     public function posts()
     {
-        return $this->hasMany(Post::class);
+        return $this->hasMany(Post::class, 'username');
     }
 
     public function postComments()
     {
-        return $this->hasMany(PostComment::class);
+        return $this->hasMany(PostComment::class, 'username');
     }
 
     public function postCommentLikes()
     {
-        return $this->hasMany(PostCommentLike::class);
+        return $this->hasMany(PostCommentLike::class, 'username');
     }
 
     public function postLikes()
     {
-        return $this->hasMany(PostLike::class);
+        return $this->hasMany(PostLike::class, 'username');
     }
 
     public function referrals()
     {
-        return $this->hasMany(Referral::class);
+        return $this->hasMany(Referral::class, 'username');
     }
 
     public function savedKaraokes()
     {
-        return $this->hasMany(SavedKaraoke::class);
+        return $this->hasMany(SavedKaraoke::class, 'username');
     }
 
     public function searches()
     {
-        return $this->hasMany(Search::class);
+        return $this->hasMany(Search::class, 'username');
     }
 
     public function songPayouts()
     {
-        return $this->hasMany(SongPayout::class);
+        return $this->hasMany(SongPayout::class, 'username');
     }
 
     public function videos()
     {
-        return $this->hasMany(Video::class);
+        return $this->hasMany(Video::class, 'username');
     }
 
     public function videoAlbums()
     {
-        return $this->hasMany(VideoAlbum::class);
+        return $this->hasMany(VideoAlbum::class, 'username');
     }
 
     public function videoComments()
     {
-        return $this->hasMany(VideoComment::class);
+        return $this->hasMany(VideoComment::class, 'username');
     }
 
     public function videoCommentLikes()
     {
-        return $this->hasMany(VideoCommentLike::class);
+        return $this->hasMany(VideoCommentLike::class, 'username');
     }
 
     public function videoLikes()
     {
-        return $this->hasMany(VideoLike::class);
+        return $this->hasMany(VideoLike::class, 'username');
     }
 }

@@ -15,14 +15,8 @@ return new class extends Migration
     {
         Schema::create('video_likes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('video_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-            $table->foreignId('user_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->unsignedBigInteger('video_id');
+            $table->string('username');
             $table->timestamps();
         });
     }

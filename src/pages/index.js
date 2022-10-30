@@ -102,7 +102,7 @@ export default function Home(props) {
 					<div className="d-flex">
 						<div className="p-2">
 							<div className="avatar-thumbnail-sm" style={{ borderRadius: "50%" }}>
-								<Link href={`/${props.auth?.username}`}>
+								<Link href={`/profile/${props.auth?.username}`}>
 									<a>
 										<Img src={props.auth?.pp}
 											width="100px"
@@ -131,9 +131,9 @@ export default function Home(props) {
 								}}>
 								<small>{props.auth?.username}</small>
 							</h6>
-							<span style={{ color: "gold" }} className="pr-1">
+							<span style={{ color: "gold" }}>
 								<DecoSVG />
-								<small className="ml-1" style={{ color: "inherit" }}>
+								<small className="ms-1" style={{ color: "inherit" }}>
 									{props.auth?.decos}
 								</small>
 							</span>

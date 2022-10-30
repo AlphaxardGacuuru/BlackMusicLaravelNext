@@ -5,7 +5,7 @@ const Btn = ({ btnStyle, btnClass, btnText, onClick, loading }) => (
 		onClick={onClick}>
 		{btnText}
 		{loading &&
-			<div className="spinner-border ml-2 my-auto"
+			<div className="spinner-border ms-2 my-auto"
 				style={{
 					borderTopWidth: "2px",
 					borderBottomWidth: "2px",

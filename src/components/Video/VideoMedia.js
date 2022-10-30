@@ -52,7 +52,7 @@ const VideoMedia = (props) => {
 			</div>
 			<div className="d-flex" style={{ maxWidth: "220em" }}>
 				<div className="p-2">
-					<Link href={`/${props.video.username}`}>
+					<Link href={`/profile/${props.video.username}`}>
 						<a>
 							<Img
 								src={props.video.pp}

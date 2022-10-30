@@ -8,7 +8,7 @@ const MusiciansMedia = (props) => {
 	return (
 		<div className="d-flex">
 			<div className="p-2">
-				<Link href={`/${props.user.username}`}>
+				<Link href={`/profile/${props.user.username}`}>
 					<a>
 						<Img
 							src={props.user.pp}
@@ -21,7 +21,7 @@ const MusiciansMedia = (props) => {
 				</Link>
 			</div>
 			<div className="p-2 flex-grow-1">
-				<Link href={`/${props.user.username}`}>
+				<Link href={`/profile/${props.user.username}`}>
 					<a>
 						<b className="ml-2">{props.user.name}</b>
 						<small><i>{props.user.username}</i></small>

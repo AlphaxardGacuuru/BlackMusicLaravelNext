@@ -68,7 +68,7 @@ a:focus {
     color: #2f2f2f;
     font-size: 12px;
     letter-spacing: 1px;
-    /* border-radius: 20px; */
+    border-radius: 0px;
     line-height: 64px;
     padding: 0;
     background-color: rgba(220,220,220,1);

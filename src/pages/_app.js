@@ -158,6 +158,8 @@ const App = ({ Component, pageProps }) => {
 		// 		setLocalStorage("users", res.data)
 		// 	}).catch(() => setErrors(['Failed to fetch users']))
 
+		get("users", setUsers, "users")
+
 		// // Fetch Videos
 		// axios.get(`/api/videos`)
 		// 	.then((res) => {

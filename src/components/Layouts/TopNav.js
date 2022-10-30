@@ -22,7 +22,7 @@ const TopNav = (props) => {
 
 	const router = useRouter()
 
-	const { logout } = useAuth({setLogin: props.setLogin})
+	const { logout } = useAuth({ setLogin: props.setLogin })
 
 	const [menu, setMenu] = useState("")
 	const [bottomMenu, setBottomMenu] = useState("")
@@ -206,8 +206,7 @@ const TopNav = (props) => {
 							<ul>
 								<li className='nav-item active'>
 									<Link href='/'>
-										<a
-											style={{ color: router.pathname == "/" ? "gold" : "white" }}
+										<a style={{ color: router.pathname == "/" ? "gold" : "white" }}
 											className='nav-link'
 											onClick={() => setMenu("")}>
 											<span
@@ -327,21 +326,25 @@ const TopNav = (props) => {
 
 					{/* Avatar Bottom */}
 					<div className="m-0 p-0" style={{ display: avatarVisibility }}>
-						<Link href={`/${props.auth?.username}`}>
+						<Link href={`/profile/${props.auth?.username}`}>
 							<a style={{ padding: "0px", margin: "0px" }}
 								className="border-bottom text-start"
 								onClick={() => setBottomMenu("")}>
-								<h5>
-									<span className="ms-3 me-3">
+								<div className="d-flex">
+									<div className="ms-3 me-3">
 										<Img
 											src={props.auth?.pp}
-											className="rounded-circle"
+											imgClass="rounded-circle"
 											width="25px"
 											height="25px"
 											alt="Avatar" />
-									</span>
-									{props.auth?.name} <small>{props.auth?.username}</small>
-								</h5>
+									</div>
+									<div>
+										<h5>
+											{props.auth?.name} <small>{props.auth?.username}</small>
+										</h5>
+									</div>
+								</div>
 							</a>
 						</Link>
 						<Link href="/download-app">

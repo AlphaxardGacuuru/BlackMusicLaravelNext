@@ -4,18 +4,18 @@ import Link from 'next/link'
 import axios from '@/lib/axios'
 
 import Img from 'next/image'
-import Btn from '../components/core/Btn'
-import LoadingVideoMedia from '../components/video/LoadingVideoMedia'
-import LoadingAudioMedia from '../components/audio/LoadingAudioMedia'
+import Btn from '../../components/core/Btn'
+import LoadingVideoMedia from '../../components/video/LoadingVideoMedia'
+import LoadingAudioMedia from '../../components/audio/LoadingAudioMedia'
 
-import CheckSVG from '../svgs/CheckSVG';
-import DecoSVG from '../svgs/DecoSVG';
-import LoadingPostMedia from '../components/post/LoadingPostMedia';
-import PostMedia from '../components/post/PostMedia';
-import PostOptions from '../components/post/PostOptions';
+import CheckSVG from '../../svgs/CheckSVG';
+import DecoSVG from '../../svgs/DecoSVG';
+import LoadingPostMedia from '../../components/post/LoadingPostMedia';
+import PostMedia from '../../components/post/PostMedia';
+import PostOptions from '../../components/post/PostOptions';
 
-const VideoMedia = React.lazy(() => import('../components/video/VideoMedia'))
-const AudioMedia = React.lazy(() => import('../components/audio/AudioMedia'))
+const VideoMedia = React.lazy(() => import('../../components/video/VideoMedia'))
+const AudioMedia = React.lazy(() => import('../../components/audio/AudioMedia'))
 
 const Profile = (props) => {
 
@@ -117,8 +117,10 @@ const Profile = (props) => {
 					{/* Check whether user has bought at least one song from musician */}
 					{/* Check whether user has followed musician and display appropriate Btn */}
 					{profile.username == props.auth?.username ?
-						<Link href="/profile-edit">
-							<Btn className="float-end mysonar-btn white-btn">edit profile</Btn>
+						<Link href="/profile/edit">
+							<Btn
+								btnClass="mysonar-btn white-btn float-end"
+								btnText="edit profile" />
 						</Link>
 						: profile.username != "@blackmusic" ?
 							profile.hasFollowed ?
@@ -129,13 +131,13 @@ const Profile = (props) => {
 								</Btn> :
 								profile.hasBought1 ?
 									<Btn
-										btnClass={'mysonar-btn white-btn float-end'}
+										btnClass="mysonar-btn white-btn float-end"
 										onClick={() => props.onFollow(username)}
-										btnText={'follow'} />
+										btnText="follow" />
 									: <Btn
-										btnClass={'mysonar-btn white-btn float-end'}
+										btnClass="mysonar-btn white-btn float-end"
 										onClick={() => props.setErrors([`You must have bought atleast one song by ${username}`])}
-										btnText={'follow'} /> : ""}
+										btnText="follow" /> : ""}
 					<div>
 						<h3>{profile.name}</h3>
 						<h5>

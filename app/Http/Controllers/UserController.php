@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\BoughtAudio;
+use App\Models\BoughtVideo;
 use App\Models\Follow;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -16,7 +19,68 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::all();
+        $getUsers = User::all();
+
+        $users = [];
+
+        // Check if user is logged in
+        if (Auth::check()) {
+            $authUsername = auth()->user()->username;
+        } else {
+            $authUsername = '@guest';
+        }
+
+        // Get Users
+        foreach ($getUsers as $key => $user) {
+
+            // Format profile pic
+            $pp = preg_match("/http/", $user->pp) ?
+            $user->pp :
+            "/storage/" . $user->pp;
+
+            /*
+             * Fetch data directly
+             */
+
+            // Check if user has followed User
+            $hasFollowed = $user->follows
+                ->where('username', $authUsername)
+                ->count() > 1 ? true : false;
+
+            // Get user's fans
+            $fans = Follow::where('followed', $user->username)->count() - 1;
+
+            // Check if user has bought atleast 1 song
+            $hasBoughtVideo = BoughtVideo::where('username', $authUsername)
+                ->where('artist', $user->username)
+                ->count();
+
+            // Check if user has bought atleast 1 song
+            $hasBoughtAudio = BoughtAudio::where('username', $authUsername)
+                ->where('artist', $user->username)
+                ->count();
+
+            $hasBought1 = ($hasBoughtVideo + $hasBoughtAudio) > 1 ? true : false;
+
+            array_push($users, [
+                "id" => $user->id,
+                "name" => $user->name,
+                "username" => $user->username,
+                "pp" => $pp,
+                "bio" => $user->bio,
+                "withdrawal" => $user->withdrawal,
+                "posts" => $user->posts->count(),
+                "following" => $user->follows->count() - 1,
+                "fans" => $fans,
+                "hasFollowed" => $hasFollowed,
+                "hasBought1" => $hasBought1,
+                "decos" => $user->decos->count(),
+                "updated_at" => $user->updated_at->format("d M Y"),
+                "created_at" => $user->created_at->format("d M Y"),
+            ]);
+        }
+
+        return $users;
     }
 
     /**
@@ -27,7 +91,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+		// 
     }
 
     /**
@@ -48,9 +112,57 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'string|nullable|max:20',
+            'phone' => 'string|nullable|startsWith:0|min:10|max:10',
+            'filepond-profile-pic' => 'nullable|max:9999',
+            'bio' => 'string|nullable|max:50',
+            'withdrawal' => 'string|nullable',
+        ]);
+
+        /* Update profile */
+        $user = User::find($id);
+
+        if ($request->filled('name')) {
+            $user->name = $request->input('name');
+        }
+
+        if ($request->filled('phone')) {
+            $user->phone = $request->input('phone');
+			$user->password = Hash::make($request->input('phone'));
+        }
+
+        if ($request->filled('account_type')) {
+            $user->account_type = $request->input('account_type');
+
+            /* Create new audio album */
+            $aAlbum = new AudioAlbum;
+            $aAlbum->name = "Singles";
+            $aAlbum->username = auth()->user()->username;
+            $aAlbum->cover = "audio-album-covers/musical-note.png";
+            $aAlbum->save();
+
+            /* Create new video album */
+            $vAlbum = new VideoAlbum;
+            $vAlbum->name = "Singles";
+            $vAlbum->username = auth()->user()->username;
+            $vAlbum->cover = "video-album-covers/musical-note.png";
+            $vAlbum->save();
+        }
+
+        if ($request->filled('bio')) {
+            $user->bio = $request->input('bio');
+        }
+
+        if ($request->filled('withdrawal')) {
+            $user->withdrawal = $request->input('withdrawal');
+        }
+
+        $user->save();
+
+        return response("Account updated", 200);
     }
 
     /**

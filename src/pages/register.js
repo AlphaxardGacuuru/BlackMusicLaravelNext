@@ -45,7 +45,7 @@ const Register = (props) => {
 				password: phone,
 			}).then((res) => {
 				props.setMessages(["Account Updated"])
-				setTimeout(() => router.push('/'), 1000)
+				setTimeout(() => router.push('/'), 500)
 			}).catch((err) => {
 				const resErrors = err.response.data.errors
 
@@ -55,7 +55,7 @@ const Register = (props) => {
 					newError.push(resErrors[resError])
 				}
 				// Get other errors
-				newError.push((err).response.data.message)
+				// newError.push((err).response.data.message)
 				props.setErrors(newError)
 			});
 		});
@@ -106,12 +106,10 @@ const Register = (props) => {
 
 		// Check if phone exists
 		if (props.users.some((user) => user.phone == phone)) {
-			// onUpdate()
-			onRegister()
+			onUpdate()
 		} else if (props.users.some((user) => user.username == username && user.id < 235)) {
 			// If user in older than id 100 allow
-			// onUpdate()
-			onRegister()
+			onUpdate()
 		} else {
 			onRegister()
 		}

@@ -138,7 +138,7 @@ const TopNavLinks = (props) => {
 					aria-expanded="false">
 					<Img
 						src={props.auth?.pp}
-						className="rounded-circle"
+						imgClass="rounded-circle"
 						width="25px"
 						height="25px"
 						alt="Avatar" />
@@ -153,7 +153,7 @@ const TopNavLinks = (props) => {
 					}}>
 					<Img
 						src={props.auth?.pp}
-						className="rounded-circle anti-hidden"
+						imgClass="rounded-circle anti-hidden"
 						width="25px"
 						height="25px"
 						alt="Avatar" />
@@ -161,7 +161,7 @@ const TopNavLinks = (props) => {
 				<div
 					style={{ backgroundColor: "#232323" }}
 					className="dropdown-menu rounded-0 m-0 p-0">
-					<Link href={`/${props.auth?.username}`}>
+					<Link href={`/profile/${props.auth?.username}`}>
 						<a className="p-3 dropdown-item border-bottom border-dark">
 							<div className="d-flex">
 								<div>

@@ -92,7 +92,7 @@ const PostMedia = (props) => {
 		<div className="d-flex">
 			<div className="p-1">
 				<div className="avatar-thumbnail-xs" style={{ borderRadius: "50%" }}>
-					<Link href={`/${props.post.username}`}>
+					<Link href={`/profile/${props.post.username}`}>
 						<a>
 							<Img src={props.post.pp}
 								width="50px"

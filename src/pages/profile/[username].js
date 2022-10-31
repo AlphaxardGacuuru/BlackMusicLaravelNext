@@ -118,9 +118,11 @@ const Profile = (props) => {
 					{/* Check whether user has followed musician and display appropriate Btn */}
 					{profile.username == props.auth?.username ?
 						<Link href="/profile/edit">
-							<Btn
-								btnClass="mysonar-btn white-btn float-end"
-								btnText="edit profile" />
+							<a>
+								<Btn
+									btnClass="mysonar-btn white-btn float-end"
+									btnText="edit profile" />
+							</a>
 						</Link>
 						: profile.username != "@blackmusic" ?
 							profile.hasFollowed ?

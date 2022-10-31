@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\BoughtAudio;
 use App\Models\BoughtVideo;
+use App\Models\VideoAlbum;
+use App\Models\AudioAlbum;
 use App\Models\Follow;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -50,16 +52,17 @@ class UserController extends Controller
             // Get user's fans
             $fans = Follow::where('followed', $user->username)->count() - 1;
 
-            // Check if user has bought atleast 1 song
+            // Check if auth user has bought user's video
             $hasBoughtVideo = BoughtVideo::where('username', $authUsername)
                 ->where('artist', $user->username)
                 ->count();
 
-            // Check if user has bought atleast 1 song
+            // Check if auth user has bought user's audio
             $hasBoughtAudio = BoughtAudio::where('username', $authUsername)
                 ->where('artist', $user->username)
                 ->count();
 
+            // Check if user has bought atleast 1 song
             $hasBought1 = ($hasBoughtVideo + $hasBoughtAudio) > 1 ? true : false;
 
             array_push($users, [
@@ -67,6 +70,7 @@ class UserController extends Controller
                 "name" => $user->name,
                 "username" => $user->username,
                 "pp" => $pp,
+                "account_type" => $user->account_type,
                 "bio" => $user->bio,
                 "withdrawal" => $user->withdrawal,
                 "posts" => $user->posts->count(),
@@ -91,7 +95,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-		// 
+        //
     }
 
     /**
@@ -131,7 +135,7 @@ class UserController extends Controller
 
         if ($request->filled('phone')) {
             $user->phone = $request->input('phone');
-			$user->password = Hash::make($request->input('phone'));
+            $user->password = Hash::make($request->input('phone'));
         }
 
         if ($request->filled('account_type')) {
@@ -199,8 +203,10 @@ class UserController extends Controller
 
             // Format profile pic
             $pp = preg_match("/http/", $auth->pp) ?
-            $auth->pp :
-            "/storage/" . $auth->pp;
+            $auth->pp : "/storage/" . $auth->pp;
+
+            // Check if user is musician
+            $isMusician = $auth->videos->count() + $auth->audios->count();
 
             return [
                 "id" => $auth->id,

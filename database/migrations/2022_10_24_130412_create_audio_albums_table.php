@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('username')->nullable();
             $table->string('name')->nullable();
-            $table->string('cover')->nullable();
+            $table->string('cover')->default('audio-album-covers/musical-note.png')->nullable();
             $table->string('released')->nullable();
             $table->timestamps();
         });

@@ -23,7 +23,8 @@ return new class extends Migration
             $table->rememberToken()->nullable();
             $table->string('phone')->unique()->nullable();
             $table->string('gender')->nullable();
-            $table->string('pp')->nullable();
+            $table->string('account_type')->default('normal')->nullable();
+            $table->string('pp')->default('profile-pics/male_avatar.png')->nullable();
             $table->string('pb')->nullable();
             $table->string('bio')->nullable();
             $table->string('dob')->nullable();

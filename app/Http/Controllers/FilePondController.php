@@ -16,13 +16,14 @@ class FilePondController extends Controller
             $pp = substr($pp, 7);
 
             $user = User::find($id);
-            $user->pp = $pp;
-            $user->save();
 
             // Delete profile pic if it's not the default one
             if ($user->pp != '/storage/profile-pics/male_avatar.png') {
                 Storage::delete('public/' . $user->pp);
             }
+			
+            $user->pp = $pp;
+            $user->save();
 
             return response("Account updated", 200);
         }

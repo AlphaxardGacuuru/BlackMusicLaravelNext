@@ -82,6 +82,8 @@ const Edit = (props) => {
 					setWithdrawal("")
 					// Remove loader for button
 					setBtnLoading(false)
+					// Reload page to see changes
+					location.reload()
 				}).catch(err => {
 					// Remove loader for button
 					setBtnLoading(false)
@@ -123,6 +125,8 @@ const Edit = (props) => {
 										url: `/update-profile-pic/${props.auth?.id}`,
 										onload: (res) => {
 											props.setMessages(["Account updated"])
+											// Reload page to see changes
+											location.reload()
 											// Update Users
 											axios.get('/api/users')
 												.then((res) => props.setUsers(res.data))

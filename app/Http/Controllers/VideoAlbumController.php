@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\VideoAlbum;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class VideoAlbumController extends Controller
 {
@@ -14,7 +15,23 @@ class VideoAlbumController extends Controller
      */
     public function index()
     {
-        //
+        // Get Video Albums
+        $getVideoAlbums = VideoAlbum::all();
+
+        $videoAlbums = [];
+
+        foreach ($getVideoAlbums as $key => $videoAlbum) {
+            array_push($videoAlbums, [
+                "id" => $videoAlbum->id,
+                "username" => $videoAlbum->username,
+                "name" => $videoAlbum->name,
+                "cover" => "/storage/" . $videoAlbum->cover,
+                "released" => $videoAlbum->released,
+                "created_at" => $videoAlbum->created_at->format("d M Y"),
+            ]);
+        }
+
+		return $videoAlbums;
     }
 
     /**
@@ -25,7 +42,25 @@ class VideoAlbumController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'cover' => 'required|image|max:1999',
+        ]);
+
+        /* Handle file upload */
+        if ($request->hasFile('cover')) {
+            $vCover = $request->file('cover')->store('public/video-album-covers');
+            $vCover = substr($vCover, 7);
+        }
+
+        /* Create new video album */
+        $vAlbum = new VideoAlbum;
+        $vAlbum->name = $request->input('name');
+        $vAlbum->username = auth()->user()->username;
+        $vAlbum->cover = $vCover;
+        $vAlbum->released = $request->input('released');
+        $vAlbum->save();
+
+        return response('Video Album Created', 200);
     }
 
     /**
@@ -46,9 +81,37 @@ class VideoAlbumController extends Controller
      * @param  \App\Models\VideoAlbum  $videoAlbum
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, VideoAlbum $videoAlbum)
+    public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'cover' => 'nullable|image|max:1999',
+        ]);
+
+        /* Handle file upload */
+        if ($request->hasFile('cover')) {
+            $vCover = $request->file('cover')->store('public/video-album-covers');
+            $vCover = substr($vCover, 7);
+            Storage::delete('public/' . VideoAlbum::where('id', $id)->first()->cover);
+        }
+
+        /* Create new video album */
+        $vAlbum = VideoAlbum::find($id);
+
+        if ($request->filled('name')) {
+            $vAlbum->name = $request->input('name');
+        }
+
+        if ($request->hasFile('cover')) {
+            $vAlbum->cover = $vCover;
+        }
+
+        if ($request->filled('released')) {
+            $vAlbum->released = $request->input('released');
+        }
+
+        $vAlbum->save();
+
+        return response('Video Album Edited', 200);
     }
 
     /**

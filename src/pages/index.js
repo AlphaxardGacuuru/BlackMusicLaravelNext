@@ -168,7 +168,9 @@ export default function Home(props) {
 
 						{/* Loading Musician items */}
 						{dummyArray
-							.filter(() => props.users.length < 1)
+							.filter(() => props.users
+								.filter((user) => user.isMusician)
+								.length < 1)
 							.map((item, key) => <LoadingMusiciansMedia key={key} />)}
 
 						{/* Musicians */}

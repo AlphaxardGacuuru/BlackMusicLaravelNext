@@ -164,15 +164,15 @@ const TopNavLinks = (props) => {
 					<Link href={`/profile/${props.auth?.username}`}>
 						<a className="p-3 dropdown-item border-bottom border-dark">
 							<div className="d-flex">
-								<div>
+								<div className="align-items-center">
 									<Img
 										src={props.auth?.pp}
-										className="rounded-circle"
+										imgClass="rounded-circle"
 										width="25px"
 										height="25px"
 										alt="Avatar" />
 								</div>
-								<div className="pl-2">
+								<div className="ps-2">
 									<h5>{props.auth?.name}</h5>
 									<h6>{props.auth?.username}</h6>
 								</div>

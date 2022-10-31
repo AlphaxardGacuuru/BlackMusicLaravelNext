@@ -12,6 +12,7 @@ const Register = (props) => {
 
 	const [username, setUsername] = useState("")
 	const [phone, setPhone] = useState('07')
+	const [loading, setLoading] = useState(false)
 
 	var referer
 	var page
@@ -62,6 +63,9 @@ const Register = (props) => {
 	}
 
 	const onRegister = () => {
+		// Show loading button
+		setLoading(true)
+
 		axios.get('/sanctum/csrf-cookie').then(() => {
 			// Register User
 			axios.post(`${props.url}/register`, {
@@ -82,10 +86,12 @@ const Register = (props) => {
 
 				props.setMessages(["Account created"])
 				// Redirect user
-				setTimeout(() => router.push(page ? page : '/'), 500)
+				setTimeout(() => location.href = (page ? page : '/'), 500)
 				// Clear sessionStorage
 				sessionStorage.clear("referer")
 				sessionStorage.clear("page")
+				// Removing loading
+				setLoading(false)
 			}).catch(err => {
 				console.log(err.response)
 				const resErrors = err.response.data.errors
@@ -173,7 +179,8 @@ const Register = (props) => {
 											<Btn
 												type="submit"
 												btnClass="sonar-btn gold-btn float-end"
-												btnText="register" />
+												btnText="register"
+												loading={loading} />
 											<br />
 											<br />
 											<br />

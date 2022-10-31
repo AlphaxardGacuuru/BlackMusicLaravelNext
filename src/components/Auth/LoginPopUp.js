@@ -28,12 +28,16 @@ const LoginPopUp = (props) => {
 
 	const router = useRouter()
 
-	const [name, setName] = useState('Alphaxard Gacuuru')
-	const [username, setUsername] = useState('@alphaxardG')
-	const [email, setEmail] = useState('alphaxardgacuuru47@gmail.com')
-	const [phone, setPhone] = useState('0700364446')
-	const [password, setPassword] = useState('0700364446')
-	const [passwordConfirmation, setPasswordConfirmation] = useState('0700364446')
+	// const [name, setName] = useState('Alphaxard Gacuuru')
+	const [name, setName] = useState('Black Music')
+	// const [username, setUsername] = useState('@alphaxardG')
+	const [username, setUsername] = useState('@blackmusic')
+	// const [email, setEmail] = useState('alphaxardgacuuru47@gmail.com')
+	const [email, setEmail] = useState('al@black.co.ke')
+	// const [phone, setPhone] = useState('0700364446')
+	const [phone, setPhone] = useState('0700000000')
+	// const [password, setPassword] = useState('0700364446')
+	const [password, setPassword] = useState('0700000000')
 	const [shouldRemember, setShouldRemember] = useState()
 	const [status, setStatus] = useState()
 	const [errors, setErrors] = useState([])
@@ -44,7 +48,7 @@ const LoginPopUp = (props) => {
 		// axios.get(`${props.url}/api/login/${website}`)
 		// .then((res) => console.log(res.data))
 
-		// register({ name, username, email, phone, password, password_confirmation: passwordConfirmation, setErrors })
+		// register({ name, username, email, phone, password, password_confirmation: password, setErrors })
 
 		login({ username, phone, email, password, remember: shouldRemember, setErrors, setStatus })
 	}
@@ -60,11 +64,11 @@ const LoginPopUp = (props) => {
 				phone: phone,
 				password: phone,
 				remember: 'checked'
-			}).then(res => {
+			}).then((res) => {
 				props.setLogin(false)
 				props.setMessages(["Logged in"])
 				// Update Logged in user
-				axios.get(`${props.url}/api/home`)
+				axios.get(`${props.url}/api/auth`)
 					.then((res) => props.setAuth(res.data))
 				// Save phone to Local Storage
 				localStorage.setItem("phone", phone)
@@ -123,7 +127,7 @@ const LoginPopUp = (props) => {
 											className="form-control"
 											name="phone"
 											value={phone}
-											onChange={(e) => { setPhone(e.target.value) }}
+											onChange={(e) => setPhone(e.target.value)}
 											required={true}
 											autoComplete="phone"
 											autoFocus />
@@ -131,7 +135,7 @@ const LoginPopUp = (props) => {
 
 										<Btn type="submit"
 											btnClass="mysonar-btn float-right"
-											btnText={'Login'} />
+											btnText="Login" />
 									</form>
 									<br />
 									<br />

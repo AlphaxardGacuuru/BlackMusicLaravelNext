@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import axios from '@/lib/axios';
 
 import Btn from '@/components/core/Btn'
+import Img from '@/components/core/Img'
 
 // Import React FilePond
 import { FilePond, registerPlugin } from 'react-filepond';
@@ -31,23 +32,27 @@ registerPlugin(
 	FilePondPluginFileValidateSize
 );
 
-const VideoCreate = (props) => {
-
-	// Declare states
-	const [formData, setFormData] = useState()
-	const [video, setVideo] = useState("")
-	const [name, setName] = useState("")
-	const [ft, setFt] = useState("")
-	const [videoAlbumId, setVideoAlbumId] = useState()
-	const [genre, setGenre] = useState()
-	const [released, setReleased] = useState()
-	const [description, setDescription] = useState()
-	const [thumbnail, setThumbnail] = useState("")
-	const [files, setFiles] = useState([]);
-	const [loadingBtn, setLoadingBtn] = useState()
+const VideoEdit = (props) => {
 
 	// Get history for page location
 	const router = useRouter()
+
+	let { id } = router.query;
+
+	// Get Audio Album info
+	const editVideo = props.videos.find((video) => video.id == id)
+
+	// Declare states
+	const [formData, setFormData] = useState()
+	const [name, setName] = useState("")
+	const [ft, setFt] = useState("")
+	const [videoAlbumId, setVideoAlbumId] = useState("")
+	const [genre, setGenre] = useState("")
+	const [released, setReleased] = useState("")
+	const [description, setDescription] = useState("")
+	const [thumbnail, setThumbnail] = useState("")
+	const [video, setVideo] = useState("");
+	const [btnLoading, setBtnLoading] = useState()
 
 	useEffect(() => {
 		// Declare new FormData object for form data
@@ -58,51 +63,43 @@ const VideoCreate = (props) => {
 		e.preventDefault()
 
 		// Show loader for button
-		setLoadingBtn(true)
+		setBtnLoading(true)
 
 		// Add form data to FormData object
-		formData.append("video", video);
-		formData.append("thumbnail", thumbnail);
 		formData.append("name", name);
-		formData.append("username", props.auth?.username);
 		formData.append("ft", ft);
 		formData.append("video_album_id", videoAlbumId);
 		formData.append("genre", genre);
 		formData.append("released", released);
 		formData.append("description", description);
-		formData.append("files", files);
+		formData.append("video", video);
+		formData.append("thumbnail", thumbnail);
+		formData.append("_method", 'put');
 
-		// Send data to PostsController
+		// Send data to VideosController
 		// Get csrf cookie from Laravel inorder to send a POST request
 		axios.get('sanctum/csrf-cookie').then(() => {
-			axios.post(`/api/videos`, formData)
+			axios.post(`${props.url}/api/videos/${id}`, formData)
 				.then((res) => {
 					props.setMessages([res.data])
 					// Update Videos
-					axios.get(`/api/videos`)
+					axios.get(`${props.url}/api/videos`)
 						.then((res) => props.setVideos(res.data))
 					// Remove loader for button
-					setLoadingBtn(false)
-					setTimeout(() => router.push('/videos'), 500)
+					setBtnLoading(false)
 				}).catch(err => {
 					// Remove loader for button
-					setLoadingBtn(false)
+					setBtnLoading(false)
 					const resErrors = err.response.data.errors
 					var resError
 					var newError = []
 					for (resError in resErrors) {
 						newError.push(resErrors[resError])
 					}
-					// Get other errors
-					// newError.push(err.response.data.message)
 					props.setErrors(newError)
 				})
 		})
 	}
-
-	const onPatch = () => axios.post(`/api/videos/filepond/video`)
-		.then((res) => console.log(res.data))
-		.catch((err) => console.log(err.data))
 
 	return (
 		<div>
@@ -129,8 +126,32 @@ const VideoCreate = (props) => {
 					<div className="row">
 						<div className="col-12">
 							<div className="contact-form text-center call-to-action-content wow fadeInUp" data-wow-delay="0.5s">
-								<h2>Upload your video</h2>
-								<h5>It's free</h5>
+								<h2>Edit Video</h2>
+								{editVideo &&
+									<div className="d-flex p-2">
+										<div className="thumbnail">
+											<Img
+												src={editVideo.thumbnail}
+												width="160em"
+												height="90em" />
+										</div>
+										<div className="ml-1">
+											<h6 className="m-0 pr-1"
+												style={{
+													width: "150px",
+													whiteSpace: "nowrap",
+													overflow: "hidden",
+													textOverflow: "clip"
+												}}>
+												{editVideo.name}
+											</h6>
+											<h6 className="mt-0 mb-2 pt-0 pr-1 pb-0">
+												<small>{editVideo.username}</small>
+												<small className="ml-1">{editVideo.ft}</small>
+											</h6>
+											<h6 className="ml-1">{editVideo.released}</h6>
+										</div>
+									</div>}
 								<br />
 								<div className="form-group">
 									<form onSubmit={onSubmit}>
@@ -138,8 +159,7 @@ const VideoCreate = (props) => {
 											type="text"
 											name="name"
 											className="form-control"
-											placeholder="Video name"
-											required={true}
+											placeholder={editVideo?.name}
 											onChange={(e) => setName(e.target.value)} />
 										<br />
 										<br />
@@ -152,7 +172,7 @@ const VideoCreate = (props) => {
 											type="text"
 											name="ft"
 											className="form-control"
-											placeholder="Featuring Artist e.g. @JohnDoe"
+											placeholder={editVideo?.ft}
 											onChange={(e) => setFt(e.target.value)} />
 										<br />
 										<br />
@@ -160,11 +180,9 @@ const VideoCreate = (props) => {
 										<select
 											name='album'
 											className='form-control'
-											required={true}
-											onChange={(e) => setVideoAlbumId(e.target.value) }>
-											<option defaultValue value="">Select Album</option>
+											onChange={(e) => setVideoAlbumId(e.target.value)}>
 											{props.videoAlbums
-												.filter((videoAlbum) => videoAlbum.username == props.auth?.username)
+												.filter((videoAlbum) => videoAlbum.username == props.auth.username)
 												.map((videoAlbum, key) => (
 													<option
 														key={key}
@@ -181,9 +199,7 @@ const VideoCreate = (props) => {
 											name='genre'
 											className='form-control'
 											placeholder='Select video genre'
-											required={true}
-											onChange={(e) => setGenre(e.target.value)}>
-											<option defaultValue value="">Select Genre</option>
+											onChange={(e) => { setGenre(e.target.value) }}>
 											<option value="Afro" className="bg-dark text-light">Afro</option>
 											<option value="Benga" className="bg-dark text-light">Benga</option>
 											<option value="Blues" className="bg-dark text-light">Blues</option>
@@ -211,8 +227,8 @@ const VideoCreate = (props) => {
 											type="date"
 											name="released"
 											className="form-control"
-											placeholder="Released"
-											required={true}
+											style={{ colorScheme: "dark" }}
+											placeholder={editVideo?.released}
 											onChange={(e) => setReleased(e.target.value)} />
 										<br />
 										<br />
@@ -221,12 +237,12 @@ const VideoCreate = (props) => {
 											type="text"
 											name="description"
 											className="form-control"
-											placeholder="Say something about your song"
+											placeholder={editVideo?.description}
 											cols="30"
 											rows="10"
-											required={true}
-											onChange={(e) => setDescription(e.target.value)}>
-										</textarea>
+											onChange={(e) => setDescription(e.target.value)}></textarea>
+										<br />
+										<br />
 
 										<label className="text-light">Upload Video Thumbnail</label>
 										<br />
@@ -238,16 +254,20 @@ const VideoCreate = (props) => {
 											imageCropAspectRatio="16:9"
 											acceptedFileTypes={['image/*']}
 											stylePanelAspectRatio="16:9"
-											allowRevert={true}
+											allowRevert={false}
 											server={{
-												url: `${props.baseUrl}/api/filepond`,
+												url: `${props.url}/api/filepond`,
 												process: {
-													url: "/upload-video-thumbnail",
-													onload: res => setThumbnail(res),
+													url: `/update-video-thumbnail/${editVideo?.id}`,
+													onload: res => {
+														// Update Videos
+														axios.get(`${props.url}/api/videos`)
+															.then((res) => props.setVideos(res.data))
+													},
 													onerror: (err) => console.log(err.response.data)
 												},
 												revert: {
-													url: `/delete-video-thumbnail/${thumbnail.substr(17)}`,
+													url: `/update-video-thumbnail/${thumbnail.substr(17)}`,
 													onload: res => props.setMessages([res]),
 												},
 											}} />
@@ -264,16 +284,20 @@ const VideoCreate = (props) => {
 											acceptedFileTypes={['video/*']}
 											stylePanelAspectRatio="16:9"
 											maxFileSize="200000000"
-											allowRevert={true}
+											allowRevert={false}
 											server={{
-												url: `${props.baseUrl}/api/filepond`,
+												url: `${props.url}/api/filepond`,
 												process: {
-													url: "/upload-video",
-													onload: res => setVideo(res),
+													url: `/update-video/${editVideo?.id}`,
+													onload: (res) => {
+														// Update Videos
+														axios.get(`${props.url}/api/videos`)
+															.then((res) => props.setVideos(res.data))
+													},
 													onerror: (err) => console.log(err.response.data)
 												},
 												revert: {
-													url: `/delete-video/${video.substr(7)}`,
+													url: `/delete-video/${video}`,
 													onload: res => {
 														props.setMessages([res])
 													},
@@ -282,36 +306,12 @@ const VideoCreate = (props) => {
 										<br />
 										<br />
 
-										{/* {{-- Collapse --}} */}
-										<button
-											className="sonar-btn"
-											type="button"
-											data-bs-toggle="collapse" 
-											data-bs-target="#collapseExample" 
-											aria-expanded="false" 
-											aria-controls="collapseExample">
-											next
-										</button>
-										<div className="collapse" id="collapseExample">
-											<div className="">
-												<br />
-												<h3>Before you upload</h3>
-												<h6>By uploading you agree that you <b>own</b> this song.</h6>
-												<h6>Videos are sold at
-													<b style={{ color: "green" }}> KES 20</b>, Black Music takes
-													<b style={{ color: "green" }}> 50% (KES 10)</b> and the musician takes
-													<b style={{ color: "green" }}> 50% (KES 10)</b>.</h6>
-												<br />
-												<Btn btnText="upload video" loading={loadingBtn} />
-											</div>
-										</div>
-										{/* {{-- Collapse End --}} */}
-									</form>
-									<br />
-									<br />
+										<button type="reset" className="sonar-btn">reset</button>
+										<br />
+										<br />
 
-									<button type="reset" className="sonar-btn">reset</button>
-									<br />
+										<Btn btnText="edit video" loading={btnLoading} />
+									</form>
 									<br />
 									<Link href="/video/dashboard"><a className="btn sonar-btn btn-2">studio</a></Link>
 								</div>
@@ -320,8 +320,8 @@ const VideoCreate = (props) => {
 					</div>
 				</div>
 			</div>
-		</div >
+		</div>
 	)
 }
 
-export default VideoCreate
+export default VideoEdit

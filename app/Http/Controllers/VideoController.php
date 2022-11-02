@@ -60,7 +60,7 @@ class VideoController extends Controller
                 "genre" => $video->genre,
                 "thumbnail" => $thumbnail,
                 "description" => $video->description,
-                "released" => $video->released,
+                "released" => $video->released_date,
                 "hasLiked" => $hasLiked,
                 "likes" => $video->likes->count(),
                 "inCart" => $inCart,
@@ -156,8 +156,8 @@ class VideoController extends Controller
         if ($request->filled('ft')) {
             $video->ft = $request->input('ft');
         }
-        if ($request->filled('album')) {
-            $video->album = $request->input('album');
+        if ($request->filled('video_album_id')) {
+            $video->video_album_id = $request->input('video_album_id');
         }
         if ($request->filled('genre')) {
             $video->genre = $request->input('genre');

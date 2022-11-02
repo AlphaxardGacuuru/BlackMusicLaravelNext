@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\VideoAlbum;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -26,8 +27,9 @@ class VideoAlbumController extends Controller
                 "username" => $videoAlbum->username,
                 "name" => $videoAlbum->name,
                 "cover" => "/storage/" . $videoAlbum->cover,
-                "released" => $videoAlbum->released,
-                "created_at" => $videoAlbum->created_at->format("d M Y"),
+                // "released" => Carbon::parse($videoAlbum->released)->format("d M Y"),
+                "released" => $videoAlbum->released_date,
+                "createdAt" => $videoAlbum->created_at->format("d M Y")
             ]);
         }
 

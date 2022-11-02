@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Video;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -57,6 +58,44 @@ class FilePondController extends Controller
         //     ->save('public/video-thumbnails/' . $videoName . '.png');
 
         return $videoShort;
+    }
+
+    /*
+     * Update VideoThumbnail */
+    public function updateVideoThumbnail(Request $request, $id)
+    {
+        /* Handle thumbnail upload */
+        $thumbnail = $request->file('filepond-thumbnail')->store('public/video-thumbnails');
+        $thumbnail = substr($thumbnail, 7);
+
+        $video = Video::find($id);
+
+        // Delete thumbnail
+        $oldThumbnail = $video->thumbnail;
+        Storage::delete('public/' . $oldThumbnail);
+
+		// Update Thumbnail
+        $video->thumbnail = $thumbnail;
+		$video->save();
+    }
+
+    /*
+     * Update VideoThumbnail */
+    public function updateVideo(Request $request, $id)
+    {
+        /* Handle thumbnail upload */
+        $videoFile = $request->file('filepond-video')->store('public/videos');
+        $videoFile = substr($videoFile, 7);
+
+        $video = Video::find($id);
+
+        // Delete thumbnail
+        $oldvideoFile = $video->video;
+        Storage::delete('public/' . $oldvideoFile);
+
+		// Update Thumbnail
+        $video->video = $videoFile;
+		$video->save();
     }
 
     /*

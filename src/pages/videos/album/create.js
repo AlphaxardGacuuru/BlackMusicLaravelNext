@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import axios from '@/lib/axios';
@@ -8,6 +8,7 @@ import Btn from '@/components/core/Btn'
 const VideoAlbumCreate = (props) => {
 
 	// Declare states
+	const [formData, setFormData] = useState()
 	const [name, setName] = useState("")
 	const [released, setReleased] = useState("")
 	const [preview, setPreview] = useState()
@@ -20,8 +21,10 @@ const VideoAlbumCreate = (props) => {
 	// Assign id to element
 	const mediaInput = React.useRef(null)
 
-	// Declare new FormData object for form data
-	const formData = new FormData();
+	useEffect(() => {
+		// Declare new FormData object for form data
+		setFormData(new FormData())
+	}, [])
 
 	// Fire when image is choosen
 	var onImageChange = event => {
@@ -155,7 +158,7 @@ const VideoAlbumCreate = (props) => {
 										<br />
 										<br />
 
-										<Link href="/videos"><a className="btn sonar-btn btn-2">studio</a></Link>
+										<Link href="/video/dashboard"><a className="btn sonar-btn btn-2">studio</a></Link>
 									</form>
 								</div>
 							</div>

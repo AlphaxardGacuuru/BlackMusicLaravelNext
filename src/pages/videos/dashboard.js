@@ -23,7 +23,7 @@ const Index = (props) => {
 			setButton("")
 		}
 	}, [])
-		
+
 	// Become musician
 	const onMusician = () => {
 		// Show loader
@@ -81,13 +81,13 @@ const Index = (props) => {
 			<div className="row" style={{ display: main }}>
 				<div className="col-sm-12">
 					<center>
-						<Link href="/audios"><a className="btn sonar-btn btn-2">go to audios</a></Link>
+						<Link href="/audio"><a className="btn sonar-btn btn-2">go to audios</a></Link>
 						<br />
 						<br />
-						<Link href="/videos/create"><a className="btn sonar-btn">upload video</a></Link>
+						<Link href="/video/create"><a className="btn sonar-btn">upload video</a></Link>
 						<br />
 						<br />
-						<Link href="/videos/album-create"><a className="btn sonar-btn">create video album</a></Link>
+						<Link href="/video/album/create"><a className="btn sonar-btn">create video album</a></Link>
 					</center>
 				</div>
 			</div>
@@ -156,7 +156,7 @@ const Index = (props) => {
 								<div className="d-flex">
 									<div className="p-2">
 										{videoAlbum.name != "Singles" ?
-											<Link href={`/video-album-edit/${videoAlbum.id}`}>
+											<Link href={`/video/album/edit/${videoAlbum.id}`}>
 												<a>
 													<Img
 														src={`${videoAlbum.cover}`}
@@ -208,35 +208,44 @@ const Index = (props) => {
 																alt={"thumbnail"} />
 														</Link>
 													</td>
-													<td className="border-top border-dark" style={{ color: "rgba(220, 220, 220, 1) " }}>
+													<td className="border-top border-dark"
+														style={{ color: "rgba(220, 220, 220, 1) " }}>
 														{albumItem.name}
 													</td>
-													<td className="border-top border-dark" style={{ color: "rgba(220, 220, 220, 1) " }}>
+													<td className="border-top border-dark"
+														style={{ color: "rgba(220, 220, 220, 1) " }}>
 														{albumItem.ft}
 													</td>
-													<td className="border-top border-dark" style={{ color: "rgba(220, 220, 220, 1) " }}>
+													<td className="border-top border-dark"
+														style={{ color: "rgba(220, 220, 220, 1) " }}>
 														{albumItem.genre}
 													</td>
-													<td className="border-top border-dark" style={{ color: "rgba(220, 220, 220, 1) " }}>
+													<td className="border-top border-dark"
+														style={{ color: "rgba(220, 220, 220, 1) " }}>
 														{albumItem.description}
 													</td>
-													<td className="border-top border-dark" style={{ color: "rgba(220, 220, 220, 1) " }}>
+													<td className="border-top border-dark"
+														style={{ color: "rgba(220, 220, 220, 1) " }}>
 														{albumItem.downloads}
 													</td>
 													<td className="border-top border-dark text-success">
 														KES <span className="text-success">{albumItem.downloads * 10}</span>
 													</td>
-													<td className="border-top border-dark" style={{ color: "rgba(220, 220, 220, 1) " }}>
+													<td className="border-top border-dark"
+														style={{ color: "rgba(220, 220, 220, 1) " }}>
 														{albumItem.likes}
 													</td>
-													<td className="border-top border-dark" style={{ color: "rgba(220, 220, 220, 1) " }}>
+													<td className="border-top border-dark"
+														style={{ color: "rgba(220, 220, 220, 1) " }}>
 														{videoAlbum.released}
 													</td>
-													<td className="border-top border-dark" style={{ color: "rgba(220, 220, 220, 1) " }}>
+													<td className="border-top border-dark"
+														style={{ color: "rgba(220, 220, 220, 1) " }}>
 														{albumItem.created_at}
 													</td>
-													<td className="border-top border-dark" style={{ color: "rgba(220, 220, 220, 1) " }}>
-														<Link href={`/video-edit/${albumItem.id}`}>
+													<td className="border-top border-dark"
+														style={{ color: "rgba(220, 220, 220, 1) " }}>
+														<Link href={`/videos/${albumItem.id}`}>
 															<button className='mysonar-btn white-btn'>edit</button>
 														</Link>
 													</td>

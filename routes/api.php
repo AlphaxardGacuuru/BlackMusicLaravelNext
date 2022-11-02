@@ -108,7 +108,12 @@ Route::prefix('filepond')->group(function () {
         Route::post('update-profile-pic/{id}', 'updateProfilePic');
         Route::post('upload-video-thumbnail', 'uploadVideoThumbnail');
         Route::post('upload-video', 'uploadVideo');
-        // Delete
+		
+		// Updates
+        Route::post('update-video-thumbnail/{id}', 'updateVideoThumbnail');
+        Route::post('update-video/{id}', 'updateVideo');
+        
+		// Delete
         Route::delete('delete-video-thumbnail/{id}', 'deleteVideoThumbnail');
         Route::delete('delete-video/{id}', 'deleteVideo');
     });

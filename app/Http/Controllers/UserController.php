@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AudioAlbum;
 use App\Models\BoughtAudio;
 use App\Models\BoughtVideo;
-use App\Models\VideoAlbum;
-use App\Models\AudioAlbum;
 use App\Models\Follow;
 use App\Models\User;
+use App\Models\VideoAlbum;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -39,10 +39,6 @@ class UserController extends Controller
             $pp = preg_match("/http/", $user->pp) ?
             $user->pp :
             "/storage/" . $user->pp;
-
-            /*
-             * Fetch data directly
-             */
 
             // Check if user has followed User
             $hasFollowed = $user->follows
@@ -138,7 +134,7 @@ class UserController extends Controller
             $user->password = Hash::make($request->input('phone'));
         }
 
-        if ($request->filled('account_type')) {
+        if ($request->filled('account_type') && $user->account_type == "normal") {
             $user->account_type = $request->input('account_type');
 
             /* Create new audio album */
@@ -188,6 +184,7 @@ class UserController extends Controller
      */
     public function auth()
     {
+
         // Check if user is logged in
         if (Auth::check()) {
 
@@ -204,9 +201,6 @@ class UserController extends Controller
             // Format profile pic
             $pp = preg_match("/http/", $auth->pp) ?
             $auth->pp : "/storage/" . $auth->pp;
-
-            // Check if user is musician
-            $isMusician = $auth->videos->count() + $auth->audios->count();
 
             return [
                 "id" => $auth->id,

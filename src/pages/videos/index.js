@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import axios from '@/lib/axios'
 
@@ -6,27 +7,38 @@ import Btn from '@/components/core/Btn'
 
 const Index = (props) => {
 
-	var main = "none"
-	var button = "none"
+	const [main, setMain] = useState("none")
+	const [button, setButton] = useState("none")
 
-	// Check if user is musician
-	if (props.auth?.account_type == "musician") {
-		main = ""
-		button = "none"
-	} else {
-		main = "none"
-		button = ""
-	}
+	const [loading, setLoading] = useState()
 
+	useEffect(() => {
+
+		// Check if user is musician
+		if (props.auth?.account_type == "musician") {
+			setMain("")
+			setButton("none")
+		} else {
+			setMain("none")
+			setButton("")
+		}
+	}, [])
+		
 	// Become musician
 	const onMusician = () => {
+		// Show loader
+		setLoading(true)
+
 		// Set account type to musician
 		axios.get('sanctum/csrf-cookie').then(() => {
 			axios.post(`/api/users/${props.auth?.id}`, {
 				account_type: "musician",
 				_method: "put"
 			}).then((res) => {
-				props.setMessages([res.data])
+				props.setMessages(["You're now a Musician"])
+				// Update Auth
+				axios.get('api/auth')
+					.then((res) => props.setAuth(res.data))
 				// Update Users
 				axios.get(`/api/users`)
 					.then((res) => props.setUsers(res.data))
@@ -36,6 +48,8 @@ const Index = (props) => {
 				// Update Audio Albums
 				axios.get(`/api/audio-albums`)
 					.then((res) => props.setAudioAlbums(res.data))
+				// Remove loader
+				setLoading(false)
 			}).catch((err) => {
 				const resErrors = err.response.data.errors
 				var resError
@@ -53,8 +67,12 @@ const Index = (props) => {
 
 			{/* Become musician button */}
 			<center className="mt-5 pt-5" style={{ display: button }}>
-				<Btn btnText="become a musician" onClick={onMusician} />
+				<Btn
+					btnText="become a musician"
+					loading={loading}
+					onClick={onMusician} />
 			</center>
+			{/* Become musician button End */}
 
 			{/* <!-- ***** Call to Action Area Start ***** - */}
 			<div className="backEnd-content">
@@ -66,10 +84,10 @@ const Index = (props) => {
 						<Link href="/audios"><a className="btn sonar-btn btn-2">go to audios</a></Link>
 						<br />
 						<br />
-						<Link href="/create"><a className="btn sonar-btn">upload video</a></Link>
+						<Link href="/videos/create"><a className="btn sonar-btn">upload video</a></Link>
 						<br />
 						<br />
-						<Link href="/album-create"><a className="btn sonar-btn">create video album</a></Link>
+						<Link href="/videos/album-create"><a className="btn sonar-btn">create video album</a></Link>
 					</center>
 				</div>
 			</div>
@@ -139,11 +157,13 @@ const Index = (props) => {
 									<div className="p-2">
 										{videoAlbum.name != "Singles" ?
 											<Link href={`/video-album-edit/${videoAlbum.id}`}>
-												<Img
-													src={`${videoAlbum.cover}`}
-													width="100"
-													height="100"
-													alt="album cover" />
+												<a>
+													<Img
+														src={`${videoAlbum.cover}`}
+														width="100"
+														height="100"
+														alt="album cover" />
+												</a>
 											</Link> :
 											<Img
 												src={`${videoAlbum.cover}`}
@@ -175,7 +195,7 @@ const Index = (props) => {
 										</tr>
 									</tbody>
 									{props.videos
-										.filter((video) => video.album_id == videoAlbum.id)
+										.filter((video) => video.video_album_id == videoAlbum.id)
 										.map((albumItem, key) => (
 											<tbody key={key} className="border border-0">
 												<tr className="border-top border-dark">

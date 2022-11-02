@@ -80,6 +80,18 @@ class RegisteredUserController extends Controller
 
         Auth::login($user, $remember = true);
 
-        return response()->noContent();
+        // return response()->noContent();
+
+		/*
+		* Create Token */
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.'],
+            ]);
+        }
+
+        return $user->createToken($request->device_name)->plainTextToken;
     }
 }

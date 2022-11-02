@@ -36,7 +36,7 @@ const Register = (props) => {
 		const id = props.users.find((user) => user.username == username).id
 
 		axios.get('/sanctum/csrf-cookie').then(() => {
-			axios.post(`${props.url}/login`, {
+			axios.post(`/login`, {
 				id: id,
 				name: name,
 				email: email,
@@ -68,15 +68,17 @@ const Register = (props) => {
 
 		axios.get('/sanctum/csrf-cookie').then(() => {
 			// Register User
-			axios.post(`${props.url}/register`, {
+			axios.post(`/register`, {
 				name: name,
 				email: email,
 				avatar: avatar,
 				username: username,
 				phone: phone,
 				password: phone,
-				password_confirmation: phone
+				password_confirmation: phone,
+				device_name: "deviceName"
 			}).then((res) => {
+				props.setLocalStorage("sanctumToken", res.data)
 				// Add referer if there's one
 				referer &&
 					axios.post(`${props.url}/api/referrals`, {
@@ -101,7 +103,7 @@ const Register = (props) => {
 					newError.push(resErrors[resError])
 				}
 				// Get other errors
-				newError.push(err.response.data.message)
+				// newError.push(err.response.data.message)
 				props.setErrors(newError)
 			});
 		});
@@ -112,10 +114,12 @@ const Register = (props) => {
 
 		// Check if phone exists
 		if (props.users.some((user) => user.phone == phone)) {
-			onUpdate()
+			// onUpdate()
+			onRegister()
 		} else if (props.users.some((user) => user.username == username && user.id < 235)) {
 			// If user in older than id 100 allow
-			onUpdate()
+			// onUpdate()
+			onRegister()
 		} else {
 			onRegister()
 		}

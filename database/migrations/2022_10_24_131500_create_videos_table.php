@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('videos', function (Blueprint $table) {
             $table->id();
-            $table->string('audio')->nullable();
+            $table->string('video')->nullable();
             $table->string('name')->nullable();
             $table->string('username')->nullable();
             $table->string('ft')->nullable();

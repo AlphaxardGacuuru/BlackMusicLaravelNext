@@ -21,7 +21,6 @@ use App\Http\Controllers\KaraokeController;
 use App\Http\Controllers\KaraokeLikeController;
 use App\Http\Controllers\KopokopoController;
 use App\Http\Controllers\KopokopoRecipientController;
-use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PollController;
 use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\PostCommentLikeController;
@@ -55,47 +54,49 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResources([
-    'admin' => AdminController::class,
-    'audios' => AudioController::class,
-    'audio-likes' => AudioLikeController::class,
-    'audio-comments' => AudioCommentController::class,
-    'audio-comment-likes' => AudioCommentLikeController::class,
-    'audio-albums' => AudioAlbumController::class,
-    'bought-audios' => BoughtAudioController::class,
-    'bought-videos' => BoughtVideoController::class,
-    'cart-audios' => CartAudioController::class,
-    'cart-videos' => CartVideoController::class,
-    'chat' => ChatController::class,
-    'decos' => DecoController::class,
-    'follows' => FollowController::class,
-    'karaokes' => KaraokeController::class,
-    'karaoke-comments' => KaraokeCommentController::class,
-    'karaoke-comment-likes' => KaraokeCommentLikeController::class,
-    'karaoke-likes' => KaraokeLikeController::class,
-    'karaoke-audios' => KaraokeAudioController::class,
-    'kopokopo' => KopokopoController::class,
-    'kopokopo-recipients' => KopokopoRecipientController::class,
-    // 'notifications' => NotificationController::class,
-    'posts' => PostController::class,
-    'post-likes' => PostLikeController::class,
-    'post-comments' => PostCommentController::class,
-    'post-comment-likes' => PostCommentLikeController::class,
-    'polls' => PollController::class,
-    'referrals' => ReferralController::class,
-    'saved-karaokes' => SavedKaraokeController::class,
-    'search' => SearchController::class,
-    'song-payouts' => SongPayoutController::class,
-    'users' => UserController::class,
-    'videos' => VideoController::class,
-    'video-likes' => VideoLikeController::class,
-    'video-comments' => VideoCommentController::class,
-    'video-comment-likes' => VideoCommentLikeController::class,
-    'video-albums' => VideoAlbumController::class,
-]);
-
 // Authenticated User
 Route::get('auth', [UserController::class, 'auth']);
+
+// Route::middleware(['auth:sanctum'])->group(function () {
+    Route::apiResources([
+        'admin' => AdminController::class,
+        'audios' => AudioController::class,
+        'audio-likes' => AudioLikeController::class,
+        'audio-comments' => AudioCommentController::class,
+        'audio-comment-likes' => AudioCommentLikeController::class,
+        'audio-albums' => AudioAlbumController::class,
+        'bought-audios' => BoughtAudioController::class,
+        'bought-videos' => BoughtVideoController::class,
+        'cart-audios' => CartAudioController::class,
+        'cart-videos' => CartVideoController::class,
+        'chat' => ChatController::class,
+        'decos' => DecoController::class,
+        'follows' => FollowController::class,
+        'karaokes' => KaraokeController::class,
+        'karaoke-comments' => KaraokeCommentController::class,
+        'karaoke-comment-likes' => KaraokeCommentLikeController::class,
+        'karaoke-likes' => KaraokeLikeController::class,
+        'karaoke-audios' => KaraokeAudioController::class,
+        'kopokopo' => KopokopoController::class,
+        'kopokopo-recipients' => KopokopoRecipientController::class,
+        // 'notifications' => NotificationController::class,
+        'posts' => PostController::class,
+        'post-likes' => PostLikeController::class,
+        'post-comments' => PostCommentController::class,
+        'post-comment-likes' => PostCommentLikeController::class,
+        'polls' => PollController::class,
+        'referrals' => ReferralController::class,
+        'saved-karaokes' => SavedKaraokeController::class,
+        'search' => SearchController::class,
+        'song-payouts' => SongPayoutController::class,
+        'users' => UserController::class,
+        'videos' => VideoController::class,
+        'video-likes' => VideoLikeController::class,
+        'video-comments' => VideoCommentController::class,
+        'video-comment-likes' => VideoCommentLikeController::class,
+        'video-albums' => VideoAlbumController::class,
+    ]);
+// });
 
 Route::get('video-charts', [VideoController::class, 'charts']);
 Route::get('audio-charts', [AudioController::class, 'charts']);
@@ -103,7 +104,12 @@ Route::get('audio-charts', [AudioController::class, 'charts']);
 // Filepond Controller
 Route::prefix('filepond')->group(function () {
     Route::controller(FilePondController::class)->group(function () {
-        Route::post('/update-profile-pic/{id}', 'updateProfilePic');
-        Route::delete('/update-profile-pic', 'updateProfilePic');
+        // Uploads
+        Route::post('update-profile-pic/{id}', 'updateProfilePic');
+        Route::post('upload-video-thumbnail', 'uploadVideoThumbnail');
+        Route::post('upload-video', 'uploadVideo');
+        // Delete
+        Route::delete('delete-video-thumbnail/{id}', 'deleteVideoThumbnail');
+        Route::delete('delete-video/{id}', 'deleteVideo');
     });
 });

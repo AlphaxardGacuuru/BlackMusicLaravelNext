@@ -31,8 +31,6 @@ registerPlugin(
 
 const Edit = (props) => {
 
-	const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
-
 	// Declare states
 	const [formData, setFormData] = useState()
 	const [name, setName] = useState("")
@@ -119,7 +117,7 @@ const Edit = (props) => {
 								stylePanelAspectRatio="1:1"
 								allowRevert={false}
 								server={{
-									url: `${baseUrl}/api/filepond`,
+									url: `${props.baseUrl}/api/filepond`,
 									headers: { 'X-CSRF-TOKEN': token },
 									process: {
 										url: `/update-profile-pic/${props.auth?.id}`,

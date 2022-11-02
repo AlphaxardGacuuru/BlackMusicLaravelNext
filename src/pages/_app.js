@@ -2,8 +2,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '@/styles/dark.css'
 import('next').NextConfig
 
-import { useAuth } from '@/hooks/auth'
-
 import LoginPopUp from '@/components/auth/LoginPopUp';
 import TopNav from '@/components/layouts/TopNav'
 import BottomNav from '@/components/layouts/BottomNav'
@@ -13,6 +11,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import axios from '@/lib/axios';
 
 const App = ({ Component, pageProps }) => {
+
+	const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
 	// Set Axios default header
 	// axios.defaults.baseURL = "https://music.black.co.ke"
@@ -31,14 +31,22 @@ const App = ({ Component, pageProps }) => {
 		localStorage.setItem(state, JSON.stringify(data))
 	}
 
+	// Function for fetching data
+	const get = (endpoint, setState, storage) => {
+		axios.get(`/api/${endpoint}`, { headers: { Authorization: `Bearer ${getLocalStorage("sanctumToken")}` } })
+			.then((res) => {
+				setState(res.data)
+				setLocalStorage(storage, res.data)
+			}).catch(() => setErrors([`Failed to fetch ${endpoint}`]))
+	}
+
 	const url = process.env.NEXT_PUBLIC_BACKEND_URL
 
-	const { auth } = useAuth()
-
 	// Declare states
-	const [login, setLogin] = useState()
 	const [messages, setMessages] = useState([])
 	const [errors, setErrors] = useState([])
+	const [login, setLogin] = useState()
+	const [auth, setAuth] = useState(getLocalStorage("auth"))
 
 	const [audios, setAudios] = useState(getLocalStorage("audios"))
 	const [audioAlbums, setAudioAlbums] = useState(getLocalStorage("audioAlbums"))
@@ -65,17 +73,9 @@ const App = ({ Component, pageProps }) => {
 		setTimeout(() => setMessages([]), 2900);
 	}
 
-	// Function for fetching data
-	const get = (endpoint, setState, storage) => {
-		axios.get(`/api/${endpoint}`)
-			.then((res) => {
-				setState(res.data)
-				setLocalStorage(storage, res.data)
-			}).catch(() => setErrors([`Failed to fetch ${endpoint}`]))
-	}
-
 	// Fetch data on page load
 	useEffect(() => {
+
 		// Import Js for Bootstrap
 		import("bootstrap/dist/js/bootstrap");
 
@@ -86,22 +86,23 @@ const App = ({ Component, pageProps }) => {
 			window.location.href = 'https://music.black.co.ke'
 		}
 
+		get("auth", setAuth, "auth")
 		// get("audios", setAudios, "audios")
 		// get("audio-albums", setAudioAlbums, "audioAlbums")
 		// get("audio-likes", setAudioLikes, "audioLikes")
-		
+
 		// get("bought-audios", setBoughtAudios, "boughtAudios")
 		// get("bought-videos", setBoughtAudios, "boughtVideos")
-		
+
 		// get("cart-audios", setCartAudios, "cartAudios")
 		// get("cart-videos", setCartVideos, "cartVideos")
-		
+
 		// get("karaokes", setKaraokes, "karaokes")
-		
+
 		// get("posts", setPosts, "posts")
 		get("users", setUsers, "users")
-		
-		// get("videos", setVideos, "videos")
+
+		get("videos", setVideos, "videos")
 		get("video-albums", setVideoAlbums, "videoAlbums")
 		// get("video-likes", setVideoLikes, "videoLikes")
 
@@ -124,10 +125,11 @@ const App = ({ Component, pageProps }) => {
 
 	// All states
 	const GLOBAL_STATE = {
+		baseUrl,
 		getLocalStorage, setLocalStorage,
 		login, setLogin,
 		url,
-		auth,
+		auth, setAuth,
 		messages, setMessages,
 		errors, setErrors,
 		audios, setAudios,

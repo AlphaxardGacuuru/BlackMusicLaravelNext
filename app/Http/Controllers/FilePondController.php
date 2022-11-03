@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Audio;
 use App\Models\User;
 use App\Models\Video;
 use Illuminate\Http\Request;
@@ -30,6 +31,12 @@ class FilePondController extends Controller
             return response("Account updated", 200);
         }
     }
+
+	/*
+	*
+	* Handle Video Uploads
+	*
+	*/ 	
 
     /*
      * Handle Video Thumbnail Upload */
@@ -112,5 +119,94 @@ class FilePondController extends Controller
     {
         Storage::delete('public/videos/' . $id);
         return response("Video deleted", 200);
+    }
+
+	/*
+	*
+	* Handle Audio Uploads
+	*
+	*/ 	
+
+    /*
+     * Handle Audio Thumbnail Upload */
+    public function uploadAudioThumbnail(Request $request)
+    {
+        /* Handle thumbnail upload */
+        $thumbnail = $request->file('filepond-thumbnail')->store('public/audio-thumbnails');
+        $thumbnail = substr($thumbnail, 7);
+        return $thumbnail;
+    }
+
+    /*
+     * Handle Audio Upload */
+    public function uploadAudio(Request $request)
+    {
+        /* Handle audio upload */
+        $audio = $request->file('filepond-audio')->store('public/audios');
+        $audioShort = substr($audio, 7);
+        // $audioName = substr($audio, 14);
+        // $audioName = substr($audioName, 0, strpos($audioName, "."));
+
+        // Create frame from Audio
+        // FFMpeg::open($audio)
+        //     ->getFrameFromSeconds(5)
+        //     ->export()
+        //     ->save('public/audio-thumbnails/' . $audioName . '.png');
+
+        return $audioShort;
+    }
+
+    /*
+     * Update AudioThumbnail */
+    public function updateAudioThumbnail(Request $request, $id)
+    {
+        /* Handle thumbnail upload */
+        $thumbnail = $request->file('filepond-thumbnail')->store('public/audio-thumbnails');
+        $thumbnail = substr($thumbnail, 7);
+
+        $audio = Audio::find($id);
+
+        // Delete thumbnail
+        $oldThumbnail = $audio->thumbnail;
+        Storage::delete('public/' . $oldThumbnail);
+
+		// Update Thumbnail
+        $audio->thumbnail = $thumbnail;
+		$audio->save();
+    }
+
+    /*
+     * Update AudioThumbnail */
+    public function updateAudio(Request $request, $id)
+    {
+        /* Handle thumbnail upload */
+        $audioFile = $request->file('filepond-audio')->store('public/audios');
+        $audioFile = substr($audioFile, 7);
+
+        $audio = Audio::find($id);
+
+        // Delete thumbnail
+        $oldaudioFile = $audio->audio;
+        Storage::delete('public/' . $oldaudioFile);
+
+		// Update Thumbnail
+        $audio->audio = $audioFile;
+		$audio->save();
+    }
+
+    /*
+     * Handle Audio Thumbnail Delete */
+    public function deleteAudioThumbnail($id)
+    {
+        Storage::delete('public/audio-thumbnails/' . $id);
+        return response("Audio thumbnail deleted", 200);
+    }
+
+    /*
+     * Handle Audio Delete */
+    public function deleteAudio($id)
+    {
+        Storage::delete('public/audios/' . $id);
+        return response("Audio deleted", 200);
     }
 }

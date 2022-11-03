@@ -15,13 +15,17 @@ h6 {
     color: rgba(220,220,220,1);
     font-weight: 300;
 }
-
+thead,
 tbody,
 th,
 td,
 tr {
     color: rgba(220,220,220,1);
 	border: 0px;
+}
+
+tr, th {
+	border-top: 1px solid #232323;
 }
 
 a,
@@ -1807,12 +1811,6 @@ div.hidden-scroll span {
     -ms-overflow-style: none;
     /* Hide scrollbar for Firefox */
     scrollbar-width: none;
-}
-/* Table End */
-
-/* Tables */
-table, thead, tr, th, tbody, td {
-	border: 0px;
 }
 /* Tables End */
 

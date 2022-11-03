@@ -87,8 +87,8 @@ const App = ({ Component, pageProps }) => {
 		}
 
 		get("auth", setAuth, "auth")
-		// get("audios", setAudios, "audios")
-		// get("audio-albums", setAudioAlbums, "audioAlbums")
+		get("audios", setAudios, "audios")
+		get("audio-albums", setAudioAlbums, "audioAlbums")
 		// get("audio-likes", setAudioLikes, "audioLikes")
 
 		// get("bought-audios", setBoughtAudios, "boughtAudios")

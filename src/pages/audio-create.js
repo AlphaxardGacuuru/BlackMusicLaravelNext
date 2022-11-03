@@ -31,14 +31,14 @@ registerPlugin(
 	FilePondPluginFileValidateSize
 );
 
-const VideoCreate = (props) => {
+const AudioCreate = (props) => {
 
 	// Declare states
 	const [formData, setFormData] = useState()
-	const [video, setVideo] = useState("")
+	const [audio, setAudio] = useState("")
 	const [name, setName] = useState("")
 	const [ft, setFt] = useState("")
-	const [videoAlbumId, setVideoAlbumId] = useState()
+	const [audioAlbumId, setAudioAlbumId] = useState()
 	const [genre, setGenre] = useState()
 	const [released, setReleased] = useState()
 	const [description, setDescription] = useState()
@@ -61,12 +61,12 @@ const VideoCreate = (props) => {
 		setLoadingBtn(true)
 
 		// Add form data to FormData object
-		formData.append("video", video);
+		formData.append("audio", audio);
 		formData.append("thumbnail", thumbnail);
 		formData.append("name", name);
 		formData.append("username", props.auth?.username);
 		formData.append("ft", ft);
-		formData.append("video_album_id", videoAlbumId);
+		formData.append("audio_album_id", audioAlbumId);
 		formData.append("genre", genre);
 		formData.append("released", released);
 		formData.append("description", description);
@@ -75,15 +75,15 @@ const VideoCreate = (props) => {
 		// Send data to PostsController
 		// Get csrf cookie from Laravel inorder to send a POST request
 		axios.get('sanctum/csrf-cookie').then(() => {
-			axios.post(`/api/videos`, formData)
+			axios.post(`/api/audios`, formData)
 				.then((res) => {
 					props.setMessages([res.data])
-					// Update Videos
-					axios.get(`/api/videos`)
-						.then((res) => props.setVideos(res.data))
+					// Update Audios
+					axios.get(`/api/audios`)
+						.then((res) => props.setAudios(res.data))
 					// Remove loader for button
 					setLoadingBtn(false)
-					setTimeout(() => router.push('/videos'), 500)
+					// setTimeout(() => router.push('/audios'), 500)
 				}).catch(err => {
 					// Remove loader for button
 					setLoadingBtn(false)
@@ -100,7 +100,7 @@ const VideoCreate = (props) => {
 		})
 	}
 
-	const onPatch = () => axios.post(`/api/videos/filepond/video`)
+	const onPatch = () => axios.post(`/api/audios/filepond/audio`)
 		.then((res) => console.log(res.data))
 		.catch((err) => console.log(err.data))
 
@@ -129,7 +129,7 @@ const VideoCreate = (props) => {
 					<div className="row">
 						<div className="col-12">
 							<div className="contact-form text-center call-to-action-content wow fadeInUp" data-wow-delay="0.5s">
-								<h2>Upload your video</h2>
+								<h2>Upload your audio</h2>
 								<h5>It's free</h5>
 								<br />
 								<div className="form-group">
@@ -138,7 +138,7 @@ const VideoCreate = (props) => {
 											type="text"
 											name="name"
 											className="form-control"
-											placeholder="Video name"
+											placeholder="Audio name"
 											required={true}
 											onChange={(e) => setName(e.target.value)} />
 										<br />
@@ -161,16 +161,16 @@ const VideoCreate = (props) => {
 											name='album'
 											className='form-control'
 											required={true}
-											onChange={(e) => setVideoAlbumId(e.target.value) }>
+											onChange={(e) => setAudioAlbumId(e.target.value)}>
 											<option defaultValue value="">Select Album</option>
-											{props.videoAlbums
-												.filter((videoAlbum) => videoAlbum.username == props.auth?.username)
-												.map((videoAlbum, key) => (
+											{props.audioAlbums
+												.filter((audioAlbum) => audioAlbum.username == props.auth?.username)
+												.map((audioAlbum, key) => (
 													<option
 														key={key}
-														value={videoAlbum.id}
+														value={audioAlbum.id}
 														className="bg-dark text-light">
-														{videoAlbum.name}
+														{audioAlbum.name}
 													</option>
 												))}
 										</select>
@@ -180,7 +180,7 @@ const VideoCreate = (props) => {
 										<select
 											name='genre'
 											className='form-control'
-											placeholder='Select video genre'
+											placeholder='Select audio genre'
 											required={true}
 											onChange={(e) => setGenre(e.target.value)}>
 											<option defaultValue value="">Select Genre</option>
@@ -228,7 +228,7 @@ const VideoCreate = (props) => {
 											onChange={(e) => setDescription(e.target.value)}>
 										</textarea>
 
-										<label className="text-light">Upload Video Thumbnail</label>
+										<label className="text-light">Upload Audio Thumbnail</label>
 										<br />
 										<br />
 
@@ -242,38 +242,38 @@ const VideoCreate = (props) => {
 											server={{
 												url: `${props.baseUrl}/api/filepond`,
 												process: {
-													url: "/upload-video-thumbnail",
+													url: "/upload-audio-thumbnail",
 													onload: res => setThumbnail(res),
 													onerror: (err) => console.log(err.response.data)
 												},
 												revert: {
-													url: `/delete-video-thumbnail/${thumbnail.substr(17)}`,
+													url: `/delete-audio-thumbnail/${thumbnail.substr(17)}`,
 													onload: res => props.setMessages([res]),
 												},
 											}} />
 										<br />
 										<br />
 
-										<label className="text-light">Upload Video</label>
-										<h6 className="text-primary">If the video is too large you can upload it to Youtube for compression, download it, delete it, then upload it here.</h6>
+										<label className="text-light">Upload Audio</label>
+										<h6 className="text-primary">If the audio is too large you can upload it to Youtube for compression, download it, delete it, then upload it here.</h6>
 										<br />
 
 										<FilePond
-											name="filepond-video"
-											labelIdle='Drag & Drop your Video or <span class="filepond--label-action text-dark"> Browse </span>'
-											acceptedFileTypes={['video/*']}
+											name="filepond-audio"
+											labelIdle='Drag & Drop your Audio or <span class="filepond--label-action text-dark"> Browse </span>'
+											acceptedFileTypes={['audio/*']}
 											stylePanelAspectRatio="16:9"
 											maxFileSize="200000000"
 											allowRevert={true}
 											server={{
 												url: `${props.baseUrl}/api/filepond`,
 												process: {
-													url: "/upload-video",
-													onload: res => setVideo(res),
+													url: "/upload-audio",
+													onload: res => setAudio(res),
 													onerror: (err) => console.log(err.response.data)
 												},
 												revert: {
-													url: `/delete-video/${video.substr(7)}`,
+													url: `/delete-audio/${audio.substr(7)}`,
 													onload: res => {
 														props.setMessages([res])
 													},
@@ -286,9 +286,9 @@ const VideoCreate = (props) => {
 										<button
 											className="sonar-btn"
 											type="button"
-											data-bs-toggle="collapse" 
-											data-bs-target="#collapseExample" 
-											aria-expanded="false" 
+											data-bs-toggle="collapse"
+											data-bs-target="#collapseExample"
+											aria-expanded="false"
 											aria-controls="collapseExample">
 											next
 										</button>
@@ -297,12 +297,12 @@ const VideoCreate = (props) => {
 												<br />
 												<h3>Before you upload</h3>
 												<h6>By uploading you agree that you <b>own</b> this song.</h6>
-												<h6>Videos are sold at
-													<b style={{ color: "green" }}> KES 20</b>, Black Music takes
-													<b style={{ color: "green" }}> 50% (KES 10)</b> and the musician takes
-													<b style={{ color: "green" }}> 50% (KES 10)</b>.</h6>
+												<h6>Audios are sold at
+													<b style={{ color: "green" }}> KES 10</b>, Black Music takes
+													<b style={{ color: "green" }}> 50% (KES 5)</b> and the musician takes
+													<b style={{ color: "green" }}> 50% (KES 5)</b>.</h6>
 												<br />
-												<Btn btnText="upload video" loading={loadingBtn} />
+												<Btn btnText="upload audio" loading={loadingBtn} />
 											</div>
 										</div>
 										{/* {{-- Collapse End --}} */}
@@ -313,7 +313,7 @@ const VideoCreate = (props) => {
 									<button type="reset" className="sonar-btn">reset</button>
 									<br />
 									<br />
-									<Link href="/video/dashboard"><a className="btn sonar-btn btn-2">studio</a></Link>
+									<Link href="/audios"><a className="btn sonar-btn btn-2">studio</a></Link>
 								</div>
 							</div>
 						</div>
@@ -324,4 +324,4 @@ const VideoCreate = (props) => {
 	)
 }
 
-export default VideoCreate
+export default AudioCreate

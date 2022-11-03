@@ -1,27 +1,22 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import axios from '@/lib/axios';
-
 import Btn from '@/components/core/Btn'
-import Img from '@/components/core/Img'
 
-const VideoAlbumEdit = (props) => {
-
-	const router = useRouter()
-
-	let { id } = router.query;
-
-	// Get Audio Album info
-	const editAlbum = props.videoAlbums.find((videoAlbum) => videoAlbum.id == id)
+const AudioAlbumCreate = (props) => {
 
 	// Declare states
 	const [formData, setFormData] = useState()
 	const [name, setName] = useState("")
-	const [released, setReleased] = useState()
+	const [released, setReleased] = useState("")
 	const [preview, setPreview] = useState()
 	const [cover, setCover] = useState()
-	const [btnLoading, setBtnLoading] = useState()
+	const [loadingBtn, setLoadingBtn] = useState()
+
+	// Get history for page location
+	const router = useRouter()
 
 	// Assign id to element
 	const mediaInput = React.useRef(null)
@@ -44,29 +39,29 @@ const VideoAlbumEdit = (props) => {
 		e.preventDefault()
 
 		// Show loader for button
-		setBtnLoading(true)
+		setLoadingBtn(true)
 
 		// Add form data to FormData object
 		formData.append("name", name);
 		formData.append("released", released);
 		cover && formData.append("cover", cover);
-		formData.append("_method", 'put');
 
 		// Send data to PostsController
 		// Get csrf cookie from Laravel inorder to send a POST request
 		axios.get('sanctum/csrf-cookie').then(() => {
-			axios.post(`${props.url}/api/video-albums/${id}`, formData)
+			axios.post(`/api/audio-albums`, formData)
 				.then((res) => {
 					props.setMessages([res.data])
-					axios.get(`${props.url}/api/video-albums`)
-						.then((res) => props.setVideoAlbums(res.data))
-					setPreview()
+					axios.get(`/api/audio-albums`)
+						.then((res) => props.setAudioAlbums(res.data))
 					// Remove loader for button
-					setBtnLoading(false)
-				}).catch((err) => {
+					setLoadingBtn(false)
+					setTimeout(() => router.push('/audios'), 500)
+				}).catch(err => {
 					// Remove loader for button
-					setBtnLoading(false)
+					setLoadingBtn(false)
 					const resErrors = err.response.data.errors
+
 					var resError
 					var newError = []
 					for (resError in resErrors) {
@@ -89,30 +84,19 @@ const VideoAlbumEdit = (props) => {
 					<div className="row">
 						<div className="col-12">
 							<div className="contact-form text-center call-to-action-content wow fadeInUp" data-wow-delay="0.5s">
-								<h2>Edit Video Album</h2>
-								{editAlbum &&
-									<div className="d-flex">
-										<div className="p-2">
-											<Img src={`${editAlbum.cover}`}
-												width="100"
-												height="100"
-												alt={"album cover"} />
-										</div>
-										<div className="p-2">
-											<small>Video Album</small>
-											<h1>{editAlbum.name}</h1>
-											<h6>{editAlbum.released}</h6>
-										</div>
-									</div>}
+								<h2>Create Audio Album</h2>
 								<br />
 								<div className="form-group">
 									<form onSubmit={onSubmit}>
+
 										<input
 											type="text"
 											name="name"
 											className="form-control"
 											placeholder="Name"
-											onChange={(e) => { setName(e.target.value) }} />
+											required={true}
+											onChange={(e) => setName(e.target.value)} />
+
 										<br />
 										<br />
 
@@ -122,7 +106,9 @@ const VideoAlbumEdit = (props) => {
 											name="released"
 											className="form-control"
 											placeholder="Released"
-											onChange={(e) => { setReleased(e.target.value) }} />
+											required={true}
+											onChange={(e) => setReleased(e.target.value)} />
+
 										<br />
 										<br />
 
@@ -154,23 +140,25 @@ const VideoAlbumEdit = (props) => {
 											className="p-2"
 											style={{ backgroundColor: "#232323", color: "white" }}
 											onClick={() => mediaInput.current.click()}>
-											<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+											<svg xmens="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
 												className="bi bi-image" viewBox="0 0 16 16">
 												<path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
 												<path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z" />
 											</svg>
 										</div>
+
 										<br />
 										<br />
 
 										<Btn
 											type="submit"
-											btnText="edit album"
-											loading={btnLoading} />
+											btnText="create album"
+											loading={loadingBtn} />
+
 										<br />
 										<br />
 
-										<Link href="/video/dashboard"><a className="btn sonar-btn btn-2">studio</a></Link>
+										<Link href="/audios"><a className="btn sonar-btn btn-2">studio</a></Link>
 									</form>
 								</div>
 							</div>
@@ -182,4 +170,4 @@ const VideoAlbumEdit = (props) => {
 	)
 }
 
-export default VideoAlbumEdit
+export default AudioAlbumCreate

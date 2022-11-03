@@ -26,7 +26,7 @@ class MyDocument extends Document {
 					<title>Black Music</title>
 
 					{/* <!-- Favicon  --> */}
-					<link rel="icon" href="storage/img/musical-note.png" />
+					<link rel="icon" href="/storage/img/musical-note.png" />
 
 					{/* <!-- Fonts --> */}
 					<link rel="dns-prefetch" href="//fonts.gstatic.com" />
@@ -34,10 +34,10 @@ class MyDocument extends Document {
 					<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet" />
 
 					{/* {{-- Manifest --}} */}
-					<link rel="manifest" type="application/manifest+json" href="manifest.webmanifest" />
+					<link rel="manifest" type="application/manifest+json" href="/manifest.webmanifest" />
 
 					{/* {{-- IOS support --}} */}
-					<link rel="apple-touch-icon" href="storage/img/musical-note.png" />
+					<link rel="apple-touch-icon" href="/storage/img/musical-note.png" />
 					<meta name="apple-mobile-web-app-status-bar" content="#aa7700" />
 
 					<link

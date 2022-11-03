@@ -102,15 +102,6 @@ class VideoController extends Controller
         $video->released = $request->input('released');
         $video->save();
 
-        // Check if user is musician
-        $accountCheck = User::where('username', auth()->user()->username)->first();
-
-        if ($accountCheck->account_type == "normal") {
-            $user = User::find($accountCheck->id);
-            $user->account_type = "musician";
-            $user->save();
-        }
-
         return response('Video Uploaded', 200);
     }
 
@@ -199,14 +190,13 @@ class VideoController extends Controller
         //
     }
 
-    /**
+    /*
      * Display a listing of the charts.
      *
-     * @return \Illuminate\Http\Response
      */
     public function charts()
     {
-        return $videoLikes = DB::table('video_likes')
+        return DB::table('video_likes')
             ->select('video_id', DB::raw('count(*) as likes'))
             ->groupBy('video_id')
             ->orderBy('likes', 'DESC')

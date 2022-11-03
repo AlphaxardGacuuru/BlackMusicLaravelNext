@@ -58,44 +58,44 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::get('auth', [UserController::class, 'auth']);
 
 // Route::middleware(['auth:sanctum'])->group(function () {
-    Route::apiResources([
-        'admin' => AdminController::class,
-        'audios' => AudioController::class,
-        'audio-likes' => AudioLikeController::class,
-        'audio-comments' => AudioCommentController::class,
-        'audio-comment-likes' => AudioCommentLikeController::class,
-        'audio-albums' => AudioAlbumController::class,
-        'bought-audios' => BoughtAudioController::class,
-        'bought-videos' => BoughtVideoController::class,
-        'cart-audios' => CartAudioController::class,
-        'cart-videos' => CartVideoController::class,
-        'chat' => ChatController::class,
-        'decos' => DecoController::class,
-        'follows' => FollowController::class,
-        'karaokes' => KaraokeController::class,
-        'karaoke-comments' => KaraokeCommentController::class,
-        'karaoke-comment-likes' => KaraokeCommentLikeController::class,
-        'karaoke-likes' => KaraokeLikeController::class,
-        'karaoke-audios' => KaraokeAudioController::class,
-        'kopokopo' => KopokopoController::class,
-        'kopokopo-recipients' => KopokopoRecipientController::class,
-        // 'notifications' => NotificationController::class,
-        'posts' => PostController::class,
-        'post-likes' => PostLikeController::class,
-        'post-comments' => PostCommentController::class,
-        'post-comment-likes' => PostCommentLikeController::class,
-        'polls' => PollController::class,
-        'referrals' => ReferralController::class,
-        'saved-karaokes' => SavedKaraokeController::class,
-        'search' => SearchController::class,
-        'song-payouts' => SongPayoutController::class,
-        'users' => UserController::class,
-        'videos' => VideoController::class,
-        'video-likes' => VideoLikeController::class,
-        'video-comments' => VideoCommentController::class,
-        'video-comment-likes' => VideoCommentLikeController::class,
-        'video-albums' => VideoAlbumController::class,
-    ]);
+Route::apiResources([
+    'admin' => AdminController::class,
+    'audios' => AudioController::class,
+    'audio-likes' => AudioLikeController::class,
+    'audio-comments' => AudioCommentController::class,
+    'audio-comment-likes' => AudioCommentLikeController::class,
+    'audio-albums' => AudioAlbumController::class,
+    'bought-audios' => BoughtAudioController::class,
+    'bought-videos' => BoughtVideoController::class,
+    'cart-audios' => CartAudioController::class,
+    'cart-videos' => CartVideoController::class,
+    'chat' => ChatController::class,
+    'decos' => DecoController::class,
+    'follows' => FollowController::class,
+    'karaokes' => KaraokeController::class,
+    'karaoke-comments' => KaraokeCommentController::class,
+    'karaoke-comment-likes' => KaraokeCommentLikeController::class,
+    'karaoke-likes' => KaraokeLikeController::class,
+    'karaoke-audios' => KaraokeAudioController::class,
+    'kopokopo' => KopokopoController::class,
+    'kopokopo-recipients' => KopokopoRecipientController::class,
+    // 'notifications' => NotificationController::class,
+    'posts' => PostController::class,
+    'post-likes' => PostLikeController::class,
+    'post-comments' => PostCommentController::class,
+    'post-comment-likes' => PostCommentLikeController::class,
+    'polls' => PollController::class,
+    'referrals' => ReferralController::class,
+    'saved-karaokes' => SavedKaraokeController::class,
+    'search' => SearchController::class,
+    'song-payouts' => SongPayoutController::class,
+    'users' => UserController::class,
+    'videos' => VideoController::class,
+    'video-likes' => VideoLikeController::class,
+    'video-comments' => VideoCommentController::class,
+    'video-comment-likes' => VideoCommentLikeController::class,
+    'video-albums' => VideoAlbumController::class,
+]);
 // });
 
 Route::get('video-charts', [VideoController::class, 'charts']);
@@ -104,17 +104,21 @@ Route::get('audio-charts', [AudioController::class, 'charts']);
 // Filepond Controller
 Route::prefix('filepond')->group(function () {
     Route::controller(FilePondController::class)->group(function () {
-        // Uploads
         Route::post('update-profile-pic/{id}', 'updateProfilePic');
+        // Video
         Route::post('upload-video-thumbnail', 'uploadVideoThumbnail');
-        Route::post('upload-video', 'uploadVideo');
-		
-		// Updates
         Route::post('update-video-thumbnail/{id}', 'updateVideoThumbnail');
+        Route::post('upload-video', 'uploadVideo');
         Route::post('update-video/{id}', 'updateVideo');
-        
-		// Delete
         Route::delete('delete-video-thumbnail/{id}', 'deleteVideoThumbnail');
         Route::delete('delete-video/{id}', 'deleteVideo');
+
+        // Audio
+        Route::post('upload-audio-thumbnail', 'uploadAudioThumbnail');
+        Route::post('update-audio-thumbnail/{id}', 'updateAudioThumbnail');
+        Route::post('upload-audio', 'uploadAudio');
+        Route::post('update-audio/{id}', 'updateAudio');
+        Route::delete('delete-audio-thumbnail/{id}', 'deleteAudioThumbnail');
+        Route::delete('delete-audio/{id}', 'deleteAudio');
     });
 });

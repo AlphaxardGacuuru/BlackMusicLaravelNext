@@ -14,7 +14,23 @@ class AudioAlbumController extends Controller
      */
     public function index()
     {
-        //
+        // Get Audio Albums
+        $getAudioAlbums = AudioAlbum::all();
+
+        $audioAlbums = [];
+
+        foreach ($getAudioAlbums as $key => $audioAlbum) {
+            array_push($audioAlbums, [
+                "id" => $audioAlbum->id,
+                "username" => $audioAlbum->username,
+                "name" => $audioAlbum->name,
+                "cover" => "/storage/" . $audioAlbum->cover,
+                "released" => $audioAlbum->released_date,
+                "created_at" => $audioAlbum->created_at->format("d M Y"),
+            ]);
+        }
+
+        return $audioAlbums;
     }
 
     /**
@@ -25,7 +41,25 @@ class AudioAlbumController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'cover' => 'required|image|max:1999',
+        ]);
+
+        /* Handle file upload */
+        if ($request->hasFile('cover')) {
+            $aCover = $request->file('cover')->store('public/audio-album-covers');
+            $aCover = substr($aCover, 7);
+        }
+
+        /* Create new video album */
+        $aAlbum = new AudioAlbum;
+        $aAlbum->name = $request->input('name');
+        $aAlbum->username = auth()->user()->username;
+        $aAlbum->cover = $aCover;
+        $aAlbum->released = $request->input('released');
+        $aAlbum->save();
+
+        return response('Audio Album Created', 200);
     }
 
     /**
@@ -46,9 +80,37 @@ class AudioAlbumController extends Controller
      * @param  \App\Models\AudioAlbum  $audioAlbum
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, AudioAlbum $audioAlbum)
+    public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'cover' => 'nullable|image|max:1999',
+        ]);
+
+        /* Handle file upload */
+        if ($request->hasFile('cover')) {
+            $aCover = $request->file('cover')->store('public/audio-album-covers');
+            $aCover = substr($aCover, 7);
+            Storage::delete('public/' . AudioAlbum::where('id', $id)->first()->cover);
+        }
+
+        /* Create new video album */
+        $aAlbum = AudioAlbum::find($id);
+
+        if ($request->filled('name')) {
+            $aAlbum->name = $request->input('name');
+        }
+
+        if ($request->hasFile('cover')) {
+            $aAlbum->cover = $aCover;
+        }
+
+        if ($request->filled('released')) {
+            $aAlbum->released = $request->input('released');
+        }
+
+        $aAlbum->save();
+
+        return response("Audio Album Edited", 200);
     }
 
     /**

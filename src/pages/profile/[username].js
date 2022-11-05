@@ -208,7 +208,7 @@ const Profile = (props) => {
 							<div key={videoAlbum.id} className="mb-5">
 								<div className="d-flex">
 									<div className="p-2">
-										<Img src={`/storage/${videoAlbum.cover}`}
+										<Img src={videoAlbum.cover}
 											width="100px"
 											height="100px"
 											alt="album cover" />
@@ -277,7 +277,7 @@ const Profile = (props) => {
 							<div key={audioAlbum.id} className="mb-5">
 								<div className="d-flex">
 									<div className="p-2">
-										<Img src={`/storage/${audioAlbum.cover}`}
+										<Img src={audioAlbum.cover}
 											width="100px"
 											height="100px"
 											alt={"album cover"} />

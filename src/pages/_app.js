@@ -33,7 +33,7 @@ const App = ({ Component, pageProps }) => {
 
 	// Function for fetching data
 	const get = (endpoint, setState, storage) => {
-		axios.get(`/api/${endpoint}`, { headers: { Authorization: `Bearer ${getLocalStorage("sanctumToken")}` } })
+		axios.get(`/api/${endpoint}`)
 			.then((res) => {
 				setState(res.data)
 				setLocalStorage(storage, res.data)
@@ -95,7 +95,7 @@ const App = ({ Component, pageProps }) => {
 		// get("bought-videos", setBoughtAudios, "boughtVideos")
 
 		// get("cart-audios", setCartAudios, "cartAudios")
-		// get("cart-videos", setCartVideos, "cartVideos")
+		get("cart-videos", setCartVideos, "cartVideos")
 
 		// get("karaokes", setKaraokes, "karaokes")
 
@@ -126,6 +126,7 @@ const App = ({ Component, pageProps }) => {
 	// All states
 	const GLOBAL_STATE = {
 		baseUrl,
+		get,
 		getLocalStorage, setLocalStorage,
 		login, setLogin,
 		url,
@@ -141,9 +142,6 @@ const App = ({ Component, pageProps }) => {
 		cartVideos, setCartVideos,
 		karaokes, setKaraokes,
 		posts, setPosts,
-		users, setUsers,
-		videoAlbums, setVideoAlbums,
-		videos, setVideos,
 		users, setUsers,
 		videos, setVideos,
 		videoAlbums, setVideoAlbums,

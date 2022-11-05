@@ -52,12 +52,6 @@ export default function Home(props) {
 		})
 	}
 
-	// Buy function
-	const onBuyVideos = (video) => {
-		props.onCartVideos(video)
-		setTimeout(() => router.push('/cart'), 1000)
-	}
-
 	// Function for loading more artists
 	const handleScroll = (e) => {
 		const bottom = e.target.scrollLeft >= (e.target.scrollWidth - (e.target.scrollWidth / 3));
@@ -207,7 +201,6 @@ export default function Home(props) {
 										<VideoMedia
 											{...props}
 											video={video}
-											onBuyVideos={onBuyVideos}
 											onClick={() => props.setShow(0)} />
 									</Suspense>
 								))}
@@ -265,7 +258,6 @@ export default function Home(props) {
 									<VideoMedia
 										{...props}
 										video={video}
-										onBuyVideos={onBuyVideos}
 										onClick={() => props.setShow(0)} />
 								</Suspense>
 							))}

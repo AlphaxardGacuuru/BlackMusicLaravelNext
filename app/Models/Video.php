@@ -16,11 +16,11 @@ class Video extends Model
         return $this->released ? Carbon::parse($this->released)->format("d M Y") : "";
     }
 
-	public function users() {
-		return $this->belongsTo(User::class, 'username');
+	public function user() {
+		return $this->belongsTo(User::class, 'username', 'id');
 	}
 
-	public function albums() {
+	public function album() {
 		return $this->belongsTo(VideoAlbum::class, 'video_album_id');
 	}
 

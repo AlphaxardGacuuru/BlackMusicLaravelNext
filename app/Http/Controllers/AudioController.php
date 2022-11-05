@@ -55,7 +55,7 @@ class AudioController extends Controller
                 "username" => $audio->username,
                 "ft" => $audio->ft,
                 "audio_album_id" => $audio->audio_album_id,
-                "album" => $audio->albums->name,
+                "album" => $audio->album->name,
                 "genre" => $audio->genre,
                 "thumbnail" => $thumbnail,
                 "description" => $audio->description,

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Video;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -54,9 +53,10 @@ class VideoController extends Controller
                 "video" => $video->video,
                 "name" => $video->name,
                 "username" => $video->username,
+				"user" => $video->user,
                 "ft" => $video->ft,
                 "video_album_id" => $video->video_album_id,
-                "album" => $video->albums->name,
+                "album" => $video->album->name,
                 "genre" => $video->genre,
                 "thumbnail" => $thumbnail,
                 "description" => $video->description,

@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Video;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class VideoController extends Controller
 {
@@ -53,14 +54,14 @@ class VideoController extends Controller
                 "video" => $video->video,
                 "name" => $video->name,
                 "username" => $video->username,
-				"user" => $video->user,
+                "user" => $video->user,
                 "ft" => $video->ft,
                 "video_album_id" => $video->video_album_id,
                 "album" => $video->album->name,
                 "genre" => $video->genre,
                 "thumbnail" => $thumbnail,
                 "description" => $video->description,
-                "released" => $video->released_date,
+                "released" => $video->released,
                 "hasLiked" => $hasLiked,
                 "likes" => $video->likes->count(),
                 "inCart" => $inCart,
@@ -89,6 +90,10 @@ class VideoController extends Controller
             'ft' => 'nullable|exists:users,username',
         ]);
 
+        // Format Released date
+        $released = $request->input('released');
+        $released = Carbon::parse($released)->format("d M Y");
+
         /* Create new video song */
         $video = new Video;
         $video->video = $request->input('video');
@@ -99,7 +104,7 @@ class VideoController extends Controller
         $video->genre = $request->input('genre');
         $video->thumbnail = $request->input('thumbnail');
         $video->description = $request->input('description');
-        $video->released = $request->input('released');
+        $video->released = $released;
         $video->save();
 
         return response('Video Uploaded', 200);
@@ -157,7 +162,11 @@ class VideoController extends Controller
             $video->description = $request->input('description');
         }
         if ($request->filled('released')) {
-            $video->released = $request->input('released');
+            // Format Released date
+            $released = $request->input('released');
+            $released = Carbon::parse($released)->format("d M Y");
+
+            $video->released = $released;
         }
         if ($request->filled('thumbnail')) {
             $video->thumbnail = $request->input('thumbnail');

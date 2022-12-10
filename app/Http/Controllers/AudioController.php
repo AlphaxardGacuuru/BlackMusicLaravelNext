@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Audio;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class AudioController extends Controller
@@ -59,7 +60,7 @@ class AudioController extends Controller
                 "genre" => $audio->genre,
                 "thumbnail" => $thumbnail,
                 "description" => $audio->description,
-                "released" => $audio->released_date,
+                "released" => $audio->released,
                 "hasLiked" => $hasLiked,
                 "likes" => $audio->likes->count(),
                 "inCart" => $inCart,
@@ -87,6 +88,10 @@ class AudioController extends Controller
             'ft' => 'nullable|exists:users,username',
         ]);
 
+        // Format Released date
+        $released = $request->input('released');
+        $released = Carbon::parse($released)->format("d M Y");
+
         /* Create new audio song */
         $audio = new Audio;
         $audio->name = $request->input('name');
@@ -97,7 +102,7 @@ class AudioController extends Controller
         $audio->audio = $request->input('audio');
         $audio->thumbnail = $request->input('thumbnail');
         $audio->description = $request->input('description');
-        $audio->released = $request->input('released');
+        $audio->released = $released;
         $audio->save();
 
         return response('Audio Uploaded', 200);
@@ -169,7 +174,11 @@ class AudioController extends Controller
             }
 
             if ($request->filled('released')) {
-                $audio->released = $request->input('released');
+                // Format Released date
+                $released = $request->input('released');
+                $released = Carbon::parse($released)->format("d M Y");
+
+                $audio->released = $released;
             }
 
             if ($request->filled('thumbnail')) {

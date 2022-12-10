@@ -12,7 +12,7 @@ const AudioAlbumCreate = (props) => {
 	const [name, setName] = useState("")
 	const [released, setReleased] = useState("")
 	const [preview, setPreview] = useState()
-	const [cover, setCover] = useState()
+	const [cover, setCover] = useState("")
 	const [loadingBtn, setLoadingBtn] = useState()
 
 	// Get history for page location

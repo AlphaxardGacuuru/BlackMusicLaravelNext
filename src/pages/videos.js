@@ -7,22 +7,16 @@ import Btn from '@/components/core/Btn'
 
 const Videos = (props) => {
 
-	const [main, setMain] = useState("none")
-	const [button, setButton] = useState("none")
+	const [main, setMain] = useState(props.auth?.account_type == "musician" ? "" : "none")
+	const [button, setButton] = useState(props.auth?.account_type == "musician" ? "none" : "")
 
 	const [loading, setLoading] = useState()
 
 	useEffect(() => {
-
-		// Check if user is musician
-		if (props.auth?.account_type == "musician") {
-			setMain("")
-			setButton("none")
-		} else {
-			setMain("none")
-			setButton("")
-		}
+		setMain(main)
+		setButton(button)
 	}, [])
+
 
 	// Become musician
 	const onMusician = () => {
@@ -40,25 +34,14 @@ const Videos = (props) => {
 				axios.get('api/auth')
 					.then((res) => props.setAuth(res.data))
 				// Update Users
-				axios.get(`/api/users`)
-					.then((res) => props.setUsers(res.data))
+				props.get(`users`, props.setUsers, "users")
 				// Update Video Albums
-				axios.get(`/api/video-albums`)
-					.then((res) => props.setVideoAlbums(res.data))
+				props.get(`video-albums`, props.setVideoAlbums, "videoAlbums")
 				// Update Audio Albums
-				axios.get(`/api/audio-albums`)
-					.then((res) => props.setAudioAlbums(res.data))
+				props.get(`audio-albums`, props.setAudioAlbums, "audioAlbums")
 				// Remove loader
 				setLoading(false)
-			}).catch((err) => {
-				const resErrors = err.response.data.errors
-				var resError
-				var newError = []
-				for (resError in resErrors) {
-					newError.push(resErrors[resError])
-				}
-				props.setErrors(newError)
-			})
+			}).catch((err) => props.setGetErrors(err, props.setErrors))
 		})
 	}
 
@@ -84,6 +67,7 @@ const Videos = (props) => {
 			{/* Become musician button */}
 			<center className="mt-5 pt-5" style={{ display: button }}>
 				<Btn
+					btnClass="sonar-btn white-btn"
 					btnText="become a musician"
 					loading={loading}
 					onClick={onMusician} />
@@ -91,160 +75,162 @@ const Videos = (props) => {
 			{/* Become musician button End */}
 
 			{/* <!-- ***** Call to Action Area Start ***** - */}
-			<div className="backEnd-content">
-				<h2 style={{ color: "rgba(255, 255, 255, 0.1)" }}>Studio</h2>
-			</div>
-			<div className="row" style={{ display: main }}>
-				<div className="col-sm-12">
-					<center>
-						<h1 style={{ fontSize: "5em", fontWeight: "100" }}>Videos</h1>
-						<br />
-						<Link href="/audios"><a className="btn sonar-btn btn-2">go to audios</a></Link>
-					</center>
+			<div style={{ display: main }}>
+				<div className="backEnd-content">
+					<h2 style={{ color: "rgba(255, 255, 255, 0.1)" }}>Studio</h2>
 				</div>
-			</div>
-			<div className="row">
-				<div className="col-sm-4"></div>
-				<div className="col-sm-2">
-					<center>
-						<Link href="/video-album-create">
-							<a className="btn sonar-btn">create video album</a>
-						</Link>
-					</center>
+				<div className="row">
+					<div className="col-sm-12">
+						<center>
+							<h1 style={{ fontSize: "5em", fontWeight: "100" }}>Videos</h1>
+							<br />
+							<Link href="/audios"><a className="btn sonar-btn btn-2">go to audios</a></Link>
+						</center>
+					</div>
 				</div>
-				<div className="col-sm-2">
-					<center>
-						<Link href="/video-create">
-							<a className="btn sonar-btn">upload video</a>
-						</Link>
-					</center>
+				<div className="row">
+					<div className="col-sm-4"></div>
+					<div className="col-sm-2">
+						<center>
+							<Link href="/video-album-create">
+								<a className="btn sonar-btn">create video album</a>
+							</Link>
+						</center>
+					</div>
+					<div className="col-sm-2">
+						<center>
+							<Link href="/video-create">
+								<a className="btn sonar-btn">upload video</a>
+							</Link>
+						</center>
+					</div>
+					<div className="col-sm-4"></div>
 				</div>
-				<div className="col-sm-4"></div>
-			</div>
-			<br />
-			<div className="row" style={{ display: main }}>
-				<div className="col-sm-2">
-					<h1>Stats</h1>
-					<table className='table'>
-						<tbody>
-							<tr>
-								<th><h5>Videos</h5></th>
-								<th><h5>{videos}</h5></th>
-							</tr>
-						</tbody>
-						<tbody>
-							<tr>
-								<th><h5>Video Albums</h5></th>
-								<th><h5>{videoAlbums}</h5></th>
-							</tr>
-						</tbody>
-						<tbody>
-							<tr>
-								<td><h5>Downloads</h5></td>
-								<td><h5>{videoDownloads}</h5></td>
-							</tr>
-						</tbody>
-						<tbody>
-							<tr>
-								<td><h5>Revenue</h5></td>
-								<td>
-									<h5 className="text-success">
-										KES<span className="ms-1 text-success">{videoRevenue}</span>
-									</h5>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+				<br />
+				<div className="row" style={{ display: main }}>
+					<div className="col-sm-2">
+						<h1>Stats</h1>
+						<table className='table'>
+							<tbody>
+								<tr>
+									<th><h5>Videos</h5></th>
+									<th><h5>{videos}</h5></th>
+								</tr>
+							</tbody>
+							<tbody>
+								<tr>
+									<th><h5>Video Albums</h5></th>
+									<th><h5>{videoAlbums}</h5></th>
+								</tr>
+							</tbody>
+							<tbody>
+								<tr>
+									<td><h5>Downloads</h5></td>
+									<td><h5>{videoDownloads}</h5></td>
+								</tr>
+							</tbody>
+							<tbody>
+								<tr>
+									<td><h5>Revenue</h5></td>
+									<td>
+										<h5 className="text-success">
+											KES<span className="ms-1 text-success">{videoRevenue}</span>
+										</h5>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 
-				<div className="col-sm-9">
-					{props.videoAlbums
-						.filter((videoAlbum) => videoAlbum.username == props.auth?.username)
-						.map((videoAlbum, key) => (
-							<div key={key}>
-								<div className="d-flex">
-									<div className="p-2">
-										{videoAlbum.name != "Singles" ?
-											<Link href={`/video-album-edit/${videoAlbum.id}`}>
-												<a>
-													<Img
-														src={videoAlbum.cover}
-														width="100"
-														height="100"
-														alt="album cover" />
-												</a>
-											</Link> :
-											<Img
-												src={videoAlbum.cover}
-												width="100"
-												height="100"
-												alt="album cover" />}
+					<div className="col-sm-9">
+						{props.videoAlbums
+							.filter((videoAlbum) => videoAlbum.username == props.auth?.username)
+							.map((videoAlbum, key) => (
+								<div key={key}>
+									<div className="d-flex">
+										<div className="p-2">
+											{videoAlbum.name != "Singles" ?
+												<Link href={`/video-album-edit/${videoAlbum.id}`}>
+													<a>
+														<Img
+															src={videoAlbum.cover}
+															width="100"
+															height="100"
+															alt="album cover" />
+													</a>
+												</Link> :
+												<Img
+													src={videoAlbum.cover}
+													width="100"
+													height="100"
+													alt="album cover" />}
+										</div>
+										<div className="p-2">
+											<small>Video Album</small>
+											<h1>{videoAlbum.name}</h1>
+											<h6>{videoAlbum.created_at}</h6>
+										</div>
 									</div>
-									<div className="p-2">
-										<small>Video Album</small>
-										<h1>{videoAlbum.name}</h1>
-										<h6>{videoAlbum.created_at}</h6>
-									</div>
+									<br />
+									<table className="table table-responsive">
+										<tbody>
+											<tr>
+												<th><h5>Thumbnail</h5></th>
+												<th><h5>Video Name</h5></th>
+												<th><h5>ft</h5></th>
+												<th><h5>Genre</h5></th>
+												<th><h5>Description</h5></th>
+												<th><h5>Downloads</h5></th>
+												<th><h5 className="text-success">Revenue</h5></th>
+												<th><h5>Likes</h5></th>
+												<th><h5>Released</h5></th>
+												<th><h5>Uploaded</h5></th>
+												<th><h5></h5></th>
+											</tr>
+										</tbody>
+										{props.videos
+											.filter((video) => video.video_album_id == videoAlbum.id)
+											.map((albumItem, key) => (
+												<tbody key={key}>
+													<tr>
+														<td>
+															<Link href={`/video-show/${albumItem.id}`}>
+																<Img
+																	src={albumItem.thumbnail}
+																	width="160em"
+																	height="90em"
+																	alt={"thumbnail"} />
+															</Link>
+														</td>
+														<td>{albumItem.name}</td>
+														<td>{albumItem.ft}</td>
+														<td>{albumItem.genre}</td>
+														<td>{albumItem.description}</td>
+														<td>{albumItem.downloads}</td>
+														<td className="text-success">
+															KES <span className="text-success">{albumItem.downloads * 10}</span>
+														</td>
+														<td>{albumItem.likes}</td>
+														<td>{videoAlbum.released}</td>
+														<td>{albumItem.created_at}</td>
+														<td>
+															<Link href={`/video-edit/${albumItem.id}`}>
+																<button className='mysonar-btn white-btn'>edit</button>
+															</Link>
+														</td>
+													</tr>
+												</tbody>
+											))}
+									</table>
+									<br />
+									<br />
 								</div>
-								<br />
-								<table className="table table-responsive">
-									<tbody>
-										<tr>
-											<th><h5>Thumbnail</h5></th>
-											<th><h5>Video Name</h5></th>
-											<th><h5>ft</h5></th>
-											<th><h5>Genre</h5></th>
-											<th><h5>Description</h5></th>
-											<th><h5>Downloads</h5></th>
-											<th><h5 className="text-success">Revenue</h5></th>
-											<th><h5>Likes</h5></th>
-											<th><h5>Released</h5></th>
-											<th><h5>Uploaded</h5></th>
-											<th><h5></h5></th>
-										</tr>
-									</tbody>
-									{props.videos
-										.filter((video) => video.video_album_id == videoAlbum.id)
-										.map((albumItem, key) => (
-											<tbody key={key}>
-												<tr>
-													<td>
-														<Link href={`/video-show/${albumItem.id}`}>
-															<Img
-																src={albumItem.thumbnail}
-																width="160em"
-																height="90em"
-																alt={"thumbnail"} />
-														</Link>
-													</td>
-													<td>{albumItem.name}</td>
-													<td>{albumItem.ft}</td>
-													<td>{albumItem.genre}</td>
-													<td>{albumItem.description}</td>
-													<td>{albumItem.downloads}</td>
-													<td className="text-success">
-														KES <span className="text-success">{albumItem.downloads * 10}</span>
-													</td>
-													<td>{albumItem.likes}</td>
-													<td>{videoAlbum.released}</td>
-													<td>{albumItem.created_at}</td>
-													<td>
-														<Link href={`/video-edit/${albumItem.id}`}>
-															<button className='mysonar-btn white-btn'>edit</button>
-														</Link>
-													</td>
-												</tr>
-											</tbody>
-										))}
-								</table>
-								<br />
-								<br />
-							</div>
-						))}
+							))}
+					</div>
+					<div className="col-sm-1"></div>
 				</div>
-				<div className="col-sm-1"></div>
 			</div>
-		</div >
+		</div>
 	)
 }
 

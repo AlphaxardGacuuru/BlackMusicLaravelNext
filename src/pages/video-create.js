@@ -39,9 +39,9 @@ const VideoCreate = (props) => {
 	const [name, setName] = useState("")
 	const [ft, setFt] = useState("")
 	const [videoAlbumId, setVideoAlbumId] = useState()
-	const [genre, setGenre] = useState()
-	const [released, setReleased] = useState()
-	const [description, setDescription] = useState()
+	const [genre, setGenre] = useState("")
+	const [released, setReleased] = useState("")
+	const [description, setDescription] = useState("")
 	const [thumbnail, setThumbnail] = useState("")
 	const [files, setFiles] = useState([]);
 	const [loadingBtn, setLoadingBtn] = useState()

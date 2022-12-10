@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\AudioAlbum;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AudioAlbumController extends Controller
 {
@@ -25,7 +27,7 @@ class AudioAlbumController extends Controller
                 "username" => $audioAlbum->username,
                 "name" => $audioAlbum->name,
                 "cover" => "/storage/" . $audioAlbum->cover,
-                "released" => $audioAlbum->released_date,
+                "released" => $audioAlbum->released,
                 "created_at" => $audioAlbum->created_at->format("d M Y"),
             ]);
         }
@@ -51,12 +53,16 @@ class AudioAlbumController extends Controller
             $aCover = substr($aCover, 7);
         }
 
+        // Format Released date
+        $released = $request->input('released');
+        $released = Carbon::parse($released)->format("d M Y");
+
         /* Create new video album */
         $aAlbum = new AudioAlbum;
         $aAlbum->name = $request->input('name');
         $aAlbum->username = auth()->user()->username;
         $aAlbum->cover = $aCover;
-        $aAlbum->released = $request->input('released');
+        $aAlbum->released = $released;
         $aAlbum->save();
 
         return response('Audio Album Created', 200);
@@ -105,7 +111,11 @@ class AudioAlbumController extends Controller
         }
 
         if ($request->filled('released')) {
-            $aAlbum->released = $request->input('released');
+			// Format Released date
+            $released = $request->input('released');
+            $released = Carbon::parse($released)->format("d M Y");
+
+            $aAlbum->released = $released;
         }
 
         $aAlbum->save();

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 import axios from '@/lib/axios'
 
@@ -6,6 +7,8 @@ import Img from '@/components/core/Img'
 import Btn from '@/components/core/Btn'
 
 const Videos = (props) => {
+
+	const router = useRouter()
 
 	const [main, setMain] = useState("none")
 	const [button, setButton] = useState("none")
@@ -30,35 +33,27 @@ const Videos = (props) => {
 		setLoading(true)
 
 		// Set account type to musician
-		axios.get('sanctum/csrf-cookie').then(() => {
-			axios.post(`/api/users/${props.auth?.id}`, {
-				account_type: "musician",
-				_method: "put"
-			}).then((res) => {
-				props.setMessages(["You're now a Musician"])
-				// Update Auth
-				axios.get('api/auth')
-					.then((res) => props.setAuth(res.data))
-				// Update Users
-				axios.get(`/api/users`)
-					.then((res) => props.setUsers(res.data))
-				// Update Video Albums
-				axios.get(`/api/video-albums`)
-					.then((res) => props.setVideoAlbums(res.data))
-				// Update Audio Albums
-				axios.get(`/api/audio-albums`)
-					.then((res) => props.setAudioAlbums(res.data))
-				// Remove loader
-				setLoading(false)
-			}).catch((err) => {
-				const resErrors = err.response.data.errors
-				var resError
-				var newError = []
-				for (resError in resErrors) {
-					newError.push(resErrors[resError])
-				}
-				props.setErrors(newError)
-			})
+		axios.post(`/api/users/${props.auth?.id}`, {
+			account_type: "musician",
+			_method: "put"
+		}).then((res) => {
+			props.setMessages(["You're now a Musician"])
+			// Update Auth
+			props.get("auth", props.setAuth, "auth")
+			// Update Video Albums
+			props.get("video-albums", props.setVideoAlbums, "videoAlbums")
+			// Update Audio Albums
+			props.get("audio-albums", props.setAudioAlbums, "audioAlbums")
+			// Update Users
+			axios.get(`/api/users`)
+				.then((res) => {
+					setMain("")
+					setButton("none")
+					props.setUsers(res.data)
+				})
+		}).catch((err) => {
+			setLoading(false)
+			props.getErrors(err)
 		})
 	}
 
@@ -85,6 +80,7 @@ const Videos = (props) => {
 			<center className="mt-5 pt-5" style={{ display: button }}>
 				<Btn
 					btnText="become a musician"
+					btnClass="sonar-btn btn-2"
 					loading={loading}
 					onClick={onMusician} />
 			</center>
@@ -103,7 +99,7 @@ const Videos = (props) => {
 					</center>
 				</div>
 			</div>
-			<div className="row">
+			<div className="row" style={{ display: main }}>
 				<div className="col-sm-4"></div>
 				<div className="col-sm-2">
 					<center>

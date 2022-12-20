@@ -67,33 +67,24 @@ const Edit = (props) => {
 
 		// Send data to UsersController
 		// Get csrf cookie from Laravel inorder to send a POST request
-		axios.get('sanctum/csrf-cookie').then(() => {
-			axios.post(`/api/users/${props.auth?.id}`, formData)
-				.then((res) => {
-					props.setMessages([res.data])
-					// Update Posts
-					axios.get('/api/posts')
-						.then((res) => props.setPosts(res.data))
-					setName("")
-					setPhone("")
-					setBio("")
-					setWithdrawal("")
-					// Remove loader for button
-					setBtnLoading(false)
-					// Reload page to see changes
-					location.reload()
-				}).catch(err => {
-					// Remove loader for button
-					setBtnLoading(false)
-					const resErrors = err.response.data.errors
-					var resError
-					var newError = []
-					for (resError in resErrors) {
-						newError.push(resErrors[resError])
-					}
-					props.setErrors(newError)
-				})
-		})
+		axios.post(`/api/users/${props.auth?.id}`, formData)
+			.then((res) => {
+				props.setMessages([res.data])
+				// Update Posts
+				props.get("posts", props.setPosts, "posts")
+				setName("")
+				setPhone("")
+				setBio("")
+				setWithdrawal("")
+				// Remove loader for button
+				setBtnLoading(false)
+				// Reload page to see changes
+				location.reload()
+			}).catch((err) => {
+				// Remove loader for button
+				setBtnLoading(false)
+				props.getErrors(err)
+			})
 	}
 
 	return (

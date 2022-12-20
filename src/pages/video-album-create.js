@@ -48,28 +48,18 @@ const VideoAlbumCreate = (props) => {
 
 		// Send data to PostsController
 		// Get csrf cookie from Laravel inorder to send a POST request
-		axios.get('sanctum/csrf-cookie').then(() => {
-			axios.post(`${props.url}/api/video-albums`, formData)
-				.then((res) => {
-					props.setMessages([res.data])
-					axios.get(`${props.url}/api/video-albums`)
-						.then((res) => props.setVideoAlbums(res.data))
-					// Remove loader for button
-					setLoadingBtn(false)
-					setTimeout(() => router.push('/videos'), 500)
-				}).catch(err => {
-					// Remove loader for button
-					setLoadingBtn(false)
-					const resErrors = err.response.data.errors
-
-					var resError
-					var newError = []
-					for (resError in resErrors) {
-						newError.push(resErrors[resError])
-					}
-					props.setErrors(newError)
-				})
-		})
+		axios.post(`${props.url}/api/video-albums`, formData)
+			.then((res) => {
+				props.setMessages([res.data])
+				props.get("video-albums", props.setVideoAlbums, "videoAlbums")
+				// Remove loader for button
+				setLoadingBtn(false)
+				setTimeout(() => router.push('/videos'), 500)
+			}).catch(err => {
+				// Remove loader for button
+				setLoadingBtn(false)
+				props.getErrors(err)
+			})
 	}
 
 	return (

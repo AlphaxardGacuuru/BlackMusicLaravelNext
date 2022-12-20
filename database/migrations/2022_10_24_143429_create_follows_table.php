@@ -15,11 +15,27 @@ return new class extends Migration
     {
         Schema::create('follows', function (Blueprint $table) {
             $table->id();
-            $table->string('followed')->nullable();
-            $table->string('username')->nullable();
-            $table->string('muted')->nullable();
-            $table->string('blocked')->nullable();
+            $table->string('followed');
+            $table->string('username');
+            $table->string('muted')
+                ->default('false')
+                ->nullable();
+            $table->string('blocked')
+                ->default('false')
+                ->nullable();
             $table->timestamps();
+
+            $table->foreign('username')
+                ->references('username')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->foreign('followed')
+                ->references('username')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

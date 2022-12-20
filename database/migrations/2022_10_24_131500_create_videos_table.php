@@ -15,16 +15,25 @@ return new class extends Migration
     {
         Schema::create('videos', function (Blueprint $table) {
             $table->id();
-            $table->string('video')->nullable();
-            $table->string('name')->nullable();
-            $table->string('username')->nullable();
+            $table->string('video');
+            $table->string('name');
+            $table->string('username');
             $table->string('ft')->nullable();
-            $table->unsignedBigInteger('video_album_id');
-            $table->string('genre')->nullable();
-            $table->string('thumbnail')->nullable();
-            $table->string('description')->nullable();
-            $table->string('released')->nullable();
+            $table->foreignId('video_album_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->string('genre');
+            $table->string('thumbnail');
+            $table->string('description');
+            $table->timestamp('released');
             $table->timestamps();
+
+            $table->foreign('username')
+                ->references('username')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

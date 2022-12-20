@@ -13,21 +13,23 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('chats', function (Blueprint $table) {
+        Schema::create('audios', function (Blueprint $table) {
             $table->id();
+            $table->string('audio');
+            $table->string('name');
             $table->string('username');
-            $table->string('to');
-            $table->string('text');
-            $table->string('media')->nullable();
+            $table->string('ft')->nullable();
+            $table->foreignId('audio_album_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->string('genre');
+            $table->string('thumbnail');
+            $table->string('description');
+            $table->timestamp('released');
             $table->timestamps();
 
             $table->foreign('username')
-                ->references('username')
-                ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
-            $table->foreign('to')
                 ->references('username')
                 ->on('users')
                 ->onUpdate('cascade')
@@ -42,6 +44,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('chats');
+        Schema::dropIfExists('audios');
     }
 };

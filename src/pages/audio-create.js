@@ -72,37 +72,22 @@ const AudioCreate = (props) => {
 		formData.append("description", description);
 		formData.append("files", files);
 
-		// Send data to PostsController
+		// Send data to AudioController
 		// Get csrf cookie from Laravel inorder to send a POST request
-		axios.get('sanctum/csrf-cookie').then(() => {
-			axios.post(`/api/audios`, formData)
-				.then((res) => {
-					props.setMessages([res.data])
-					// Update Audios
-					axios.get(`/api/audios`)
-						.then((res) => props.setAudios(res.data))
-					// Remove loader for button
-					setLoadingBtn(false)
-					// setTimeout(() => router.push('/audios'), 500)
-				}).catch(err => {
-					// Remove loader for button
-					setLoadingBtn(false)
-					const resErrors = err.response.data.errors
-					var resError
-					var newError = []
-					for (resError in resErrors) {
-						newError.push(resErrors[resError])
-					}
-					// Get other errors
-					// newError.push(err.response.data.message)
-					props.setErrors(newError)
-				})
-		})
+		axios.post(`/api/audios`, formData)
+			.then((res) => {
+				props.setMessages([res.data])
+				// Update Audios
+				props.get("audios", props.setAudios, "audios")
+				// Remove loader for button
+				setLoadingBtn(false)
+				setTimeout(() => router.push('/audios'), 500)
+			}).catch((err) => {
+				// Remove loader for button
+				setLoadingBtn(false)
+				props.getErrors(err)
+			})
 	}
-
-	const onPatch = () => axios.post(`/api/audios/filepond/audio`)
-		.then((res) => console.log(res.data))
-		.catch((err) => console.log(err.data))
 
 	return (
 		<div>

@@ -15,9 +15,15 @@ return new class extends Migration
     {
         Schema::create('song_payouts', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->nullable();
-            $table->string('amount')->nullable();
+            $table->string('username');
+            $table->string('amount');
             $table->timestamps();
+
+            $table->foreign('username')
+                ->references('username')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

@@ -14,27 +14,14 @@ const PostMedia = (props) => {
 
 	// Function for voting in poll
 	const onPoll = (post, parameter) => {
-		axios.get('sanctum/csrf-cookie').then(() => {
-			axios.post(`/api/polls`, {
-				post: post,
-				parameter: parameter
-			}).then((res) => {
-				props.setMessages([res.data])
-				// Update posts
-				axios.get(`/api/posts`)
-					.then((res) => props.setPosts(res.data))
-			}).catch((err) => {
-				const resErrors = err.response.data.errors
-				var resError
-				var newError = []
-				for (resError in resErrors) {
-					newError.push(resErrors[resError])
-				}
-				// Get other errors
-				newError.push(err.response.data.message)
-				props.setErrors(newError)
-			})
-		})
+		axios.post(`/api/polls`, {
+			post: post,
+			parameter: parameter
+		}).then((res) => {
+			props.setMessages([res.data])
+			// Update posts
+			props.get("posts", props.setPosts, "posts")
+		}).catch((err) => props.getErrors(err, true))
 	}
 
 	// Function for liking posts
@@ -52,26 +39,13 @@ const PostMedia = (props) => {
 		props.setPosts(newPosts)
 
 		// Add like to database
-		axios.get('sanctum/csrf-cookie').then(() => {
 			axios.post(`/api/post-likes`, {
 				post: post
 			}).then((res) => {
 				props.setMessages([res.data])
 				// Update posts
-				axios.get(`/api/posts`)
-					.then((res) => props.setPosts(res.data))
-			}).catch((err) => {
-				const resErrors = err.response.data.errors
-				var resError
-				var newError = []
-				for (resError in resErrors) {
-					newError.push(resErrors[resError])
-				}
-				// Get other errors
-				newError.push(err.response.data.message)
-				props.setErrors(newError)
-			})
-		})
+				props.get("posts", props.setPosts, "posts")
+			}).catch((err) => props.getErrors(err))
 	}
 
 	// Web Share API for share button

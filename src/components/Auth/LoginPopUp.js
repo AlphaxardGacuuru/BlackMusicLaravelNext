@@ -59,34 +59,20 @@ const LoginPopUp = (props) => {
 	const onSubmit = (e) => {
 		e.preventDefault()
 
-		axios.get('/sanctum/csrf-cookie').then(() => {
-			axios.post(`${props.url}/api/login`, {
-				phone: phone,
-				password: phone,
-				remember: 'checked'
-			}).then((res) => {
-				props.setLogin(false)
-				props.setMessages(["Logged in"])
-				// Update Logged in user
-				axios.get(`${props.url}/api/auth`)
-					.then((res) => props.setAuth(res.data))
-				// Save phone to Local Storage
-				localStorage.setItem("phone", phone)
-				// Reload page
-				setTimeout(() => location.reload(), 1000)
-			}).catch(err => {
-				const resErrors = err.response.data.errors
-				// Get validation errors
-				var resError
-				var newError = []
-				for (resError in resErrors) {
-					newError.push(resErrors[resError])
-				}
-				// Get other errors
-				newError.push(err.response.data.message)
-				props.setErrors(newError)
-			});
-		});
+		axios.post(`${props.url}/api/login`, {
+			phone: phone,
+			password: phone,
+			remember: 'checked'
+		}).then((res) => {
+			props.setLogin(false)
+			props.setMessages(["Logged in"])
+			// Update Logged in user
+			props.get(`auth`, props.setAuth, 'auth')
+			// Save phone to Local Storage
+			localStorage.setItem("phone", phone)
+			// Reload page
+			setTimeout(() => location.reload(), 1000)
+		}).catch((err) => props.getErrors(err, true));
 
 		setPhone('07')
 	}

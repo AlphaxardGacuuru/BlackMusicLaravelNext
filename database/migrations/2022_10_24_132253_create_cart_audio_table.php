@@ -15,9 +15,18 @@ return new class extends Migration
     {
         Schema::create('cart_audios', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('audio_id');
+            $table->foreignId('audio_id')
+                ->constrained('audios')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->string('username');
             $table->timestamps();
+
+            $table->foreign('username')
+                ->references('username')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

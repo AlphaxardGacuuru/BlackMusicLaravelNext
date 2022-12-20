@@ -15,9 +15,18 @@ return new class extends Migration
     {
         Schema::create('audio_comment_likes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('audio_comment_id');
+            $table->foreignId('audio_comment_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->string('username');
             $table->timestamps();
+
+            $table->foreign('username')
+                ->references('username')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

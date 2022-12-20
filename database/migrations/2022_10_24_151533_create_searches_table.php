@@ -15,9 +15,15 @@ return new class extends Migration
     {
         Schema::create('searches', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->nullable();
-            $table->string('keyword')->nullable();
+            $table->string('username');
+            $table->string('keyword');
             $table->timestamps();
+
+            $table->foreign('username')
+                ->references('username')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

@@ -48,28 +48,18 @@ const AudioAlbumCreate = (props) => {
 
 		// Send data to PostsController
 		// Get csrf cookie from Laravel inorder to send a POST request
-		axios.get('sanctum/csrf-cookie').then(() => {
-			axios.post(`/api/audio-albums`, formData)
-				.then((res) => {
-					props.setMessages([res.data])
-					axios.get(`/api/audio-albums`)
-						.then((res) => props.setAudioAlbums(res.data))
-					// Remove loader for button
-					setLoadingBtn(false)
-					setTimeout(() => router.push('/audios'), 500)
-				}).catch(err => {
-					// Remove loader for button
-					setLoadingBtn(false)
-					const resErrors = err.response.data.errors
-
-					var resError
-					var newError = []
-					for (resError in resErrors) {
-						newError.push(resErrors[resError])
-					}
-					props.setErrors(newError)
-				})
-		})
+		axios.post(`/api/audio-albums`, formData)
+			.then((res) => {
+				props.setMessages([res.data])
+				props.get("audio-albums", props.setAudioAlbums, "audioAlbums")
+				// Remove loader for button
+				setLoadingBtn(false)
+				setTimeout(() => router.push('/audios'), 500)
+			}).catch((err) => {
+				// Remove loader for button
+				setLoadingBtn(false)
+				props.getErrors(err)
+			})
 	}
 
 	return (

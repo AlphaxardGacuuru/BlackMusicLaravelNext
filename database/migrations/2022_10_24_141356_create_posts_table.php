@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->nullable();
-            $table->string('text')->nullable();
+            $table->string('username');
+            $table->string('text');
             $table->string('media')->nullable();
             $table->string('parameter_1')->nullable();
             $table->string('parameter_2')->nullable();
@@ -24,6 +24,12 @@ return new class extends Migration
             $table->string('parameter_4')->nullable();
             $table->string('parameter_5')->nullable();
             $table->timestamps();
+
+            $table->foreign('username')
+                ->references('username')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

@@ -58,21 +58,14 @@ const AudioAlbumEdit = (props) => {
 			axios.post(`${props.url}/api/audio-albums/${id}`, formData)
 				.then((res) => {
 					props.setMessages([res.data])
-					axios.get(`${props.url}/api/audio-albums`)
-						.then((res) => props.setAudioAlbums(res.data))
+					props.get("audio-albums", props.setAudioAlbums, "audioAlbums")
 					setPreview()
 					// Remove loader for button
 					setBtnLoading(false)
 				}).catch((err) => {
 					// Remove loader for button
 					setBtnLoading(false)
-					const resErrors = err.response.data.errors
-					var resError
-					var newError = []
-					for (resError in resErrors) {
-						newError.push(resErrors[resError])
-					}
-					props.setErrors(newError)
+					props.getErrors(err)
 				})
 		})
 	}

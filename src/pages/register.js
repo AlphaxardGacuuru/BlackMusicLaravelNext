@@ -47,18 +47,7 @@ const Register = (props) => {
 			}).then((res) => {
 				props.setMessages(["Account Updated"])
 				setTimeout(() => router.push('/'), 500)
-			}).catch((err) => {
-				const resErrors = err.response.data.errors
-
-				var resError
-				var newError = []
-				for (resError in resErrors) {
-					newError.push(resErrors[resError])
-				}
-				// Get other errors
-				// newError.push((err).response.data.message)
-				props.setErrors(newError)
-			});
+			}).catch((err) => props.getErrors(err));
 		});
 	}
 
@@ -66,46 +55,37 @@ const Register = (props) => {
 		// Show loading button
 		setLoading(true)
 
-		axios.get('/sanctum/csrf-cookie').then(() => {
-			// Register User
-			axios.post(`/register`, {
-				name: name,
-				email: email,
-				avatar: avatar,
-				username: username,
-				phone: phone,
-				password: phone,
-				password_confirmation: phone,
-				device_name: "deviceName"
-			}).then((res) => {
-				props.setLocalStorage("sanctumToken", res.data)
-				// Add referer if there's one
-				referer &&
-					axios.post(`${props.url}/api/referrals`, {
-						referer: referer,
-						username: username
-					})
+		// Register User
+		axios.post(`/register`, {
+			name: name,
+			email: email,
+			avatar: avatar,
+			username: username,
+			phone: phone,
+			password: phone,
+			password_confirmation: phone,
+			device_name: "deviceName"
+		}).then((res) => {
+			props.setLocalStorage("sanctumToken", res.data)
+			// Add referer if there's one
+			referer &&
+				axios.post(`${props.url}/api/referrals`, {
+					referer: referer,
+					username: username
+				})
 
-				props.setMessages(["Account created"])
-				// Redirect user
-				setTimeout(() => location.href = (page ? page : '/'), 500)
-				// Clear sessionStorage
-				sessionStorage.clear("referer")
-				sessionStorage.clear("page")
-				// Removing loading
-				setLoading(false)
-			}).catch(err => {
-				console.log(err.response)
-				const resErrors = err.response.data.errors
-				var resError
-				var newError = []
-				for (resError in resErrors) {
-					newError.push(resErrors[resError])
-				}
-				// Get other errors
-				// newError.push(err.response.data.message)
-				props.setErrors(newError)
-			});
+			props.setMessages(["Account created"])
+			// Redirect user
+			setTimeout(() => location.href = (page ? page : '/'), 500)
+			// Clear sessionStorage
+			sessionStorage.clear("referer")
+			sessionStorage.clear("page")
+			// Removing loading
+			setLoading(false)
+		}).catch(err => {
+			props.getErrors(err)
+			// Removing loading
+			setLoading(false)
 		});
 	}
 

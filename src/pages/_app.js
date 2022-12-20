@@ -31,15 +31,6 @@ const App = ({ Component, pageProps }) => {
 		localStorage.setItem(state, JSON.stringify(data))
 	}
 
-	// Function for fetching data
-	const get = (endpoint, setState, storage) => {
-		axios.get(`/api/${endpoint}`)
-			.then((res) => {
-				setState(res.data)
-				setLocalStorage(storage, res.data)
-			}).catch(() => setErrors([`Failed to fetch ${endpoint}`]))
-	}
-
 	const url = process.env.NEXT_PUBLIC_BACKEND_URL
 
 	// Declare states
@@ -66,6 +57,27 @@ const App = ({ Component, pageProps }) => {
 	const [videos, setVideos] = useState(getLocalStorage("videos"))
 	const [videoAlbums, setVideoAlbums] = useState(getLocalStorage("videoAlbums"))
 	const [videoLikes, setVideoLikes] = useState(getLocalStorage("videoLikes"))
+
+	// Function for fetching data from API
+	const get = (endpoint, setState, storage = null) => {
+		axios.get(`/api/${endpoint}`)
+			.then((res) => {
+				setState(res.data)
+				storage && setLocalStorage(storage, res.data)
+			}).catch(() => setErrors([`Failed to fetch ${endpoint}`]))
+	}
+
+	// Function for getting errors from responses
+	const getErrors = (err, message = false) => {
+		const resErrors = err.response.data.errors
+		var newError = []
+		for (var resError in resErrors) {
+			newError.push(resErrors[resError])
+		}
+		// Get other errors
+		message && newError.push(err.response.data.message)
+		setErrors(newError)
+	}
 
 	// Reset Messages and Errors to null after 3 seconds
 	if (errors.length > 0 || messages.length > 0) {
@@ -126,7 +138,7 @@ const App = ({ Component, pageProps }) => {
 	// All states
 	const GLOBAL_STATE = {
 		baseUrl,
-		get,
+		get, getErrors,
 		getLocalStorage, setLocalStorage,
 		login, setLogin,
 		url,

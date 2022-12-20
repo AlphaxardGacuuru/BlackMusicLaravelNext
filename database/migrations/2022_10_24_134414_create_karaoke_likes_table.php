@@ -15,9 +15,18 @@ return new class extends Migration
     {
         Schema::create('karaoke_likes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('karaoke_id');
+            $table->foreignId('karaoke_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->string('username');
             $table->timestamps();
+
+            $table->foreign('username')
+                ->references('username')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

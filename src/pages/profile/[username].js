@@ -52,24 +52,11 @@ const Profile = (props) => {
 
 	// Function for deleting posts
 	const onDeletePost = (id) => {
-		axios.get('sanctum/csrf-cookie').then(() => {
-			axios.delete(`${props.url}/api/posts/${id}`).then((res) => {
-				props.setMessages([res.data])
-				// Update posts
-				axios.get(`${props.url}/api/posts`)
-					.then((res) => props.setPosts(res.data))
-			}).catch((err) => {
-				const resErrors = err.response.data.errors
-				var resError
-				var newError = []
-				for (resError in resErrors) {
-					newError.push(resErrors[resError])
-				}
-				// Get other errors
-				newError.push(err.response.data.message)
-				props.setErrors(newError)
-			})
-		})
+		axios.delete(`${props.url}/api/posts/${id}`).then((res) => {
+			props.setMessages([res.data])
+			// Update posts
+			props.get("posts", props.setPosts, "posts")
+		}).catch((err) => props.getErrors(err, true))
 	}
 
 	return (

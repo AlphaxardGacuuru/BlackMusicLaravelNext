@@ -8,6 +8,7 @@ use App\Models\BoughtVideo;
 use App\Models\Follow;
 use App\Models\User;
 use App\Models\VideoAlbum;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -36,9 +37,7 @@ class UserController extends Controller
         foreach ($getUsers as $key => $user) {
 
             // Format profile pic
-            $pp = preg_match("/http/", $user->pp) ?
-            $user->pp :
-            "/storage/" . $user->pp;
+            $pp = preg_match("/http/", $user->pp) ? $user->pp : "/storage/" . $user->pp;
 
             // Check if user has followed User
             $hasFollowed = $user->follows
@@ -135,21 +134,24 @@ class UserController extends Controller
         }
 
         if ($request->filled('account_type') && $user->account_type == "normal") {
-            $user->account_type = $request->input('account_type');
 
-            /* Create new audio album */
-            $aAlbum = new AudioAlbum;
-            $aAlbum->name = "Singles";
-            $aAlbum->username = auth()->user()->username;
-            $aAlbum->cover = "audio-album-covers/musical-note.png";
-            $aAlbum->save();
+            $user->account_type = $request->input('account_type');
 
             /* Create new video album */
             $vAlbum = new VideoAlbum;
             $vAlbum->name = "Singles";
             $vAlbum->username = auth()->user()->username;
             $vAlbum->cover = "video-album-covers/musical-note.png";
+            $vAlbum->released = Carbon::now();
             $vAlbum->save();
+
+            /* Create new audio album */
+            $aAlbum = new AudioAlbum;
+            $aAlbum->name = "Singles";
+            $aAlbum->username = auth()->user()->username;
+            $aAlbum->cover = "audio-album-covers/musical-note.png";
+            $vAlbum->released = Carbon::now();
+            $aAlbum->save();
         }
 
         if ($request->filled('bio')) {

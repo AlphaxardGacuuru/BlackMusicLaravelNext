@@ -78,27 +78,18 @@ const VideoEdit = (props) => {
 
 		// Send data to VideosController
 		// Get csrf cookie from Laravel inorder to send a POST request
-		axios.get('sanctum/csrf-cookie').then(() => {
-			axios.post(`${props.url}/api/videos/${id}`, formData)
-				.then((res) => {
-					props.setMessages([res.data])
-					// Update Videos
-					axios.get(`${props.url}/api/videos`)
-						.then((res) => props.setVideos(res.data))
-					// Remove loader for button
-					setBtnLoading(false)
-				}).catch(err => {
-					// Remove loader for button
-					setBtnLoading(false)
-					const resErrors = err.response.data.errors
-					var resError
-					var newError = []
-					for (resError in resErrors) {
-						newError.push(resErrors[resError])
-					}
-					props.setErrors(newError)
-				})
-		})
+		axios.post(`${props.url}/api/videos/${id}`, formData)
+			.then((res) => {
+				props.setMessages([res.data])
+				// Update Videos
+				props.get("videos", props.setVideos, "videos")
+				// Remove loader for button
+				setBtnLoading(false)
+			}).catch(err => {
+				// Remove loader for button
+				setBtnLoading(false)
+				props.getErrors(err)
+			})
 	}
 
 	return (

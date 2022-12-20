@@ -15,11 +15,17 @@ return new class extends Migration
     {
         Schema::create('video_albums', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->nullable();
-            $table->string('name')->nullable();
-            $table->string('cover')->default('video-album-covers/musical-note.png')->nullable();
-            $table->string('released')->nullable();
+            $table->string('username');
+            $table->string('name');
+            $table->string('cover')->default('video-album-covers/musical-note.png');
+            $table->timestamp('released');
             $table->timestamps();
+
+            $table->foreign('username')
+                ->references('username')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

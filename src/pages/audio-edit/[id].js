@@ -83,20 +83,13 @@ const AudioEdit = (props) => {
 				.then((res) => {
 					props.setMessages([res.data])
 					// Update Audios
-					axios.get(`/api/audios`)
-						.then((res) => props.setAudios(res.data))
+					props.get("audios", props.setAudios, "audios")
 					// Remove loader for button
 					setBtnLoading(false)
-				}).catch(err => {
+				}).catch((err) => {
 					// Remove loader for button
 					setBtnLoading(false)
-					const resErrors = err.response.data.errors
-					var resError
-					var newError = []
-					for (resError in resErrors) {
-						newError.push(resErrors[resError])
-					}
-					props.setErrors(newError)
+					props.getErrors(err)
 				})
 		})
 	}

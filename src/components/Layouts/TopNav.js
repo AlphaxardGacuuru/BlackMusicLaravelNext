@@ -65,22 +65,18 @@ const TopNav = (props) => {
 	// }
 
 	const onNotification = () => {
-		axios.get('sanctum/csrf-cookie').then(() => {
-			axios.put(`${props.url}/api/notifications/update`)
-				.then((res) => {
-					// Update notifications
-					axios.get(`${props.url}/api/notifications`)
-						.then((res) => setNotifications(res.data))
-				})
-		})
+		axios.put(`${props.url}/api/notifications/update`)
+			.then((res) => {
+				// Update notifications
+				props.get("notifications", setNotifications)
+			})
 	}
 
 	const onDeleteNotifications = (id) => {
 		axios.delete(`${props.url}/api/notifications/${id}`)
 			.then((res) => {
 				// Update Notifications
-				axios.get(`${props.url}/api/notifications`)
-					.then((res) => setNotifications(res.data))
+				props.get("notifications", setNotifications)
 			})
 	}
 

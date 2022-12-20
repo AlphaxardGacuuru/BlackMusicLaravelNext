@@ -74,35 +74,20 @@ const VideoCreate = (props) => {
 
 		// Send data to PostsController
 		// Get csrf cookie from Laravel inorder to send a POST request
-		axios.get('sanctum/csrf-cookie').then(() => {
-			axios.post(`/api/videos`, formData)
-				.then((res) => {
-					props.setMessages([res.data])
-					// Update Videos
-					axios.get(`/api/videos`)
-						.then((res) => props.setVideos(res.data))
-					// Remove loader for button
-					setLoadingBtn(false)
-					setTimeout(() => router.push('/videos'), 500)
-				}).catch(err => {
-					// Remove loader for button
-					setLoadingBtn(false)
-					const resErrors = err.response.data.errors
-					var resError
-					var newError = []
-					for (resError in resErrors) {
-						newError.push(resErrors[resError])
-					}
-					// Get other errors
-					// newError.push(err.response.data.message)
-					props.setErrors(newError)
-				})
-		})
+		axios.post(`/api/videos`, formData)
+			.then((res) => {
+				props.setMessages([res.data])
+				// Update Videos
+				props.get("videos", props.setVideos, "videos")
+				// Remove loader for button
+				setLoadingBtn(false)
+				setTimeout(() => router.push('/videos'), 500)
+			}).catch(err => {
+				// Remove loader for button
+				setLoadingBtn(false)
+				props.getErrors(err)
+			})
 	}
-
-	const onPatch = () => axios.post(`/api/videos/filepond/video`)
-		.then((res) => console.log(res.data))
-		.catch((err) => console.log(err.data))
 
 	return (
 		<div>
@@ -161,7 +146,7 @@ const VideoCreate = (props) => {
 											name='album'
 											className='form-control'
 											required={true}
-											onChange={(e) => setVideoAlbumId(e.target.value) }>
+											onChange={(e) => setVideoAlbumId(e.target.value)}>
 											<option defaultValue value="">Select Album</option>
 											{props.videoAlbums
 												.filter((videoAlbum) => videoAlbum.username == props.auth?.username)
@@ -286,9 +271,9 @@ const VideoCreate = (props) => {
 										<button
 											className="sonar-btn"
 											type="button"
-											data-bs-toggle="collapse" 
-											data-bs-target="#collapseExample" 
-											aria-expanded="false" 
+											data-bs-toggle="collapse"
+											data-bs-target="#collapseExample"
+											aria-expanded="false"
 											aria-controls="collapseExample">
 											next
 										</button>

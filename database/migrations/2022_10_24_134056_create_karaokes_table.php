@@ -15,11 +15,20 @@ return new class extends Migration
     {
         Schema::create('karaokes', function (Blueprint $table) {
             $table->id();
-            $table->string('karaoke')->nullable();
-            $table->string('username')->nullable();
-            $table->unsignedBigInteger('audio_id');
+            $table->string('karaoke');
+            $table->string('username');
+            $table->foreignId('audio_id')
+                ->constrained('audios')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->string('description')->nullable();
             $table->timestamps();
+
+            $table->foreign('username')
+                ->references('username')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

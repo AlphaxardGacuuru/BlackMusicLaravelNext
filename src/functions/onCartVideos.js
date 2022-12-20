@@ -31,29 +31,17 @@ const onCartVideos = (props) => {
 	props.setCartVideos(newCartVideos)
 
 	// Add Video to Cart
-	axios.get('sanctum/csrf-cookie').then(() => {
-		axios.post(`/api/cart-videos`, {
-			video: props.video.id
-		}).then((res) => {
-			props.setMessages([res.data])
-			// Update Videos
-			props.get("videos", props.setVideos, "videos")
-			// Update Cart Videos
-			props.get("cart-videos", props.setCartVideos, "cartVideos")
-			// Update Video Albums
-			props.get("video-albums", props.setVideoAlbums, "videoAlbums")
-		}).catch((err) => {
-			const resErrors = err.response.data.errors
-			// Get validation errors
-			var newError = []
-			for (var resError in resErrors) {
-				newError.push(resErrors[resError])
-			}
-			// Get other errors
-			newError.push(err.response.data.message)
-			props.setErrors(newError)
-		})
-	});
+	axios.post(`/api/cart-videos`, {
+		video: props.video.id
+	}).then((res) => {
+		props.setMessages([res.data])
+		// Update Videos
+		props.get("videos", props.setVideos, "videos")
+		// Update Cart Videos
+		props.get("cart-videos", props.setCartVideos, "cartVideos")
+		// Update Video Albums
+		props.get("video-albums", props.setVideoAlbums, "videoAlbums")
+	}).catch((err) => props.getErrors(err, true))
 }
 
 export default onCartVideos

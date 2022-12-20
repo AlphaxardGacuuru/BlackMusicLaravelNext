@@ -16,16 +16,10 @@ const Videos = (props) => {
 	const [loading, setLoading] = useState()
 
 	useEffect(() => {
-
-		// Check if user is musician
-		if (props.auth?.account_type == "musician") {
-			setMain("")
-			setButton("none")
-		} else {
-			setMain("none")
-			setButton("")
-		}
+		setMain(main)
+		setButton(button)
 	}, [])
+
 
 	// Become musician
 	const onMusician = () => {
@@ -79,6 +73,7 @@ const Videos = (props) => {
 			{/* Become musician button */}
 			<center className="mt-5 pt-5" style={{ display: button }}>
 				<Btn
+					btnClass="sonar-btn white-btn"
 					btnText="become a musician"
 					btnClass="sonar-btn btn-2"
 					loading={loading}
@@ -153,94 +148,95 @@ const Videos = (props) => {
 					</table>
 				</div>
 
-				<div className="col-sm-9">
-					{props.videoAlbums
-						.filter((videoAlbum) => videoAlbum.username == props.auth?.username)
-						.map((videoAlbum, key) => (
-							<div key={key}>
-								<div className="d-flex">
-									<div className="p-2">
-										{videoAlbum.name != "Singles" ?
-											<Link href={`/video-album-edit/${videoAlbum.id}`}>
-												<a>
-													<Img
-														src={videoAlbum.cover}
-														width="100"
-														height="100"
-														alt="album cover" />
-												</a>
-											</Link> :
-											<Img
-												src={videoAlbum.cover}
-												width="100"
-												height="100"
-												alt="album cover" />}
+					<div className="col-sm-9">
+						{props.videoAlbums
+							.filter((videoAlbum) => videoAlbum.username == props.auth?.username)
+							.map((videoAlbum, key) => (
+								<div key={key}>
+									<div className="d-flex">
+										<div className="p-2">
+											{videoAlbum.name != "Singles" ?
+												<Link href={`/video-album-edit/${videoAlbum.id}`}>
+													<a>
+														<Img
+															src={videoAlbum.cover}
+															width="100"
+															height="100"
+															alt="album cover" />
+													</a>
+												</Link> :
+												<Img
+													src={videoAlbum.cover}
+													width="100"
+													height="100"
+													alt="album cover" />}
+										</div>
+										<div className="p-2">
+											<small>Video Album</small>
+											<h1>{videoAlbum.name}</h1>
+											<h6>{videoAlbum.created_at}</h6>
+										</div>
 									</div>
-									<div className="p-2">
-										<small>Video Album</small>
-										<h1>{videoAlbum.name}</h1>
-										<h6>{videoAlbum.created_at}</h6>
-									</div>
+									<br />
+									<table className="table table-responsive">
+										<tbody>
+											<tr>
+												<th><h5>Thumbnail</h5></th>
+												<th><h5>Video Name</h5></th>
+												<th><h5>ft</h5></th>
+												<th><h5>Genre</h5></th>
+												<th><h5>Description</h5></th>
+												<th><h5>Downloads</h5></th>
+												<th><h5 className="text-success">Revenue</h5></th>
+												<th><h5>Likes</h5></th>
+												<th><h5>Released</h5></th>
+												<th><h5>Uploaded</h5></th>
+												<th><h5></h5></th>
+											</tr>
+										</tbody>
+										{props.videos
+											.filter((video) => video.video_album_id == videoAlbum.id)
+											.map((albumItem, key) => (
+												<tbody key={key}>
+													<tr>
+														<td>
+															<Link href={`/video-show/${albumItem.id}`}>
+																<Img
+																	src={albumItem.thumbnail}
+																	width="160em"
+																	height="90em"
+																	alt={"thumbnail"} />
+															</Link>
+														</td>
+														<td>{albumItem.name}</td>
+														<td>{albumItem.ft}</td>
+														<td>{albumItem.genre}</td>
+														<td>{albumItem.description}</td>
+														<td>{albumItem.downloads}</td>
+														<td className="text-success">
+															KES <span className="text-success">{albumItem.downloads * 10}</span>
+														</td>
+														<td>{albumItem.likes}</td>
+														<td>{videoAlbum.released}</td>
+														<td>{albumItem.created_at}</td>
+														<td>
+															<Link href={`/video-edit/${albumItem.id}`}>
+																<button className='mysonar-btn white-btn'>edit</button>
+															</Link>
+														</td>
+													</tr>
+												</tbody>
+											))}
+									</table>
+									<br />
+									<br />
 								</div>
-								<br />
-								<table className="table table-responsive">
-									<tbody>
-										<tr>
-											<th><h5>Thumbnail</h5></th>
-											<th><h5>Video Name</h5></th>
-											<th><h5>ft</h5></th>
-											<th><h5>Genre</h5></th>
-											<th><h5>Description</h5></th>
-											<th><h5>Downloads</h5></th>
-											<th><h5 className="text-success">Revenue</h5></th>
-											<th><h5>Likes</h5></th>
-											<th><h5>Released</h5></th>
-											<th><h5>Uploaded</h5></th>
-											<th><h5></h5></th>
-										</tr>
-									</tbody>
-									{props.videos
-										.filter((video) => video.video_album_id == videoAlbum.id)
-										.map((albumItem, key) => (
-											<tbody key={key}>
-												<tr>
-													<td>
-														<Link href={`/video-show/${albumItem.id}`}>
-															<Img
-																src={albumItem.thumbnail}
-																width="160em"
-																height="90em"
-																alt={"thumbnail"} />
-														</Link>
-													</td>
-													<td>{albumItem.name}</td>
-													<td>{albumItem.ft}</td>
-													<td>{albumItem.genre}</td>
-													<td>{albumItem.description}</td>
-													<td>{albumItem.downloads}</td>
-													<td className="text-success">
-														KES <span className="text-success">{albumItem.downloads * 10}</span>
-													</td>
-													<td>{albumItem.likes}</td>
-													<td>{videoAlbum.released}</td>
-													<td>{albumItem.created_at}</td>
-													<td>
-														<Link href={`/video-edit/${albumItem.id}`}>
-															<button className='mysonar-btn white-btn'>edit</button>
-														</Link>
-													</td>
-												</tr>
-											</tbody>
-										))}
-								</table>
-								<br />
-								<br />
-							</div>
-						))}
+							))}
+					</div>
+					<div className="col-sm-1"></div>
 				</div>
-				<div className="col-sm-1"></div>
 			</div>
-		</div >
+		</div>
 	)
 }
 

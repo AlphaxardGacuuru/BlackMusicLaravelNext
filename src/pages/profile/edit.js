@@ -134,7 +134,7 @@ const Edit = (props) => {
 								className="form-control"
 								placeholder={props.auth?.name}
 								value={name}
-								onChange={(e) => { setName(e.target.value) }} />
+								onChange={(e) => setName(e.target.value)} />
 							{/* Name End */}
 							<br />
 
@@ -156,7 +156,7 @@ const Edit = (props) => {
 								className="form-control"
 								placeholder={props.auth?.phone}
 								value={phone}
-								onChange={(e) => { setPhone(e.target.value) }} />
+								onChange={(e) => setPhone(e.target.value)} />
 							{/* Phone End */}
 							<br />
 
@@ -168,7 +168,7 @@ const Edit = (props) => {
 								className="form-control"
 								placeholder={props.auth?.bio}
 								value={bio}
-								onChange={(e) => { setBio(e.target.value) }} />
+								onChange={(e) => setBio(e.target.value)} />
 							{/* Bio End */}
 							<br />
 
@@ -186,7 +186,7 @@ const Edit = (props) => {
 								className="form-control"
 								placeholder={`KES ${props.auth?.withdrawal}`}
 								value={withdrawal}
-								onChange={(e) => { setWithdrawal(e.target.value) }} />
+								onChange={(e) => setWithdrawal(e.target.value)} />
 							{/* Cash Withdrawal End */}
 							<br />
 							<br />

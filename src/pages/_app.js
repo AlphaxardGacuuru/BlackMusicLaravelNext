@@ -85,6 +85,25 @@ const App = ({ Component, pageProps }) => {
 		setTimeout(() => setMessages([]), 2900);
 	}
 
+	// Function for fetching data
+	const get = (endpoint, setState, storage) => {
+		axios.get(`/api/${endpoint}`)
+			.then((res) => {
+				setState(res.data)
+				setLocalStorage(storage, res.data)
+			}).catch(() => setErrors([`Failed to fetch ${endpoint}`]))
+	}
+
+	const setGetErrors = (err, setErrors) => {
+		var newError = []
+
+		for (var resError in err.response.data.errors) {
+			newError.push(resErrors[resError])
+		}
+
+		setErrors(newError)
+	}
+
 	// Fetch data on page load
 	useEffect(() => {
 

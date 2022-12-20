@@ -12,12 +12,6 @@ class Audio extends Model
 
     protected $table = "audios";
 
-    // Get released date even when null
-    public function getReleasedDateAttribute()
-    {
-        return $this->released ? Carbon::parse($this->released)->format("d M Y") : "";
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class, 'username');

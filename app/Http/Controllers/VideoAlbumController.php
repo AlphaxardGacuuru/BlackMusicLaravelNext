@@ -27,13 +27,12 @@ class VideoAlbumController extends Controller
                 "username" => $videoAlbum->username,
                 "name" => $videoAlbum->name,
                 "cover" => "/storage/" . $videoAlbum->cover,
-                // "released" => Carbon::parse($videoAlbum->released)->format("d M Y"),
-                "released" => $videoAlbum->released_date,
-                "createdAt" => $videoAlbum->created_at->format("d M Y")
+                "released" => $videoAlbum->released,
+                "createdAt" => $videoAlbum->created_at->format("d M Y"),
             ]);
         }
 
-		return $videoAlbums;
+        return $videoAlbums;
     }
 
     /**
@@ -54,12 +53,16 @@ class VideoAlbumController extends Controller
             $vCover = substr($vCover, 7);
         }
 
+        // Format Released date
+        $released = $request->input('released');
+        $released = Carbon::parse($released)->format("d M Y");
+
         /* Create new video album */
         $vAlbum = new VideoAlbum;
         $vAlbum->name = $request->input('name');
         $vAlbum->username = auth()->user()->username;
         $vAlbum->cover = $vCover;
-        $vAlbum->released = $request->input('released');
+        $vAlbum->released = $released;
         $vAlbum->save();
 
         return response('Video Album Created', 200);
@@ -108,7 +111,11 @@ class VideoAlbumController extends Controller
         }
 
         if ($request->filled('released')) {
-            $vAlbum->released = $request->input('released');
+			// Format Released date
+            $released = $request->input('released');
+            $released = Carbon::parse($released)->format("d M Y");
+
+            $vAlbum->released = $released;
         }
 
         $vAlbum->save();

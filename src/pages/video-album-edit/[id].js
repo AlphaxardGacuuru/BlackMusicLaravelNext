@@ -18,9 +18,9 @@ const VideoAlbumEdit = (props) => {
 	// Declare states
 	const [formData, setFormData] = useState()
 	const [name, setName] = useState("")
-	const [released, setReleased] = useState()
+	const [released, setReleased] = useState("")
 	const [preview, setPreview] = useState()
-	const [cover, setCover] = useState()
+	const [cover, setCover] = useState("")
 	const [btnLoading, setBtnLoading] = useState()
 
 	// Assign id to element

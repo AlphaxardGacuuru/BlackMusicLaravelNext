@@ -120,13 +120,7 @@ const VideoAlbumEdit = (props) => {
 										<label className="text-light">Upload Album Cover</label>
 										<div
 											className="mb-2"
-											style={{
-												borderTopLeftRadius: "10px",
-												borderTopRightRadius: "10px",
-												borderBottomRightRadius: "10px",
-												borderBottomLeftRadius: "10px",
-												overflow: "hidden"
-											}}>
+											style={{ overflow: "hidden" }}>
 
 											<img
 												src={preview}

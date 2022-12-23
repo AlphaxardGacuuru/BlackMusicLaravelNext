@@ -54,7 +54,7 @@ class VideoController extends Controller
                 "video" => $video->video,
                 "name" => $video->name,
                 "username" => $video->username,
-                "user" => $video->user,
+                "profilePic" => $video->user->profile_pic,
                 "ft" => $video->ft,
                 "video_album_id" => $video->video_album_id,
                 "album" => $video->album->name,
@@ -92,7 +92,7 @@ class VideoController extends Controller
 
         // Format Released date
         $released = $request->input('released');
-        $released = Carbon::parse($released)->format("d M Y");
+        $released = Carbon::parse($released);
 
         /* Create new video song */
         $video = new Video;
@@ -164,7 +164,7 @@ class VideoController extends Controller
         if ($request->filled('released')) {
             // Format Released date
             $released = $request->input('released');
-            $released = Carbon::parse($released)->format("d M Y");
+            $released = Carbon::parse($released);
 
             $video->released = $released;
         }

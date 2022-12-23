@@ -37,7 +37,7 @@ class UserController extends Controller
         foreach ($getUsers as $key => $user) {
 
             // Format profile pic
-            $pp = preg_match("/http/", $user->pp) ? $user->pp : "/storage/" . $user->pp;
+            $avatar = preg_match("/http/", $user->avatar) ? $user->avatar : "/storage/" . $user->avatar;
 
             // Check if user has followed User
             $hasFollowed = $user->follows
@@ -64,7 +64,7 @@ class UserController extends Controller
                 "id" => $user->id,
                 "name" => $user->name,
                 "username" => $user->username,
-                "pp" => $pp,
+                "avatar" => $avatar,
                 "account_type" => $user->account_type,
                 "bio" => $user->bio,
                 "withdrawal" => $user->withdrawal,
@@ -201,8 +201,8 @@ class UserController extends Controller
             $balance = $kopokopo - ($totalVideos + $totalAudios);
 
             // Format profile pic
-            $pp = preg_match("/http/", $auth->pp) ?
-            $auth->pp : "/storage/" . $auth->pp;
+            $avatar = preg_match("/http/", $auth->avatar) ?
+            $auth->avatar : "/storage/" . $auth->avatar;
 
             return [
                 "id" => $auth->id,
@@ -211,8 +211,8 @@ class UserController extends Controller
                 "email" => $auth->email,
                 "phone" => $auth->phone,
                 "account_type" => $auth->account_type,
-                "pp" => $pp,
-                "pb" => $auth->pb,
+                "avatar" => $avatar,
+                "backdrop" => $auth->backdrop,
                 "bio" => $auth->bio,
                 "dob" => $auth->dob,
                 "withdrawal" => $auth->withdrawal,

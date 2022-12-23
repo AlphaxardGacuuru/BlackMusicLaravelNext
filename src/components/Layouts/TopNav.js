@@ -57,7 +57,7 @@ const TopNav = (props) => {
 	// 				props.setAuth({
 	// 					"name": "Guest",
 	// 					"username": "@guest",
-	// 					"pp": "profile-pics/male_avatar.png",
+	// 					"avatar": "profile-pics/male_avatar.png",
 	// 					"account_type": "normal"
 	// 				})
 	// 			});
@@ -329,7 +329,7 @@ const TopNav = (props) => {
 								<div className="d-flex">
 									<div className="ms-3 me-3">
 										<Img
-											src={props.auth?.pp}
+											src={props.auth?.avatar}
 											imgClass="rounded-circle"
 											width="25px"
 											height="25px"

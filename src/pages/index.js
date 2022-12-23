@@ -85,7 +85,7 @@ export default function Home(props) {
 							<div className="avatar-thumbnail-sm" style={{ borderRadius: "50%" }}>
 								<Link href={`/profile/${props.auth?.username}`}>
 									<a>
-										<Img src={props.auth?.pp}
+										<Img src={props.auth?.avatar}
 											width="100px"
 											height="100px"
 											alt="avatar" />

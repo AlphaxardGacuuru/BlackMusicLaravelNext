@@ -10,7 +10,7 @@ class Video extends Model
     use HasFactory;
 
 	public function user() {
-		return $this->belongsTo(User::class, 'username', 'id');
+		return $this->belongsTo(User::class, 'username', 'username');
 	}
 
 	public function album() {

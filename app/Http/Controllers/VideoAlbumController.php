@@ -55,7 +55,7 @@ class VideoAlbumController extends Controller
 
         // Format Released date
         $released = $request->input('released');
-        $released = Carbon::parse($released)->format("d M Y");
+        $released = Carbon::parse($released);
 
         /* Create new video album */
         $vAlbum = new VideoAlbum;
@@ -113,7 +113,7 @@ class VideoAlbumController extends Controller
         if ($request->filled('released')) {
 			// Format Released date
             $released = $request->input('released');
-            $released = Carbon::parse($released)->format("d M Y");
+            $released = Carbon::parse($released);
 
             $vAlbum->released = $released;
         }

@@ -58,7 +58,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->phone),
             'phone' => $request->phone,
-            'pp' => $request->avatar,
+            'avatar' => $request->avatar,
             'withdrawal' => '1000',
         ]);
 

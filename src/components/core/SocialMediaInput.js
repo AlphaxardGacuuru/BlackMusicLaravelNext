@@ -71,7 +71,7 @@ const SocialMediaInput = (props) => {
 				{/* Profile pic */}
 				<div className='p-2'>
 					<Img
-						src={props.auth.pp}
+						src={props.auth.avatar}
 						imgClass={"rounded-circle"}
 						width="25px"
 						height="25px"
@@ -257,7 +257,7 @@ const SocialMediaInput = (props) => {
 									onClick={() => addMention(user.username)}>
 									<div className="p-2">
 										<Img
-											src={user.pp}
+											src={user.avatar}
 											imgClass="rounded-circle"
 											width="30px"
 											height="30px" />

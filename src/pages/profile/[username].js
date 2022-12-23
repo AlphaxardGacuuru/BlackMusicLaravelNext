@@ -86,7 +86,7 @@ const Profile = (props) => {
 										key={key}
 										style={{ position: "absolute", zIndex: "99" }}
 										className="avatar hover-img"
-										src={profile.pp}
+										src={profile.avatar}
 										layout="fill" />))}
 						</div>
 					</div>

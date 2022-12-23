@@ -62,8 +62,9 @@ const App = ({ Component, pageProps }) => {
 	const get = (endpoint, setState, storage = null) => {
 		axios.get(`/api/${endpoint}`)
 			.then((res) => {
-				setState(res.data)
-				storage && setLocalStorage(storage, res.data)
+				var data = res.data ? res.data : []
+				setState(data)
+				storage && setLocalStorage(storage, data)
 			}).catch(() => setErrors([`Failed to fetch ${endpoint}`]))
 	}
 
@@ -83,25 +84,6 @@ const App = ({ Component, pageProps }) => {
 	if (errors.length > 0 || messages.length > 0) {
 		setTimeout(() => setErrors([]), 2900);
 		setTimeout(() => setMessages([]), 2900);
-	}
-
-	// Function for fetching data
-	const get = (endpoint, setState, storage) => {
-		axios.get(`/api/${endpoint}`)
-			.then((res) => {
-				setState(res.data)
-				setLocalStorage(storage, res.data)
-			}).catch(() => setErrors([`Failed to fetch ${endpoint}`]))
-	}
-
-	const setGetErrors = (err, setErrors) => {
-		var newError = []
-
-		for (var resError in err.response.data.errors) {
-			newError.push(resErrors[resError])
-		}
-
-		setErrors(newError)
 	}
 
 	// Fetch data on page load

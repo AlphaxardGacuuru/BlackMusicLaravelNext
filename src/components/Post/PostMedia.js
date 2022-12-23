@@ -39,13 +39,13 @@ const PostMedia = (props) => {
 		props.setPosts(newPosts)
 
 		// Add like to database
-			axios.post(`/api/post-likes`, {
-				post: post
-			}).then((res) => {
-				props.setMessages([res.data])
-				// Update posts
-				props.get("posts", props.setPosts, "posts")
-			}).catch((err) => props.getErrors(err))
+		axios.post(`/api/post-likes`, {
+			post: post
+		}).then((res) => {
+			props.setMessages([res.data])
+			// Update posts
+			props.get("posts", props.setPosts, "posts")
+		}).catch((err) => props.getErrors(err))
 	}
 
 	// Web Share API for share button
@@ -68,7 +68,7 @@ const PostMedia = (props) => {
 				<div className="avatar-thumbnail-xs" style={{ borderRadius: "50%" }}>
 					<Link href={`/profile/${props.post.username}`}>
 						<a>
-							<Img src={props.post.pp}
+							<Img src={props.post.avatar}
 								width="50px"
 								height="50px"
 								alt={'avatar'} />

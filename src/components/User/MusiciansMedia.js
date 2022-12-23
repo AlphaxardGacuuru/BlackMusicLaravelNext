@@ -11,7 +11,7 @@ const MusiciansMedia = (props) => {
 				<Link href={`/profile/${props.user.username}`}>
 					<a>
 						<Img
-							src={props.user.pp}
+							src={props.user.avatar}
 							className="rounded-circle"
 							width="30px"
 							height="30px"

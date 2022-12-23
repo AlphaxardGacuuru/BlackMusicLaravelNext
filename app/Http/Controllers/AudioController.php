@@ -90,7 +90,7 @@ class AudioController extends Controller
 
         // Format Released date
         $released = $request->input('released');
-        $released = Carbon::parse($released)->format("d M Y");
+        $released = Carbon::parse($released);
 
         /* Create new audio song */
         $audio = new Audio;
@@ -176,7 +176,7 @@ class AudioController extends Controller
             if ($request->filled('released')) {
                 // Format Released date
                 $released = $request->input('released');
-                $released = Carbon::parse($released)->format("d M Y");
+                $released = Carbon::parse($released);
 
                 $audio->released = $released;
             }

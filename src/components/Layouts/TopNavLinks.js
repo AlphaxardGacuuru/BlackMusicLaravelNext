@@ -137,7 +137,7 @@ const TopNavLinks = (props) => {
 					data-bs-toggle="dropdown"
 					aria-expanded="false">
 					<Img
-						src={props.auth?.pp}
+						src={props.auth?.avatar}
 						imgClass="rounded-circle"
 						width="25px"
 						height="25px"
@@ -152,7 +152,7 @@ const TopNavLinks = (props) => {
 						props.setNotificationVisibility("none")
 					}}>
 					<Img
-						src={props.auth?.pp}
+						src={props.auth?.avatar}
 						imgClass="rounded-circle anti-hidden"
 						width="25px"
 						height="25px"
@@ -166,7 +166,7 @@ const TopNavLinks = (props) => {
 							<div className="d-flex">
 								<div className="align-items-center">
 									<Img
-										src={props.auth?.pp}
+										src={props.auth?.avatar}
 										imgClass="rounded-circle"
 										width="25px"
 										height="25px"

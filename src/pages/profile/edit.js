@@ -72,14 +72,16 @@ const Edit = (props) => {
 				props.setMessages([res.data])
 				// Update Posts
 				props.get("posts", props.setPosts, "posts")
+				// Update Auth
+				props.get("auth", props.setAuth, "auth")
+				// Update Users
+				props.get("users", props.setUsers, "users")
 				setName("")
 				setPhone("")
 				setBio("")
 				setWithdrawal("")
 				// Remove loader for button
 				setBtnLoading(false)
-				// Reload page to see changes
-				location.reload()
 			}).catch((err) => {
 				// Remove loader for button
 				setBtnLoading(false)
@@ -114,11 +116,8 @@ const Edit = (props) => {
 										url: `/update-profile-pic/${props.auth?.id}`,
 										onload: (res) => {
 											props.setMessages(["Account updated"])
-											// Reload page to see changes
-											location.reload()
-											// Update Users
-											axios.get('/api/users')
-												.then((res) => props.setUsers(res.data))
+											// Update Auth
+											props.get("auth", props.setAuth, "auth")
 										},
 										onerror: (err) => console.log(err.response)
 									}

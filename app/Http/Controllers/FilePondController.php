@@ -15,28 +15,28 @@ class FilePondController extends Controller
     public function updateProfilePic(Request $request, $id)
     {
         if ($request->hasFile('filepond-profile-pic')) {
-            $pp = $request->file('filepond-profile-pic')->store('public/profile-pics');
-            $pp = substr($pp, 7);
+            $avatar = $request->file('filepond-profile-pic')->store('public/profile-pics');
+            $avatar = substr($avatar, 7);
 
             $user = User::find($id);
 
             // Delete profile pic if it's not the default one
-            if ($user->pp != '/storage/profile-pics/male_avatar.png') {
-                Storage::delete('public/' . $user->pp);
+            if ($user->avatar != '/storage/profile-pics/male_avatar.png') {
+                Storage::delete('public/' . $user->avatar);
             }
 
-            $user->pp = $pp;
+            $user->avatar = $avatar;
             $user->save();
 
             return response("Account updated", 200);
         }
     }
 
-	/*
-	*
-	* Handle Video Uploads
-	*
-	*/ 	
+    /*
+     *
+     * Handle Video Uploads
+     *
+     */
 
     /*
      * Handle Video Thumbnail Upload */
@@ -81,9 +81,9 @@ class FilePondController extends Controller
         $oldThumbnail = $video->thumbnail;
         Storage::delete('public/' . $oldThumbnail);
 
-		// Update Thumbnail
+        // Update Thumbnail
         $video->thumbnail = $thumbnail;
-		$video->save();
+        $video->save();
     }
 
     /*
@@ -100,9 +100,9 @@ class FilePondController extends Controller
         $oldvideoFile = $video->video;
         Storage::delete('public/' . $oldvideoFile);
 
-		// Update Thumbnail
+        // Update Thumbnail
         $video->video = $videoFile;
-		$video->save();
+        $video->save();
     }
 
     /*
@@ -121,11 +121,11 @@ class FilePondController extends Controller
         return response("Video deleted", 200);
     }
 
-	/*
-	*
-	* Handle Audio Uploads
-	*
-	*/ 	
+    /*
+     *
+     * Handle Audio Uploads
+     *
+     */
 
     /*
      * Handle Audio Thumbnail Upload */
@@ -170,9 +170,9 @@ class FilePondController extends Controller
         $oldThumbnail = $audio->thumbnail;
         Storage::delete('public/' . $oldThumbnail);
 
-		// Update Thumbnail
+        // Update Thumbnail
         $audio->thumbnail = $thumbnail;
-		$audio->save();
+        $audio->save();
     }
 
     /*
@@ -189,9 +189,9 @@ class FilePondController extends Controller
         $oldaudioFile = $audio->audio;
         Storage::delete('public/' . $oldaudioFile);
 
-		// Update Thumbnail
+        // Update Thumbnail
         $audio->audio = $audioFile;
-		$audio->save();
+        $audio->save();
     }
 
     /*

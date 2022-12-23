@@ -112,7 +112,7 @@ class User extends Authenticatable
 
     public function follows()
     {
-        return $this->hasMany(Follow::class, 'username');
+        return $this->hasMany(Follow::class, 'username', 'username');
     }
 
     public function karaokes()

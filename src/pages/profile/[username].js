@@ -63,7 +63,7 @@ const Profile = (props) => {
 		<>
 			<div className="row p-0 m-0"
 				style={{
-					backgroundImage: "url('/storage/img/headphones.jpg')",
+					backgroundImage: `url('${profile.backdrop}')`,
 					backgroundPosition: "center",
 					backgroundSize: "cover",
 					position: "relative",

@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import axios from '@/lib/axios'
@@ -27,8 +27,13 @@ export default function Home(props) {
 	const [editLink, setEditLink] = useState()
 	const [deleteLink, setDeleteLink] = useState()
 	const [unfollowLink, setUnfollowLink] = useState()
+	const [showPostBtn, setShowPostBtn] = useState()
 
 	const router = useRouter()
+
+	useEffect(() => {
+		props.auth?.account_type == "musician" && setShowPostBtn(true)
+	}, [])
 
 	// Function for deleting posts
 	const onDeletePost = (id) => {
@@ -60,7 +65,7 @@ export default function Home(props) {
 	return (
 		<>
 			{/* Post button */}
-			{props.auth?.account_type == 'musician' &&
+			{showPostBtn &&
 				<Link href="post-create">
 					<a id="floatBtn"
 						className={`${!checkLocation && "mb-5"}`}>
@@ -156,7 +161,8 @@ export default function Home(props) {
 
 						{/* Musicians */}
 						{props.users
-							.filter((user) => user.account_type == "musician" &&
+							.filter((user) => 
+							// user.account_type == "musician" &&
 								user.username != props.auth?.username &&
 								user.username != "@blackmusic")
 							.slice(0, 10)

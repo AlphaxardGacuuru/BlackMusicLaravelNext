@@ -66,14 +66,12 @@ class RegisteredUserController extends Controller
         $follow = new Follow;
         $follow->followed = $request->username;
         $follow->username = $request->username;
-        $follow->muted = "show";
         $follow->save();
 
         /* User should follow @blackmusic */
         $follow = new Follow;
         $follow->followed = '@blackmusic';
         $follow->username = $request->username;
-        $follow->muted = "show";
         $follow->save();
 
         event(new Registered($user));

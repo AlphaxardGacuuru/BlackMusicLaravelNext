@@ -34,6 +34,8 @@ class VideoController extends Controller
             $video->thumbnail :
             "/storage/" . $video->thumbnail;
 
+			$avatar = "/storage/" . $video->user->avatar;
+
             // Check if user has liked video
             $hasLiked = $video->likes
                 ->where('username', $authUsername)
@@ -54,7 +56,7 @@ class VideoController extends Controller
                 "video" => $video->video,
                 "name" => $video->name,
                 "username" => $video->username,
-                "profilePic" => $video->user->profile_pic,
+                "avatar" => $avatar,
                 "ft" => $video->ft,
                 "video_album_id" => $video->video_album_id,
                 "album" => $video->album->name,

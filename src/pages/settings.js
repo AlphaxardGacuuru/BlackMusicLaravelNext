@@ -12,9 +12,9 @@ const Settings = (props) => {
 
 	// Fetch Kopokopo Recipients
 	useEffect(() => {
-		props.get("kopokopo-recipients", props.setKopokopoRecipients, "kopokopoRecipients")
-		props.get("referrals", props.setReferrals, "referrals")
-		props.get("song-payouts", props.setSongPayouts, "songPayouts")
+		props.get("kopokopo-recipients", setKopokopoRecipients, "kopokopoRecipients")
+		props.get("referrals", setReferrals, "referrals")
+		props.get("song-payouts", setSongPayouts, "songPayouts")
 	}, [])
 
 	const reference = kopokopoRecipients

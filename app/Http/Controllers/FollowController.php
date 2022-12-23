@@ -25,7 +25,33 @@ class FollowController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        /* Add follow */
+        $hasFollowed = Follow::where('followed', $request->musician)
+            ->where('username', auth()->user()->username)
+            ->exists();
+
+        if ($hasFollowed) {
+            Follow::where('followed', $request->musician)
+                ->where('username', auth()->user()->username)
+                ->delete();
+
+            $message = "Unfollowed";
+        } else {
+            $post = new Follow;
+            $post->followed = $request->input('musician');
+            $post->username = auth()->user()->username;
+            $post->save();
+			
+            $message = "Followed";
+
+            // Notify Musician
+            // $musician = User::where('username', $request->input('musician'))
+                // ->first();
+
+            // $musician->notify(new FollowNotifications);
+        }
+
+        return response('You ' . $message . ' ' . $request->musician, 200);
     }
 
     /**

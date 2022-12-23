@@ -38,11 +38,12 @@ class UserController extends Controller
 
             // Format profile pic
             $avatar = preg_match("/http/", $user->avatar) ? $user->avatar : "/storage/" . $user->avatar;
+            $backdrop = "/storage/" . $user->backdrop;
 
             // Check if user has followed User
-            $hasFollowed = $user->follows
-                ->where('username', $authUsername)
-                ->count() > 1 ? true : false;
+            $hasFollowed = Follow::where('username', $authUsername)
+                ->where('followed', $user->username)
+                ->count() > 0 ? true : false;
 
             // Get user's fans
             $fans = Follow::where('followed', $user->username)->count() - 1;
@@ -65,6 +66,7 @@ class UserController extends Controller
                 "name" => $user->name,
                 "username" => $user->username,
                 "avatar" => $avatar,
+                "backdrop" => $backdrop,
                 "account_type" => $user->account_type,
                 "bio" => $user->bio,
                 "withdrawal" => $user->withdrawal,
@@ -200,9 +202,11 @@ class UserController extends Controller
             $kopokopo = $auth->kopokopos->sum('amount');
             $balance = $kopokopo - ($totalVideos + $totalAudios);
 
-            // Format profile pic
+            // Format pictures
             $avatar = preg_match("/http/", $auth->avatar) ?
             $auth->avatar : "/storage/" . $auth->avatar;
+
+            $backdrop = "/storage/" . $auth->backdrop;
 
             return [
                 "id" => $auth->id,
@@ -212,7 +216,7 @@ class UserController extends Controller
                 "phone" => $auth->phone,
                 "account_type" => $auth->account_type,
                 "avatar" => $avatar,
-                "backdrop" => $auth->backdrop,
+                "backdrop" => $backdrop,
                 "bio" => $auth->bio,
                 "dob" => $auth->dob,
                 "withdrawal" => $auth->withdrawal,

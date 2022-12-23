@@ -66,7 +66,7 @@ const VideoMedia = (props) => {
 					<Link href={`/profile/${props.video.username}`}>
 						<a>
 							<Img
-								src={props.video.thumbnail}
+								src={props.video.avatar}
 								className="rounded-circle"
 								width="40px"
 								height="40px"
@@ -86,7 +86,7 @@ const VideoMedia = (props) => {
 						}}>
 						{props.video.name}
 					</h6>
-					<h6>
+					<h6 className="float-start">
 						<small>{props.video.username} {props.video.ft}</small>
 					</h6>
 				</div>

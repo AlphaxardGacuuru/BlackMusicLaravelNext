@@ -209,4 +209,18 @@ class FilePondController extends Controller
         Storage::delete('public/audios/' . $id);
         return response("Audio deleted", 200);
     }
+
+    /*
+     *
+     * Handle Post Uploads
+     *
+     */
+
+    public function uploadFileMedia(Request $request)
+    {
+        /* Handle media upload */
+        $media = $request->file('filepond-media')->store('public/post-media');
+        $media = substr($media, 7);
+        return $media;
+    }
 }

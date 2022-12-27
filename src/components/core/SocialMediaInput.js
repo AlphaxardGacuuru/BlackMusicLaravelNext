@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic';
 
-import Button from '../components/Button'
-import Img from '../components/core/Img'
+import Button from '@/components/core/Btn'
+import Img from '@/components/core/Img'
 
 // Import React FilePond
 import { FilePond, registerPlugin } from 'react-filepond';
@@ -29,30 +30,30 @@ registerPlugin(
 	FilePondPluginFileValidateSize
 );
 
-import Picker from 'emoji-picker-react';
-
 const SocialMediaInput = (props) => {
 
-	// Get csrf token
-	const token = document.head.querySelector('meta[name="csrf-token"]');
+	const Picker = dynamic(
+		() => {
+			return import('emoji-picker-react');
+		},
+		{ ssr: false }
+	);
 
-	// const [chosenEmoji, setChosenEmoji] = useState(null);
 	const [doNotShowMentionPicker, setDoNotShowMentionPicker] = useState(true)
 	const [display2, setDisplay2] = useState("none")
 	const [display3, setDisplay3] = useState("none")
 	const [display4, setDisplay4] = useState("none")
 	const [display5, setDisplay5] = useState("none")
 
-	const onEmojiClick = (event, emojiObject) => {
-		// setChosenEmoji(emojiObject);
-		props.setText(props.text + emojiObject.emoji)
-	};
-
 	// Show error on space in username
 	useEffect(() => {
 		props.text.indexOf("@") > -1 &&
 			props.setShowMentionPicker(true)
 	}, [props.text])
+
+	const onEmojiClick = (event, emojiObject) => {
+		props.setText(props.text + emojiObject.emoji)
+	};
 
 	// Add username to text
 	const addMention = (mention) => {
@@ -226,12 +227,10 @@ const SocialMediaInput = (props) => {
 							url: `${props.url}/api`,
 							process: {
 								url: props.urlTo,
-								headers: { 'X-CSRF-TOKEN': token.content },
 								onload: res => props.setMedia(res),
 							},
 							revert: {
 								url: props.urlToDelete,
-								headers: { 'X-CSRF-TOKEN': token.content },
 								onload: res => props.setMessages([res]),
 							},
 						}} />
@@ -330,11 +329,6 @@ const SocialMediaInput = (props) => {
 				</center>}
 		</center>
 	)
-}
-
-SocialMediaInput.defaultProps = {
-	urlTo: '/',
-	urlToDelete: '/',
 }
 
 export default SocialMediaInput

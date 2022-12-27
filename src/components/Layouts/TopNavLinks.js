@@ -17,7 +17,7 @@ const TopNavLinks = (props) => {
 			{/* Admin */}
 			{props.auth?.username == "@blackmusic" &&
 				<Link href="/admin">
-					<a className="me-2">
+					<a className="me-3">
 						<PersonSVG />
 					</a>
 				</Link>}

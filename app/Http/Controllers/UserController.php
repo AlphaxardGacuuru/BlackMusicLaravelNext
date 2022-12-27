@@ -186,47 +186,42 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function auth()
+    public function auth(Request $request)
     {
+        $auth = $request->user();
 
-        // Check if user is logged in
-        if (Auth::check()) {
+        // Get Cost of Bought Videos at each price
+        $totalVideos = $auth->boughtVideos->count() * 20;
+        $totalAudios = $auth->boughtAudios->count() * 10;
 
-            $auth = Auth::user();
+        // Get Total Cash paid
+        $kopokopo = $auth->kopokopos->sum('amount');
+        $balance = $kopokopo - ($totalVideos + $totalAudios);
 
-            // Get Cost of Bought Videos at each price
-            $totalVideos = $auth->boughtVideos->count() * 20;
-            $totalAudios = $auth->boughtAudios->count() * 10;
+        // Format pictures
+        $avatar = preg_match("/http/", $auth->avatar) ?
+        $auth->avatar : "/storage/" . $auth->avatar;
 
-            // Get Total Cash paid
-            $kopokopo = $auth->kopokopos->sum('amount');
-            $balance = $kopokopo - ($totalVideos + $totalAudios);
+        $backdrop = "/storage/" . $auth->backdrop;
 
-            // Format pictures
-            $avatar = preg_match("/http/", $auth->avatar) ?
-            $auth->avatar : "/storage/" . $auth->avatar;
-
-            $backdrop = "/storage/" . $auth->backdrop;
-
-            return [
-                "id" => $auth->id,
-                "name" => $auth->name,
-                "username" => $auth->username,
-                "email" => $auth->email,
-                "phone" => $auth->phone,
-                "account_type" => $auth->account_type,
-                "avatar" => $avatar,
-                "backdrop" => $backdrop,
-                "bio" => $auth->bio,
-                "dob" => $auth->dob,
-                "withdrawal" => $auth->withdrawal,
-                "decos" => $auth->decos->count(),
-                "fans" => Follow::where('followed', $auth->username)->count() - 1,
-                "following" => $auth->follows->count(),
-                "posts" => $auth->posts->count(),
-                "balance" => $balance,
-                "created_at" => $auth->created_at,
-            ];
-        }
+        return [
+            "id" => $auth->id,
+            "name" => $auth->name,
+            "username" => $auth->username,
+            "email" => $auth->email,
+            "phone" => $auth->phone,
+            "account_type" => $auth->account_type,
+            "avatar" => $avatar,
+            "backdrop" => $backdrop,
+            "bio" => $auth->bio,
+            "dob" => $auth->dob,
+            "withdrawal" => $auth->withdrawal,
+            "decos" => $auth->decos->count(),
+            "fans" => Follow::where('followed', $auth->username)->count() - 1,
+            "following" => $auth->follows->count(),
+            "posts" => $auth->posts->count(),
+            "balance" => $balance,
+            "created_at" => $auth->created_at,
+        ];
     }
 }

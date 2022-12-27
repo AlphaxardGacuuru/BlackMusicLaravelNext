@@ -33,7 +33,7 @@ export default function Home(props) {
 
 	useEffect(() => {
 		props.auth?.account_type == "musician" && setShowPostBtn(true)
-	}, [])
+	}, [props.auth])
 
 	// Function for deleting posts
 	const onDeletePost = (id) => {
@@ -66,7 +66,7 @@ export default function Home(props) {
 		<>
 			{/* Post button */}
 			{showPostBtn &&
-				<Link href="post-create">
+				<Link href="post/create">
 					<a id="floatBtn"
 						className={`${!checkLocation && "mb-5"}`}>
 						<PenSVG />
@@ -161,8 +161,8 @@ export default function Home(props) {
 
 						{/* Musicians */}
 						{props.users
-							.filter((user) => 
-							// user.account_type == "musician" &&
+							.filter((user) =>
+								user.account_type == "musician" &&
 								user.username != props.auth?.username &&
 								user.username != "@blackmusic")
 							.slice(0, 10)

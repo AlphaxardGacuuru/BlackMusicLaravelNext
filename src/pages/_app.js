@@ -12,6 +12,19 @@ import axios from '@/lib/axios';
 
 const App = ({ Component, pageProps }) => {
 
+	/*
+	*
+	* Register service worker */
+	if (typeof window !== "undefined" && window.location.href.match(/https/)) {
+		if ('serviceWorker' in navigator) {
+			window.addEventListener('load', () => {
+				navigator.serviceWorker.register('/sw.js')
+				// .then((reg) => console.log('Service worker registered', reg))
+				// .catch((err) => console.log('Service worker not registered', err));
+			})
+		}
+	}
+
 	const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
 	// Set Axios default header
@@ -112,7 +125,7 @@ const App = ({ Component, pageProps }) => {
 
 		// get("karaokes", setKaraokes, "karaokes")
 
-		// get("posts", setPosts, "posts")
+		get("posts", setPosts, "posts")
 		get("users", setUsers, "users")
 
 		get("videos", setVideos, "videos")
@@ -123,17 +136,71 @@ const App = ({ Component, pageProps }) => {
 
 	console.log("rendered")
 
-	/*
-	*
-	* Register service worker */
-	if (typeof window !== "undefined" && window.location.href.match(/https/)) {
-		if ('serviceWorker' in navigator) {
-			window.addEventListener('load', () => {
-				navigator.serviceWorker.register('/sw.js')
-				// .then((reg) => console.log('Service worker registered', reg))
-				// .catch((err) => console.log('Service worker not registered', err));
-			})
-		}
+	// Social Input states
+	const [id, setId] = useState()
+	const [to, setTo] = useState()
+	const [placeholder, setPlaceholder] = useState()
+	const [text, setText] = useState("")
+	const [media, setMedia] = useState("")
+	const [para1, setPara1] = useState("")
+	const [para2, setPara2] = useState("")
+	const [para3, setPara3] = useState("")
+	const [para4, setPara4] = useState("")
+	const [para5, setPara5] = useState("")
+	const [urlTo, setUrlTo] = useState()
+	const [urlToTwo, setUrlToTwo] = useState()
+	const [urlToDelete, setUrlToDelete] = useState()
+	const [stateToUpdate, setStateToUpdate] = useState()
+	const [stateToUpdateTwo, setStateToUpdateTwo] = useState()
+	const [showImage, setShowImage] = useState()
+	const [showPoll, setShowPoll] = useState()
+	const [showMentionPicker, setShowMentionPicker] = useState(false)
+	const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+	const [showImagePicker, setShowImagePicker] = useState(false)
+	const [showPollPicker, setShowPollPicker] = useState(false)
+	const [editing, setEditing] = useState(false)
+
+	const [formData, setFormData] = useState()
+
+	useEffect(() => {
+		// Declare new FormData object for form data
+		setFormData(new FormData())
+	}, [])
+
+
+	// Handle form submit for Social Input
+	const onSubmit = (e) => {
+		e.preventDefault()
+
+		// Add form data to FormData object
+		formData.append("text", text);
+		id && formData.append("id", id);
+		to && formData.append("to", to);
+		media && formData.append("media", media);
+		para1 && formData.append("para1", para1);
+		para2 && formData.append("para2", para2);
+		para3 && formData.append("para3", para3);
+		para4 && formData.append("para4", para4);
+		para5 && formData.append("para5", para5);
+		editing && formData.append("_method", "put");
+
+		// Send data to HelpPostsController
+		// Get csrf cookie from Laravel inorder to send a POST request
+		axios.post(`/api/${urlTo}`, formData)
+			.then((res) => {
+				setMessages([res.data])
+				// Updated State One
+				get(urlTo, stateToUpdate)
+				// Updated State Two
+				axios.get(`/api/${urlToTwo}`)
+					.then((res) => stateToUpdateTwo && stateToUpdateTwo(res.data))
+				// Clear text unless editing
+				!editing && setText("")
+				setShowMentionPicker(false)
+				setShowEmojiPicker(false)
+				setShowImagePicker(false)
+				setShowPollPicker(false)
+			}).catch((err) => getErrors(err))
 	}
 
 	// All states
@@ -160,6 +227,30 @@ const App = ({ Component, pageProps }) => {
 		videoAlbums, setVideoAlbums,
 		videoLikes, setVideoLikes,
 		karaokes, setKaraokes,
+		// Social Input
+		id, setId,
+		to, setTo,
+		text, setText,
+		media, setMedia,
+		para1, setPara1,
+		para2, setPara2,
+		para3, setPara3,
+		para4, setPara4,
+		para5, setPara5,
+		placeholder, setPlaceholder,
+		urlTo, setUrlTo,
+		urlToTwo, setUrlToTwo,
+		urlToDelete, setUrlToDelete,
+		stateToUpdate, setStateToUpdate,
+		stateToUpdateTwo, setStateToUpdateTwo,
+		showImage, setShowImage,
+		showPoll, setShowPoll,
+		showMentionPicker, setShowMentionPicker,
+		showEmojiPicker, setShowEmojiPicker,
+		showImagePicker, setShowImagePicker,
+		showPollPicker, setShowPollPicker,
+		editing, setEditing,
+		onSubmit,
 	}
 
 	return (

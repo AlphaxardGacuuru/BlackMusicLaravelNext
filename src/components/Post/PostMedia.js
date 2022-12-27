@@ -228,7 +228,7 @@ const PostMedia = (props) => {
 								</h6>
 							</a> :
 							<span>
-								<Link to={`/post-edit/${props.post.id}`}>
+								<Link href={`/post/${props.post.id}`}>
 									<a className="dropdown-item">
 										<h6>Edit post</h6>
 									</a>
@@ -250,7 +250,6 @@ const PostMedia = (props) => {
 					<span
 						className="text-secondary"
 						onClick={() => {
-							console.log("clicked")
 							if (props.post.username != props.auth?.username) {
 								if (props.post.username != "@blackmusic") {
 									props.setBottomMenu("menu-open")

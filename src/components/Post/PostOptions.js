@@ -6,13 +6,11 @@ const PostOptions = (props) => {
 	return (
 		<div className={props.bottomMenu} >
 			<div className="bottomMenu">
-				<div
-					className="d-flex align-items-center justify-content-between border-bottom border-dark mb-3"
-					style={{ height: "3em" }}>
+				<div className="d-flex align-items-center justify-content-between border-bottom border-dark">
 					<div></div>
 					{/* <!-- Close Icon --> */}
 					<div
-						className="closeIcon p-2 float-right"
+						className="closeIcon float-end mr-3"
 						style={{ fontSize: "0.8em" }}
 						onClick={() => props.setBottomMenu("")}>
 						<CloseSVG />
@@ -28,7 +26,7 @@ const PostOptions = (props) => {
 						<h6 className="pb-2">Unfollow {props.userToUnfollow}</h6>
 					</div>}
 				{props.editLink &&
-					<Link to={`/post-edit/${props.postToEdit}`}>
+					<Link href={`/post/${props.postToEdit}`}>
 						<a onClick={() => props.setBottomMenu("")}>
 							<h6 className="pb-2">Edit post</h6>
 						</a>

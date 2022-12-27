@@ -57,57 +57,57 @@ class User extends Authenticatable
 
     public function audios()
     {
-        return $this->hasMany(Audio::class, 'username');
+        return $this->hasMany(Audio::class, 'username', 'username');
     }
 
     public function audioAlbums()
     {
-        return $this->hasMany(AudioAlbum::class, 'username');
+        return $this->hasMany(AudioAlbum::class, 'username', 'username');
     }
 
     public function audioComments()
     {
-        return $this->hasMany(AudioComment::class, 'username');
+        return $this->hasMany(AudioComment::class, 'username', 'username');
     }
 
     public function audioCommentLikes()
     {
-        return $this->hasMany(AudioCommentLike::class, 'username');
+        return $this->hasMany(AudioCommentLike::class, 'username', 'username');
     }
 
     public function audioLikes()
     {
-        return $this->hasMany(AudioLike::class, 'username');
+        return $this->hasMany(AudioLike::class, 'username', 'username');
     }
 
     public function boughtAudios()
     {
-        return $this->hasMany(AudioLike::class, 'username');
+        return $this->hasMany(AudioLike::class, 'username', 'username');
     }
 
     public function boughtVideos()
     {
-        return $this->hasMany(AudioLike::class, 'username');
+        return $this->hasMany(AudioLike::class, 'username', 'username');
     }
 
     public function cartAudios()
     {
-        return $this->hasMany(AudioLike::class, 'username');
+        return $this->hasMany(AudioLike::class, 'username', 'username');
     }
 
     public function cartVideos()
     {
-        return $this->hasMany(AudioLike::class, 'username');
+        return $this->hasMany(AudioLike::class, 'username', 'username');
     }
 
     public function chats()
     {
-        return $this->hasMany(Chat::class, 'username');
+        return $this->hasMany(Chat::class, 'username', 'username');
     }
 
     public function decos()
     {
-        return $this->hasMany(Deco::class, 'username');
+        return $this->hasMany(Deco::class, 'username', 'username');
     }
 
     public function follows()
@@ -117,106 +117,106 @@ class User extends Authenticatable
 
     public function karaokes()
     {
-        return $this->hasMany(Karaoke::class, 'username');
+        return $this->hasMany(Karaoke::class, 'username', 'username');
     }
 
     public function karaokeAudios()
     {
-        return $this->hasMany(KaraokeAudio::class, 'username');
+        return $this->hasMany(KaraokeAudio::class, 'username', 'username');
     }
 
     public function karaokeComment()
     {
-        return $this->hasMany(KaraokeComment::class, 'username');
+        return $this->hasMany(KaraokeComment::class, 'username', 'username');
     }
 
     public function karaokeCommentLikes()
     {
-        return $this->hasMany(KaraokeCommentLike::class, 'username');
+        return $this->hasMany(KaraokeCommentLike::class, 'username', 'username');
     }
 
     public function karaokeLikes()
     {
-        return $this->hasMany(KaraokeLike::class, 'username');
+        return $this->hasMany(KaraokeLike::class, 'username', 'username');
     }
 
     public function kopokopos()
     {
-        return $this->hasMany(Kopokopo::class, 'username');
+        return $this->hasMany(Kopokopo::class, 'username', 'username');
     }
 
     public function kopokopoRecipients()
     {
-        return $this->hasMany(KopokopoRecipient::class, 'username');
+        return $this->hasMany(KopokopoRecipient::class, 'username', 'username');
     }
 
     public function polls()
     {
-        return $this->hasMany(Poll::class, 'username');
+        return $this->hasMany(Poll::class, 'username', 'username');
     }
 
     public function posts()
     {
-        return $this->hasMany(Post::class, 'username');
+        return $this->hasMany(Post::class, 'username', 'username');
     }
 
     public function postComments()
     {
-        return $this->hasMany(PostComment::class, 'username');
+        return $this->hasMany(PostComment::class, 'username', 'username');
     }
 
     public function postCommentLikes()
     {
-        return $this->hasMany(PostCommentLike::class, 'username');
+        return $this->hasMany(PostCommentLike::class, 'username', 'username');
     }
 
     public function postLikes()
     {
-        return $this->hasMany(PostLike::class, 'username');
+        return $this->hasMany(PostLike::class, 'username', 'username');
     }
 
     public function referrals()
     {
-        return $this->hasMany(Referral::class, 'username');
+        return $this->hasMany(Referral::class, 'username', 'username');
     }
 
     public function savedKaraokes()
     {
-        return $this->hasMany(SavedKaraoke::class, 'username');
+        return $this->hasMany(SavedKaraoke::class, 'username', 'username');
     }
 
     public function searches()
     {
-        return $this->hasMany(Search::class, 'username');
+        return $this->hasMany(Search::class, 'username', 'username');
     }
 
     public function songPayouts()
     {
-        return $this->hasMany(SongPayout::class, 'username');
+        return $this->hasMany(SongPayout::class, 'username', 'username');
     }
 
     public function videos()
     {
-        return $this->hasMany(Video::class, 'username');
+        return $this->hasMany(Video::class, 'username', 'username');
     }
 
     public function videoAlbums()
     {
-        return $this->hasMany(VideoAlbum::class, 'username');
+        return $this->hasMany(VideoAlbum::class, 'username', 'username');
     }
 
     public function videoComments()
     {
-        return $this->hasMany(VideoComment::class, 'username');
+        return $this->hasMany(VideoComment::class, 'username', 'username');
     }
 
     public function videoCommentLikes()
     {
-        return $this->hasMany(VideoCommentLike::class, 'username');
+        return $this->hasMany(VideoCommentLike::class, 'username', 'username');
     }
 
     public function videoLikes()
     {
-        return $this->hasMany(VideoLike::class, 'username');
+        return $this->hasMany(VideoLike::class, 'username', 'username');
     }
 }

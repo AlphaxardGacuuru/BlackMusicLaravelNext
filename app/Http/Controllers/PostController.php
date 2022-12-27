@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\PostService;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,9 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(PostService $postService)
     {
-        //
+        return $postService->index();
     }
 
     /**
@@ -23,9 +24,14 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, PostService $postService)
     {
-        //
+        $this->validate($request, [
+            'text' => 'required',
+            'media' => 'image|nullable|max:9999',
+        ]);
+
+        return $postService->store($request);
     }
 
     /**
@@ -46,9 +52,9 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, $id, PostService $postService)
     {
-        //
+        return $postService->update($request, $id);
     }
 
     /**
@@ -57,8 +63,8 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy($id, PostService $postService)
     {
-        //
+        return $postService->destory($id);
     }
 }

@@ -54,8 +54,10 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Authenticated User
-Route::get('auth', [UserController::class, 'auth']);
+Route::middleware(['auth:sanctum'])->group(function () {
+	// Authenticated User
+    Route::get('auth', [UserController::class, 'auth']);
+});
 
 // Route::middleware(['auth:sanctum'])->group(function () {
 Route::apiResources([
@@ -120,5 +122,9 @@ Route::prefix('filepond')->group(function () {
         Route::post('update-audio/{id}', 'updateAudio');
         Route::delete('delete-audio-thumbnail/{id}', 'deleteAudioThumbnail');
         Route::delete('delete-audio/{id}', 'deleteAudio');
+		
+		// Post
+        Route::post('upload-post-media', 'uploadPostMedia');
+        Route::post('delete-post-media', 'deletePostMedia');
     });
 });

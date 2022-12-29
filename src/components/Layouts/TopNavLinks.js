@@ -186,7 +186,7 @@ const TopNavLinks = (props) => {
 							<h6><span className="me-2"><DownloadSVG /></span>Get App</h6>
 						</a>
 					</Link>
-					<Link href='/videos'>
+					<Link href='/video'>
 						<a className="p-3 dropdown-item border-bottom border-dark">
 							<h6><span className="me-2"><StudioSVG /></span>Studio</h6>
 						</a>

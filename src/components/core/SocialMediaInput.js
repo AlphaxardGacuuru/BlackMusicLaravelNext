@@ -224,13 +224,13 @@ const SocialMediaInput = (props) => {
 						acceptedFileTypes={['image/*']}
 						allowRevert={true}
 						server={{
-							url: `${props.url}/api`,
+							url: `${props.url}/api/filepond/`,
 							process: {
 								url: props.urlTo,
 								onload: res => props.setMedia(res),
 							},
 							revert: {
-								url: props.urlToDelete,
+								url: props.urlTo + '/' + props.media.substr(11),
 								onload: res => props.setMessages([res]),
 							},
 						}} />

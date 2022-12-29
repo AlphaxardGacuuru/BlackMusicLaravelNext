@@ -149,7 +149,6 @@ const App = ({ Component, pageProps }) => {
 	const [para5, setPara5] = useState("")
 	const [urlTo, setUrlTo] = useState()
 	const [urlToTwo, setUrlToTwo] = useState()
-	const [urlToDelete, setUrlToDelete] = useState()
 	const [stateToUpdate, setStateToUpdate] = useState()
 	const [stateToUpdateTwo, setStateToUpdateTwo] = useState()
 	const [showImage, setShowImage] = useState()
@@ -166,7 +165,6 @@ const App = ({ Component, pageProps }) => {
 		// Declare new FormData object for form data
 		setFormData(new FormData())
 	}, [])
-
 
 	// Handle form submit for Social Input
 	const onSubmit = (e) => {
@@ -192,8 +190,9 @@ const App = ({ Component, pageProps }) => {
 				// Updated State One
 				get(urlTo, stateToUpdate)
 				// Updated State Two
-				axios.get(`/api/${urlToTwo}`)
-					.then((res) => stateToUpdateTwo && stateToUpdateTwo(res.data))
+				urlToTwo &&
+					axios.get(`/api/${urlToTwo}`)
+						.then((res) => stateToUpdateTwo(res.data))
 				// Clear text unless editing
 				!editing && setText("")
 				setShowMentionPicker(false)
@@ -240,7 +239,6 @@ const App = ({ Component, pageProps }) => {
 		placeholder, setPlaceholder,
 		urlTo, setUrlTo,
 		urlToTwo, setUrlToTwo,
-		urlToDelete, setUrlToDelete,
 		stateToUpdate, setStateToUpdate,
 		stateToUpdateTwo, setStateToUpdateTwo,
 		showImage, setShowImage,

@@ -106,25 +106,25 @@ Route::get('audio-charts', [AudioController::class, 'charts']);
 // Filepond Controller
 Route::prefix('filepond')->group(function () {
     Route::controller(FilePondController::class)->group(function () {
-        Route::post('update-profile-pic/{id}', 'updateProfilePic');
+        Route::post('profile-pic/{id}', 'updateProfilePic');
         // Video
-        Route::post('upload-video-thumbnail', 'uploadVideoThumbnail');
-        Route::post('update-video-thumbnail/{id}', 'updateVideoThumbnail');
-        Route::post('upload-video', 'uploadVideo');
-        Route::post('update-video/{id}', 'updateVideo');
-        Route::delete('delete-video-thumbnail/{id}', 'deleteVideoThumbnail');
-        Route::delete('delete-video/{id}', 'deleteVideo');
+        Route::post('video-thumbnail', 'storeVideoThumbnail');
+        Route::post('video-thumbnail/{id}', 'updateVideoThumbnail');
+        Route::post('video', 'storeVideo');
+        Route::post('video/{id}', 'updateVideo');
+        Route::delete('video-thumbnail/{id}', 'destoryVideoThumbnail');
+        Route::delete('video/{id}', 'destoryVideo');
 
         // Audio
-        Route::post('upload-audio-thumbnail', 'uploadAudioThumbnail');
-        Route::post('update-audio-thumbnail/{id}', 'updateAudioThumbnail');
-        Route::post('upload-audio', 'uploadAudio');
-        Route::post('update-audio/{id}', 'updateAudio');
-        Route::delete('delete-audio-thumbnail/{id}', 'deleteAudioThumbnail');
-        Route::delete('delete-audio/{id}', 'deleteAudio');
+        Route::post('audio-thumbnail', 'storeAudioThumbnail');
+        Route::post('audio-thumbnail/{id}', 'updateAudioThumbnail');
+        Route::post('audio', 'storeAudio');
+        Route::post('audio/{id}', 'updateAudio');
+        Route::delete('audio-thumbnail/{id}', 'destoryAudioThumbnail');
+        Route::delete('audio/{id}', 'destoryAudio');
 		
 		// Post
-        Route::post('upload-post-media', 'uploadPostMedia');
-        Route::post('delete-post-media', 'deletePostMedia');
+        Route::post('posts', 'storePostMedia');
+        Route::delete('posts/{id}', 'destroyPostMedia');
     });
 });

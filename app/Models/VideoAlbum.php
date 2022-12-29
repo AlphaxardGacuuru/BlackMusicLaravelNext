@@ -10,14 +10,19 @@ class VideoAlbum extends Model
 {
     use HasFactory;
 
-	// Get released date even when null
-    public function getReleasedDateAttribute()
-    {
-        return $this->released ? Carbon::parse($this->released)->format("d M Y") : "";
-    }
+	protected $dates = ['released'];
 
     public function videos()
     {
         return $this->hasMany(Video::class);
     }
+
+	/*
+	*	Custom Functions
+	*/
+
+	public function cover($videoAlbum)
+	{
+		return "/storage/" . $videoAlbum->cover;
+	}
 }

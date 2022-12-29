@@ -1,4 +1,4 @@
-import { useEffect, Suspense } from 'react'
+import { useEffect } from 'react'
 import Link from 'next/link'
 
 // const SocialMediaInput = React.lazy(() => import('@/components/core/SocialMediaInput'))
@@ -17,7 +17,6 @@ const PostCreate = (props) => {
 			props.setShowImagePicker(false)
 			props.setShowPollPicker(false)
 			props.setUrlTo("posts")
-			props.setUrlToDelete(`posts/${props.media.substr(11)}`)
 			props.setStateToUpdate(() => props.setPosts)
 			props.setEditing(false)
 		}, 100)

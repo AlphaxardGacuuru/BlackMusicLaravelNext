@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\PollService;
 use App\Models\Poll;
 use Illuminate\Http\Request;
 
@@ -23,9 +24,9 @@ class PollController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, PollService $pollService)
     {
-        //
+        return $pollService->store($request);
     }
 
     /**

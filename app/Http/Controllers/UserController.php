@@ -2,16 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AudioAlbum;
-use App\Models\BoughtAudio;
-use App\Models\BoughtVideo;
-use App\Models\Follow;
+use App\Http\Services\UserService;
 use App\Models\User;
-use App\Models\VideoAlbum;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -20,68 +13,9 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(UserService $userService)
     {
-        $getUsers = User::all();
-
-        $users = [];
-
-        // Check if user is logged in
-        if (Auth::check()) {
-            $authUsername = auth()->user()->username;
-        } else {
-            $authUsername = '@guest';
-        }
-
-        // Get Users
-        foreach ($getUsers as $key => $user) {
-
-            // Format profile pic
-            $avatar = preg_match("/http/", $user->avatar) ? $user->avatar : "/storage/" . $user->avatar;
-            $backdrop = "/storage/" . $user->backdrop;
-
-            // Check if user has followed User
-            $hasFollowed = Follow::where('username', $authUsername)
-                ->where('followed', $user->username)
-                ->count() > 0 ? true : false;
-
-            // Get user's fans
-            $fans = Follow::where('followed', $user->username)->count() - 1;
-
-            // Check if auth user has bought user's video
-            $hasBoughtVideo = BoughtVideo::where('username', $authUsername)
-                ->where('artist', $user->username)
-                ->count();
-
-            // Check if auth user has bought user's audio
-            $hasBoughtAudio = BoughtAudio::where('username', $authUsername)
-                ->where('artist', $user->username)
-                ->count();
-
-            // Check if user has bought atleast 1 song
-            $hasBought1 = ($hasBoughtVideo + $hasBoughtAudio) > 1 ? true : false;
-
-            array_push($users, [
-                "id" => $user->id,
-                "name" => $user->name,
-                "username" => $user->username,
-                "avatar" => $avatar,
-                "backdrop" => $backdrop,
-                "account_type" => $user->account_type,
-                "bio" => $user->bio,
-                "withdrawal" => $user->withdrawal,
-                "posts" => $user->posts->count(),
-                "following" => $user->follows->count() - 1,
-                "fans" => $fans,
-                "hasFollowed" => $hasFollowed,
-                "hasBought1" => $hasBought1,
-                "decos" => $user->decos->count(),
-                "updated_at" => $user->updated_at->format("d M Y"),
-                "created_at" => $user->created_at->format("d M Y"),
-            ]);
-        }
-
-        return $users;
+        return $userService->index();
     }
 
     /**
@@ -113,7 +47,7 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, UserService $userService)
     {
         $this->validate($request, [
             'name' => 'string|nullable|max:20',
@@ -123,50 +57,7 @@ class UserController extends Controller
             'withdrawal' => 'string|nullable',
         ]);
 
-        /* Update profile */
-        $user = User::find($id);
-
-        if ($request->filled('name')) {
-            $user->name = $request->input('name');
-        }
-
-        if ($request->filled('phone')) {
-            $user->phone = $request->input('phone');
-            $user->password = Hash::make($request->input('phone'));
-        }
-
-        if ($request->filled('account_type') && $user->account_type == "normal") {
-
-            $user->account_type = $request->input('account_type');
-
-            /* Create new video album */
-            $vAlbum = new VideoAlbum;
-            $vAlbum->name = "Singles";
-            $vAlbum->username = auth()->user()->username;
-            $vAlbum->cover = "video-album-covers/musical-note.png";
-            $vAlbum->released = Carbon::now();
-            $vAlbum->save();
-
-            /* Create new audio album */
-            $aAlbum = new AudioAlbum;
-            $aAlbum->name = "Singles";
-            $aAlbum->username = auth()->user()->username;
-            $aAlbum->cover = "audio-album-covers/musical-note.png";
-            $vAlbum->released = Carbon::now();
-            $aAlbum->save();
-        }
-
-        if ($request->filled('bio')) {
-            $user->bio = $request->input('bio');
-        }
-
-        if ($request->filled('withdrawal')) {
-            $user->withdrawal = $request->input('withdrawal');
-        }
-
-        $user->save();
-
-        return response("Account updated", 200);
+        return $userService->update($request, $id);
     }
 
     /**
@@ -186,42 +77,8 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function auth(Request $request)
+    public function auth(UserService $userService)
     {
-        $auth = $request->user();
-
-        // Get Cost of Bought Videos at each price
-        $totalVideos = $auth->boughtVideos->count() * 20;
-        $totalAudios = $auth->boughtAudios->count() * 10;
-
-        // Get Total Cash paid
-        $kopokopo = $auth->kopokopos->sum('amount');
-        $balance = $kopokopo - ($totalVideos + $totalAudios);
-
-        // Format pictures
-        $avatar = preg_match("/http/", $auth->avatar) ?
-        $auth->avatar : "/storage/" . $auth->avatar;
-
-        $backdrop = "/storage/" . $auth->backdrop;
-
-        return [
-            "id" => $auth->id,
-            "name" => $auth->name,
-            "username" => $auth->username,
-            "email" => $auth->email,
-            "phone" => $auth->phone,
-            "account_type" => $auth->account_type,
-            "avatar" => $avatar,
-            "backdrop" => $backdrop,
-            "bio" => $auth->bio,
-            "dob" => $auth->dob,
-            "withdrawal" => $auth->withdrawal,
-            "decos" => $auth->decos->count(),
-            "fans" => Follow::where('followed', $auth->username)->count() - 1,
-            "following" => $auth->follows->count(),
-            "posts" => $auth->posts->count(),
-            "balance" => $balance,
-            "created_at" => $auth->created_at,
-        ];
+        return $userService->auth();
     }
 }

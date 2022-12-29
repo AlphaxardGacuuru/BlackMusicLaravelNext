@@ -110,13 +110,7 @@ class PostService
     {
         $post = Post::where('id', $id)->first();
         Storage::delete('public/' . $post->media);
-        // Polls::where('post_id', $post->id)->delete();
-        // $comments = PostComments::where('post_id', $id)->get();
-        // foreach ($comments as $comment) {
-            // PostCommentLikes::where('comment_id', $comment->id)->delete();
-        // }
-        // PostComments::where('post_id', $id)->delete();
-        // PostLikes::where('post_id', $id)->delete();
+
         Post::find($id)->delete();
 
         return response("Post deleted", 200);

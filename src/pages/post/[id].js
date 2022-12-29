@@ -28,7 +28,6 @@ const PostEdit = (props) => {
 			props.setShowImagePicker(false)
 			props.setShowPollPicker(false)
 			props.setUrlTo(`posts/${id}`)
-			props.setUrlToDelete(`posts/${props.media.substr(11)}`)
 			props.setUrlToTwo(`posts`)
 			props.setStateToUpdate(() => props.setPosts)
 			props.setStateToUpdateTwo(() => props.setPosts)

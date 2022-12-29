@@ -1,6 +1,7 @@
 import Link from 'next/link'
-import Img from 'next/image'
+import axios from '@/lib/axios'
 
+import Img from '@/components/core/Img'
 import Poll from './Poll'
 
 import DecoSVG from '../../svgs/DecoSVG'

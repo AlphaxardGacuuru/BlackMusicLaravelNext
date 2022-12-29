@@ -40,7 +40,7 @@ class FilePondController extends Controller
 
     /*
      * Handle Video Thumbnail Upload */
-    public function uploadVideoThumbnail(Request $request)
+    public function storeVideoThumbnail(Request $request)
     {
         /* Handle thumbnail upload */
         $thumbnail = $request->file('filepond-thumbnail')->store('public/video-thumbnails');
@@ -50,7 +50,7 @@ class FilePondController extends Controller
 
     /*
      * Handle Video Upload */
-    public function uploadVideo(Request $request)
+    public function storeVideo(Request $request)
     {
         /* Handle video upload */
         $video = $request->file('filepond-video')->store('public/videos');
@@ -107,7 +107,7 @@ class FilePondController extends Controller
 
     /*
      * Handle Video Thumbnail Delete */
-    public function deleteVideoThumbnail($id)
+    public function destoryVideoThumbnail($id)
     {
         Storage::delete('public/video-thumbnails/' . $id);
         return response("Video thumbnail deleted", 200);
@@ -115,7 +115,7 @@ class FilePondController extends Controller
 
     /*
      * Handle Video Delete */
-    public function deleteVideo($id)
+    public function destoryVideo($id)
     {
         Storage::delete('public/videos/' . $id);
         return response("Video deleted", 200);
@@ -129,7 +129,7 @@ class FilePondController extends Controller
 
     /*
      * Handle Audio Thumbnail Upload */
-    public function uploadAudioThumbnail(Request $request)
+    public function storeAudioThumbnail(Request $request)
     {
         /* Handle thumbnail upload */
         $thumbnail = $request->file('filepond-thumbnail')->store('public/audio-thumbnails');
@@ -139,7 +139,7 @@ class FilePondController extends Controller
 
     /*
      * Handle Audio Upload */
-    public function uploadAudio(Request $request)
+    public function storeAudio(Request $request)
     {
         /* Handle audio upload */
         $audio = $request->file('filepond-audio')->store('public/audios');
@@ -196,7 +196,7 @@ class FilePondController extends Controller
 
     /*
      * Handle Audio Thumbnail Delete */
-    public function deleteAudioThumbnail($id)
+    public function destoryAudioThumbnail($id)
     {
         Storage::delete('public/audio-thumbnails/' . $id);
         return response("Audio thumbnail deleted", 200);
@@ -204,7 +204,7 @@ class FilePondController extends Controller
 
     /*
      * Handle Audio Delete */
-    public function deleteAudio($id)
+    public function destoryAudio($id)
     {
         Storage::delete('public/audios/' . $id);
         return response("Audio deleted", 200);
@@ -216,11 +216,21 @@ class FilePondController extends Controller
      *
      */
 
-    public function uploadFileMedia(Request $request)
+    /*
+     * Handle Post Media */
+    public function storePostMedia(Request $request)
     {
         /* Handle media upload */
         $media = $request->file('filepond-media')->store('public/post-media');
         $media = substr($media, 7);
         return $media;
+    }
+
+    /*
+     * Handle Post Media Delete */
+    public function destroyPostMedia($id)
+    {
+        Storage::delete('public/post-media/' . $id);
+        return response("Post media deleted", 200);
     }
 }

@@ -113,7 +113,7 @@ const Edit = (props) => {
 									url: `${props.baseUrl}/api/filepond`,
 									headers: { 'X-CSRF-TOKEN': token },
 									process: {
-										url: `/update-profile-pic/${props.auth?.id}`,
+										url: `/profile-pic/${props.auth?.id}`,
 										onload: (res) => {
 											props.setMessages(["Account updated"])
 											// Update Auth

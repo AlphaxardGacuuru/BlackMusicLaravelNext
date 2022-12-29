@@ -351,7 +351,7 @@ const TopNav = (props) => {
 								<h6><span className="ms-3 me-4"><DownloadSVG /></span>Get App</h6>
 							</a>
 						</Link>
-						<Link href='/videos'>
+						<Link href='/video'>
 							<a
 								className="p-3 text-start"
 								onClick={() => setBottomMenu("")}>

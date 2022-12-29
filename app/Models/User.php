@@ -219,4 +219,71 @@ class User extends Authenticatable
     {
         return $this->hasMany(VideoLike::class, 'username', 'username');
     }
+
+    /*
+     *    Custom Functions
+     */
+
+    // Format profile pic
+    public function avatar($user)
+    {
+        return preg_match("/http/", $user->avatar) ? $user->avatar : "/storage/" . $user->avatar;
+    }
+
+    // Format profile pic
+    public function backdrop($user)
+    {
+        return "/storage/" . $user->backdrop;
+    }
+
+    // Check if user has followed User
+    public function hasFollowed($user, $username)
+    {
+        return Follow::where('username', $username)
+            ->where('followed', $user->username)
+            ->count() > 0 ? true : false;
+    }
+
+    // Get user's fans
+    public function fans($user)
+    {
+        return Follow::where('followed', $user->username)->count() - 1;
+    }
+
+    // Check if auth user has bought user's video
+    public function hasBoughtVideo($user, $username)
+    {
+        return BoughtVideo::where('username', $username)
+            ->where('artist', $user->username)
+            ->count();
+    }
+
+    // Check if auth user has bought user's audio
+    public function hasBoughtAudio($user, $username)
+    {
+        return BoughtAudio::where('username', $username)
+            ->where('artist', $user->username)
+            ->count();
+    }
+
+    // Check if user has bought atleast 1 song
+    public function hasBought1($user, $username)
+    {
+        $hasBoughtVideo = $user->hasBoughtVideo($user, $username);
+        $hasBoughtAudio = $user->hasBoughtAudio($user, $username);
+
+        return $hasBoughtVideo + $hasBoughtAudio > 1 ? true : false;
+    }
+
+    // Get balance
+    public function balance($user)
+    {
+        // Get Cost of Bought Videos at each price
+        $totalVideos = $user->boughtVideos->count() * 20;
+        $totalAudios = $user->boughtAudios->count() * 10;
+
+        // Get Total Cash paid
+        $kopokopo = $user->kopokopos->sum('amount');
+        return $kopokopo - ($totalVideos + $totalAudios);
+    }
 }

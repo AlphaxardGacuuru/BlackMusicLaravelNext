@@ -21,7 +21,7 @@ th,
 td,
 tr {
     color: rgba(220,220,220,1);
-	border: 0px;
+	/* border: 0px; */
 }
 
 tr, th {

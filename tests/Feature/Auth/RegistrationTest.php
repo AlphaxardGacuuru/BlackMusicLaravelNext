@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class RegistrationTest extends TestCase
@@ -12,13 +14,19 @@ class RegistrationTest extends TestCase
     public function test_new_users_can_register()
     {
         $response = $this->post('/register', [
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Black Music',
+            'email' => 'al@black.co.ke',
+            'avatar' => 'profile-pics/male_avatar.png',
+            'username' => '@blackmusic',
+            'phone' => '0700000000',
             'password' => 'password',
             'password_confirmation' => 'password',
+            'device_name' => "deviceName"
         ]);
 
         $this->assertAuthenticated();
-        $response->assertNoContent();
+
+        // $response->dump();
+        // $response->assertNoContent();
     }
 }

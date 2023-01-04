@@ -66,7 +66,6 @@ const Edit = (props) => {
 		formData.append("_method", 'put');
 
 		// Send data to UsersController
-		// Get csrf cookie from Laravel inorder to send a POST request
 		axios.post(`/api/users/${props.auth?.id}`, formData)
 			.then((res) => {
 				props.setMessages([res.data])

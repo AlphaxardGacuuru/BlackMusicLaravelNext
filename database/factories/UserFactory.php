@@ -18,11 +18,20 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
+            // 'name' => fake()->name(),
+            // 'username' => '@' . fake()->firstName(),
+            // 'email' => fake()->unique()->safeEmail(),
+            // 'email_verified_at' => now(),
+            // 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            // 'remember_token' => Str::random(10),
+			
+            'name' => 'Black Music',
+            'email' => 'al@black.co.ke',
+            'avatar' => 'profile-pics/male_avatar.png',
+            'backdrop' => 'profile-pics/male_avatar.png',
+            'username' => '@blackmusic',
+            'phone' => '0700000000',
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token' => Str::random(10),
         ];
     }
 

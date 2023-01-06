@@ -7,7 +7,11 @@ use Illuminate\Support\Facades\Storage;
 
 class AudioAlbumService
 {
-    // Get Audio Albums
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $getAudioAlbums = AudioAlbum::all();
@@ -28,6 +32,23 @@ class AudioAlbumService
         return $audioAlbums;
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\AudioAlbum  $audioAlbum
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        return AudioAlbum::find($id);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store($request)
     {
         /* Handle file upload */
@@ -47,6 +68,13 @@ class AudioAlbumService
         return response('Audio Album Created', 200);
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\AudioAlbum  $audioAlbum
+     * @return \Illuminate\Http\Response
+     */
     public function update($request, $id)
     {
         /* Handle file upload */

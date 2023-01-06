@@ -22,7 +22,7 @@ const TopNav = (props) => {
 
 	const router = useRouter()
 
-	const { logout } = useAuth({ setLogin: props.setLogin })
+	// const { logout } = useAuth({ setLogin: props.setLogin })
 
 	const [menu, setMenu] = useState("")
 	const [bottomMenu, setBottomMenu] = useState("")
@@ -44,25 +44,18 @@ const TopNav = (props) => {
 		// 	}).catch(() => props.setErrors(['Failed to fetch notifications']))
 	}, [])
 
-	// const logout = (e) => {
-	// 	e.preventDefault()
+	const logout = (e) => {
+		e.preventDefault()
 
-	// 	axios.get('/sanctum/csrf-cookie').then(() => {
-	// 		axios.post(`${props.url}/api/logout`)
-	// 			.then((res) => {
-	// 				// Remove phone from localStorage
-	// 				localStorage.removeItem("auth?")
-	// 				props.setMessages(["Logged out"])
-	// 				// Update Auth
-	// 				props.setAuth({
-	// 					"name": "Guest",
-	// 					"username": "@guest",
-	// 					"avatar": "profile-pics/male_avatar.png",
-	// 					"account_type": "normal"
-	// 				})
-	// 			});
-	// 	})
-	// }
+		axios.post(`/logout`)
+			.then((res) => {
+				// Remove phone from localStorage
+				localStorage.clear()
+				props.setMessages(["Logged out"])
+				// Reload 
+				location.reload()
+			});
+	}
 
 	const onNotification = () => {
 		axios.put(`${props.url}/api/notifications/update`)
@@ -132,7 +125,7 @@ const TopNav = (props) => {
 									<div className="menu-content-area d-flex align-items-center">
 										{/* <!-- Header Social Area --> */}
 										<div className="header-social-area d-flex align-items-center">
-											{!props.auth?.username ?
+											{props.auth?.username == "@guest" ?
 												<Link href="#">
 													<a className="display-4" onClick={() => props.setLogin(true)}>
 														Login

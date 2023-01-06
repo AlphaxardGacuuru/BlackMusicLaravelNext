@@ -206,7 +206,7 @@ const TopNavLinks = (props) => {
 					<Link href="#">
 						<a
 							className="p-3 dropdown-item"
-							onClick={props.logout}>
+							onClick={(e) => props.logout(e)}>
 							<h6><span className="me-2"><LogoutSVG /></span>Logout</h6>
 						</a>
 					</Link>

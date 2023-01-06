@@ -155,7 +155,7 @@ export default function Home(props) {
 						{/* Loading Musician items */}
 						{dummyArray
 							.filter(() => props.users
-								.filter((user) => user.isMusician)
+								.filter((user) => user.account_type)
 								.length < 1)
 							.map((item, key) => <LoadingMusiciansMedia key={key} />)}
 
@@ -212,7 +212,7 @@ export default function Home(props) {
 
 						{/* Posts */}
 						{props.posts
-							.filter((post) => post.hasFollowed)
+							.filter((post) => post.hasFollowed || props.auth?.username == "@blackmusic")
 							.map((post, key) => (
 								<Suspense key={key} fallback={<LoadingPostMedia />}>
 									<PostMedia

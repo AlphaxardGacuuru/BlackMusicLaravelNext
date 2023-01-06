@@ -233,6 +233,7 @@ const Profile = (props) => {
 					{/* <!-- Posts area --> */}
 					{props.posts
 						.filter((post) => post.username == username)
+						.filter((post) => post.hasFollowed || props.auth?.username == "@blackmusic")
 						.map((post, key) => (
 							<Suspense key={key} fallback={<LoadingPostMedia />}>
 								<PostMedia

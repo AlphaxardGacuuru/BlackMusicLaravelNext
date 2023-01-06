@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -41,28 +41,38 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
+		// Delete Current Access Token
+		$request->user()->currentAccessToken()->delete();
+
         return response()->noContent();
     }
 
-	/*
-	* Token Based Login
-	*/
+    /*
+     * Token Based Login
+     */
     public function token(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'phone' => 'required',
             'password' => 'required',
             'device_name' => 'required',
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('phone', $request->phone)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
+                'phone' => ['The provided credentials are incorrect.'],
             ]);
         }
 
-        return $user->createToken($request->device_name)->plainTextToken;
+        // Give @blackmusic all abilities
+        if ($user->username == '@blackmusic') {
+            $token = $user->createToken($request->device_name, ['*'])->plainTextToken;
+        } else {
+            $token = $user->createToken($request->device_name)->plainTextToken;
+        }
+
+        return $token;
     }
 }

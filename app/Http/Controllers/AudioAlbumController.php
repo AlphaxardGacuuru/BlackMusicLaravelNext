@@ -39,9 +39,9 @@ class AudioAlbumController extends Controller
      * @param  \App\Models\AudioAlbum  $audioAlbum
      * @return \Illuminate\Http\Response
      */
-    public function show(AudioAlbum $audioAlbum)
+    public function show($id, AudioAlbumService $audioAlbumService)
     {
-        //
+        return $audioAlbumService->show($id);
     }
 
     /**

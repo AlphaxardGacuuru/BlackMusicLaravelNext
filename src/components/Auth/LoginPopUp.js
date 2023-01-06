@@ -35,7 +35,7 @@ const LoginPopUp = (props) => {
 	// const [email, setEmail] = useState('alphaxardgacuuru47@gmail.com')
 	const [email, setEmail] = useState('al@black.co.ke')
 	// const [phone, setPhone] = useState('0700364446')
-	const [phone, setPhone] = useState('0700000000')
+	const [phone, setPhone] = useState('')
 	// const [password, setPassword] = useState('0700364446')
 	const [password, setPassword] = useState('0700000000')
 	const [shouldRemember, setShouldRemember] = useState()
@@ -50,7 +50,7 @@ const LoginPopUp = (props) => {
 
 		// register({ name, username, email, phone, password, password_confirmation: password, setErrors })
 
-		login({ username, phone, email, password, remember: shouldRemember, setErrors, setStatus })
+		// login({ username, phone, email, password, remember: shouldRemember, setErrors, setStatus })
 	}
 
 	// const [phone, setPhone] = useState('07')
@@ -59,17 +59,17 @@ const LoginPopUp = (props) => {
 	const onSubmit = (e) => {
 		e.preventDefault()
 
-		axios.post(`${props.url}/api/login`, {
+		axios.post(`/login`, {
 			phone: phone,
 			password: phone,
+			device_name: "deviceName",
 			remember: 'checked'
 		}).then((res) => {
 			props.setLogin(false)
-			props.setMessages(["Logged in"])
+			props.setLocalStorage("sanctumToken", res.data)
 			// Update Logged in user
 			props.get(`auth`, props.setAuth, 'auth')
-			// Save phone to Local Storage
-			localStorage.setItem("phone", phone)
+			props.setMessages(["Logged in"])
 			// Reload page
 			setTimeout(() => location.reload(), 1000)
 		}).catch((err) => props.getErrors(err, true));

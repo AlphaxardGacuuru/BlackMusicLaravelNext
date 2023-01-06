@@ -27,9 +27,6 @@ const App = ({ Component, pageProps }) => {
 
 	const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
-	// Set Axios default header
-	// axios.defaults.baseURL = "https://music.black.co.ke"
-
 	// Function for checking local storage
 	const getLocalStorage = (state) => {
 		if (typeof window !== "undefined" && localStorage.getItem(state)) {
@@ -50,7 +47,17 @@ const App = ({ Component, pageProps }) => {
 	const [messages, setMessages] = useState([])
 	const [errors, setErrors] = useState([])
 	const [login, setLogin] = useState()
-	const [auth, setAuth] = useState(getLocalStorage("auth"))
+	const [auth, setAuth] = useState(
+		getLocalStorage("auth") &&
+		{
+			"name": "Guest",
+			"username": "@guest",
+			"avatar": "/storage/profile-pics/male_avatar.png",
+			"account_type": "normal",
+			"decos": 0,
+			"posts": 0,
+			"fans": 0
+		})
 
 	const [audios, setAudios] = useState(getLocalStorage("audios"))
 	const [audioAlbums, setAudioAlbums] = useState(getLocalStorage("audioAlbums"))

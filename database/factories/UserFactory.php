@@ -2,7 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Follow;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Str;
 
 /**
@@ -17,9 +20,6 @@ class UserFactory extends Factory
      */
     public function definition()
     {
-        // Generate phone number that starts with 0
-        $phone = fake()->phoneNumber();
-
         return [
             'name' => fake()->name(),
             'username' => '@' . fake()->unique()->firstName(),
@@ -27,7 +27,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'avatar' => 'profile-pics/male_avatar.png',
             'backdrop' => 'img/headphones.jpg',
-            'phone' => $phone,
+            'phone' => fake()->phoneNumber(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
             'bio' => fake()->catchPhrase(),
@@ -44,5 +44,23 @@ class UserFactory extends Factory
         return $this->state(fn(array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+	
+    /**
+     * Configure the model factory.
+     *
+     * @return $this
+     */
+    public function configure()
+    {
+		// User Follows themselves and Black Music after creation
+        return $this->afterMaking(function (User $user) {
+            //
+        })->afterCreating(function (User $user) {
+            Follow::factory()
+                ->count(2)
+                ->state(new Sequence(['followed' => $user->username], ['followed' => '@blackmusic']))
+                ->create(['username' => $user->username]);
+        });
     }
 }

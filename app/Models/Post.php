@@ -17,22 +17,22 @@ class Post extends Model
 
     public function likes()
     {
-        return $this->hasMany(PostLike::class, 'username', 'username');
+        return $this->hasMany(PostLike::class);
     }
 
     public function comments()
     {
-        return $this->hasMany(PostComment::class, 'username', 'username');
+        return $this->hasMany(PostComment::class);
     }
 
     public function commentLikes()
     {
-        return $this->hasMany(PostCommentLike::class, 'username', 'username');
+        return $this->hasMany(PostCommentLike::class);
     }
 
     public function polls()
     {
-        return $this->hasMany(Poll::class, 'username', 'username');
+        return $this->hasMany(Poll::class);
     }
 
     /*

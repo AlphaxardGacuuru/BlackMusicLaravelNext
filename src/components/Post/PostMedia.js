@@ -95,10 +95,10 @@ const PostMedia = (props) => {
 				<div className="mb-1" style={{ overflow: "hidden" }}>
 					{props.post.media &&
 						<Img
-							src={`storage/${props.post.media}`}
+							src={`/storage/${props.post.media}`}
 							width="100%"
 							height="auto"
-							alt={'post-media'} />}
+							alt="post-media" />}
 				</div>
 
 				{/* Polls */}

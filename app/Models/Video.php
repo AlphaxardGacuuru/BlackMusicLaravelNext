@@ -26,6 +26,11 @@ class Video extends Model
         return $this->hasMany(VideoLike::class);
     }
 
+    public function comments()
+    {
+        return $this->hasMany(VideoComment::class);
+    }
+
     public function bought()
     {
         return $this->hasMany(BoughtVideo::class);

@@ -17,8 +17,10 @@ class AudioFactory extends Factory
     public function definition()
     {
         return [
-            'audio' => 'audios/audio.mp3',
+            'audio' => 'audios/1.mp3',
             'name' => fake()->catchPhrase(),
+            'genre' => fake()->catchPhrase(),
+            'thumbnail' => fake()->catchPhrase(),
             'description' => fake()->realText($maxNbChars = 20, $indexSize = 2),
             'released' => now(),
         ];

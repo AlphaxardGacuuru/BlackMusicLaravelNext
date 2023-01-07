@@ -29,6 +29,11 @@ class Audio extends Model
         return $this->hasMany(AudioLike::class);
     }
 
+    public function comments()
+    {
+        return $this->hasMany(AudioComment::class);
+    }
+
     public function bought()
     {
         return $this->hasMany(BoughtAudio::class);

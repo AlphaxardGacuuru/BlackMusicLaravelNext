@@ -36,6 +36,7 @@ class VideoService
                 "released" => $video->released->format('d M Y'),
                 "hasLiked" => $video->hasLiked($video, $authUsername),
                 "likes" => $video->likes->count(),
+                "comments" => $video->comments->count(),
                 "inCart" => $video->inCart($video, $authUsername),
                 "hasBoughtVideo" => $video->hasBoughtVideo($video, $authUsername),
                 "downloads" => $video->bought->count(),

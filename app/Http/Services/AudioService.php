@@ -36,6 +36,7 @@ class AudioService
                 "released" => $audio->released->format('d M Y'),
                 "hasLiked" => $audio->hasLiked($audio, $authUsername),
                 "likes" => $audio->likes->count(),
+                "comments" => $audio->comments->count(),
                 "inCart" => $audio->inCart($audio, $authUsername),
                 "hasBoughtAudio" => $audio->hasBoughtAudio($audio, $authUsername),
                 "downloads" => $audio->bought->count(),

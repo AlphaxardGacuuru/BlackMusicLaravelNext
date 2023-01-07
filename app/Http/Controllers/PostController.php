@@ -28,7 +28,6 @@ class PostController extends Controller
     {
         $this->validate($request, [
             'text' => 'required',
-            'media' => 'image|nullable|max:9999',
         ]);
 
         return $postService->store($request);

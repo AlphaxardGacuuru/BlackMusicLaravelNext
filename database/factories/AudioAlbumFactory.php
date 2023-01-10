@@ -19,7 +19,7 @@ class AudioAlbumFactory extends Factory
         return [
             'name' => fake()->catchPhrase(),
             'cover' => 'audio-album-covers/musical-note.png',
-            'released' => now(),
+            'released' => fake()->dateTime(),
         ];
     }
 }

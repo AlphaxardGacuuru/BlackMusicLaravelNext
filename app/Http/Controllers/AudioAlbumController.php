@@ -27,6 +27,8 @@ class AudioAlbumController extends Controller
     public function store(Request $request, AudioAlbumService $audioAlbumService)
     {
         $this->validate($request, [
+            'name' => 'required|string',
+            'released' => 'required',
             'cover' => 'required|image|max:1999',
         ]);
 

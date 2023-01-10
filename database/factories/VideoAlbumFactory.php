@@ -19,7 +19,7 @@ class VideoAlbumFactory extends Factory
         return [
             'name' => fake()->catchPhrase(),
             'cover' => 'video-album-covers/musical-note.png',
-            'released' => now(),
+            'released' => fake()->dateTime(),
         ];
     }
 }

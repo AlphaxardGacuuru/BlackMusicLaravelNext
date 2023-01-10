@@ -3,7 +3,6 @@
 namespace App\Http\Services;
 
 use App\Models\Audio;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class AudioService
@@ -47,17 +46,15 @@ class AudioService
         return $audios;
     }
 
-    public function show($audio, $id)
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\AudioAlbum  $audioAlbum
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
     {
-        $audio = Audio::find($id);
-        // Get file extesion
-        $ext = substr($audio->audio, -3);
-
-        $src = 'storage/' . $audio->audio;
-
-        $name = $audio->name . '.' . $ext;
-
-        return response()->download($src, $name);
+        return Audio::find($id);
     }
 
     public function store($request)
@@ -66,7 +63,7 @@ class AudioService
         $audio = new Audio;
         $audio->audio = $request->input('audio');
         $audio->name = $request->input('name');
-        $audio->username = $request->input('username');
+        $audio->username = auth('sanctum')->user()->username;
         $audio->ft = $request->input('ft');
         $audio->audio_album_id = $request->input('audio_album_id');
         $audio->genre = $request->input('genre');
@@ -126,5 +123,19 @@ class AudioService
         $audio->save();
 
         return response('Audio Edited', 200);
+    }
+
+    // Download Audio
+    public function download($id)
+    {
+        $audio = Audio::find($id);
+        // Get file extesion
+        $ext = substr($audio->audio, -3);
+
+        $src = 'storage/' . $audio->audio;
+
+        $name = $audio->name . '.' . $ext;
+
+        return response()->download($src, $name);
     }
 }

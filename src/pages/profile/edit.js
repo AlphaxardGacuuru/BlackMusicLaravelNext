@@ -101,7 +101,7 @@ const Edit = (props) => {
 						<label htmlFor="" className="text-light">Profile Pic</label>
 						<div className="avatar-container">
 							<FilePond
-								name="filepond-profile-pic"
+								name="filepond-avatar"
 								labelIdle='Drag & Drop your Image or <span class="filepond--label-action text-dark"> Browse </span>'
 								stylePanelLayout="compact circle"
 								imageCropAspectRatio="1:1"
@@ -112,7 +112,7 @@ const Edit = (props) => {
 									url: `${props.baseUrl}/api/filepond`,
 									headers: { 'X-CSRF-TOKEN': token },
 									process: {
-										url: `/profile-pic/${props.auth?.id}`,
+										url: `/avatar/${props.auth?.id}`,
 										onload: (res) => {
 											props.setMessages(["Account updated"])
 											// Update Auth

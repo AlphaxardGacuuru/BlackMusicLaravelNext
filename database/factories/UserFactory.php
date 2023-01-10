@@ -25,13 +25,34 @@ class UserFactory extends Factory
             'username' => '@' . fake()->unique()->firstName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'avatar' => 'profile-pics/male_avatar.png',
+            'avatar' => 'avatars/male_avatar.png',
             'backdrop' => 'img/headphones.jpg',
             'phone' => fake()->phoneNumber(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
             'bio' => fake()->catchPhrase(),
         ];
+    }
+
+    /**
+     * Add Black Music Account
+     *
+     * @return static
+     */
+    public function black()
+    {
+        return $this->state(fn(array $attributes) => [
+            'name' => 'Black Music',
+            'username' => '@blackmusic',
+            'email' => 'al@black.co.ke',
+            'email_verified_at' => now(),
+            'avatar' => 'avatars/male_avatar.png',
+            'backdrop' => 'img/headphones.jpg',
+            'phone' => '0700000000',
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'remember_token' => Str::random(10),
+            'bio' => fake()->catchPhrase(),
+        ]);
     }
 
     /**
@@ -45,7 +66,7 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
-	
+
     /**
      * Configure the model factory.
      *
@@ -53,13 +74,16 @@ class UserFactory extends Factory
      */
     public function configure()
     {
-		// User Follows themselves and Black Music after creation
+        // User Follows themselves and Black Music after creation
         return $this->afterMaking(function (User $user) {
             //
         })->afterCreating(function (User $user) {
             Follow::factory()
                 ->count(2)
-                ->state(new Sequence(['followed' => $user->username], ['followed' => '@blackmusic']))
+                ->state(new Sequence(
+                    ['followed' => $user->username],
+                    ['followed' => '@blackmusic']
+                ))
                 ->create(['username' => $user->username]);
         });
     }

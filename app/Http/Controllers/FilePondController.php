@@ -12,16 +12,16 @@ class FilePondController extends Controller
 {
     /*
      * Handle Profile Pic Upload */
-    public function updateProfilePic(Request $request, $id)
+    public function updateAvatar(Request $request, $id)
     {
-        if ($request->hasFile('filepond-profile-pic')) {
-            $avatar = $request->file('filepond-profile-pic')->store('public/profile-pics');
+        if ($request->hasFile('filepond-avatar')) {
+            $avatar = $request->file('filepond-avatar')->store('public/avatars');
             $avatar = substr($avatar, 7);
 
             $user = User::find($id);
 
             // Delete profile pic if it's not the default one
-            if ($user->avatar != '/storage/profile-pics/male_avatar.png') {
+            if ($user->avatar != '/storage/avatars/male_avatar.png') {
                 Storage::delete('public/' . $user->avatar);
             }
 

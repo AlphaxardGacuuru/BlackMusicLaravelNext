@@ -106,7 +106,7 @@ Route::get('audio-charts', [AudioController::class, 'charts']);
 // Filepond Controller
 Route::prefix('filepond')->group(function () {
     Route::controller(FilePondController::class)->group(function () {
-        Route::post('profile-pic/{id}', 'updateProfilePic');
+        Route::post('avatar/{id}', 'updateAvatar');
         // Video
         Route::post('video-thumbnail', 'storeVideoThumbnail');
         Route::post('video-thumbnail/{id}', 'updateVideoThumbnail');

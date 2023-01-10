@@ -22,7 +22,7 @@ class AudioFactory extends Factory
             'genre' => fake()->catchPhrase(),
             'thumbnail' => fake()->catchPhrase(),
             'description' => fake()->realText($maxNbChars = 20, $indexSize = 2),
-            'released' => now(),
+            'released' => fake()->dateTime(),
         ];
     }
 }

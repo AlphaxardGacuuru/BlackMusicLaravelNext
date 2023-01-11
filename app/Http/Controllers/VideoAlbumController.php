@@ -39,9 +39,9 @@ class VideoAlbumController extends Controller
      * @param  \App\Models\VideoAlbum  $videoAlbum
      * @return \Illuminate\Http\Response
      */
-    public function show(VideoAlbum $videoAlbum)
+    public function show($id, VideoAlbumService $videoAlbumService)
     {
-        //
+        return $videoAlbumService->show($id);
     }
 
     /**

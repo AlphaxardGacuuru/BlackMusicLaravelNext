@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import Img from '@/components/core/Img'
 
 import PersonSVG from '@/svgs/PersonSVG'
@@ -136,9 +137,9 @@ const TopNavLinks = (props) => {
 					className="hidden"
 					data-bs-toggle="dropdown"
 					aria-expanded="false">
-					<Img
+					<Image
 						src={props.auth?.avatar}
-						imgClass="rounded-circle"
+						className="rounded-circle"
 						width="25px"
 						height="25px"
 						alt="Avatar" />

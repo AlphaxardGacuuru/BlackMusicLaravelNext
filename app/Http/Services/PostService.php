@@ -78,6 +78,17 @@ class PostService
         return $posts;
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\AudioAlbum  $audioAlbum
+     * @return \Illuminate\Http\Response
+     */
+	public function show($id)
+	{
+		return Post::find($id);
+	}	
+
     /* Create new post */
     public function store($request)
     {

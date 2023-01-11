@@ -10,6 +10,7 @@ import CommentSVG from '../../svgs/CommentSVG'
 import HeartSVG from '../../svgs/HeartSVG'
 import HeartFilledSVG from '../../svgs/HeartFilledSVG'
 import ShareSVG from '../../svgs/ShareSVG'
+import Image from 'next/image'
 
 const PostMedia = (props) => {
 
@@ -95,9 +96,9 @@ const PostMedia = (props) => {
 				<div className="mb-1" style={{ overflow: "hidden" }}>
 					{props.post.media &&
 						<Img
-							src={`/storage/${props.post.media}`}
 							width="100%"
-							height="auto"
+							height="20em"
+							src={`/storage/${props.post.media}`}
 							alt="post-media" />}
 				</div>
 

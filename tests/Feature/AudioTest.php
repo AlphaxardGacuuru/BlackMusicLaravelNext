@@ -97,8 +97,11 @@ class AudioTest extends TestCase
         $audio = UploadedFile::fake()->create('audio.mp3');
 
         // Upload audio and thumbnail
-        $this->post('api/filepond/audio-thumbnail', ['filepond-thumbnail' => $thumbnail]);
-        $this->post('api/filepond/audio', ['filepond-audio' => $audio]);
+        $uploadThumbnail = $this->post('api/filepond/audio-thumbnail', ['filepond-thumbnail' => $thumbnail]);
+        $uploadAudio = $this->post('api/filepond/audio', ['filepond-audio' => $audio]);
+
+        $uploadThumbnail->assertStatus(200);
+        $uploadAudio->assertStatus(200);
 
         $response = $this->post('api/audios', [
             'audio' => 'audios/' . $audio->hashName(),
@@ -121,7 +124,7 @@ class AudioTest extends TestCase
     }
 
     /**
-     * Store
+     * Store Bad
      *
      * @return void
      */
@@ -163,8 +166,11 @@ class AudioTest extends TestCase
         $audioFile = UploadedFile::fake()->create('audio.mp3');
 
         // Upload audio and thumbnail
-        $this->post('api/filepond/audio-thumbnail', ['filepond-thumbnail' => $thumbnail]);
-        $this->post('api/filepond/audio', ['filepond-audio' => $audioFile]);
+        $uploadThumbnail = $this->post('api/filepond/audio-thumbnail', ['filepond-thumbnail' => $thumbnail]);
+        $uploadVideo = $this->post('api/filepond/audio', ['filepond-audio' => $audioFile]);
+
+        $uploadThumbnail->assertStatus(200);
+        $uploadVideo->assertStatus(200);
 
         $this->put('api/audios/' . $audio->id, [
             'audio' => 'audios/' . $audioFile->hashName(),

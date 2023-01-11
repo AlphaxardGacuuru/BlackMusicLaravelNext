@@ -89,7 +89,7 @@ const SocialMediaInput = (props) => {
 							height: "50px",
 							resize: "none"
 						}}
-						placeholder={props.placeholder}
+						placeholder={props.placeholder + props.media}
 						value={props.text}
 						row="1"
 						onChange={(e) => props.setText(e.target.value)}
@@ -102,9 +102,11 @@ const SocialMediaInput = (props) => {
 						className="text-light"
 						style={{ cursor: "pointer" }}
 						onClick={() => {
-							props.setShowEmojiPicker(!props.showEmojiPicker)
-							props.setShowImagePicker(true && false)
-							props.setShowPollPicker(true && false)
+							if (!props.media && !props.para1) {
+								props.setShowEmojiPicker(!props.showEmojiPicker)
+								props.setShowImagePicker(true && false)
+								props.setShowPollPicker(true && false)
+							}
 						}}>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -123,16 +125,10 @@ const SocialMediaInput = (props) => {
 					<div
 						className="pt-2 px-1 text-light"
 						onClick={() => {
-							props.setShowImagePicker(!props.showImagePicker)
-							props.setShowEmojiPicker(true && false)
-							props.setShowPollPicker(true && false)
-							if (props.showImage || props.showPollPicker) {
-								props.setMedia("")
-								props.setPara1()
-								props.setPara2()
-								props.setPara3()
-								props.setPara4()
-								props.setPara5()
+							if (!props.media && !props.para1) {
+								props.setShowEmojiPicker(true && false)
+								props.setShowImagePicker(!props.showImagePicker)
+								props.setShowPollPicker(true && false)
 							}
 						}}>
 						<div style={{ cursor: "pointer" }}>
@@ -153,16 +149,10 @@ const SocialMediaInput = (props) => {
 					<div
 						className="pt-2 px-1 text-white"
 						onClick={() => {
-							props.setShowPollPicker(!props.showPollPicker)
-							props.setShowEmojiPicker(true && false)
-							props.setShowImagePicker(true && false)
-							if (props.showImage || props.showPollPicker) {
-								props.setMedia("")
-								props.setPara1()
-								props.setPara2()
-								props.setPara3()
-								props.setPara4()
-								props.setPara5()
+							if (!props.media && !props.para1) {
+								props.setShowEmojiPicker(true && false)
+								props.setShowPollPicker(!props.showPollPicker)
+								props.setShowImagePicker(true && false)
 							}
 						}}>
 						<div style={{ cursor: "pointer" }}>
@@ -231,7 +221,10 @@ const SocialMediaInput = (props) => {
 							},
 							revert: {
 								url: props.urlTo + '/' + props.media.substr(11),
-								onload: res => props.setMessages([res]),
+								onload: res => {
+									props.setMessages([res])
+									props.setMedia("")
+								},
 							},
 						}} />
 					<br />

@@ -3,7 +3,6 @@
 namespace App\Http\Services;
 
 use App\Models\Video;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class VideoService
@@ -47,17 +46,15 @@ class VideoService
         return $videos;
     }
 
-    public function show($video, $id)
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\AudioAlbum  $audioAlbum
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
     {
-        $video = Video::find($id);
-        // Get file extesion
-        $ext = substr($video->video, -3);
-
-        $src = 'storage/' . $video->video;
-
-        $name = $video->name . '.' . $ext;
-
-        return response()->download($src, $name);
+        return Video::find($id);
     }
 
     public function store($request)
@@ -66,7 +63,7 @@ class VideoService
         $video = new Video;
         $video->video = $request->input('video');
         $video->name = $request->input('name');
-        $video->username = $request->input('username');
+        $video->username = auth('sanctum')->user()->username;
         $video->ft = $request->input('ft');
         $video->video_album_id = $request->input('video_album_id');
         $video->genre = $request->input('genre');
@@ -126,5 +123,18 @@ class VideoService
         $video->save();
 
         return response('Video Edited', 200);
+    }
+
+    public function download($video, $id)
+    {
+        $video = Video::find($id);
+        // Get file extesion
+        $ext = substr($video->video, -3);
+
+        $src = 'storage/' . $video->video;
+
+        $name = $video->name . '.' . $ext;
+
+        return response()->download($src, $name);
     }
 }

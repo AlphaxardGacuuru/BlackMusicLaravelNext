@@ -80,7 +80,7 @@ class AudioAlbumTest extends TestCase
     }
 
     /**
-     * Store
+     * Store Bad
      *
      * @return void
      */

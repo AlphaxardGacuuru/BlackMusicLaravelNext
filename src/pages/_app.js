@@ -194,6 +194,8 @@ const App = ({ Component, pageProps }) => {
 		axios.post(`/api/${urlTo}`, formData)
 			.then((res) => {
 				setMessages([res.data])
+				// Clear Media
+				setMedia("")
 				// Updated State One
 				get(urlTo, stateToUpdate)
 				// Updated State Two

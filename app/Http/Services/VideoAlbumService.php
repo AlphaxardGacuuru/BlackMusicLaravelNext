@@ -28,6 +28,17 @@ class VideoAlbumService
         return $videoAlbums;
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\AudioAlbum  $audioAlbum
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        return VideoAlbum::find($id);
+    }
+
 	public function store($request)
 	{
         /* Handle file upload */

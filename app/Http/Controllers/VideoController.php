@@ -44,9 +44,9 @@ class VideoController extends Controller
      * @param  \App\Models\Video  $video
      * @return \Illuminate\Http\Response
      */
-    public function show(Video $video, $id, VideoService $videoService)
+    public function show($id, VideoService $videoService)
     {
-		return $videoService->show($video, $id);
+		return $videoService->show($id);
     }
 
     /**

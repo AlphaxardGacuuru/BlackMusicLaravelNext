@@ -14,22 +14,24 @@ class FilePondController extends Controller
      * Handle Profile Pic Upload */
     public function updateAvatar(Request $request, $id)
     {
-        if ($request->hasFile('filepond-avatar')) {
-            $avatar = $request->file('filepond-avatar')->store('public/avatars');
-            $avatar = substr($avatar, 7);
+        $this->validate($request, [
+            'filepond-avatar' => 'required|image',
+        ]);
 
-            $user = User::find($id);
+        $avatar = $request->file('filepond-avatar')->store('public/avatars');
+        $avatar = substr($avatar, 7);
 
-            // Delete profile pic if it's not the default one
-            if ($user->avatar != '/storage/avatars/male_avatar.png') {
-                Storage::delete('public/' . $user->avatar);
-            }
+        $user = User::find($id);
 
-            $user->avatar = $avatar;
-            $user->save();
-
-            return response("Account updated", 200);
+        // Delete profile pic if it's not the default one
+        if ($user->avatar != '/storage/avatars/male_avatar.png') {
+            Storage::delete('public/' . $user->avatar);
         }
+
+        $user->avatar = $avatar;
+        $user->save();
+
+        return response("Account updated", 200);
     }
 
     /*
@@ -42,7 +44,10 @@ class FilePondController extends Controller
      * Handle Video Thumbnail Upload */
     public function storeVideoThumbnail(Request $request)
     {
-        /* Handle thumbnail upload */
+        $this->validate($request, [
+            'filepond-thumbnail' => 'required|image',
+        ]);
+
         $thumbnail = $request->file('filepond-thumbnail')->store('public/video-thumbnails');
         $thumbnail = substr($thumbnail, 7);
         return $thumbnail;
@@ -52,17 +57,12 @@ class FilePondController extends Controller
      * Handle Video Upload */
     public function storeVideo(Request $request)
     {
-        /* Handle video upload */
+        $this->validate($request, [
+            'filepond-video' => 'required|file',
+        ]);
+
         $video = $request->file('filepond-video')->store('public/videos');
         $videoShort = substr($video, 7);
-        // $videoName = substr($video, 14);
-        // $videoName = substr($videoName, 0, strpos($videoName, "."));
-
-        // Create frame from Video
-        // FFMpeg::open($video)
-        //     ->getFrameFromSeconds(5)
-        //     ->export()
-        //     ->save('public/video-thumbnails/' . $videoName . '.png');
 
         return $videoShort;
     }
@@ -71,7 +71,10 @@ class FilePondController extends Controller
      * Update VideoThumbnail */
     public function updateVideoThumbnail(Request $request, $id)
     {
-        /* Handle thumbnail upload */
+        $this->validate($request, [
+            'filepond-thumbnail' => 'required|image',
+        ]);
+
         $thumbnail = $request->file('filepond-thumbnail')->store('public/video-thumbnails');
         $thumbnail = substr($thumbnail, 7);
 
@@ -90,7 +93,10 @@ class FilePondController extends Controller
      * Update VideoThumbnail */
     public function updateVideo(Request $request, $id)
     {
-        /* Handle thumbnail upload */
+        $this->validate($request, [
+            'filepond-video' => 'required|file',
+        ]);
+
         $videoFile = $request->file('filepond-video')->store('public/videos');
         $videoFile = substr($videoFile, 7);
 
@@ -131,7 +137,10 @@ class FilePondController extends Controller
      * Handle Audio Thumbnail Upload */
     public function storeAudioThumbnail(Request $request)
     {
-        /* Handle thumbnail upload */
+        $this->validate($request, [
+            'filepond-thumbnail' => 'required|image',
+        ]);
+
         $thumbnail = $request->file('filepond-thumbnail')->store('public/audio-thumbnails');
         $thumbnail = substr($thumbnail, 7);
         return $thumbnail;
@@ -141,17 +150,13 @@ class FilePondController extends Controller
      * Handle Audio Upload */
     public function storeAudio(Request $request)
     {
+        $this->validate($request, [
+            'filepond-audio' => 'required|file',
+        ]);
+
         /* Handle audio upload */
         $audio = $request->file('filepond-audio')->store('public/audios');
         $audioShort = substr($audio, 7);
-        // $audioName = substr($audio, 14);
-        // $audioName = substr($audioName, 0, strpos($audioName, "."));
-
-        // Create frame from Audio
-        // FFMpeg::open($audio)
-        //     ->getFrameFromSeconds(5)
-        //     ->export()
-        //     ->save('public/audio-thumbnails/' . $audioName . '.png');
 
         return $audioShort;
     }
@@ -160,7 +165,10 @@ class FilePondController extends Controller
      * Update AudioThumbnail */
     public function updateAudioThumbnail(Request $request, $id)
     {
-        /* Handle thumbnail upload */
+        $this->validate($request, [
+            'filepond-thumbnail' => 'required|image',
+        ]);
+
         $thumbnail = $request->file('filepond-thumbnail')->store('public/audio-thumbnails');
         $thumbnail = substr($thumbnail, 7);
 
@@ -179,7 +187,10 @@ class FilePondController extends Controller
      * Update AudioThumbnail */
     public function updateAudio(Request $request, $id)
     {
-        /* Handle thumbnail upload */
+        $this->validate($request, [
+            'filepond-audio' => 'required|file',
+        ]);
+
         $audioFile = $request->file('filepond-audio')->store('public/audios');
         $audioFile = substr($audioFile, 7);
 
@@ -220,6 +231,10 @@ class FilePondController extends Controller
      * Handle Post Media */
     public function storePostMedia(Request $request)
     {
+        $this->validate($request, [
+            'filepond-media' => 'required',
+        ]);
+
         /* Handle media upload */
         $media = $request->file('filepond-media')->store('public/post-media');
         $media = substr($media, 7);

@@ -127,7 +127,8 @@ const KaraokeCharts = (props) => {
 									link={`/karaoke-show/${karaoke.id}`}
 									src={`/storage/${karaoke.karaoke}`}
 									name={karaoke.name}
-									username={karaoke.username} />
+									username={karaoke.username}
+									avatar={karaoke.avatar} />
 							))}
 					</div>
 					{/* Karaoke Items End */}

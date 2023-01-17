@@ -225,9 +225,9 @@ class User extends Authenticatable
      */
 
     // Format profile pic
-    public function avatar($user)
+    public function avatar()
     {
-        return preg_match("/http/", $user->avatar) ? $user->avatar : "/storage/" . $user->avatar;
+        return preg_match("/http/", $this->avatar) ? $this->avatar : "/storage/" . $this->avatar;
     }
 
     // Format profile pic

@@ -34,7 +34,7 @@ class KaraokeService
                 "audio_thumbnail" => $karaoke->audio->thumbnail,
                 "name" => $karaoke->user->name,
                 "username" => $karaoke->user->username,
-                "pp" => $karaoke->user->avatar,
+                "avatar" => $karaoke->user->avatar(),
                 "decos" => $karaoke->user->decos->count(),
                 "description" => $karaoke->description,
                 "hasLiked" => $karaoke->hasLiked($karaoke, $authUsername),

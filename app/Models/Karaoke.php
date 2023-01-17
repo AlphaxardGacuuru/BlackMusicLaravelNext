@@ -37,7 +37,7 @@ class Karaoke extends Model
     /*
      *    Custom Functions
      */
-
+	
     // Check if user has liked karaoke
     public function hasLiked($karaoke, $username)
     {

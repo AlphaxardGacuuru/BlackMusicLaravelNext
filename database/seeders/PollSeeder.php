@@ -18,6 +18,8 @@ class PollSeeder extends Seeder
      */
     public function run()
     {
+        $runs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+
         // Create Post
         $post = Post::factory()
             ->create([
@@ -27,30 +29,32 @@ class PollSeeder extends Seeder
                 'parameter_4' => 'D',
                 'parameter_5' => 'E',
                 'username' => User::all()->random()->username,
-                'created_at' => Carbon::now()->subHours(24)]);
+                'created_at' => Carbon::now()->subHours(24),
+            ]);
 
-        Poll::factory()
-            ->count(50)
+        $poll1 = Poll::factory()
             ->state(new Sequence(
                 ['parameter' => $post->parameter_1],
-                ['parameter' => $post->parameter_2]))
-            ->create([
+                ['parameter' => $post->parameter_2]));
+
+        $poll2 = Poll::factory()
+            ->state(new Sequence(
+                ['parameter' => $post->parameter_3],
+                ['parameter' => $post->parameter_4]));
+
+        foreach ($runs as $run) {
+            $poll1->create([
                 'post_id' => $post->id,
                 'username' => User::all()->random()->username]);
 
-        Poll::factory()
-            ->count(50)
-            ->state(new Sequence(
-                ['parameter' => $post->parameter_3],
-                ['parameter' => $post->parameter_4]))
-            ->create(['post_id' => $post->id,
-                'username' => User::all()->random()->username]);
+            $poll2->create(['post_id' => $post->id,
+                'username' => User::all()->random()->username,
+            ]);
 
-        Poll::factory()
-            ->count(50)
-            ->create([
+            Poll::factory()->create([
                 'parameter' => $post->parameter_5,
                 'post_id' => $post->id,
                 'username' => User::all()->random()->username]);
+        }
     }
 }

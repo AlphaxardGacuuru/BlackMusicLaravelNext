@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\KaraokeService;
 use App\Models\Karaoke;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,9 @@ class KaraokeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(KaraokeService $karaokeService)
     {
-        //
+        return $karaokeService->index();
     }
 
     /**

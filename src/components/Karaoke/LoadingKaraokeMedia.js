@@ -6,12 +6,11 @@ const LoadingKaraokeMedia = () => {
 				borderRadius: "0px",
 				textAlign: "center",
 				color: "#232323",
-				width: "45%"
 			}}>
-			<div className="karaoke-thumbnail gradient w-100">
+			<div className="karaoke-thumbnail gradient" style={{ width: "15em", height: "25em" }}>
 				<div className="gradient" style={{ width: "100%" }}></div>
 			</div>
-			<h6 className="m-0 mt-1 pt-2 px-1 gradient w-75"
+			<h6 className="m-0 mt-1 px-1 gradient w-75"
 				style={{
 					width: "150px",
 					whiteSpace: "nowrap",

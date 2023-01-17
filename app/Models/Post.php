@@ -59,10 +59,14 @@ class Post extends Model
     public function percentage($post, $parameter)
     {
         $countParameter = $post->polls
-            ->where('parameter', $post->parameter)
+            ->where('parameter', $parameter)
             ->count();
 
-        return $countParameter > 0 ? $countParameter / $post->polls->count() * 100 : 0;
+        $polls = $post->polls->count();
+
+        $percentage = $countParameter > 0 ? $countParameter / $polls * 100 : 0;
+
+        return round($percentage, 1);
     }
 
     // Check if poll is within 24Hrs

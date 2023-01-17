@@ -130,8 +130,6 @@ const App = ({ Component, pageProps }) => {
 		// get("cart-audios", setCartAudios, "cartAudios")
 		get("cart-videos", setCartVideos, "cartVideos")
 
-		// get("karaokes", setKaraokes, "karaokes")
-
 		get("posts", setPosts, "posts")
 		get("users", setUsers, "users")
 
@@ -228,7 +226,6 @@ const App = ({ Component, pageProps }) => {
 		boughtVideos, setBoughtVideos,
 		cartAudios, setCartAudios,
 		cartVideos, setCartVideos,
-		karaokes, setKaraokes,
 		posts, setPosts,
 		users, setUsers,
 		videos, setVideos,

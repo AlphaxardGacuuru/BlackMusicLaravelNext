@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             PostSeeder::class,
             VideoSeeder::class,
             AudioSeeder::class,
+            KaraokeSeeder::class,
         ]);
 
         // \App\Models\User::factory(10)->create();

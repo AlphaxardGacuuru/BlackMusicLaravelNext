@@ -169,7 +169,7 @@ const TopNav = (props) => {
 				<br />
 				{/* Remove for profile page for better background image */}
 				{router.pathname.match(/profile/) ||
-					router.pathname.match(/karaoke-charts/) ||
+					router.pathname.match(/charts/) ||
 					router.pathname.match(/video-charts/) ||
 					router.pathname.match(/audio-charts/) ?
 					<br className="hidden" /> :
@@ -211,12 +211,12 @@ const TopNav = (props) => {
 									</Link>
 								</li>
 								<li className='nav-item active'>
-									<Link href='/karaoke-charts'>
+									<Link href='/karaoke/charts'>
 										<a
 											style={{
-												color: router.pathname == "/karaoke-charts" ||
-													router.pathname == "/video-charts" ||
-													router.pathname == "/audio-charts" ?
+												color: router.pathname == "/karaoke/charts" ||
+													router.pathname == "/video/charts" ||
+													router.pathname == "/audio/charts" ?
 													"gold" : "white"
 											}}
 											className='nav-link'
@@ -225,9 +225,9 @@ const TopNav = (props) => {
 												style={{
 													float: "left",
 													paddingRight: "20px",
-													color: router.pathname == "/karaoke-charts" ||
-														router.pathname == "/video-charts" ||
-														router.pathname == "/audio-charts" ?
+													color: router.pathname == "/karaoke/charts" ||
+														router.pathname == "/video/charts" ||
+														router.pathname == "/audio/charts" ?
 														"gold" : "white"
 												}}>
 												<DiscoverSVG />

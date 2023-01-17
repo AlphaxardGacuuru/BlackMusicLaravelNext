@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\KaraokeAudioService;
 use App\Models\KaraokeAudio;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,9 @@ class KaraokeAudioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(KaraokeAudioService $karaokeAudioService)
     {
-        //
+        return $karaokeAudioService->index();
     }
 
     /**
@@ -34,9 +35,9 @@ class KaraokeAudioController extends Controller
      * @param  \App\Models\KaraokeAudio  $karaokeAudio
      * @return \Illuminate\Http\Response
      */
-    public function show(KaraokeAudio $karaokeAudio)
+    public function show($id, KaraokeAudioService $karaokeAudioService)
     {
-        //
+        return $karaokeAudioService->show($id);
     }
 
     /**

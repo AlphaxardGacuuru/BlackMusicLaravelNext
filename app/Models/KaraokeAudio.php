@@ -9,5 +9,10 @@ class KaraokeAudio extends Model
 {
     use HasFactory;
 
-	protected $table = 'karaoke_audios';
+    protected $table = 'karaoke_audios';
+
+    public function audio()
+    {
+        return $this->belongsTo(Audio::class);
+    }
 }

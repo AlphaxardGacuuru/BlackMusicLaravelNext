@@ -23,8 +23,21 @@ class KaraokeAudioService
      * @param  \App\Models\AudioAlbum  $audioAlbum
      * @return \Illuminate\Http\Response
      */
-	public function show($id)
-	{
-		return KaraokeAudio::find($id);
-	}
+    public function show($id)
+    {
+        $getKaraokeAudio = KaraokeAudio::find($id);
+
+        $karaokeAudio = [];
+
+        array_push($karaokeAudio, [
+            "id" => $getKaraokeAudio->id,
+            "audioId" => $getKaraokeAudio->audio_id,
+            "username" => $getKaraokeAudio->username,
+            "name" => $getKaraokeAudio->audio->name,
+            "thumbnail" => $getKaraokeAudio->audio->thumbnail(),
+            "createdAt" => $getKaraokeAudio->created_at->format('d M Y'),
+        ]);
+
+        return $karaokeAudio;
+    }
 }

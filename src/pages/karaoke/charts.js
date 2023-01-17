@@ -16,7 +16,6 @@ const KaraokeCharts = (props) => {
 	const router = useRouter()
 
 	const [karaokes, setKaraokes] = useState(props.data.karaokes)
-	const [karaokeAudio, setKaraokeAudio] = useState(props.data.karaokeAudio)
 	const [week, setWeek] = useState(0)
 	const weeks = [0, 1, 2, 3, 4, 5]
 
@@ -56,7 +55,7 @@ const KaraokeCharts = (props) => {
 
 	return (
 		<>
-			<Link href={`karaoke-create/${karaokeAudio.audio_id}`}>
+			<Link href={`/karaoke/create`}>
 				<a id="chatFloatBtn"
 					className={`${!checkLocation && "mb-5"}`}>
 					<PlusSVG />
@@ -143,16 +142,11 @@ export async function getServerSideProps() {
 	// Fetch data from external API
 	var data = {
 		karaokes: null,
-		karaokeAudio: null,
 	}
 
 	// Fetch Karaokes
 	await axios.get(`/api/karaokes`)
 		.then((res) => data.karaokes = res.data)
-
-	// Fetch Karaoke Audios
-	await axios.get(`/api/karaoke-audios/1`)
-		.then((res) => data.karaokeAudio = res.data)
 
 	// Pass data to the page via props
 	return { props: { data } }

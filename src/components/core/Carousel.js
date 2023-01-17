@@ -12,7 +12,6 @@ const Carousel = () => {
 		setInnerHeight2(window.innerHeight * 0.85)
 	}, [])
 
-
 	const banner = useRef()
 
 	useEffect(() => {

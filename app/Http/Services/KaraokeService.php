@@ -29,9 +29,9 @@ class KaraokeService
             array_push($karaokes, [
                 "id" => $karaoke->id,
                 "karaoke" => $karaoke->karaoke,
-                "audio_id" => $karaoke->audio_id,
-                "audio_name" => $karaoke->audio->name,
-                "audio_thumbnail" => $karaoke->audio->thumbnail,
+                "audioId" => $karaoke->audio_id,
+                "audioName" => $karaoke->audio->name,
+                "audioThumbnail" => $karaoke->audio->thumbnail(),
                 "name" => $karaoke->user->name,
                 "username" => $karaoke->user->username,
                 "avatar" => $karaoke->user->avatar(),

@@ -47,9 +47,9 @@ class Audio extends Model
      *    Custom Functions
      */
 
-    public function thumbnail($audio)
+    public function thumbnail()
     {
-        return preg_match("/http/", $audio->thumbnail) ? $audio->thumbnail : "/storage/" . $audio->thumbnail;
+        return preg_match("/http/", $this->thumbnail) ? $this->thumbnail : "/storage/" . $this->thumbnail;
     }
 
     public function avatar($audio)

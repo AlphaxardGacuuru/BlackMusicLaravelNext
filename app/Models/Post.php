@@ -19,7 +19,7 @@ class Post extends Model
     protected function media(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => "/storage/" . $value,
+            get: fn ($value) => $value && "/storage/" . $value,
         );
     }
 

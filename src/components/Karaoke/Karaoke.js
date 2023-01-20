@@ -6,6 +6,8 @@ import Ticker from 'react-ticker'
 import Img from '@/components/core/Img'
 import KaraokeCommentSection from './KaraokeCommentSection'
 
+import onKaraokeLike from '@/functions/onKaraokeLike'
+
 import CloseSVG from '@/svgs/CloseSVG'
 import CommentSVG from '@/svgs/CommentSVG'
 import DecoSVG from '@/svgs/DecoSVG'
@@ -34,32 +36,6 @@ const Karaoke = (props) => {
 
 	// Id for rotating record
 	const spiningRecord = useRef()
-
-	// Function for liking karaoke
-	const onKaraokeLike = () => {
-		// Show like
-		const newKaraokes = props.karaokes
-			.filter((item) => {
-				// Get the exact karaoke and change like status
-				if (item.id == props.karaoke.id) {
-					item.hasLiked = !item.hasLiked
-				}
-				return true
-			})
-		// Set new karaokes
-		props.setKaraokes(newKaraokes)
-
-		// Add like to database
-		axios.get('sanctum/csrf-cookie').then(() => {
-			axios.post(`${props.url}/api/karaoke-likes`, {
-				karaoke: props.karaoke.id
-			}).then((res) => {
-				props.setMessages([res.data])
-				// Update karaoke
-				props.get("karaokes", props.setKaraokes)
-			}).catch((err) => props.getErrors(err))
-		})
-	}
 
 	// Function for saving Karaokes
 	const onKaraokeSave = () => {
@@ -124,7 +100,7 @@ const Karaoke = (props) => {
 		var t = showDescription.current.innerHTML
 		showDescription.current.innerHTML = t == "show more" ? "show less" : "show more"
 	}
-	console.log(props.key)
+
 	return (
 		<div
 			id={props.karaoke.id}
@@ -249,7 +225,7 @@ const Karaoke = (props) => {
 									<span
 										className="p-0"
 										style={{ fontSize: "2em" }}
-										onClick={onKaraokeLike}>
+										onClick={() => onKaraokeLike(props, props.karaoke.id)}>
 										{props.karaoke.hasLiked ?
 											<span style={{ color: "#fb3958" }}>
 												<HeartFilledSVG />

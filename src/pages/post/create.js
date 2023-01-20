@@ -6,7 +6,7 @@ import SocialMediaInput from '@/components/core/SocialMediaInput'
 import CloseSVG from '@/svgs/CloseSVG'
 
 const PostCreate = (props) => {
-console.log(props.media)
+	
 	// Set states
 	useEffect(() => {
 		setTimeout(() => {

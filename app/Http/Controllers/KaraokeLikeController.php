@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\KaraokeLikeService;
 use App\Models\KaraokeLike;
 use Illuminate\Http\Request;
 
@@ -23,9 +24,9 @@ class KaraokeLikeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, KaraokeLikeService $karaokeLikeService)
     {
-        //
+        return $karaokeLikeService->store($request);
     }
 
     /**

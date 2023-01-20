@@ -5,7 +5,7 @@ const LoadingVideoMedia = () => {
 				<div className="gradient"
 					style={{
 						width: "320em",
-								height: "180em"
+						height: "180em"
 					}}>
 				</div>
 			</div>

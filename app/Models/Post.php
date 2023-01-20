@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,7 +11,26 @@ class Post extends Model
 {
     use HasFactory;
 
-    public function users()
+    /**
+     * Accesors.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function media(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => "/storage/" . $value,
+        );
+    }
+
+    protected function createdAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => Carbon::parse($value)->format('d M Y'),
+        );
+    }
+
+    public function user()
     {
         return $this->belongsTo(User::class, 'username', 'username');
     }
@@ -38,13 +58,6 @@ class Post extends Model
     /*
      *    Custom Functions
      */
-
-    // Profile Pic
-    public function avatar($post)
-    {
-        $avatar = $post->users->avatar;
-        return preg_match("/http/", $avatar) ? $avatar : "/storage/" . $avatar;
-    }
 
     // Check if user has voted for various parameters
     public function hasVoted($post, $username, $parameter)

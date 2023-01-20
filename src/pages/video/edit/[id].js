@@ -123,8 +123,8 @@ const VideoEdit = (props) => {
 										<div className="thumbnail">
 											<Img
 												src={editVideo.thumbnail}
-												width="160em"
-												height="90em" />
+												width="8em"
+												height="4em" />
 										</div>
 										<div className="px-2">
 											<h1 className="my-0">{editVideo.name}</h1>

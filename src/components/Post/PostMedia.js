@@ -98,7 +98,7 @@ const PostMedia = (props) => {
 						<Img
 							width="100%"
 							height="20em"
-							src={`/storage/${props.post.media}`}
+							src={props.post.media}
 							alt="post-media" />}
 				</div>
 

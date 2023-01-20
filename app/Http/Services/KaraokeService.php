@@ -31,17 +31,17 @@ class KaraokeService
                 "karaoke" => $karaoke->karaoke,
                 "audioId" => $karaoke->audio_id,
                 "audioName" => $karaoke->audio->name,
-                "audioThumbnail" => $karaoke->audio->thumbnail(),
+                "audioThumbnail" => $karaoke->audio->thumbnail,
                 "name" => $karaoke->user->name,
                 "username" => $karaoke->user->username,
-                "avatar" => $karaoke->user->avatar(),
+                "avatar" => $karaoke->user->avatar,
                 "decos" => $karaoke->user->decos->count(),
                 "description" => $karaoke->description,
                 "hasLiked" => $karaoke->hasLiked($karaoke, $authUsername),
                 "hasSaved" => $karaoke->hasSaved($karaoke, $authUsername),
                 "likes" => $karaoke->likes->count(),
                 "comments" => $karaoke->comments->count(),
-                "created_at" => $karaoke->created_at->format('d M Y'),
+                "created_at" => $karaoke->created_at,
             ]);
         }
 

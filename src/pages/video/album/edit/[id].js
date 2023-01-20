@@ -85,8 +85,8 @@ const VideoAlbumEdit = (props) => {
 									<div className="d-flex text-start">
 										<div className="p-2">
 											<Img src={editAlbum.cover}
-												width="100"
-												height="100"
+												width="10em"
+												height="10em"
 												alt="album cover" />
 										</div>
 										<div className="p-2">

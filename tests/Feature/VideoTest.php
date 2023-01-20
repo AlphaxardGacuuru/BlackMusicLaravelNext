@@ -183,8 +183,8 @@ class VideoTest extends TestCase
         // Get the new resource
         $this->get('api/videos/' . $video->id)
             ->assertJsonFragment([
-                'video' => 'videos/' . $videoFile->hashName(),
-                'thumbnail' => 'video-thumbnails/' . $thumbnail->hashName(),
+                'video' => '/storage/videos/' . $videoFile->hashName(),
+                'thumbnail' => '/storage/video-thumbnails/' . $thumbnail->hashName(),
                 'name' => 'Video 1',
                 'ft' => null,
                 'video_album_id' => $album->id,

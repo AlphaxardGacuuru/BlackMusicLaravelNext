@@ -12,15 +12,17 @@ const KaraokeMedia = (props) => {
 			onClick={() => props.setShow(0)}>
 			<div style={{ width: "15em", height: "27em" }}>
 				<Link href={props.link}>
-					<video
-						src={props.src}
-						width="100%"
-						preload="none"
-						autoPlay
-						muted
-						loop
-						playsInline>
-					</video>
+					<a>
+						<video
+							src={props.src}
+							width="100%"
+							preload="none"
+							autoPlay
+							muted
+							loop
+							playsInline>
+						</video>
+					</a>
 				</Link>
 			</div>
 			<div className="d-flex">

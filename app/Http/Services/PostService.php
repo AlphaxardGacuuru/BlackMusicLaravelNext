@@ -42,10 +42,10 @@ class PostService
 
             array_push($posts, [
                 "id" => $post->id,
-                "name" => $post->users->name,
-                "username" => $post->users->username,
-                "avatar" => $post->avatar($post),
-                "decos" => $post->users->decos->count(),
+                "name" => $post->user->name,
+                "username" => $post->user->username,
+                "avatar" => $post->user->avatar,
+                "decos" => $post->user->decos->count(),
                 "text" => $post->text,
                 "media" => $post->media,
                 "parameter_1" => $post->parameter_1,
@@ -71,7 +71,7 @@ class PostService
                 "hasEdited" => $post->hasEdited($post),
                 "likes" => $post->likes->count(),
                 "comments" => $post->comments->count(),
-                "created_at" => $post->created_at->format("d F Y"),
+                "created_at" => $post->created_at,
             ]);
         }
 

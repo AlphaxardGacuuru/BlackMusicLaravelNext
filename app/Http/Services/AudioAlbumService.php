@@ -23,9 +23,9 @@ class AudioAlbumService
                 "id" => $audioAlbum->id,
                 "username" => $audioAlbum->username,
                 "name" => $audioAlbum->name,
-                "cover" => $audioAlbum->cover($audioAlbum),
-                "released" => $audioAlbum->released->format('d M Y'),
-                "createdAt" => $audioAlbum->created_at->format("d M Y"),
+                "cover" => $audioAlbum->cover,
+                "released" => $audioAlbum->released,
+                "createdAt" => $audioAlbum->created_at,
             ]);
         }
 

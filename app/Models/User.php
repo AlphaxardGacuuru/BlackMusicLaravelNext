@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -54,6 +56,32 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Accesors.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function avatar(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => preg_match("/http/", $value) ? $value : "/storage/" . $value
+        );
+    }
+
+    protected function backdrop(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => "/storage/" . $value
+        );
+    }
+
+    protected function createdAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => Carbon::parse($value)->format('d M Y'),
+        );
+    }
 
     public function audios()
     {
@@ -223,18 +251,6 @@ class User extends Authenticatable
     /*
      *    Custom Functions
      */
-
-    // Format profile pic
-    public function avatar()
-    {
-        return preg_match("/http/", $this->avatar) ? $this->avatar : "/storage/" . $this->avatar;
-    }
-
-    // Format profile pic
-    public function backdrop($user)
-    {
-        return "/storage/" . $user->backdrop;
-    }
 
     // Check if user has followed User
     public function hasFollowed($user, $username)

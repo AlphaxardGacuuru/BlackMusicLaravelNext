@@ -186,8 +186,8 @@ class AudioTest extends TestCase
         // Get the new resource
         $this->get('api/audios/' . $audio->id)
             ->assertJsonFragment([
-                'audio' => 'audios/' . $audioFile->hashName(),
-                'thumbnail' => 'audio-thumbnails/' . $thumbnail->hashName(),
+                'audio' => '/storage/audios/' . $audioFile->hashName(),
+                'thumbnail' => '/storage/audio-thumbnails/' . $thumbnail->hashName(),
                 'name' => 'Audio 1',
                 'ft' => null,
                 'audio_album_id' => $album->id,

@@ -158,19 +158,19 @@ const Videos = (props) => {
 								<div className="d-flex">
 									<div className="p-2">
 										{videoAlbum.name != "Singles" ?
-											<Link href={`/video/album/${videoAlbum.id}`}>
+											<Link href={`/video/album/edit/${videoAlbum.id}`}>
 												<a>
 													<Img
 														src={videoAlbum.cover}
-														width="100"
-														height="100"
+														width="10em"
+														height="10em"
 														alt="album cover" />
 												</a>
 											</Link> :
 											<Img
 												src={videoAlbum.cover}
-												width="100"
-												height="100"
+												width="10em"
+												height="10em"
 												alt="album cover" />}
 									</div>
 									<div className="p-2">
@@ -207,8 +207,8 @@ const Videos = (props) => {
 																<a>
 																	<Img
 																		src={albumItem.thumbnail}
-																		width="160em"
-																		height="90em"
+																		width="8em"
+																		height="4em"
 																		alt="thumbnail" />
 																</a>
 															</Link>

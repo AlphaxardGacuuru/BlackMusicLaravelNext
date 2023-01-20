@@ -99,18 +99,18 @@ const Audios = (props) => {
 								<div className="d-flex">
 									<div className="p-2">
 										{audioAlbum.name != "Singles" ?
-											<Link href={`/audio/album/${audioAlbum.id}`}>
+											<Link href={`/audio/album/edit/${audioAlbum.id}`}>
 												<a>
 													<Img src={audioAlbum.cover}
-														width="100"
-														height="100"
+														width="10em"
+														height="10em"
 														alt="album cover" />
 												</a>
 											</Link> :
 											<Img
 												src={audioAlbum.cover}
-												width="100"
-												height="100"
+												width="10em"
+												height="10em"
 												alt="album cover" />}
 									</div>
 									<div className="p-2">

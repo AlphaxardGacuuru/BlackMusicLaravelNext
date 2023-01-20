@@ -123,7 +123,7 @@ class VideoAlbumTest extends TestCase
         $this->get('api/video-albums/' . $videoAlbum->id)
             ->assertJsonFragment([
                 'name' => 'Video Album One',
-                'cover' => 'video-album-covers/' . $cover->hashName(),
+                'cover' => '/storage/video-album-covers/' . $cover->hashName(),
             ], $escape = true);
 
         Storage::assertExists('public/video-album-covers/' . $cover->hashName());

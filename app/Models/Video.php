@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,6 +12,32 @@ class Video extends Model
     use HasFactory;
 
 	protected $dates = ['released'];
+
+    /**
+     * Accesors.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function video(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => "/storage/" . $value
+        );
+    }
+
+    protected function thumbnail(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => preg_match("/http/", $value) ? $value : "/storage/" . $value
+        );
+    }
+
+    protected function createdAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => Carbon::parse($value)->format('d M Y'),
+        );
+    }
 
     public function user()
     {
@@ -44,16 +72,6 @@ class Video extends Model
     /*
      *    Custom Functions
      */
-
-    public function thumbnail($video)
-    {
-        return preg_match("/http/", $video->thumbnail) ? $video->thumbnail : "/storage/" . $video->thumbnail;
-    }
-
-    public function avatar($video)
-    {
-        return "/storage/" . $video->user->avatar;
-    }
 
     // Check if user has liked video
     public function hasLiked($video, $username)

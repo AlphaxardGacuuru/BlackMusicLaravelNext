@@ -32,8 +32,8 @@ class UserService
                 "id" => $user->id,
                 "name" => $user->name,
                 "username" => $user->username,
-                "avatar" => $user->avatar($user),
-                "backdrop" => $user->backdrop($user),
+                "avatar" => $user->avatar,
+                "backdrop" => $user->backdrop,
                 "account_type" => $user->account_type,
                 "bio" => $user->bio,
                 "withdrawal" => $user->withdrawal,
@@ -43,8 +43,7 @@ class UserService
                 "hasFollowed" => $user->hasFollowed($user, $authUsername),
                 "hasBought1" => $user->hasBought1($user, $authUsername),
                 "decos" => $user->decos->count(),
-                "updated_at" => $user->updated_at->format("d M Y"),
-                "created_at" => $user->created_at->format("d M Y"),
+                "created_at" => $user->created_at,
             ]);
         }
 
@@ -134,8 +133,8 @@ class UserService
             "email" => $auth->email,
             "phone" => $auth->phone,
             "account_type" => $auth->account_type,
-            "avatar" => $auth->avatar($auth),
-            "backdrop" => $auth->backdrop($auth),
+            "avatar" => $auth->avatar,
+            "backdrop" => $auth->backdrop,
             "bio" => $auth->bio,
             "dob" => $auth->dob,
             "withdrawal" => $auth->withdrawal,

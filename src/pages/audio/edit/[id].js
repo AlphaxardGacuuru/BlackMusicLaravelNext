@@ -125,8 +125,8 @@ const AudioEdit = (props) => {
 										<div className="thumbnail">
 											<Img
 												src={editAudio.thumbnail}
-												width="160em"
-												height="90em" />
+												width="10em"
+												height="10em" />
 										</div>
 										<div className="px-2">
 											<h1 className="my-0">{editAudio.name}</h1>

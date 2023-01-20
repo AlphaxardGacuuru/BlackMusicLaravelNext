@@ -76,8 +76,8 @@ const TopNav = (props) => {
 	var display
 
 	// Hide TopNav from various pages
-	router.pathname.match("/404") ||
-		router.pathname.match("/karaoke-show") ||
+	router.pathname.match("/404") || 
+		router.pathname == "/karaoke/[id]" ||
 		router.pathname.match("/karaoke/create") ||
 		router.pathname.match("/privacy-policy") ||
 		router.pathname.match("/download-app") ||

@@ -19,9 +19,9 @@ class VideoAlbumService
                 "id" => $videoAlbum->id,
                 "username" => $videoAlbum->username,
                 "name" => $videoAlbum->name,
-                "cover" => $videoAlbum->cover($videoAlbum),
-                "released" => $videoAlbum->released->format('d M Y'),
-                "createdAt" => $videoAlbum->created_at->format("d M Y"),
+                "cover" => $videoAlbum->cover,
+                "released" => $videoAlbum->released,
+                "createdAt" => $videoAlbum->created_at,
             ]);
         }
 

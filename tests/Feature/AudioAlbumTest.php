@@ -123,7 +123,7 @@ class AudioAlbumTest extends TestCase
         $this->get('api/audio-albums/' . $audioAlbum->id)
             ->assertJsonFragment([
                 'name' => 'Audio Album One',
-                'cover' => 'audio-album-covers/' . $cover->hashName(),
+                'cover' => '/storage/audio-album-covers/' . $cover->hashName(),
             ], $escape = true);
 
         Storage::assertExists('public/audio-album-covers/' . $cover->hashName());

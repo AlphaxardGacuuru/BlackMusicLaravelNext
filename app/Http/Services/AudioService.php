@@ -25,12 +25,12 @@ class AudioService
                 "audio" => $audio->audio,
                 "name" => $audio->name,
                 "username" => $audio->username,
-                "avatar" => $audio->avatar($audio),
+                "avatar" => $audio->user->avatar,
                 "ft" => $audio->ft,
                 "audio_album_id" => $audio->audio_album_id,
                 "album" => $audio->album->name,
                 "genre" => $audio->genre,
-                "thumbnail" => $audio->thumbnail($audio),
+                "thumbnail" => $audio->thumbnail,
                 "description" => $audio->description,
                 "released" => $audio->released->format('d M Y'),
                 "hasLiked" => $audio->hasLiked($audio, $authUsername),
@@ -39,7 +39,7 @@ class AudioService
                 "inCart" => $audio->inCart($audio, $authUsername),
                 "hasBoughtAudio" => $audio->hasBoughtAudio($audio, $authUsername),
                 "downloads" => $audio->bought->count(),
-                "created_at" => $audio->created_at->format('d M Y'),
+                "created_at" => $audio->created_at,
             ]);
         }
 

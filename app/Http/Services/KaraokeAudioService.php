@@ -34,8 +34,8 @@ class KaraokeAudioService
             "audioId" => $getKaraokeAudio->audio_id,
             "username" => $getKaraokeAudio->username,
             "name" => $getKaraokeAudio->audio->name,
-            "thumbnail" => $getKaraokeAudio->audio->thumbnail(),
-            "createdAt" => $getKaraokeAudio->created_at->format('d M Y'),
+            "thumbnail" => $getKaraokeAudio->audio->thumbnail,
+            "createdAt" => $getKaraokeAudio->created_at,
         ]);
 
         return $karaokeAudio;

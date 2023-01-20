@@ -3,8 +3,11 @@
 namespace Tests\Feature;
 
 use App\Models\Post;
+use Laravel\Sanctum\Sanctum;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class PostTest extends TestCase
@@ -62,6 +65,11 @@ class PostTest extends TestCase
         );
 
         $image = UploadedFile::fake()->image('avatar.jpg');
+
+        // Upload media
+        $uploadImage = $this->post('api/filepond/posts', ['filepond-media' => $image]);
+
+        $uploadImage->assertStatus(200);
 
         $response = $this->post('api/posts', [
             'text' => 'Some text',

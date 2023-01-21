@@ -21,7 +21,7 @@ const KaraokeShow = (props) => {
 		<div className="row p-0">
 			<div className="col-sm-4"></div>
 			<div className="col-sm-4">
-				<div className="karaokes hidden-scroll">
+				<div className="karaokes">
 					{props.karaokes
 						.map((karaoke, key) => (
 							<Karaoke

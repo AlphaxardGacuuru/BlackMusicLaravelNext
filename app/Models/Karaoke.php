@@ -40,7 +40,7 @@ class Karaoke extends Model
         return $this->belongsTo(Audio::class);
     }
 
-    public function savedKaraoke()
+    public function savedKaraokes()
     {
         return $this->hasMany(SavedKaraoke::class);
     }
@@ -60,17 +60,17 @@ class Karaoke extends Model
      */
 
     // Check if user has liked karaoke
-    public function hasLiked($karaoke, $username)
+    public function hasLiked($username)
     {
-        return $karaoke->likes
+        return $this->likes
             ->where('username', $username)
             ->count() > 0 ? true : false;
     }
 
     // Check if user has saved karaoke
-    public function hasSaved($karaoke, $username)
+    public function hasSaved($username)
     {
-        return $karaoke->savedKaraoke
+        return $this->savedKaraokes
             ->where('username', $username)
             ->count() > 0 ? true : false;
     }

@@ -19,6 +19,7 @@ class UserService
     {
         // Check if user is logged in
         $auth = auth('sanctum')->user();
+		
         $authUsername = $auth ? $auth->username : '@guest';
 
         $getUsers = User::all();

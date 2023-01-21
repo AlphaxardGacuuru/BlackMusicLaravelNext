@@ -3,7 +3,6 @@
 namespace App\Http\Services;
 
 use App\Models\Karaoke;
-use App\Models\SavedKaraoke;
 
 class KaraokeService
 {
@@ -37,8 +36,8 @@ class KaraokeService
                 "avatar" => $karaoke->user->avatar,
                 "decos" => $karaoke->user->decos->count(),
                 "description" => $karaoke->description,
-                "hasLiked" => $karaoke->hasLiked($karaoke, $authUsername),
-                "hasSaved" => $karaoke->hasSaved($karaoke, $authUsername),
+                "hasLiked" => $karaoke->hasLiked($authUsername),
+                "hasSaved" => $karaoke->hasSaved($authUsername),
                 "likes" => $karaoke->likes->count(),
                 "comments" => $karaoke->comments->count(),
                 "created_at" => $karaoke->created_at,

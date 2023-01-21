@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class SavedKaraoke extends Model
 {
     use HasFactory;
+
+	public function karaoke()
+	{
+		return $this->belongsTo(Karaoke::class);
+	}
 }

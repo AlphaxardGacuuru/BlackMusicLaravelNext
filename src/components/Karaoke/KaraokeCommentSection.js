@@ -13,7 +13,7 @@ import SocialMediaInput from '../core/SocialMediaInput'
 
 const KaraokeCommentSection = (props) => {
 
-	const [karaokeComments, setKaraokeComments] = useState(karaokeComments)
+	const [karaokeComments, setKaraokeComments] = useState(props.karaokeComments)
 	const [bottomMenu, setBottomMenu] = useState()
 	const [commentToEdit, setCommentToEdit] = useState()
 	const [commentDeleteLink, setCommentDeleteLink] = useState()

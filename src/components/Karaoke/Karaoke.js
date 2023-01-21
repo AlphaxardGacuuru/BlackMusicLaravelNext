@@ -7,6 +7,8 @@ import Img from '@/components/core/Img'
 import KaraokeCommentSection from './KaraokeCommentSection'
 
 import onKaraokeLike from '@/functions/onKaraokeLike'
+import onKaraokeSave from '@/functions/onKaraokeSave'
+import onShare from '@/functions/onShare'
 
 import CloseSVG from '@/svgs/CloseSVG'
 import CommentSVG from '@/svgs/CommentSVG'
@@ -36,32 +38,6 @@ const Karaoke = (props) => {
 
 	// Id for rotating record
 	const spiningRecord = useRef()
-
-	// Function for saving Karaokes
-	const onKaraokeSave = () => {
-		// Show Save
-		const newKaraokes = props.karaokes
-			.filter((item) => {
-				// Get the exact karaoke and change save status
-				if (item.id == props.karaoke.id) {
-					item.hasSaved = !item.hasSaved
-				}
-				return true
-			})
-		// Set new karaokes
-		props.setKaraokes(newKaraokes)
-
-		// Save Karaoke
-		axios.get('sanctum/csrf-cookie').then(() => {
-			axios.post('api/saved-karaokes', {
-				id: props.karaoke.id
-			}).then((res) => {
-				props.setMessages([res.data])
-				// Update karaoke
-				props.get("karaokes", props.setKaraokes)
-			}).catch((err) => props.getErrors(err))
-		})
-	}
 
 	// Web Share API for share button
 	// Share must be triggered by "user activation"
@@ -124,7 +100,7 @@ const Karaoke = (props) => {
 				style={{ position: "absolute", top: 0 }}>
 				<div className="d-flex">
 					{/* Close Icon */}
-					<div className="p-2">
+					<div className="">
 						<Link href="/karaoke/charts">
 							<a style={{ fontSize: "1.5em" }}>
 								<CloseSVG />
@@ -149,7 +125,7 @@ const Karaoke = (props) => {
 				</div>
 				{/* Floating Video Info Middle End */}
 				{/* Horizontal Content */}
-				<div className="d-flex">
+				<div className="d-flex pe-2">
 					<div className="p-1 flex-grow-1 align-self-end">
 						<div className="m-1"
 							style={{
@@ -267,7 +243,7 @@ const Karaoke = (props) => {
 									<span
 										className="mb-2 p-0"
 										style={{ fontSize: "2em" }}
-										onClick={onKaraokeSave}>
+										onClick={() => onKaraokeSave(props, props.karaoke.id)}>
 										{props.karaoke.hasSaved ?
 											<span style={{ color: "#FFD700" }}>
 												<BookmarkFilledSVG />
@@ -279,12 +255,12 @@ const Karaoke = (props) => {
 								</center>
 							</div>
 							{/* Share Karaoke */}
-							<div>
+							<div className="mb-3">
 								<center>
 									<span
-										className="mb-3 p-0"
+										className="p-0"
 										style={{ fontSize: "2em", color: "rgba(220, 220, 220, 1)" }}
-										onClick={onShare}>
+										onClick={() => onShare()}>
 										<ShareSVG />
 									</span>
 								</center>

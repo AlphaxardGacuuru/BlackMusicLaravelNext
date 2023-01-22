@@ -16,11 +16,12 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             PostSeeder::class,
+            PollSeeder::class,
+            VideoAlbumSeeder::class,
+            AudioAlbumSeeder::class,
             VideoSeeder::class,
             AudioSeeder::class,
             KaraokeSeeder::class,
         ]);
-
-        // \App\Models\User::factory(10)->create();
     }
 }

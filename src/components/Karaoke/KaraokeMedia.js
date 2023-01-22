@@ -1,5 +1,8 @@
 import Link from 'next/link'
 import Img from 'next/image'
+import HeartFilledSVG from '@/svgs/HeartFilledSVG'
+import HeartSVG from '@/svgs/HeartSVG'
+import CommentSVG from '@/svgs/CommentSVG'
 
 const KaraokeMedia = (props) => {
 	return (
@@ -7,10 +10,10 @@ const KaraokeMedia = (props) => {
 			className="m-1 karaoke-media"
 			onClick={() => props.setShow(0)}>
 			<div>
-				<Link href={props.link}>
+				<Link href={`karaokes/${props.karaoke.id}`}>
 					<a>
 						<video
-							src={props.src}
+							src={props.karaoke.karaoke}
 							width="100%"
 							preload="none"
 							autoPlay
@@ -22,11 +25,11 @@ const KaraokeMedia = (props) => {
 				</Link>
 			</div>
 			<div className="d-flex">
-				<div className="py-2 w-25">
-					<Link href={`/profile/${props.username}`}>
+				<div>
+					<Link href={`/profile/${props.karaoke.username}`}>
 						<a>
 							<Img
-								src={props.avatar}
+								src={props.karaoke.avatar}
 								className="rounded-circle"
 								width="40em"
 								height="40em"
@@ -35,18 +38,20 @@ const KaraokeMedia = (props) => {
 						</a>
 					</Link>
 				</div>
-				<div className="px-2">
-					<h6 className="m-0 pt-2 px-1"
-						style={{
-							width: "150px",
-							whiteSpace: "nowrap",
-							overflow: "hidden",
-							textOverflow: "clip",
-							textAlign: "left"
-						}}>
-						{props.name}
+				<div className="px-2"
+					style={{
+						textAlign: "left",
+						width: "10em",
+						whiteSpace: "nowrap",
+						overflow: "hidden",
+						textOverflow: "clip",
+					}}>
+					<h6 className="m-0 px-1">
+						{props.karaoke.name}
 					</h6>
-					<h6 className="mt-0 mx-1 mb-2 px-1 py-0" style={{ textAlign: "left" }}>{props.username}</h6>
+					<h6 className="mt-0 mx-1 mb-2 px-1 py-0">
+						{props.karaoke.username}
+					</h6>
 				</div>
 			</div>
 		</div>

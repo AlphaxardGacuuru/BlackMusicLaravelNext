@@ -6,6 +6,7 @@ use App\Http\Services\VideoService;
 use App\Models\Video;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class VideoController extends Controller
 {

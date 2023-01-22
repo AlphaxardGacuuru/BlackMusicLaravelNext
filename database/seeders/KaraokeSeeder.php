@@ -17,10 +17,7 @@ class KaraokeSeeder extends Seeder
      */
     public function run()
     {
-        $runs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
         $karaoke = Karaoke::factory()
-            ->count(1)
             ->state(new Sequence(
                 ['karaoke' => 'karaokes/1.mp4'],
                 ['karaoke' => 'karaokes/2.mp4']))
@@ -28,14 +25,13 @@ class KaraokeSeeder extends Seeder
             ->hasComments(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username]);
 
         $karaoke2 = Karaoke::factory()
-            ->count(1)
             ->state(new Sequence(
                 ['karaoke' => 'karaokes/3.mp4'],
                 ['karaoke' => 'karaokes/4.mp4']))
             ->hasLikes(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username])
             ->hasComments(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username]);
 
-        foreach ($runs as $run) {
+        for ($i = 0; $i < 5; $i++) {
             $karaoke->create([
                 'audio_id' => Audio::all()->random()->id,
                 'username' => User::all()->random()->username,

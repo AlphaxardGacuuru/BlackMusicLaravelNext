@@ -25,7 +25,7 @@ class UserFactory extends Factory
             'username' => '@' . fake()->unique()->firstName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'avatar' => 'avatars/male_avatar.png',
+            'avatar' => 'avatars/male-avatar.png',
             'backdrop' => 'img/headphones.jpg',
             'phone' => fake()->phoneNumber(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password

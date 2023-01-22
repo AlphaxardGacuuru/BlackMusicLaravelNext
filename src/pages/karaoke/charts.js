@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import axios from '@/lib/axios'
 
 import Carousel from '@/components/core/Carousel'
 import LoadingKaraokeMedia from '@/components/Karaoke/LoadingKaraokeMedia'
@@ -67,13 +66,25 @@ const KaraokeCharts = (props) => {
 			{/* <!-- Scroll menu - */}
 			<div id="chartsMenu" className="hidden-scroll mt-2">
 				<span>
-					<Link href="/karaoke-charts"><h3 className="active-scrollmenu">Karaoke</h3></Link>
+					<Link href="/karaoke/charts">
+						<a>
+							<h3 className="active-scrollmenu">Karaoke</h3>
+						</a>
+					</Link>
 				</span>
 				<span>
-					<Link href="/video/charts"><h3>Videos</h3></Link>
+					<Link href="/video/charts">
+						<a>
+							<h3>Videos</h3>
+						</a>
+					</Link>
 				</span>
 				<span>
-					<Link href="/audio/charts"><h3>Audios</h3></Link>
+					<Link href="/audio/charts">
+						<a>
+							<h3>Audios</h3>
+						</a>
+					</Link>
 				</span>
 			</div>
 
@@ -115,11 +126,7 @@ const KaraokeCharts = (props) => {
 								<KaraokeMedia
 									key={key}
 									setShow={props.setShow}
-									link={`/karaoke/${karaoke.id}`}
-									src={karaoke.karaoke}
-									name={karaoke.name}
-									username={karaoke.username}
-									avatar={karaoke.avatar} />
+									karaoke={karaoke} />
 							))}
 					</div>
 					{/* Karaoke Items End */}

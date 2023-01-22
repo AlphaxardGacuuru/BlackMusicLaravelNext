@@ -96,9 +96,9 @@ const PostMedia = (props) => {
 				<div className="mb-1" style={{ overflow: "hidden" }}>
 					{props.post.media &&
 						<Img
+							src={props.post.media}
 							width="100%"
 							height="20em"
-							src={props.post.media}
 							alt="post-media" />}
 				</div>
 

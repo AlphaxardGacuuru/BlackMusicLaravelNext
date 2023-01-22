@@ -18,8 +18,6 @@ class PollSeeder extends Seeder
      */
     public function run()
     {
-        $runs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
-
         // Create Post
         $post = Post::factory()
             ->create([
@@ -42,7 +40,7 @@ class PollSeeder extends Seeder
                 ['parameter' => $post->parameter_3],
                 ['parameter' => $post->parameter_4]));
 
-        foreach ($runs as $run) {
+        for ($i = 0; $i < 20; $i++) {
             $poll1->create([
                 'post_id' => $post->id,
                 'username' => User::all()->random()->username]);

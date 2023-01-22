@@ -1,32 +1,29 @@
-import React, { useState, useEffect, useRef, Suspense } from 'react'
-import Link from 'next/link'
+import React, { useState, useEffect, Suspense } from 'react'
 import { useRouter } from 'next/router'
-
-import onCartVideos from '@/functions/onCartVideos'
+import Link from 'next/link'
 
 import Carousel from '@/components/core/Carousel'
+import LoadingAudioMedia from '@/components/Audio/LoadingAudioMedia'
 import LoadingAvatarMedia from '@/components/User/LoadingAvatarMedia'
-import LoadingVideoMedia from '@/components/Video/LoadingVideoMedia'
 
-const VideoMedia = React.lazy(() => import('@/components/Video/VideoMedia'))
+const AudioMedia = React.lazy(() => import('@/components/Audio/AudioMedia'))
 const AvatarMedia = React.lazy(() => import('@/components/User/AvatarMedia'))
 
-const VideoCharts = (props) => {
+const AudioCharts = (props) => {
 
 	useEffect(() => {
-		// Fetch Video Albums
-		props.get("video-albums", props.setVideoAlbums, "videoAlbums")
-		// Fetch Videos
-		props.get("videos", props.setVideos, "videos")
+		// Fetch Audio Albums
+		props.get("audio-albums", props.setAudioAlbums, "audioAlbums")
+		props.get("audios", props.setAudios, "audios")
 
 		// Load more on page bottom
 		window.onscroll = function (ev) {
-			if (router.pathname.match(/video-charts/)) {
+			if (location.pathname.match(/audio-charts/)) {
 				const bottom = (window.innerHeight + window.scrollY) >=
 					(document.body.offsetHeight - document.body.offsetHeight / 16)
 
 				if (bottom) {
-					setVideoSlice(videoSlice + 8)
+					setAudioSlice(audioSlice + 8)
 				}
 			};
 		}
@@ -38,7 +35,7 @@ const VideoCharts = (props) => {
 	const [chart, setChart] = useState("Newly Released")
 	const [genre, setGenre] = useState("All")
 	const [artistSlice, setArtistSlice] = useState(10)
-	const [videoSlice, setVideoSlice] = useState(10)
+	const [audioSlice, setAudioSlice] = useState(10)
 
 	// Array for links
 	const charts = ["Newly Released", "Trending", "Top Downloaded", "Top Liked"]
@@ -56,48 +53,50 @@ const VideoCharts = (props) => {
 
 	// Set state for chart list
 	if (chart == "Newly Released") {
-		var chartList = props.videos
+		var chartList = props.audios
 	} else if (chart == "Trending") {
-		var chartList = props.boughtVideos
+		var chartList = props.boughtAudios
 	} else if (chart == "Top Downloaded") {
-		var chartList = props.boughtVideos
+		var chartList = props.boughtAudios
 	} else {
-		var chartList = props.videoLikes
+		var chartList = props.audioLikes
 	}
 
-	// Array for video id and frequency
+	// Array for audio id and frequency
 	var artistsArray = []
-	var videosArray = []
+	var audiosArray = []
 
 	// Generate Arrays
 	chartList.filter((item) => {
 		// Filter for genres
-		// If genre is All then allow all videos
+		// If genre is All then allow all audios
 		if (genre == "All") {
 			return true
 		} else {
+
 			// For Newly Released
 			if (chart == "Newly Released") {
 				return item.genre == genre
 			}
 
-			return props.videos.find((video) => video.id == item.video_id).genre == genre
+			return props.audios.find((audio) => audio.id == item.audio_id).genre == genre
 		}
-	}).forEach((video) => {
+
+	}).forEach((audio) => {
 
 		// Set variable for id to be fetched
 		if (chart == "Newly Released") {
-			var getId = video.username
-			var getIdTwo = video.id
+			var getId = audio.username
+			var getIdTwo = audio.id
 		} else if (chart == "Trending") {
-			var getId = video.artist
-			var getIdTwo = video.video_id
+			var getId = audio.artist
+			var getIdTwo = audio.audio_id
 		} else if (chart == "Top Downloaded") {
-			var getId = video.artist
-			var getIdTwo = video.video_id
+			var getId = audio.artist
+			var getIdTwo = audio.audio_id
 		} else {
-			var getId = props.videos.find((item) => item.id == video.video_id).username
-			var getIdTwo = video.video_id
+			var getId = props.audios.find((item) => item.id == audio.audio_id).username
+			var getIdTwo = audio.audio_id
 		}
 
 		// Populate Artists array
@@ -110,30 +109,30 @@ const VideoCharts = (props) => {
 			artistsArray.push({ key: getId, value: 1 })
 		}
 
-		// Populate Videos array
-		if (videosArray.some((index) => index.key == getIdTwo)) {
+		// Populate audios array
+		if (audiosArray.some((index) => index.key == getIdTwo)) {
 			// Increment value if it exists
-			var item = videosArray.find((index) => index.key == getIdTwo)
+			var item = audiosArray.find((index) => index.key == getIdTwo)
 			item && item.value++
 		} else {
 			// Add item if it doesn't exist
-			videosArray.push({ key: getIdTwo, value: 1 })
+			audiosArray.push({ key: getIdTwo, value: 1 })
 		}
 	})
 
 	// Sort array in descending order depending on the value
 	artistsArray.sort((a, b) => b.value - a.value)
-	videosArray.sort((a, b) => b.value - a.value)
+	audiosArray.sort((a, b) => b.value - a.value)
 
 	// Reverse list if chart is Newly Released
 	if (chart == "Newly Released") {
-		videosArray.reverse()
+		audiosArray.reverse()
 	}
 
-	// Buy function
-	const onBuyVideos = (video) => {
-		onCartVideos(props, video)
-		setTimeout(() => router.push('/cart'), 500)
+	// Function for buying audio to cart
+	const onBuyAudios = (audio) => {
+		props.onCartAudios(audio)
+		setTimeout(() => router.push('/cart'), 1000)
 	}
 
 	// Function for loading more artists
@@ -163,16 +162,16 @@ const VideoCharts = (props) => {
 					</Link>
 				</span>
 				<span>
-					<Link href="#">
+					<Link href="/video/charts">
 						<a>
-							<h3 className="active-scrollmenu">Videos</h3>
+							<h3>Videos</h3>
 						</a>
 					</Link>
 				</span>
 				<span>
 					<Link href="/audio/charts">
 						<a>
-							<h3>Audios</h3>
+							<h3 className="active-scrollmenu">Audios</h3>
 						</a>
 					</Link>
 				</span>
@@ -195,7 +194,7 @@ const VideoCharts = (props) => {
 			</div>
 
 			{/* List of Genres */}
-			<div id="video-chartsMenu" className="hidden-scroll m-0">
+			<div id="audio-chartsMenu" className="hidden-scroll m-0">
 				{genres.map((genreItem, key) => (
 					<span key={key}>
 						<a href="#" onClick={(e) => {
@@ -242,48 +241,45 @@ const VideoCharts = (props) => {
 						{/* Echo Artists End */}
 					</div>
 					{/* <!-- ****** Artists Area End ****** - */}
+				</div>
+			</div>
 
-					{/* <!-- ****** Songs Area ****** - */}
-					<h5>Songs</h5>
-					<center className="">
-						<div className="d-flex flex-wrap justify-content-center" onScroll={handleScroll}>
-							{/* Loading Video items */}
-							{dummyArray
-								.filter(() => props.videos.length < 1)
-								.map((item, key) => (
-									<center className="mx-1 mb-2">
-										<LoadingVideoMedia key={key} />
-									</center>
-								))}
+			<br />
 
-							{/* Real Video items */}
-							{videosArray
-								.slice(0, videoSlice)
-								.map((videoArray, key) => (
-									<span key={key} style={{ textAlign: "center" }}>
-										{props.videos
-											.filter((video) => video.id == videoArray.key &&
-												video.username != "@blackmusic")
-											.map((video, key) => (
-												<center key={video.id} className="mx-1 mb-2">
-													<Suspense fallback={<LoadingVideoMedia />}>
-														<VideoMedia
-															{...props}
-															video={video}
-															onBuyVideos={onBuyVideos}
-															onClick={() => props.setShow(0)} />
-													</Suspense>
-												</center>
-											))}
-									</span>
-								))}
-						</div>
-					</center>
+			{/* <!-- ****** Songs Area ****** - */}
+			<div className="row">
+				<div className="col-sm-1"></div>
+				<div className="col-sm-10">
+					<h5 className="p-2">Songs</h5>
+					{/* Loading Audio items */}
+					{dummyArray
+						.filter(() => props.videos.length < 1)
+						.map((item, key) => (<LoadingAudioMedia key={key} />))}
+
+					{/* Audio Items */}
+					{audiosArray
+						.slice(0, audioSlice)
+						.map((audioArray, key) => (
+							<div key={key}>
+								{props.audios
+									.filter((audio) => audio.id == audioArray.key &&
+										audio.username != "@blackmusic")
+									.map((audio, key) => (
+										<Suspense key={audio.id} fallback={<LoadingAudioMedia />}>
+											<AudioMedia
+												{...props}
+												audio={audio}
+												onBuyAudios={onBuyAudios} />
+										</Suspense>
+									))}
+							</div>
+						))}
 					{/* <!-- ****** Songs Area End ****** - */}
 				</div>
+				<div className="col-sm-1"></div>
 			</div>
 		</>
 	)
 }
 
-export default VideoCharts
+export default AudioCharts

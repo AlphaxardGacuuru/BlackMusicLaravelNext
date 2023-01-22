@@ -79,9 +79,16 @@ class AudioAlbumService
     {
         /* Handle file upload */
         if ($request->hasFile('cover')) {
-            $vCover = $request->file('cover')->store('public/audio-album-covers');
-            $vCover = substr($vCover, 7);
-            Storage::delete('public/' . AudioAlbum::where('id', $id)->first()->cover);
+            $cover = $request->file('cover')->store('public/audio-album-covers');
+			// Format for saving in DB
+            $cover = substr($cover, 7);
+
+            // Get old cover and delete it
+            $oldCover = AudioAlbum::where('id', $id)->first()->cover;
+
+            $oldCover = substr($oldCover, 9);
+
+            Storage::disk("public")->delete($oldCover);
         }
 
         /* Create new audio album */
@@ -92,7 +99,7 @@ class AudioAlbumService
         }
 
         if ($request->hasFile('cover')) {
-            $vAlbum->cover = $vCover;
+            $vAlbum->cover = $cover;
         }
 
         if ($request->filled('released')) {

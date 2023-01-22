@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Http\Services;
+
+use App\Models\PostLike;
+
+class PostLikeService
+{
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store($request)
+    {
+        $hasLiked = PostLike::where('post_id', $request->input('post'))
+            ->where('username', auth('sanctum')->user()->username)
+            ->exists();
+
+        if ($hasLiked) {
+            PostLike::where('post_id', $request->input('post'))
+                ->where('username', auth('sanctum')->user()->username)
+                ->delete();
+
+            $message = "Like removed";
+        } else {
+            $postLike = new PostLike;
+            $postLike->post_id = $request->input('post');
+            $postLike->username = auth('sanctum')->user()->username;
+            $postLike->save();
+            $message = "Post liked";
+
+            // Show notification
+            // $musician = Posts::find($request->input('post'))->users;
+            // $musician->username != auth('sanctum')->user()->username &&
+            // $musician->notify(new PostLikeNotifications);
+        }
+
+        return response($message, 200);
+    }
+}

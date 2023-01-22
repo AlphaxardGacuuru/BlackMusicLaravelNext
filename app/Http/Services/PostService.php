@@ -84,10 +84,10 @@ class PostService
      * @param  \App\Models\AudioAlbum  $audioAlbum
      * @return \Illuminate\Http\Response
      */
-	public function show($id)
-	{
-		return Post::find($id);
-	}	
+    public function show($id)
+    {
+        return Post::find($id);
+    }
 
     /* Create new post */
     public function store($request)
@@ -120,7 +120,10 @@ class PostService
     public function destory($id)
     {
         $post = Post::where('id', $id)->first();
-        Storage::delete('public/' . $post->media);
+
+        $media = substr($post->media, 9);
+
+        Storage::delete("public/" . $media);
 
         Post::find($id)->delete();
 

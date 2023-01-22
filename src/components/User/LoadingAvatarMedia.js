@@ -9,25 +9,14 @@ const LoadingAvatar = () => {
 							style={{ width: "150px", height: "150px" }}>
 						</div>
 					</div>
-					<h6 className="mt-2 mb-0 gradient"
-						style={{
-							width: "100px",
-							whiteSpace: "nowrap",
-							overflow: "hidden",
-							textOverflow: "clip",
-							color: "#232323"
-						}}>
-						user.name
+					<h6 className="loading-text gradient w-75"
+						style={{ width: "150px", color: "#232323" }}>
+						name
 					</h6>
-					<h6 className="gradient mt-1"
-						style={{
-							width: "100px",
-							whiteSpace: "nowrap",
-							overflow: "hidden",
-							textOverflow: "clip",
-							color: "#232323"
-						}}>
-						user.username
+					<h6
+						className="loading-text gradient w-50"
+						style={{ color: "#232323" }}>
+						username
 					</h6>
 				</center>
 			</span>

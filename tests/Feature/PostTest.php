@@ -80,6 +80,38 @@ class PostTest extends TestCase
 
         Storage::assertExists('public/post-media/' . $image->hashName());
 
-        // Storage::disk('public')->delete('post-media/' . $image->hashName());
+        Storage::disk('public')->delete('post-media/' . $image->hashName());
+    }
+
+    /**
+     * Destroy
+     *
+     * @return void
+     */
+    public function test_user_can_delete_post()
+    {
+        Sanctum::actingAs(
+            User::factory()->black()->create(),
+            ['*']
+        );
+
+        $image = UploadedFile::fake()->image('avatar.jpg');
+
+        // Upload media
+        $uploadImage = $this->post('api/filepond/posts', ['filepond-media' => $image]);
+
+        $uploadImage->assertStatus(200);
+
+		// Store
+        $response = $this->post('api/posts', [
+            'text' => 'Some text',
+            'media' => $image,
+        ]);
+
+        $response->assertStatus(200);
+
+        Storage::assertExists('public/post-media/' . $image->hashName());
+
+        Storage::disk('public')->delete('post-media/' . $image->hashName());
     }
 }

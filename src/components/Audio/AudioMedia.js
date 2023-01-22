@@ -17,7 +17,7 @@ const AudioMedia = (props) => {
 							"time": 0
 						})
 					}} passHref>
-					<Img src={`/storage/${props.audio.thumbnail}`} width="50px" height="50px" />
+					<Img src={props.audio.thumbnail} width="50px" height="50px" />
 				</Link>
 			</div>
 			<div className="p-2 me-auto">

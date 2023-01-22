@@ -122,7 +122,7 @@ const VideoAlbumCreate = (props) => {
 
 										<div
 											className="p-2"
-											style={{ backgroundColor: "#232323", color: "white" }}
+											style={{ backgroundColor: "#232323", color: "white", cursor: "pointer" }}
 											onClick={() => mediaInput.current.click()}>
 											<svg xmens="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
 												className="bi bi-image" viewBox="0 0 16 16">

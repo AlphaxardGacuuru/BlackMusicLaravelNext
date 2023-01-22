@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\PostLikeService;
 use App\Models\PostLike;
 use Illuminate\Http\Request;
 
@@ -23,9 +24,9 @@ class PostLikeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, PostLikeService $postLikeService)
     {
-        //
+        return $postLikeService->store($request);
     }
 
     /**

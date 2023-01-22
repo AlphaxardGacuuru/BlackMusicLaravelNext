@@ -39,8 +39,8 @@ class VideoAlbumService
         return VideoAlbum::find($id);
     }
 
-	public function store($request)
-	{
+    public function store($request)
+    {
         /* Handle file upload */
         if ($request->hasFile('cover')) {
             $vCover = $request->file('cover')->store('public/video-album-covers');
@@ -52,19 +52,25 @@ class VideoAlbumService
         $vAlbum->name = $request->input('name');
         $vAlbum->username = auth('sanctum')->user()->username;
         $vAlbum->cover = $vCover;
-        $vAlbum->released = $request->input('released');;
+        $vAlbum->released = $request->input('released');
         $vAlbum->save();
 
         return response('Video Album Created', 200);
-	}
+    }
 
-	public function update($request, $id)
-	{
+    public function update($request, $id)
+    {
         /* Handle file upload */
         if ($request->hasFile('cover')) {
-            $vCover = $request->file('cover')->store('public/video-album-covers');
-            $vCover = substr($vCover, 7);
-            Storage::delete('public/' . VideoAlbum::where('id', $id)->first()->cover);
+            $cover = $request->file('cover')->store('public/video-album-covers');
+            // Format for saving in DB
+            $cover = substr($cover, 7);
+			
+            $oldCover = VideoAlbum::where('id', $id)->first()->cover;
+            
+			$oldCover = substr($oldCover,9);
+            
+			Storage::disk("public")->delete($oldCover);
         }
 
         /* Create new video album */
@@ -75,15 +81,15 @@ class VideoAlbumService
         }
 
         if ($request->hasFile('cover')) {
-            $vAlbum->cover = $vCover;
+            $vAlbum->cover = $cover;
         }
 
         if ($request->filled('released')) {
-            $vAlbum->released = $request->input('released');;
+            $vAlbum->released = $request->input('released');
         }
 
         $vAlbum->save();
 
         return response('Video Album Edited', 200);
-	}
+    }
 }

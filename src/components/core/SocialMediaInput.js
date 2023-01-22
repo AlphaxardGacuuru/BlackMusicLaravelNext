@@ -89,7 +89,7 @@ const SocialMediaInput = (props) => {
 							height: "50px",
 							resize: "none"
 						}}
-						placeholder={props.placeholder + props.media}
+						placeholder={props.placeholder}
 						value={props.text}
 						row="1"
 						onChange={(e) => props.setText(e.target.value)}

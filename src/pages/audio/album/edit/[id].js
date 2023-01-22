@@ -88,8 +88,8 @@ const AudioAlbumEdit = (props) => {
 										<div className="p-2">
 											<Img
 												src={editAlbum.cover}
-												width="100"
-												height="100"
+												width="10em"
+												height="10em"
 												alt="album cover" />
 										</div>
 										<div className="px-2">
@@ -139,7 +139,7 @@ const AudioAlbumEdit = (props) => {
 
 										<div
 											className="p-2"
-											style={{ backgroundColor: "#232323", color: "white" }}
+											style={{ backgroundColor: "#232323", color: "white", cursor: "pointer" }}
 											onClick={() => mediaInput.current.click()}>
 											<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
 												className="bi bi-image" viewBox="0 0 16 16">

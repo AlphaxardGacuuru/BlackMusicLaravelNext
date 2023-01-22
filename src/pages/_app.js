@@ -70,6 +70,7 @@ const App = ({ Component, pageProps }) => {
 	const [cartVideos, setCartVideos] = useState(getLocalStorage("cartVideos"))
 
 	const [karaokes, setKaraokes] = useState([])
+	const [karaokeComments, setKaraokeComments] = useState([])
 
 	const [posts, setPosts] = useState(getLocalStorage("posts"))
 	const [users, setUsers] = useState(getLocalStorage("users"))
@@ -234,6 +235,7 @@ const App = ({ Component, pageProps }) => {
 		videoAlbums, setVideoAlbums,
 		videoLikes, setVideoLikes,
 		karaokes, setKaraokes,
+		karaokeComments, setKaraokeComments,
 		// Social Input
 		id, setId,
 		to, setTo,

@@ -1,19 +1,14 @@
-import { useState, useRef, useEffect, Suspense } from 'react'
-import Link from 'next/link'
+import { useState, useEffect, Suspense } from 'react'
+import axios from '@/lib/axios'
 
-import Img from '@/components/core/Img'
+import CommentMedia from '@/components/core/CommentMedia'
 
 import CloseSVG from '@/svgs/CloseSVG'
-import DecoSVG from '@/svgs/DecoSVG'
-import HeartFilledSVG from '@/svgs/HeartFilledSVG'
-import HeartSVG from '@/svgs/HeartSVG'
-import OptionsSVG from '@/svgs/OptionsSVG'
 import PostOptions from '@/components/Post/PostOptions'
 import SocialMediaInput from '../core/SocialMediaInput'
 
 const KaraokeCommentSection = (props) => {
 
-	const [karaokeComments, setKaraokeComments] = useState(props.karaokeComments)
 	const [bottomMenu, setBottomMenu] = useState()
 	const [commentToEdit, setCommentToEdit] = useState()
 	const [commentDeleteLink, setCommentDeleteLink] = useState()
@@ -22,13 +17,18 @@ const KaraokeCommentSection = (props) => {
 		// Set states
 		setTimeout(() => {
 			props.setPlaceholder("Add a comment")
+			props.setText("")
 			props.setShowImage(false)
 			props.setShowPoll(false)
 			props.setShowEmojiPicker(false)
 			props.setShowImagePicker(false)
 			props.setShowPollPicker(false)
+			// props.setUrlTo("karaoke-comments")
+			// props.setStateToUpdate(() => props.setKaraokeComments)
+			props.setEditing(false)
 		}, 1000)
-	})
+
+	}, [])
 
 	// Declare new FormData object for form data
 	const formData = new FormData();
@@ -39,44 +39,27 @@ const KaraokeCommentSection = (props) => {
 
 		// Add form data to FormData object
 		formData.append("text", props.text);
-		formData.append("id", props.id);
+		formData.append("id", props.karaoke.id);
 
-		// Send data to HelpPostsController
 		// Get csrf cookie from Laravel inorder to send a POST request
-		axios.get('sanctum/csrf-cookie').then(() => {
-			axios.post(`/api/karaoke-comments`, formData)
-				.then((res) => {
-					props.setMessages([res.data])
-					// Updated Karaoke Comments One
-					axios.get(`/api/karaoke-comments`)
-						.then((res) => setKaraokeComments(res.data))
-					// Clear text unless editing
-					props.setText("")
-					props.setShowMentionPicker(false)
-					props.setShowEmojiPicker(false)
-					props.setShowImagePicker(false)
-					props.setShowPollPicker(false)
-				}).catch((err) => {
-					const resErrors = err.response.data.errors
-
-					var resError
-					var newError = []
-
-					for (resError in resErrors) {
-						newError.push(resErrors[resError])
-					}
-
-					// Show error message
-					// newError.push(err.response.data.message)
-					props.setErrors(newError)
-				})
-		})
+		axios.post(`/api/karaoke-comments`, formData)
+			.then((res) => {
+				props.setMessages([res.data])
+				// Updated Karaoke Comments One
+				props.get("karaoke-comments", props.setKaraokeComments)
+				// Clear text unless editing
+				props.setText("")
+				props.setShowMentionPicker(false)
+				props.setShowEmojiPicker(false)
+				props.setShowImagePicker(false)
+				props.setShowPollPicker(false)
+			}).catch((err) => props.getErrors(err))
 	}
 
 	// Function for liking comments
 	const onCommentLike = (comment) => {
 		// Show like
-		const newKaraokeComments = karaokeComments
+		const newKaraokeComments = props.karaokeComments
 			.filter((item) => {
 				// Get the exact karaoke and change like status
 				if (item.id == comment) {
@@ -85,64 +68,42 @@ const KaraokeCommentSection = (props) => {
 				return true
 			})
 		// Set new karaokes
-		setKaraokeComments(newKaraokeComments)
+		props.setKaraokeComments(newKaraokeComments)
 
 		// Add like to database
-		axios.get('sanctum/csrf-cookie').then(() => {
-			axios.post(`${props.url}/api/karaoke-comment-likes`, {
-				comment: comment
-			}).then((res) => {
-				props.setMessages([res.data])
-				// Update karaoke comments
-				axios.get(`${props.url}/api/karaoke-comments`)
-					.then((res) => setKaraokeComments(res.data))
-			}).catch((err) => {
-				const resErrors = err.response.data.errors
-				var resError
-				var newError = []
-				for (resError in resErrors) {
-					newError.push(resErrors[resError])
-				}
-				props.setErrors(newError)
-			})
-		})
+		axios.post(`/api/karaoke-comment-likes`, {
+			comment: comment
+		}).then((res) => {
+			props.setMessages([res.data])
+			// Update karaoke comments
+			props.get("karaoke-comments", props.setKaraokeComments)
+		}).catch((err) => props.getErrors(err))
 	}
 
 	// Function for deleting comments
 	const onDeleteComment = (id) => {
-		axios.get('sanctum/csrf-cookie').then(() => {
-			axios.delete(`${props.url}/api/karaoke-comments/${id}`)
-				.then((res) => {
-					props.setMessages([res.data])
-					// Update karaoke comments
-					axios.get(`${props.url}/api/karaoke-comments`)
-						.then((res) => setKaraokeComments(res.data))
-				}).catch((err) => {
-					const resErrors = err.response.data.errors
-					var resError
-					var newError = []
-					for (resError in resErrors) {
-						newError.push(resErrors[resError])
-					}
-					props.setErrors(newError)
-				})
-		})
+		axios.delete(`/api/karaoke-comments/${id}`)
+			.then((res) => {
+				props.setMessages([res.data])
+				// Update karaoke comments
+				props.get("karaoke-comments", props.setKaraokeComments)
+			}).catch((err) => props.getErrors(err))
 	}
 
 	return (
 		<>
 			{/* Sliding Bottom Nav */}
 			<div className={props.bottomOptionsMenu}>
-				<div className="bottomMenu">
+				<div className="commentMenu">
 					<div
 						className="d-flex align-items-center justify-content-between border-bottom border-dark"
 						style={{ height: "3em" }}>
-						<div className="dropdown-header text-white">
-							<h5 style={{ margin: "0px" }}>Comments</h5>
+						<div className="dropdown-header p-2 text-white">
+							<h5>Comments</h5>
 						</div>
 						{/* <!-- Close Icon --> */}
 						<div
-							className="closeIcon p-2 float-right"
+							className="closeIcon p-2 float-end"
 							style={{ fontSize: "1em" }}
 							onClick={() => props.setBottomOptionsMenu("")}>
 							<CloseSVG />
@@ -152,7 +113,7 @@ const KaraokeCommentSection = (props) => {
 					{/* Comment Form */}
 					<form
 						onSubmit={onSubmit}
-						className="contact-form bg-white mb-2"
+						className="contact-form bg-white mb-2 border-bottom border-light"
 						autoComplete="off">
 						<Suspense
 							fallback={
@@ -166,116 +127,25 @@ const KaraokeCommentSection = (props) => {
 
 					{/* Karaoke Comments */}
 					<div className="m-0 p-0">
-						<div style={{ maxHeight: window.innerHeight * 0.60, overflowY: "scroll" }}>
+						<div style={{ maxHeight: "60vh", overflowY: "scroll" }}>
 							{/* Get Notifications */}
 
 							{/* <!-- Comment Section --> */}
-							{karaokeComments
+							{props.karaokeComments
 								.filter((comment) => comment.karaoke_id == props.karaoke.id)
 								.length > 0 ?
-								karaokeComments
+								props.karaokeComments
 									.filter((comment) => comment.karaoke_id == props.karaoke.id)
-									.map((comment, index) => (
-										<div key={index} className="d-flex p-2">
-											<div className="">
-												<div className="avatar-thumbnail-xs" style={{ borderRadius: "50%" }}>
-													<Link href={`/profile/${comment.username}`}>
-														<Img src={comment.pp}
-															width="50px"
-															height="50px" />
-													</Link>
-												</div>
-											</div>
-											<div className="flex-grow-1 ml-2 text-left">
-												<h6 className="media-heading m-0"
-													style={{
-														width: "100%",
-														whiteSpace: "nowrap",
-														overflow: "hidden",
-														textOverflow: "clip"
-													}}>
-													<b>{comment.name}</b>
-													<small>{comment.username}</small>
-													<span className="ml-1" style={{ color: "gold" }}>
-														<DecoSVG />
-														<span className="ml-1" style={{ fontSize: "10px" }}>{comment.decos}</span>
-													</span>
-													<small>
-														<b>
-															<i className="float-right mr-1 text-secondary">
-																{comment.created_at}
-															</i>
-														</b>
-													</small>
-												</h6>
-												<p className="mb-0 text-light">{comment.text}</p>
-
-												{/* Comment likes */}
-												{comment.hasLiked ?
-													<a href="#"
-														style={{ color: "#fb3958" }}
-														onClick={(e) => {
-															e.preventDefault()
-															onCommentLike(comment.id)
-														}}>
-														<HeartFilledSVG />
-														<small className="ml-1" style={{ color: "inherit" }}>
-															{comment.likes}
-														</small>
-													</a> :
-													<a href='#'
-														className="text-light"
-														onClick={(e) => {
-															e.preventDefault()
-															onCommentLike(comment.id)
-														}}>
-														<HeartSVG />
-														<small className="ml-1" style={{ color: "inherit" }}>{comment.likes}</small>
-													</a>}
-
-												{/* <!-- Default dropup button --> */}
-												<div className="dropup float-right hidden">
-													<a
-														href="#"
-														role="button"
-														id="dropdownMenuLink"
-														data-toggle="dropdown"
-														aria-haspopup="true"
-														aria-expanded="false">
-														<OptionsSVG />
-													</a>
-													<div
-														className="dropdown-menu dropdown-menu-right p-0"
-														style={{ borderRadius: "0", backgroundColor: "#232323" }}>
-														{comment.username == props.auth.username &&
-															<a
-																href='#'
-																className="dropdown-item"
-																onClick={(e) => {
-																	e.preventDefault();
-																	onDeleteComment(comment.id)
-																}}>
-																<h6>Delete comment</h6>
-															</a>}
-													</div>
-												</div>
-												{/* For small screens */}
-												<div className="float-right anti-hidden">
-													<span
-														className="text-secondary"
-														onClick={() => {
-															if (comment.username == props.auth.username) {
-																setBottomMenu("menu-open")
-																setCommentToEdit(comment.id)
-																// Show and Hide elements
-																setCommentDeleteLink(true)
-															}
-														}}>
-														<OptionsSVG />
-													</span>
-												</div>
-											</div>
-										</div>
+									.map((comment, key) => (
+										<CommentMedia
+											{...props}
+											key={key}
+											comment={comment}
+											onCommentLike={onCommentLike}
+											setBottomMenu={setBottomMenu}
+											setCommentToEdit={setCommentToEdit}
+											onDeleteComment={onDeleteComment}
+											setCommentDeleteLink={setCommentDeleteLink} />
 									)) :
 								<center className="my-3">
 									<h6 style={{ color: "grey" }}>No comments to show</h6>
@@ -298,19 +168,6 @@ const KaraokeCommentSection = (props) => {
 			{/* Sliding Bottom Nav end */}
 		</>
 	)
-}
-
-// This gets called on every request
-export async function getServerSideProps() {
-	// Fetch data from external API
-	var karaokeComments
-
-	// Fetch Karaokes
-	await axios.get(`/api/karaokes`)
-		.then((res) => karaokeComments = res.data)
-
-	// Pass data to the page via props
-	return { props: { karaokeComments } }
 }
 
 export default KaraokeCommentSection

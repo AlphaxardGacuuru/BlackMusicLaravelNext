@@ -4,13 +4,9 @@ import Img from 'next/image'
 const KaraokeMedia = (props) => {
 	return (
 		<div
-			className="m-1"
-			style={{
-				borderRadius: "0px",
-				textAlign: "center",
-			}}
+			className="m-1 karaoke-media"
 			onClick={() => props.setShow(0)}>
-			<div style={{ width: "15em", height: "27em" }}>
+			<div>
 				<Link href={props.link}>
 					<a>
 						<video
@@ -26,14 +22,14 @@ const KaraokeMedia = (props) => {
 				</Link>
 			</div>
 			<div className="d-flex">
-				<div className="py-2">
+				<div className="py-2 w-25">
 					<Link href={`/profile/${props.username}`}>
 						<a>
 							<Img
 								src={props.avatar}
 								className="rounded-circle"
-								width="40px"
-								height="40px"
+								width="40em"
+								height="40em"
 								alt="user"
 								loading="lazy" />
 						</a>

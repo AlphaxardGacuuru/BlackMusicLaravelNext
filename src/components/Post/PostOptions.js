@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import CloseSVG from '../../svgs/CloseSVG'
+import CloseSVG from '@/svgs/CloseSVG'
 
 const PostOptions = (props) => {
 	return (

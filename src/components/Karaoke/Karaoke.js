@@ -23,7 +23,11 @@ import PlayFilledSVG from '@/svgs/PlayFilledSVG'
 
 const Karaoke = (props) => {
 
-	const [karaokeComments, setKaraokeComments] = useState(props.karaokeComments)
+	useEffect(() => {
+		// Fetch Karaoke Comments
+		props.get("karaoke-comments", props.setKaraokeComments)
+	}, [])	
+
 	const [play, setPlay] = useState()
 	const [bottomOptionsMenu, setBottomOptionsMenu] = useState()
 
@@ -80,7 +84,6 @@ const Karaoke = (props) => {
 	return (
 		<div
 			id={props.karaoke.id}
-			key={props.key}
 			className="single-karaoke">
 			<video
 				ref={video}
@@ -196,7 +199,7 @@ const Karaoke = (props) => {
 								</center>
 							</div>
 							{/* Karaoke Likes  */}
-							<div>
+							<div style={{ cursor: "pointer" }}>
 								<center>
 									<span
 										className="p-0"
@@ -222,7 +225,7 @@ const Karaoke = (props) => {
 								</center>
 							</div>
 							{/* Karaoke Comments */}
-							<div style={{ color: "rgba(220, 220, 220, 1)" }}>
+							<div style={{ color: "rgba(220, 220, 220, 1)", cursor: "pointer" }}>
 								<center>
 									<span
 										className="p-0"
@@ -238,7 +241,7 @@ const Karaoke = (props) => {
 								</center>
 							</div>
 							{/* Save Karaoke */}
-							<div>
+							<div style={{ cursor: "pointer" }}>
 								<center>
 									<span
 										className="mb-2 p-0"
@@ -255,7 +258,7 @@ const Karaoke = (props) => {
 								</center>
 							</div>
 							{/* Share Karaoke */}
-							<div className="mb-3">
+							<div className="mb-3" style={{ cursor: "pointer" }}>
 								<center>
 									<span
 										className="p-0"
@@ -296,11 +299,10 @@ const Karaoke = (props) => {
 			</div>
 			{/* Floating Video Info Bottom End */}
 
-			{/* <KaraokeCommentSection
+			<KaraokeCommentSection
 				{...props}
 				bottomOptionsMenu={bottomOptionsMenu}
-				setBottomOptionsMenu={setBottomOptionsMenu}
-				id={props.karaoke.id} /> */}
+				setBottomOptionsMenu={setBottomOptionsMenu} />
 		</div>
 	)
 }

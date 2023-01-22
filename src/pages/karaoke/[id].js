@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import axios from '@/lib/axios'
 
 import Karaoke from '@/components/Karaoke/Karaoke'
 

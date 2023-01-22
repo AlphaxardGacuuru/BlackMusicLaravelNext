@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\KaraokeCommentService;
 use App\Models\KaraokeComment;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,9 @@ class KaraokeCommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(KaraokeCommentService $karaokeCommentService)
     {
-        //
+        return $karaokeCommentService->index();
     }
 
     /**
@@ -23,9 +24,13 @@ class KaraokeCommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, KaraokeCommentService $karaokeCommentService)
     {
-        //
+        $this->validate($request, [
+            'text' => 'required',
+        ]);
+
+		return $karaokeCommentService->store($request);
     }
 
     /**
@@ -57,8 +62,8 @@ class KaraokeCommentController extends Controller
      * @param  \App\Models\KaraokeComment  $karaokeComment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(KaraokeComment $karaokeComment)
+    public function destroy($id, KaraokeCommentService $karaokeCommentService)
     {
-        //
+        return $karaokeCommentService->destroy($id);
     }
 }

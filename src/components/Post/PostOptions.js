@@ -26,7 +26,7 @@ const PostOptions = (props) => {
 						<h6 className="pb-2">Unfollow {props.userToUnfollow}</h6>
 					</div>}
 				{props.editLink &&
-					<Link href={`/post/${props.postToEdit}`}>
+					<Link href={`/post/edit/${props.postToEdit}`}>
 						<a onClick={() => props.setBottomMenu("")}>
 							<h6 className="pb-2">Edit post</h6>
 						</a>

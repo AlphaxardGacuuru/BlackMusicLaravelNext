@@ -82,9 +82,9 @@ const TopNav = (props) => {
 		router.pathname.match("/privacy-policy") ||
 		router.pathname.match("/download-app") ||
 		router.pathname.match("/chat/") ||
-		router.pathname.match("/post-edit") ||
-		router.pathname.match("/post-create") ||
-		router.pathname.match("/post-show/") ||
+		router.pathname.match("/post/edit") ||
+		router.pathname.match("/post/create") ||
+		router.pathname == "/post/[id]" ||
 		router.pathname.match("/referral") ||
 		router.pathname.match("/login") ||
 		router.pathname.match("/register") ?

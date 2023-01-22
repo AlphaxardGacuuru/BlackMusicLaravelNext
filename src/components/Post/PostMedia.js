@@ -88,8 +88,10 @@ const PostMedia = (props) => {
 					</span>
 					<small><b><i className="float-end text-secondary me-1">{props.post.created_at}</i></b></small>
 				</h6>
-				<Link href={"post-show/" + props.post.id}>
-					<p className="mb-0">{props.post.text}</p>
+				<Link href={"post/" + props.post.id}>
+					<a>
+						<p className="mb-0">{props.post.text}</p>
+					</a>
 				</Link>
 
 				{/* Show media */}
@@ -191,7 +193,7 @@ const PostMedia = (props) => {
 					</a>}
 
 				{/* Post comments */}
-				<Link href={"/post-show/" + props.post.id}>
+				<Link href={"/post/" + props.post.id}>
 					<a style={{ color: "rgba(220, 220, 220, 1)" }}>
 						<span className="ms-5" style={{ fontSize: "1.2em" }}><CommentSVG /></span>
 						<small className="ms-1" style={{ color: "inherit" }}>{props.post.comments}</small>
@@ -201,7 +203,11 @@ const PostMedia = (props) => {
 				{/* Share Post */}
 				<span
 					className="ms-5"
-					style={{ fontSize: "1.3em", color: "rgba(220, 220, 220, 1)" }}
+					style={{
+						fontSize: "1.3em",
+						color: "rgba(220, 220, 220, 1)",
+						cursor: "pointer"
+					}}
 					onClick={() => onShare(props.post)}>
 					<ShareSVG />
 				</span>
@@ -230,7 +236,7 @@ const PostMedia = (props) => {
 								</h6>
 							</a> :
 							<span>
-								<Link href={`/post/${props.post.id}`}>
+								<Link href={`/post/edit/${props.post.id}`}>
 									<a className="dropdown-item">
 										<h6>Edit post</h6>
 									</a>

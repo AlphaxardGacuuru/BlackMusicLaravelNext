@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\PostCommentService;
 use App\Models\PostComment;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,9 @@ class PostCommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(PostCommentService $postCommentService)
     {
-        //
+        return $postCommentService->index();
     }
 
     /**
@@ -23,9 +24,13 @@ class PostCommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, PostCommentService $postCommentService)
     {
-        //
+        $this->validate($request, [
+            'text' => 'required',
+        ]);
+
+		return $postCommentService->store($request);
     }
 
     /**
@@ -57,8 +62,8 @@ class PostCommentController extends Controller
      * @param  \App\Models\PostComment  $postComment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PostComment $postComment)
+    public function destroy($id, PostCommentService $postCommentService)
     {
-        //
+        return $postCommentService->destory($id);
     }
 }

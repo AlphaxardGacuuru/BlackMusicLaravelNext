@@ -73,6 +73,8 @@ const App = ({ Component, pageProps }) => {
 	const [karaokeComments, setKaraokeComments] = useState([])
 
 	const [posts, setPosts] = useState(getLocalStorage("posts"))
+	const [postComments, setPostComments] = useState(getLocalStorage("postComments"))
+
 	const [users, setUsers] = useState(getLocalStorage("users"))
 
 	const [videos, setVideos] = useState(getLocalStorage("videos"))
@@ -230,6 +232,7 @@ const App = ({ Component, pageProps }) => {
 		cartAudios, setCartAudios,
 		cartVideos, setCartVideos,
 		posts, setPosts,
+		postComments, setPostComments,
 		users, setUsers,
 		videos, setVideos,
 		videoAlbums, setVideoAlbums,

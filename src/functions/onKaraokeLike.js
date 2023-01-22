@@ -15,15 +15,13 @@ const onKaraokeLike = (props) => {
 	props.setKaraokes(newKaraokes)
 
 	// Add like to database
-	axios.get('sanctum/csrf-cookie').then(() => {
-		axios.post(`${props.url}/api/karaoke-likes`, {
-			karaoke: props.karaoke.id
-		}).then((res) => {
-			props.setMessages([res.data])
-			// Update karaoke
-			props.get("karaokes", props.setKaraokes)
-		}).catch((err) => props.getErrors(err))
-	})
+	axios.post(`/api/karaoke-likes`, {
+		karaoke: props.karaoke.id
+	}).then((res) => {
+		props.setMessages([res.data])
+		// Update karaoke
+		props.get("karaokes", props.setKaraokes)
+	}).catch((err) => props.getErrors(err))
 }
 
 export default onKaraokeLike

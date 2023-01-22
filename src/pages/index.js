@@ -5,18 +5,18 @@ import axios from '@/lib/axios'
 
 import Img from '@/components/core/Img'
 
-import LoadingMusiciansMedia from '../components/user/LoadingMusiciansMedia'
-import LoadingVideoMedia from '../components/video/LoadingVideoMedia'
-import LoadingPostMedia from '../components/post/LoadingPostMedia'
+import LoadingMusiciansMedia from '@/components/User/LoadingMusiciansMedia'
+import LoadingVideoMedia from '@/components/Video/LoadingVideoMedia'
+import LoadingPostMedia from '@/components/Post/LoadingPostMedia'
 
-const MusiciansMedia = React.lazy(() => import('../components/user/MusiciansMedia'))
-const VideoMedia = React.lazy(() => import('../components/video/VideoMedia'))
-const PostMedia = React.lazy(() => import('../components/post/PostMedia'))
+const MusiciansMedia = React.lazy(() => import('@/components/User/MusiciansMedia'))
+const VideoMedia = React.lazy(() => import('@/components/Video/VideoMedia'))
+const PostMedia = React.lazy(() => import('@/components/Post/PostMedia'))
 
-import PenSVG from '../svgs/PenSVG'
-import ChatSVG from '../svgs/ChatSVG'
-import DecoSVG from '../svgs/DecoSVG'
-import PostOptions from '../components/post/PostOptions'
+import PenSVG from '@/svgs/PenSVG'
+import ChatSVG from '@/svgs/ChatSVG'
+import DecoSVG from '@/svgs/DecoSVG'
+import PostOptions from '@/components/Post/PostOptions'
 
 export default function Home(props) {
 
@@ -177,7 +177,7 @@ export default function Home(props) {
 
 				{/* <!-- ****** Songs Area ****** --> */}
 				<div className="col-sm-4">
-					<div className="p-2">
+					<div className="mb-2 border-bottom border-secondary">
 						<h5>Songs for you</h5>
 						<div className="hidden-scroll" onScroll={handleScroll}>
 							{/* Loading Video items */}
@@ -197,8 +197,6 @@ export default function Home(props) {
 											onClick={() => props.setShow(0)} />
 									</Suspense>
 								))}
-							<br />
-							<br />
 						</div>
 					</div>
 					{/* <!-- ****** Songs Area End ****** --> */}

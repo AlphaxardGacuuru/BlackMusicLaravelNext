@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import onCartVideos from '@/functions/onCartVideos'
 
 import Img from 'next/image'
-import Button from '../core/Btn'
+import Btn from '../core/Btn'
 
 import CartSVG from '@/svgs/CartSVG'
 
@@ -21,7 +21,7 @@ const VideoMedia = (props) => {
 		<span className="mx-2 pt-0 px-0 pb-2" style={{ display: "inline-block" }}>
 			<div className="video-media">
 				<div className="video-thumbnail">
-					<Link href={`/video-show/${props.video.id}`} passHref>
+					<Link href={`/video/${props.video.id}`} passHref>
 						<a>
 							<Img src={props.video.thumbnail}
 								width="320em"
@@ -53,7 +53,7 @@ const VideoMedia = (props) => {
 									</button>
 								</div>
 								<div>
-									<Button
+									<Btn
 										btnClass="mysonar-btn green-btn btn-2"
 										btnText="KES 20"
 										onClick={() => onBuyVideos(props.video.id)} />

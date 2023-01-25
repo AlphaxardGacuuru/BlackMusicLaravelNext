@@ -253,40 +253,40 @@ class User extends Authenticatable
      */
 
     // Check if user has followed User
-    public function hasFollowed($user, $username)
+    public function hasFollowed($username)
     {
         return Follow::where('username', $username)
-            ->where('followed', $user->username)
+            ->where('followed', $this->username)
             ->count() > 0 ? true : false;
     }
 
     // Get user's fans
-    public function fans($user)
+    public function fans()
     {
-        return Follow::where('followed', $user->username)->count() - 1;
+        return Follow::where('followed', $this->username)->count() - 1;
     }
 
     // Check if auth user has bought user's video
-    public function hasBoughtVideo($user, $username)
+    public function hasBoughtVideo($username)
     {
         return BoughtVideo::where('username', $username)
-            ->where('artist', $user->username)
+            ->where('artist', $this->username)
             ->count();
     }
 
     // Check if auth user has bought user's audio
-    public function hasBoughtAudio($user, $username)
+    public function hasBoughtAudio($username)
     {
         return BoughtAudio::where('username', $username)
-            ->where('artist', $user->username)
+            ->where('artist', $this->username)
             ->count();
     }
 
     // Check if user has bought atleast 1 song
-    public function hasBought1($user, $username)
+    public function hasBought1($username)
     {
-        $hasBoughtVideo = $user->hasBoughtVideo($user, $username);
-        $hasBoughtAudio = $user->hasBoughtAudio($user, $username);
+        $hasBoughtVideo = $this->hasBoughtVideo($username);
+        $hasBoughtAudio = $this->hasBoughtAudio($username);
 
         return $hasBoughtVideo + $hasBoughtAudio > 1 ? true : false;
     }

@@ -26,6 +26,10 @@ class AudioSeeder extends Seeder
                 "thumbnail" => "audio-thumbnails/1.jpg",
                 "thumbnail" => "audio-thumbnails/2.jpg",
             ]))
+            ->state(new Sequence([
+                "audio" => "audios/1.mp3",
+                "audio" => "audios/2.mp3",
+            ]))
             ->hasLikes(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username])
             ->hasComments(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username]);
 
@@ -37,6 +41,10 @@ class AudioSeeder extends Seeder
             ->state(new Sequence([
                 "thumbnail" => "audio-thumbnails/3.jpg",
                 "thumbnail" => "audio-thumbnails/4.jpg",
+            ]))
+            ->state(new Sequence([
+                "audio" => "audios/3.mp3",
+                "audio" => "audios/4.mp3",
             ]))
             ->hasLikes(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username])
             ->hasComments(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username]);

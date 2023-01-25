@@ -32,6 +32,13 @@ class Video extends Model
         );
     }
 
+    protected function released(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => Carbon::parse($value)->format('d M Y'),
+        );
+    }
+
     protected function createdAt(): Attribute
     {
         return Attribute::make(
@@ -74,25 +81,25 @@ class Video extends Model
      */
 
     // Check if user has liked video
-    public function hasLiked($video, $username)
+    public function hasLiked($username)
     {
-        return $video->likes
+        return $this->likes
             ->where('username', $username)
             ->count() > 0 ? true : false;
     }
 
     // Check if video in cart
-    public function inCart($video, $username)
+    public function inCart($username)
     {
-        return $video->cart
+        return $this->cart
             ->where('username', $username)
             ->count() > 0 ? true : false;
     }
 
     // Check if user has bought video
-    public function hasBoughtVideo($video, $username)
+    public function hasBoughtVideo($username)
     {
-        return $video->bought
+        return $this->bought
             ->where('username', $username)
             ->count() > 0 ? true : false;
     }

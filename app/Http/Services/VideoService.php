@@ -11,6 +11,7 @@ class VideoService
     {
         // Check if user is logged in
         $auth = auth('sanctum')->user();
+
         $authUsername = $auth ? $auth->username : '@guest';
 
         // Get Videos
@@ -27,19 +28,19 @@ class VideoService
                 "username" => $video->username,
                 "avatar" => $video->user->avatar,
                 "ft" => $video->ft,
-                "video_album_id" => $video->video_album_id,
+                "videoAlbumId" => $video->video_album_id,
                 "album" => $video->album->name,
                 "genre" => $video->genre,
                 "thumbnail" => $video->thumbnail,
                 "description" => $video->description,
                 "released" => $video->released,
-                "hasLiked" => $video->hasLiked($video, $authUsername),
+                "hasLiked" => $video->hasLiked($authUsername),
                 "likes" => $video->likes->count(),
                 "comments" => $video->comments->count(),
-                "inCart" => $video->inCart($video, $authUsername),
-                "hasBoughtVideo" => $video->hasBoughtVideo($video, $authUsername),
+                "inCart" => $video->inCart($authUsername),
+                "hasBoughtVideo" => $video->hasBoughtVideo($authUsername),
                 "downloads" => $video->bought->count(),
-                "created_at" => $video->created_at,
+                "createdAt" => $video->created_at,
             ]);
         }
 
@@ -54,7 +55,43 @@ class VideoService
      */
     public function show($id)
     {
-        return Video::find($id);
+        // Check if user is logged in
+        $auth = auth('sanctum')->user();
+
+        $authUsername = $auth ? $auth->username : '@guest';
+
+        // Get Video
+        $getVideo = Video::whereId($id)->get()[0];
+
+        $video = [];
+
+        array_push($video, [
+            "id" => $getVideo->id,
+            "video" => $getVideo->video,
+            "name" => $getVideo->name,
+			"artistName" => $getVideo->user->name,
+            "username" => $getVideo->username,
+			"avatar" => $getVideo->user->avatar,
+			"artistDecos" => $getVideo->user->decos->count(),
+            "ft" => $getVideo->ft,
+            "videoAlbumId" => $getVideo->video_album_id,
+            "album" => $getVideo->album->name,
+            "genre" => $getVideo->genre,
+            "thumbnail" => $getVideo->thumbnail,
+            "description" => $getVideo->description,
+            "released" => $getVideo->released,
+            "hasLiked" => $getVideo->hasLiked($authUsername),
+            "likes" => $getVideo->likes->count(),
+            "comments" => $getVideo->comments->count(),
+            "inCart" => $getVideo->inCart($authUsername),
+            "hasBoughtVideo" => $getVideo->hasBoughtVideo($authUsername),
+			"hasBought1" => $getVideo->user->hasBought1($authUsername),
+			"hasFollowed" => $getVideo->user->hasFollowed($authUsername),
+            "downloads" => $getVideo->bought->count(),
+            "createdAt" => $getVideo->created_at,
+        ]);
+
+        return $video;
     }
 
     public function store($request)

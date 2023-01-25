@@ -17,7 +17,7 @@ class VideoAlbumFactory extends Factory
     public function definition()
     {
         return [
-            'name' => fake()->catchPhrase(),
+            'name' => fake()->word(),
             'cover' => 'video-album-covers/musical-note.png',
             'released' => fake()->dateTime(),
         ];

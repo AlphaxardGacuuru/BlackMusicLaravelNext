@@ -5,13 +5,12 @@ import axios from '@/lib/axios'
 
 import Img from '@/components/core/Img'
 
-import LoadingMusiciansMedia from '@/components/User/LoadingMusiciansMedia'
+import LoadingMusicianMedia from '@/components/User/LoadingMusicianMedia'
 import LoadingVideoMedia from '@/components/Video/LoadingVideoMedia'
 import LoadingPostMedia from '@/components/Post/LoadingPostMedia'
-
-const MusiciansMedia = React.lazy(() => import('@/components/User/MusiciansMedia'))
-const VideoMedia = React.lazy(() => import('@/components/Video/VideoMedia'))
-const PostMedia = React.lazy(() => import('@/components/Post/PostMedia'))
+import VideoMedia from '@/components/Video/VideoMedia'
+import MusicianMedia from '@/components/User/MusicianMedia'
+import PostMedia from '@/components/Post/PostMedia'
 
 import PenSVG from '@/svgs/PenSVG'
 import ChatSVG from '@/svgs/ChatSVG'
@@ -119,7 +118,7 @@ export default function Home(props) {
 							</h6>
 							<span style={{ color: "gold" }}>
 								<DecoSVG />
-								<small className="ms-1" style={{ color: "inherit" }}>
+								<small className="ms-1 fw-lighter align-bottom" style={{ color: "inherit" }}>
 									{props.auth?.decos}
 								</small>
 							</span>
@@ -157,7 +156,7 @@ export default function Home(props) {
 							.filter(() => props.users
 								.filter((user) => user.account_type)
 								.length < 1)
-							.map((item, key) => <LoadingMusiciansMedia key={key} />)}
+							.map((item, key) => <LoadingMusicianMedia key={key} />)}
 
 						{/* Musicians */}
 						{props.users
@@ -167,8 +166,8 @@ export default function Home(props) {
 								user.username != "@blackmusic")
 							.slice(0, 10)
 							.map((user, key) => (
-								<Suspense key={key} fallback={<LoadingMusiciansMedia />}>
-									<MusiciansMedia {...props} user={user} />
+								<Suspense key={key} fallback={<LoadingMusicianMedia />}>
+									<MusicianMedia {...props} user={user} />
 								</Suspense>
 							))}
 					</div>

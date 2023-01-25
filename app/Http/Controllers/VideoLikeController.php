@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\VideoLikeService;
 use App\Models\VideoLike;
 use Illuminate\Http\Request;
 
@@ -23,9 +24,9 @@ class VideoLikeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, VideoLikeService $videoLikeService)
     {
-        //
+        return $videoLikeService->store($request);
     }
 
     /**

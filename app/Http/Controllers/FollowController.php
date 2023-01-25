@@ -27,19 +27,19 @@ class FollowController extends Controller
     {
         /* Add follow */
         $hasFollowed = Follow::where('followed', $request->musician)
-            ->where('username', auth()->user()->username)
+            ->where('username', auth('sanctum')->user()->username)
             ->exists();
 
         if ($hasFollowed) {
             Follow::where('followed', $request->musician)
-                ->where('username', auth()->user()->username)
+                ->where('username', auth('sanctum')->user()->username)
                 ->delete();
 
             $message = "Unfollowed";
         } else {
             $post = new Follow;
             $post->followed = $request->input('musician');
-            $post->username = auth()->user()->username;
+            $post->username = auth('sanctum')->user()->username;
             $post->save();
 			
             $message = "Followed";

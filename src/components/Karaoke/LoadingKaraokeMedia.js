@@ -1,13 +1,13 @@
 const LoadingKaraokeMedia = () => {
 	return (
 		<div
-			className="m-1"
+			className="m-1 karaoke-media"
 			style={{
 				borderRadius: "0px",
 				textAlign: "center",
 				color: "#232323",
 			}}>
-			<div className="karaoke-thumbnail gradient" style={{ width: "15em", height: "25em" }}>
+			<div className="karaoke-thumbnail gradient" style={{ width: "15vw", height: "25.6em" }}>
 				<div className="gradient" style={{ width: "100%" }}></div>
 			</div>
 			<div className="d-flex">

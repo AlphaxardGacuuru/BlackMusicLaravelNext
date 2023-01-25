@@ -59,9 +59,9 @@ const App = ({ Component, pageProps }) => {
 			"fans": 0
 		})
 
-	const [audios, setAudios] = useState(getLocalStorage("audios"))
 	const [audioAlbums, setAudioAlbums] = useState(getLocalStorage("audioAlbums"))
-	const [audioLikes, setAudioLikes] = useState(getLocalStorage("audioLikes"))
+	const [audios, setAudios] = useState(getLocalStorage("audios"))
+	const [audioComments, setAudioComments] = useState([])
 
 	const [boughtAudios, setBoughtAudios] = useState(getLocalStorage("boughtAudios"))
 	const [boughtVideos, setBoughtVideos] = useState(getLocalStorage("boughtVideos"))
@@ -73,13 +73,13 @@ const App = ({ Component, pageProps }) => {
 	const [karaokeComments, setKaraokeComments] = useState([])
 
 	const [posts, setPosts] = useState(getLocalStorage("posts"))
-	const [postComments, setPostComments] = useState(getLocalStorage("postComments"))
+	const [postComments, setPostComments] = useState()
 
 	const [users, setUsers] = useState(getLocalStorage("users"))
 
-	const [videos, setVideos] = useState(getLocalStorage("videos"))
 	const [videoAlbums, setVideoAlbums] = useState(getLocalStorage("videoAlbums"))
-	const [videoLikes, setVideoLikes] = useState(getLocalStorage("videoLikes"))
+	const [videos, setVideos] = useState(getLocalStorage("videos"))
+	const [videoComments, setVideoComments] = useState([])
 
 	// Function for fetching data from API
 	const get = (endpoint, setState, storage = null) => {
@@ -125,7 +125,6 @@ const App = ({ Component, pageProps }) => {
 		get("auth", setAuth, "auth")
 		get("audios", setAudios, "audios")
 		get("audio-albums", setAudioAlbums, "audioAlbums")
-		// get("audio-likes", setAudioLikes, "audioLikes")
 
 		// get("bought-audios", setBoughtAudios, "boughtAudios")
 		// get("bought-videos", setBoughtAudios, "boughtVideos")
@@ -140,7 +139,6 @@ const App = ({ Component, pageProps }) => {
 
 		get("videos", setVideos, "videos")
 		get("video-albums", setVideoAlbums, "videoAlbums")
-		// get("video-likes", setVideoLikes, "videoLikes")
 
 	}, [])
 
@@ -224,9 +222,9 @@ const App = ({ Component, pageProps }) => {
 		auth, setAuth,
 		messages, setMessages,
 		errors, setErrors,
-		audios, setAudios,
 		audioAlbums, setAudioAlbums,
-		audioLikes, setAudioLikes,
+		audios, setAudios,
+		audioComments, setAudioComments,
 		boughtAudios, setBoughtAudios,
 		boughtVideos, setBoughtVideos,
 		cartAudios, setCartAudios,
@@ -234,9 +232,9 @@ const App = ({ Component, pageProps }) => {
 		posts, setPosts,
 		postComments, setPostComments,
 		users, setUsers,
-		videos, setVideos,
 		videoAlbums, setVideoAlbums,
-		videoLikes, setVideoLikes,
+		videos, setVideos,
+		videoComments, setVideoComments,
 		karaokes, setKaraokes,
 		karaokeComments, setKaraokeComments,
 		// Social Input

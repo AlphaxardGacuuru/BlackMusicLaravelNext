@@ -35,7 +35,7 @@ class UserFactory extends Factory
     }
 
     /**
-     * Add Black Music Account
+     * Add Black Music Account First
      *
      * @return static
      */

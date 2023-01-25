@@ -9,15 +9,16 @@ const AudioMedia = (props) => {
 		<div className="d-flex p-2">
 			<div className="audio-thumbnail">
 				<Link
-					href={`/audio-show/${props.audio.id}`}
-					onClick={() => {
+					href={`/audio/${props.audio.id}`}>
+					<a onClick={() => {
 						props.setShow(props.audio.id)
 						props.setLocalStorage("show", {
 							"id": props.audio.id,
 							"time": 0
 						})
 					}} passHref>
-					<Img src={props.audio.thumbnail} width="50px" height="50px" />
+						<Img src={props.audio.thumbnail} width="50px" height="50px" />
+					</a>
 				</Link>
 			</div>
 			<div className="p-2 me-auto">

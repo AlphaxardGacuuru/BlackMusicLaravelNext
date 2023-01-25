@@ -101,7 +101,9 @@ Route::apiResources([
 // });
 
 Route::get('video-charts', [VideoController::class, 'charts']);
+Route::get('videos/download', [VideoController::class, 'download']);
 Route::get('audio-charts', [AudioController::class, 'charts']);
+Route::get('audios/download', [AudioController::class, 'download']);
 
 // Filepond Controller
 Route::prefix('filepond')->group(function () {

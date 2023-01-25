@@ -5,9 +5,8 @@ import Link from 'next/link'
 import Carousel from '@/components/core/Carousel'
 import LoadingAudioMedia from '@/components/Audio/LoadingAudioMedia'
 import LoadingAvatarMedia from '@/components/User/LoadingAvatarMedia'
-
-const AudioMedia = React.lazy(() => import('@/components/Audio/AudioMedia'))
-const AvatarMedia = React.lazy(() => import('@/components/User/AvatarMedia'))
+import AudioMedia from '@/components/Audio/AudioMedia'
+import AvatarMedia from '@/components/User/AvatarMedia'
 
 const AudioCharts = (props) => {
 
@@ -232,9 +231,7 @@ const AudioCharts = (props) => {
 									{props.users
 										.filter((user) => user.username == artistArray.key)
 										.map((user, key) => (
-											<Suspense key={key} fallback={<LoadingAvatarMedia />}>
 												<AvatarMedia key={key} user={user} />
-											</Suspense>
 										))}
 								</span>
 							))}
@@ -265,12 +262,10 @@ const AudioCharts = (props) => {
 									.filter((audio) => audio.id == audioArray.key &&
 										audio.username != "@blackmusic")
 									.map((audio, key) => (
-										<Suspense key={audio.id} fallback={<LoadingAudioMedia />}>
-											<AudioMedia
-												{...props}
-												audio={audio}
-												onBuyAudios={onBuyAudios} />
-										</Suspense>
+										<AudioMedia
+											{...props}
+											audio={audio}
+											onBuyAudios={onBuyAudios} />
 									))}
 							</div>
 						))}

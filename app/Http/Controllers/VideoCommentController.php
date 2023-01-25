@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\VideoCommentService;
 use App\Models\VideoComment;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,9 @@ class VideoCommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(VideoCommentService $videoCommentService)
     {
-        //
+        return $videoCommentService->index();
     }
 
     /**
@@ -23,9 +24,13 @@ class VideoCommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, VideoCommentService $videoCommentService)
     {
-        //
+        $this->validate($request, [
+            'text' => 'required',
+        ]);
+
+        return $videoCommentService->store($request);
     }
 
     /**
@@ -34,9 +39,9 @@ class VideoCommentController extends Controller
      * @param  \App\Models\VideoComment  $videoComment
      * @return \Illuminate\Http\Response
      */
-    public function show(VideoComment $videoComment)
+    public function show($id, VideoCommentService $videoCommentService)
     {
-        //
+        return $videoCommentService->show($id);
     }
 
     /**
@@ -57,8 +62,8 @@ class VideoCommentController extends Controller
      * @param  \App\Models\VideoComment  $videoComment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(VideoComment $videoComment)
+    public function destroy($id, VideoCommentService $videoCommentService)
     {
-        //
+        return $videoCommentService->destroy($id);
     }
 }

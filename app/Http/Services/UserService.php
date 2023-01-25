@@ -40,9 +40,9 @@ class UserService
                 "withdrawal" => $user->withdrawal,
                 "posts" => $user->posts->count(),
                 "following" => $user->follows->count() - 1,
-                "fans" => $user->fans($user),
-                "hasFollowed" => $user->hasFollowed($user, $authUsername),
-                "hasBought1" => $user->hasBought1($user, $authUsername),
+                "fans" => $user->fans(),
+                "hasFollowed" => $user->hasFollowed($authUsername),
+                "hasBought1" => $user->hasBought1($authUsername),
                 "decos" => $user->decos->count(),
                 "created_at" => $user->created_at,
             ]);

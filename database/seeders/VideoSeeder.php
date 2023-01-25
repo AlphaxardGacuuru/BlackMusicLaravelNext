@@ -26,6 +26,10 @@ class VideoSeeder extends Seeder
                 "thumbnail" => "video-thumbnails/1.jpg",
                 "thumbnail" => "video-thumbnails/2.jpg",
             ]))
+            ->state(new Sequence([
+                "video" => "videos/1.mp4",
+                "video" => "videos/2.mp4",
+            ]))
             ->hasLikes(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username])
             ->hasComments(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username]);
 
@@ -37,6 +41,10 @@ class VideoSeeder extends Seeder
             ->state(new Sequence([
                 "thumbnail" => "video-thumbnails/3.jpg",
                 "thumbnail" => "video-thumbnails/4.jpg",
+            ]))
+            ->state(new Sequence([
+                "video" => "videos/3.mp4",
+                "video" => "videos/4.mp4",
             ]))
             ->hasLikes(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username])
             ->hasComments(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username]);

@@ -10,7 +10,7 @@ const KaraokeMedia = (props) => {
 			className="m-1 karaoke-media"
 			onClick={() => props.setShow(0)}>
 			<div>
-				<Link href={`karaokes/${props.karaoke.id}`}>
+				<Link href={`/karaoke/${props.karaoke.id}`}>
 					<a>
 						<video
 							src={props.karaoke.karaoke}

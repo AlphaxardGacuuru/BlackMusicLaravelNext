@@ -7,9 +7,8 @@ import onCartVideos from '@/functions/onCartVideos'
 import Carousel from '@/components/core/Carousel'
 import LoadingAvatarMedia from '@/components/User/LoadingAvatarMedia'
 import LoadingVideoMedia from '@/components/Video/LoadingVideoMedia'
-
-const VideoMedia = React.lazy(() => import('@/components/Video/VideoMedia'))
-const AvatarMedia = React.lazy(() => import('@/components/User/AvatarMedia'))
+import VideoMedia from '@/components/Video/VideoMedia'
+import AvatarMedia from '@/components/User/AvatarMedia'
 
 const VideoCharts = (props) => {
 
@@ -233,9 +232,7 @@ const VideoCharts = (props) => {
 									{props.users
 										.filter((user) => user.username == artistArray.key)
 										.map((user, key) => (
-											<Suspense key={key} fallback={<LoadingAvatarMedia />}>
 												<AvatarMedia key={key} user={user} />
-											</Suspense>
 										))}
 								</span>
 							))}
@@ -266,13 +263,11 @@ const VideoCharts = (props) => {
 												video.username != "@blackmusic")
 											.map((video, key) => (
 												<center key={video.id} className="mx-1 mb-2">
-													<Suspense fallback={<LoadingVideoMedia />}>
 														<VideoMedia
 															{...props}
 															video={video}
 															onBuyVideos={onBuyVideos}
 															onClick={() => props.setShow(0)} />
-													</Suspense>
 												</center>
 											))}
 									</span>

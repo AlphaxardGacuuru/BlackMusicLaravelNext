@@ -17,7 +17,7 @@ class AudioAlbumFactory extends Factory
     public function definition()
     {
         return [
-            'name' => fake()->catchPhrase(),
+            'name' => fake()->word(),
             'cover' => 'audio-album-covers/musical-note.png',
             'released' => fake()->dateTime(),
         ];

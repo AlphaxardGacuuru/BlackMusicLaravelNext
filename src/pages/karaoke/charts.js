@@ -6,8 +6,6 @@ import Carousel from '@/components/core/Carousel'
 import LoadingKaraokeMedia from '@/components/Karaoke/LoadingKaraokeMedia'
 import KaraokeMedia from '@/components/Karaoke/KaraokeMedia'
 
-// const KaraokeMedia = React.lazy(() => import('@/components/Karaoke/KaraokeMedia'))
-
 import PlusSVG from '@/svgs/PlusSVG'
 
 const KaraokeCharts = (props) => {

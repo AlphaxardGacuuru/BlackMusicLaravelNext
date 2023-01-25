@@ -6,10 +6,6 @@ import Ticker from 'react-ticker'
 import Img from '@/components/core/Img'
 import KaraokeCommentSection from './KaraokeCommentSection'
 
-import onKaraokeLike from '@/functions/onKaraokeLike'
-import onKaraokeSave from '@/functions/onKaraokeSave'
-import onShare from '@/functions/onShare'
-
 import CloseSVG from '@/svgs/CloseSVG'
 import CommentSVG from '@/svgs/CommentSVG'
 import DecoSVG from '@/svgs/DecoSVG'
@@ -42,6 +38,54 @@ const Karaoke = (props) => {
 
 	// Id for rotating record
 	const spiningRecord = useRef()
+
+	const onKaraokeLike = () => {
+		// Show like
+		const newKaraokes = props.karaokes
+			.filter((item) => {
+				// Get the exact karaoke and change like status
+				if (item.id == props.karaoke.id) {
+					item.hasLiked = !item.hasLiked
+				}
+				return true
+			})
+
+		// Set new karaokes
+		props.setKaraokes(newKaraokes)
+
+		// Add like to database
+		axios.post(`/api/karaoke-likes`, {
+			karaoke: props.karaoke.id
+		}).then((res) => {
+			props.setMessages([res.data])
+			// Update karaoke
+			props.get("karaokes", props.setKaraokes)
+		}).catch((err) => props.getErrors(err))
+	}
+
+	const onKaraokeSave = () => {
+		// Show Save
+		const newKaraokes = props.karaokes
+			.filter((item) => {
+				// Get the exact karaoke and change save status
+				if (item.id == props.karaoke.id) {
+					item.hasSaved = !item.hasSaved
+				}
+				return true
+			})
+		// Set new karaokes
+		props.setKaraokes(newKaraokes)
+
+		// Save Karaoke
+		axios.post('api/saved-karaokes', {
+			id: props.karaoke.id
+		}).then((res) => {
+			props.setMessages([res.data])
+			// Update karaoke
+			props.get("karaokes", props.setKaraokes)
+		}).catch((err) => props.getErrors(err))
+	}
+
 
 	// Web Share API for share button
 	// Share must be triggered by "user activation"

@@ -71,7 +71,8 @@ class PostService
                 "hasEdited" => $post->hasEdited($post),
                 "likes" => $post->likes->count(),
                 "comments" => $post->comments->count(),
-                "created_at" => $post->created_at,
+				"updatedAt" => $post->updated_at,
+                "createdAt" => $post->created_at,
             ]);
         }
 

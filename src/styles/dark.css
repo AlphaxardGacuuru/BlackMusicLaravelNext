@@ -1399,6 +1399,7 @@ div.hidden-scroll span {
 	margin: 0px 0px 0px 0px;
 }
 
+/* Audio */
 .audio-thumbnail {
 	width: 50px;
 	height: 50px;
@@ -1412,6 +1413,32 @@ div.hidden-scroll span {
 .audio-thumbnail img {
 	margin: 0px 0px 0px 0px;
 }
+
+.audio-text {
+	cursor: pointer;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+	.audio-text {
+		max-width: 7em;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: clip;
+		cursor: pointer;
+	}
+}
+
+@media only screen and (max-width: 767px) {
+	.audio-text {
+		max-width: 7em;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: clip;
+		cursor: pointer;
+	}
+}
+
+/* Audio End */
 
 .karaoke-thumbnail {
 	width: 90px;

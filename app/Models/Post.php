@@ -90,9 +90,9 @@ class Post extends Model
     }
 
     // Check if poll is within 24Hrs
-    public function isWithin24Hrs($post)
+    public function isWithin24Hrs()
     {
-        return $post->created_at > Carbon::now()->subDays(1)->toDateTimeString();
+        return $this->created_at > Carbon::now()->subDays(1)->format("d M Y");
     }
 
     // Check if user has liked post

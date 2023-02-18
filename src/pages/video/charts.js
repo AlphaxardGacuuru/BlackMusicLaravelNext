@@ -214,7 +214,7 @@ const VideoCharts = (props) => {
 			<div className="row">
 				<div className="col-sm-12">
 					{/* <!-- ****** Artists Area Start ****** - */}
-					<h5>Artists</h5>
+					<h2>Artists</h2>
 					<div className="hidden-scroll" onScroll={handleScroll}>
 						{/* Loading animation */}
 						{dummyArray
@@ -232,7 +232,7 @@ const VideoCharts = (props) => {
 									{props.users
 										.filter((user) => user.username == artistArray.key)
 										.map((user, key) => (
-												<AvatarMedia key={key} user={user} />
+											<AvatarMedia key={key} user={user} />
 										))}
 								</span>
 							))}
@@ -241,39 +241,37 @@ const VideoCharts = (props) => {
 					{/* <!-- ****** Artists Area End ****** - */}
 
 					{/* <!-- ****** Songs Area ****** - */}
-					<h5>Songs</h5>
-					<center className="">
-						<div className="d-flex flex-wrap justify-content-center" onScroll={handleScroll}>
-							{/* Loading Video items */}
-							{dummyArray
-								.filter(() => props.videos.length < 1)
-								.map((item, key) => (
-									<center className="mx-1 mb-2">
-										<LoadingVideoMedia key={key} />
-									</center>
-								))}
+					<h2>Songs</h2>
+					<br />
+					<div className="d-flex flex-wrap justify-content-center" onScroll={handleScroll}>
+						{/* Loading Video items */}
+						{dummyArray
+							.filter(() => props.videos.length < 1)
+							.map((item, key) => (
+								<center className="mx-1 mb-2">
+									<LoadingVideoMedia key={key} />
+								</center>
+							))}
 
-							{/* Real Video items */}
-							{videosArray
-								.slice(0, videoSlice)
-								.map((videoArray, key) => (
-									<span key={key} style={{ textAlign: "center" }}>
-										{props.videos
-											.filter((video) => video.id == videoArray.key &&
-												video.username != "@blackmusic")
-											.map((video, key) => (
-												<center key={video.id} className="mx-1 mb-2">
-														<VideoMedia
-															{...props}
-															video={video}
-															onBuyVideos={onBuyVideos}
-															onClick={() => props.setShow(0)} />
-												</center>
-											))}
-									</span>
-								))}
-						</div>
-					</center>
+						{/* Real Video items */}
+						{videosArray
+							.slice(0, videoSlice)
+							.map((videoArray, key) => (
+								<span key={key} style={{ textAlign: "center" }}>
+									{props.videos
+										.filter((video) => video.id == videoArray.key &&
+											video.username != "@blackmusic")
+										.map((video, key) => (
+											<center key={video.id} className="mx-1 mb-2">
+												<VideoMedia
+													{...props}
+													video={video}
+													onBuyVideos={onBuyVideos} />
+											</center>
+										))}
+								</span>
+							))}
+					</div>
 					{/* <!-- ****** Songs Area End ****** - */}
 				</div>
 			</div>

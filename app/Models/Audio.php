@@ -76,25 +76,25 @@ class Audio extends Model
      */
 
     // Check if user has liked audio
-    public function hasLiked($audio, $username)
+    public function hasLiked($username)
     {
-        return $audio->likes
+        return $this->likes
             ->where('username', $username)
             ->count() > 0 ? true : false;
     }
 
     // Check if audio in cart
-    public function inCart($audio, $username)
+    public function inCart($username)
     {
-        return $audio->cart
+        return $this->cart
             ->where('username', $username)
             ->count() > 0 ? true : false;
     }
 
     // Check if user has bought audio
-    public function hasBoughtAudio($audio, $username)
+    public function hasBoughtAudio($username)
     {
-        return $audio->bought
+        return $this->bought
             ->where('username', $username)
             ->count() > 0 ? true : false;
     }

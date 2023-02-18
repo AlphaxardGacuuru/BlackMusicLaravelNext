@@ -207,14 +207,13 @@ const Profile = (props) => {
 									</div>
 								</div>
 								{props.videos
-									.filter((video) => video.album_id == videoAlbum.id)
+									.filter((video) => video.videoAlbumId == videoAlbum.id)
 									.map((video, index) => (
 										<Suspense key={video.id} fallback={<LoadingVideoMedia />}>
 											<VideoMedia
 												{...props}
 												video={video}
-												onBuyVideos={onBuyVideos}
-												onClick={() => props.setShow(0)} />
+												onBuyVideos={onBuyVideos} />
 										</Suspense>
 									))}
 							</div>
@@ -277,7 +276,7 @@ const Profile = (props) => {
 									</div>
 								</div>
 								{props.audios
-									.filter((audio) => audio.album_id == audioAlbum.id)
+									.filter((audio) => audio.audioAlbumId == audioAlbum.id)
 									.map((audio, key) => (
 										<Suspense key={audio.id} fallback={<LoadingAudioMedia />}>
 											<AudioMedia

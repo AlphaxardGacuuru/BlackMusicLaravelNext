@@ -7,8 +7,8 @@ const LoadingKaraokeMedia = () => {
 				textAlign: "center",
 				color: "#232323",
 			}}>
-			<div className="karaoke-thumbnail gradient" style={{ width: "15vw", height: "25.6em" }}>
-				<div className="gradient" style={{ width: "100%" }}></div>
+			<div className="karaoke-thumbnail gradient" style={{ width: "100%", minHeight: "25.6em" }}>
+				<div className="gradient" style={{ width: "1080px", height: "1920px" }}></div>
 			</div>
 			<div className="d-flex">
 				<div className="p-1">

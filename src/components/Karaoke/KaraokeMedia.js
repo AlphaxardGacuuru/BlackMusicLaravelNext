@@ -1,14 +1,13 @@
 import Link from 'next/link'
 import Img from 'next/image'
-import HeartFilledSVG from '@/svgs/HeartFilledSVG'
-import HeartSVG from '@/svgs/HeartSVG'
-import CommentSVG from '@/svgs/CommentSVG'
 
 const KaraokeMedia = (props) => {
 	return (
-		<div
-			className="m-1 karaoke-media"
-			onClick={() => props.setShow(0)}>
+		<div className="m-1 karaoke-media"
+			onClick={() => {
+				props.audioStates.pauseSong()
+				props.audioStates.setShow({ id: 0, time: 0 })
+			}}>
 			<div>
 				<Link href={`/karaoke/${props.karaoke.id}`}>
 					<a>

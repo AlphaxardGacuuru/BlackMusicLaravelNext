@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\AudioLikeService;
 use App\Models\AudioLike;
 use Illuminate\Http\Request;
 
@@ -23,9 +24,9 @@ class AudioLikeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, AudioLikeService $audioLikeService)
     {
-        //
+        return $audioLikeService->store($request);
     }
 
     /**

@@ -11,6 +11,7 @@ class AudioService
     {
         // Check if user is logged in
         $auth = auth('sanctum')->user();
+
         $authUsername = $auth ? $auth->username : '@guest';
 
         // Get Audios
@@ -27,7 +28,7 @@ class AudioService
                 "username" => $audio->username,
                 "avatar" => $audio->user->avatar,
                 "ft" => $audio->ft,
-                "audio_album_id" => $audio->audio_album_id,
+                "audioAlbumId" => $audio->audio_album_id,
                 "album" => $audio->album->name,
                 "genre" => $audio->genre,
                 "thumbnail" => $audio->thumbnail,
@@ -39,7 +40,7 @@ class AudioService
                 "inCart" => $audio->inCart($audio, $authUsername),
                 "hasBoughtAudio" => $audio->hasBoughtAudio($audio, $authUsername),
                 "downloads" => $audio->bought->count(),
-                "created_at" => $audio->created_at,
+                "createdAt" => $audio->created_at,
             ]);
         }
 
@@ -54,7 +55,43 @@ class AudioService
      */
     public function show($id)
     {
-        return Audio::find($id);
+        // Check if user is logged in
+        $auth = auth('sanctum')->user();
+
+        $authUsername = $auth ? $auth->username : '@guest';
+
+        // Get Audio
+        $getAudio = Audio::whereId($id)->get()[0];
+
+        $audio = [];
+
+        array_push($audio, [
+            "id" => $getAudio->id,
+            "audio" => $getAudio->audio,
+            "name" => $getAudio->name,
+			"artistName" => $getAudio->user->name,
+            "username" => $getAudio->username,
+			"avatar" => $getAudio->user->avatar,
+			"artistDecos" => $getAudio->user->decos->count(),
+            "ft" => $getAudio->ft,
+            "audioAlbumId" => $getAudio->audio_album_id,
+            "album" => $getAudio->album->name,
+            "genre" => $getAudio->genre,
+            "thumbnail" => $getAudio->thumbnail,
+            "description" => $getAudio->description,
+            "released" => $getAudio->released,
+            "hasLiked" => $getAudio->hasLiked($authUsername),
+            "likes" => $getAudio->likes->count(),
+            "comments" => $getAudio->comments->count(),
+            "inCart" => $getAudio->inCart($authUsername),
+            "hasBoughtAudio" => $getAudio->hasBoughtAudio($authUsername),
+			"hasBought1" => $getAudio->user->hasBought1($authUsername),
+			"hasFollowed" => $getAudio->user->hasFollowed($authUsername),
+            "downloads" => $getAudio->bought->count(),
+            "createdAt" => $getAudio->created_at,
+        ]);
+
+        return $audio;
     }
 
     public function store($request)

@@ -176,7 +176,7 @@ const Videos = (props) => {
 									<div className="p-2">
 										<small>Video Album</small>
 										<h1>{videoAlbum.name}</h1>
-										<h6>{videoAlbum.created_at}</h6>
+										<h6>{videoAlbum.createdAt}</h6>
 									</div>
 								</div>
 								<br />
@@ -198,7 +198,7 @@ const Videos = (props) => {
 											</tr>
 										</tbody>
 										{props.videos
-											.filter((video) => video.video_album_id == videoAlbum.id)
+											.filter((video) => video.videoAlbumId == videoAlbum.id)
 											.map((albumItem, key) => (
 												<tbody key={key}>
 													<tr>
@@ -222,8 +222,8 @@ const Videos = (props) => {
 															KES <span className="text-success">{albumItem.downloads * 10}</span>
 														</td>
 														<td>{albumItem.likes}</td>
-														<td>{videoAlbum.released}</td>
-														<td>{albumItem.created_at}</td>
+														<td>{albumItem.released}</td>
+														<td>{albumItem.createdAt}</td>
 														<td>
 															<Link href={`/video/edit/${albumItem.id}`}>
 																<button className='mysonar-btn white-btn'>edit</button>

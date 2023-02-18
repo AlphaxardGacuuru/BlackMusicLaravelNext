@@ -247,8 +247,7 @@ export default function Home(props) {
 								<Suspense key={key} fallback={<LoadingVideoMedia />}>
 									<VideoMedia
 										{...props}
-										video={video}
-										onClick={() => props.setShow(0)} />
+										video={video} />
 								</Suspense>
 							))}
 					</div>

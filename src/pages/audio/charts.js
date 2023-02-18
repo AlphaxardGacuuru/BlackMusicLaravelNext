@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
@@ -213,7 +213,7 @@ const AudioCharts = (props) => {
 			<div className="row">
 				<div className="col-sm-12">
 					{/* <!-- ****** Artists Area Start ****** - */}
-					<h5>Artists</h5>
+					<h2>Artists</h2>
 					<div className="hidden-scroll" onScroll={handleScroll}>
 						{/* Loading animation */}
 						{dummyArray
@@ -247,11 +247,11 @@ const AudioCharts = (props) => {
 			<div className="row">
 				<div className="col-sm-1"></div>
 				<div className="col-sm-10">
-					<h5 className="p-2">Songs</h5>
+					<h2 className="p-2">Songs</h2>
 					{/* Loading Audio items */}
 					{dummyArray
 						.filter(() => props.videos.length < 1)
-						.map((item, key) => (<LoadingAudioMedia key={key} />))}
+						.map((item, key) => <LoadingAudioMedia key={key} />)}
 
 					{/* Audio Items */}
 					{audiosArray
@@ -264,6 +264,7 @@ const AudioCharts = (props) => {
 									.map((audio, key) => (
 										<AudioMedia
 											{...props}
+											key={key}
 											audio={audio}
 											onBuyAudios={onBuyAudios} />
 									))}

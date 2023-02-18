@@ -42,6 +42,9 @@ const VideoEdit = (props) => {
 	// Get Audio Album info
 	const editVideo = props.videos.find((video) => video.id == id)
 
+	// List of Genres
+	const genres = ["All", "Afro", "Benga", "Blues", "Boomba", "Country", "Cultural", "EDM", "Genge", "Gospel", "Hiphop", "Jazz", "Music of Kenya", "Pop", "R&B", "Rock", "Sesube", "Taarab"]
+
 	// Declare states
 	const [formData, setFormData] = useState()
 	const [name, setName] = useState("")
@@ -183,23 +186,14 @@ const VideoEdit = (props) => {
 											className='form-control'
 											placeholder='Select video genre'
 											onChange={(e) => { setGenre(e.target.value) }}>
-											<option value="Afro" className="bg-dark text-light">Afro</option>
-											<option value="Benga" className="bg-dark text-light">Benga</option>
-											<option value="Blues" className="bg-dark text-light">Blues</option>
-											<option value="Boomba" className="bg-dark text-light">Boomba</option>
-											<option value="Country" className="bg-dark text-light">Country</option>
-											<option value="Cultural" className="bg-dark text-light">Cultural</option>
-											<option value="EDM" className="bg-dark text-light">EDM</option>
-											<option value="Genge" className="bg-dark text-light">Genge</option>
-											<option value="Gospel" className="bg-dark text-light">Gospel</option>
-											<option value="Hiphop" className="bg-dark text-light">Hiphop</option>
-											<option value="Jazz" className="bg-dark text-light">Jazz</option>
-											<option value="Music of Kenya" className="bg-dark text-light">Music of Kenya</option>
-											<option value="Pop" className="bg-dark text-light">Pop</option>
-											<option value="R&B" className="bg-dark text-light">R&B</option>
-											<option value="Rock" className="bg-dark text-light">Rock</option>
-											<option value="Sesube" className="bg-dark text-light">Sesube</option>
-											<option value="Taarab" className="bg-dark text-light">Taarab</option>
+											{genres.map((genre, key) => (
+												<option key={key}
+													value={genre}
+													className="bg-dark text-light"
+													selected={genre == editVideo.genre ? true : false}>
+													{genre}
+												</option>
+											))}
 										</select>
 										<br />
 										<br />

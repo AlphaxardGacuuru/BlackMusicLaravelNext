@@ -116,7 +116,7 @@ const Audios = (props) => {
 									<div className="p-2">
 										<small>Audio Album</small>
 										<h1>{audioAlbum.name}</h1>
-										<h6>{audioAlbum.created_at}</h6>
+										<h6>{audioAlbum.createdAt}</h6>
 									</div>
 								</div>
 								<br />
@@ -138,7 +138,7 @@ const Audios = (props) => {
 											</tr>
 										</tbody>
 										{props.audios
-											.filter((audio) => audio.audio_album_id == audioAlbum.id)
+											.filter((audio) => audio.audioAlbumId == audioAlbum.id)
 											.map((albumItem, key) => (
 												<tbody key={key} className="table-group-divider">
 													<tr>
@@ -170,7 +170,7 @@ const Audios = (props) => {
 														</td>
 														<td>{audioAlbum.likes}</td>
 														<td>{audioAlbum.released}</td>
-														<td>{audioAlbum.created_at}</td>
+														<td>{audioAlbum.createdAt}</td>
 														<td>
 															<Link href={`/audio/edit/${albumItem.id}`}>
 																<button className='mysonar-btn white-btn'>edit</button>

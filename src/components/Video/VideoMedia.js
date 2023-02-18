@@ -18,7 +18,12 @@ const VideoMedia = (props) => {
 	}
 
 	return (
-		<span className="mx-2 pt-0 px-0 pb-2" style={{ display: "inline-block" }}>
+		<span className="mx-2 pt-0 px-0 pb-2"
+			style={{ display: "inline-block" }}
+			onClick={() => {
+				props.audioStates.pauseSong()
+				props.audioStates.setShow({ id: 0, time: 0 })
+			}}>
 			<div className="video-media">
 				<div className="video-thumbnail">
 					<Link href={`/video/${props.video.id}`} passHref>

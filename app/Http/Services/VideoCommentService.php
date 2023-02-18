@@ -26,14 +26,14 @@ class VideoCommentService
 
             array_push($videoComments, [
                 "id" => $videoComment->id,
-                "video_id" => $videoComment->video_id,
+                "videoId" => $videoComment->video_id,
                 "text" => $videoComment->text,
                 "username" => $videoComment->username,
                 "name" => $videoComment->user->name,
                 "avatar" => $videoComment->user->avatar,
                 "hasLiked" => $videoComment->hasLiked($authUsername),
                 "likes" => $videoComment->likes->count(),
-                "created_at" => $videoComment->created_at,
+                "createdAt" => $videoComment->created_at,
             ]);
         }
 
@@ -63,14 +63,15 @@ class VideoCommentService
 
             array_push($videoComments, [
                 "id" => $videoComment->id,
-                "video_id" => $videoComment->video_id,
+                "videoId" => $videoComment->video_id,
                 "text" => $videoComment->text,
                 "username" => $videoComment->username,
                 "name" => $videoComment->user->name,
                 "avatar" => $videoComment->user->avatar,
+				"decos" => $videoComment->user->decos->count(),
                 "hasLiked" => $videoComment->hasLiked($authUsername),
                 "likes" => $videoComment->likes->count(),
-                "created_at" => $videoComment->created_at,
+                "createdAt" => $videoComment->created_at,
             ]);
         }
 

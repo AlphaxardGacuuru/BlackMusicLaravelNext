@@ -9,6 +9,8 @@ import Messages from '@/components/core/Messages'
 
 import React, { useState, useEffect, useRef } from 'react'
 import axios from '@/lib/axios';
+import AudioPlayer from '@/components/Audio/AudioPlayer';
+import onAudioPlayer from '@/functions/onAudioPlayer';
 
 const App = ({ Component, pageProps }) => {
 
@@ -62,21 +64,15 @@ const App = ({ Component, pageProps }) => {
 	const [audioAlbums, setAudioAlbums] = useState(getLocalStorage("audioAlbums"))
 	const [audios, setAudios] = useState(getLocalStorage("audios"))
 	const [audioComments, setAudioComments] = useState([])
-
 	const [boughtAudios, setBoughtAudios] = useState(getLocalStorage("boughtAudios"))
 	const [boughtVideos, setBoughtVideos] = useState(getLocalStorage("boughtVideos"))
-
 	const [cartAudios, setCartAudios] = useState(getLocalStorage("cartAudios"))
 	const [cartVideos, setCartVideos] = useState(getLocalStorage("cartVideos"))
-
 	const [karaokes, setKaraokes] = useState([])
 	const [karaokeComments, setKaraokeComments] = useState([])
-
 	const [posts, setPosts] = useState(getLocalStorage("posts"))
-	const [postComments, setPostComments] = useState()
-
+	const [postComments, setPostComments] = useState([])
 	const [users, setUsers] = useState(getLocalStorage("users"))
-
 	const [videoAlbums, setVideoAlbums] = useState(getLocalStorage("videoAlbums"))
 	const [videos, setVideos] = useState(getLocalStorage("videos"))
 	const [videoComments, setVideoComments] = useState([])
@@ -125,24 +121,21 @@ const App = ({ Component, pageProps }) => {
 		get("auth", setAuth, "auth")
 		get("audios", setAudios, "audios")
 		get("audio-albums", setAudioAlbums, "audioAlbums")
-
 		// get("bought-audios", setBoughtAudios, "boughtAudios")
 		// get("bought-videos", setBoughtAudios, "boughtVideos")
-
 		// get("cart-audios", setCartAudios, "cartAudios")
 		get("cart-videos", setCartVideos, "cartVideos")
-
 		get("karaokes", setKaraokes, "karaokes")
-
 		get("posts", setPosts, "posts")
 		get("users", setUsers, "users")
-
 		get("videos", setVideos, "videos")
 		get("video-albums", setVideoAlbums, "videoAlbums")
 
 	}, [])
 
 	console.log("rendered")
+
+	const audioStates = onAudioPlayer(getLocalStorage, setErrors, auth, audios, boughtAudios, users)
 
 	// Social Input states
 	const [id, setId] = useState()
@@ -237,6 +230,8 @@ const App = ({ Component, pageProps }) => {
 		videoComments, setVideoComments,
 		karaokes, setKaraokes,
 		karaokeComments, setKaraokeComments,
+		// Audio Player
+		audioStates,
 		// Social Input
 		id, setId,
 		to, setTo,
@@ -267,8 +262,9 @@ const App = ({ Component, pageProps }) => {
 			<LoginPopUp {...GLOBAL_STATE} />
 			<TopNav {...GLOBAL_STATE} />
 			<Component {...pageProps} {...GLOBAL_STATE} />
-			{/* <BottomNav {...GLOBAL_STATE} /> */}
+			<BottomNav {...GLOBAL_STATE} />
 			<Messages {...GLOBAL_STATE} />
+			<AudioPlayer {...GLOBAL_STATE} />
 		</div>
 	)
 }

@@ -122,6 +122,7 @@ const KaraokeCharts = (props) => {
 						{props.karaokes
 							.map((karaoke, key) => (
 								<KaraokeMedia
+									{...props}
 									key={key}
 									setShow={props.setShow}
 									karaoke={karaoke} />

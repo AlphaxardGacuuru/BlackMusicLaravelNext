@@ -86,7 +86,7 @@ const PostMedia = (props) => {
 						<DecoSVG />
 						<small className="ms-1 fw-lighter align-bottom" style={{ color: "inherit" }}>{props.post.decos}</small>
 					</span>
-					<small><b><i className="float-end text-secondary me-1">{props.post.created_at}</i></b></small>
+					<small><b><i className="float-end text-secondary me-1">{props.post.createdAt}</i></b></small>
 				</h6>
 				<Link href={"post/" + props.post.id}>
 					<a>

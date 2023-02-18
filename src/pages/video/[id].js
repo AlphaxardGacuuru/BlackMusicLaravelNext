@@ -18,7 +18,6 @@ import CheckSVG from '@/svgs/CheckSVG'
 import HeartFilledSVG from '@/svgs/HeartFilledSVG'
 import HeartSVG from '@/svgs/HeartSVG'
 import DecoSVG from '@/svgs/DecoSVG'
-import MusiciansMedia from '@/components/User/MusicianMedia'
 
 const VideoShow = (props) => {
 
@@ -49,7 +48,9 @@ const VideoShow = (props) => {
 			props.setShowImagePicker(false)
 			props.setShowPollPicker(false)
 			props.setUrlTo("video-comments")
+			props.setUrlToTwo(`video-comments/${id}`)
 			props.setStateToUpdate(() => props.setVideoComments)
+			props.setStateToUpdateTwo(() => props.setVideoComments)
 			props.setEditing(false)
 		}, 1000)
 	}, [id])
@@ -65,22 +66,16 @@ const VideoShow = (props) => {
 			video: id
 		}).then((res) => {
 			props.setMessages([res.data])
+			// Fetch Video
+			axios.get(`/api/videos/${id}`)
+				.then((res) => setVideo(res.data[0]))
 		}).catch((err) => props.getErrors(err))
 	}
 
 	// Function for following users
 	const onFollow = (username) => {
 		// Change follow button
-		const newUsers = props.users
-			.filter((item) => {
-				// Get the exact user and change follow button
-				if (item.username == username) {
-					item.hasFollowed = !item.hasFollowed
-				}
-				return true
-			})
-		// Set new Users
-		props.setUsers(newUsers)
+		video.hasFollowed = !video.hasFollowed
 
 		// Add follow
 		axios.post(`/api/follows`, { musician: username })
@@ -197,6 +192,7 @@ const VideoShow = (props) => {
 								</video>
 							</div> : ""}
 
+					{/* Video Info Area */}
 					<div className="d-flex justify-content-between">
 						{/* Video likes */}
 						<div className="p-2 me-2">
@@ -282,7 +278,7 @@ const VideoShow = (props) => {
 							<h6>{video.createdAt}</h6>
 						</div>
 					</div>
-					{/* Video Area End */}
+					{/* Video Info Area End */}
 
 					{/* <!-- Read more section --> */}
 

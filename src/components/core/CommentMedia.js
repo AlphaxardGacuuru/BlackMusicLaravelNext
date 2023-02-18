@@ -42,7 +42,7 @@ const CommentMedia = (props) => {
 						</small>
 					</span>
 					<small>
-						<b><i className="float-end text-secondary me-1">{props.comment.created_at}</i></b>
+						<b><i className="float-end text-secondary me-1">{props.comment.createdAt}</i></b>
 					</small>
 				</h6>
 				<p className="mb-0 text-white">{props.comment.text}</p>

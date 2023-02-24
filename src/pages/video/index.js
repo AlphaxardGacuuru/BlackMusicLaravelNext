@@ -175,7 +175,7 @@ const Videos = (props) => {
 									</div>
 									<div className="p-2">
 										<small>Video Album</small>
-										<h1>{videoAlbum.name}</h1>
+										<h1 className="my-0">{videoAlbum.name}</h1>
 										<h6>{videoAlbum.createdAt}</h6>
 									</div>
 								</div>

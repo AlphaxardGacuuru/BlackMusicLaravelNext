@@ -39,10 +39,7 @@ const TopNavLinks = (props) => {
 						className="position-relative">
 						<CartSVG />
 						<span className="position-absolute start-200 translate-middle badge rounded-circle bg-danger fw-lighter py-1"
-							style={{
-								fontSize: "0.6em",
-								top: "0.2em",
-							}}>
+							style={{ fontSize: "0.6em", top: "0.2em" }}>
 							{props.cartItems > 0 && props.cartItems}
 						</span>
 					</a>

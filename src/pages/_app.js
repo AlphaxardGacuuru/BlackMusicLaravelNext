@@ -137,6 +137,15 @@ const App = ({ Component, pageProps }) => {
 
 	const audioStates = onAudioPlayer(getLocalStorage, setErrors, auth, audios, boughtAudios, users)
 
+	// Search State
+	const [search, setSearch] = useState("!@#$%^&")
+	const searchInput = useRef(null)
+
+	// Function to focus on search input
+	const onSearchIconClick = () => {
+		window.location.href.match("/search") && searchInput.current.focus()
+	}
+
 	// Social Input states
 	const [id, setId] = useState()
 	const [to, setTo] = useState()
@@ -230,6 +239,10 @@ const App = ({ Component, pageProps }) => {
 		videoComments, setVideoComments,
 		karaokes, setKaraokes,
 		karaokeComments, setKaraokeComments,
+		// Search 
+		onSearchIconClick,
+		searchInput,
+		search, setSearch,
 		// Audio Player
 		audioStates,
 		// Social Input

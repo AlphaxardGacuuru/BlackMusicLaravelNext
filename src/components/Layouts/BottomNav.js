@@ -247,11 +247,8 @@ const Bottomnav = (props) => {
 									}}
 									className="nav-link">
 									<CartSVG />
-									<span className="position-absolute start-200 translate-middle badge rounded-circle bg-danger fw-lighter py-1"
-										style={{
-											fontSize: "0.6em",
-											top: "0.6em",
-										}}>
+									<span className="position-absolute start-200 translate-middle badge rounded-circle bg-danger w-lighter py-1"
+										style={{ fontSize: "0.6em", top: "0.6em" }}>
 										{cartItems > 0 && cartItems}
 									</span>
 								</span>

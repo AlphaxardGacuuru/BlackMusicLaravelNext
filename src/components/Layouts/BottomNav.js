@@ -44,7 +44,7 @@ const Bottomnav = (props) => {
 		inputDisplay = "" : inputDisplay = "none"
 
 	// Check if audio is in queue and location is in audio show
-	if (props.audioStates.show.id != 0) {
+	if (props.audioStates.show.id != 0 && props.audioStates.show != "") {
 		hidePlayer = router.pathname == "/audio/[id]"
 	}
 
@@ -103,7 +103,7 @@ const Bottomnav = (props) => {
 							<span
 								onClick={() => {
 									props.audioStates.pauseSong()
-									props.setLocalStorage("show", "")
+									props.setLocalStorage("show", { id: 0, time: 0 })
 									props.audioStates.setShow({ id: 0, time: 0 })
 								}}>
 								<CloseSVG />
@@ -247,17 +247,13 @@ const Bottomnav = (props) => {
 									}}
 									className="nav-link">
 									<CartSVG />
-								</span>
-								<span className="badge badge-danger rounded-circle"
-									style={{
-										fontSize: "12px",
-										fontWeight: "100",
-										position: "absolute",
-										right: "-0.3rem",
-										bottom: "1rem",
-										border: "solid #232323"
-									}}>
-									{cartItems > 0 && cartItems}
+									<span className="position-absolute start-200 translate-middle badge rounded-circle bg-danger fw-lighter py-1"
+										style={{
+											fontSize: "0.6em",
+											top: "0.6em",
+										}}>
+										{cartItems > 0 && cartItems}
+									</span>
 								</span>
 							</a>
 						</Link>

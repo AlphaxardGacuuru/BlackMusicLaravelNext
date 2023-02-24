@@ -22,31 +22,6 @@ const onAudioPlayer = (getLocalStorage, setErrors, auth, audios, boughtAudios, u
 	var playingAudio = []
 	var playingArtist = []
 
-	// Listen for show change and autoplay song
-	useEffect(() => {
-		// Check if show is 0
-		if (show.id != 0) {
-			var playPromise = audioEl.current.play();
-
-			if (playPromise != undefined) {
-				playPromise.then(() => {
-					// Automatic playback started!
-					// Show playing UI.
-					setPlayBtn(true)
-					setAudioLoader(false)
-					audioEl.current.currentTime = show.time
-					// Song ends
-					audioEl.current.addEventListener('ended', nextSong);
-				}).catch(() => {
-					// Auto-play was prevented
-					// Show paused UI.
-					setPlayBtn(false)
-					setAudioLoader(true)
-				});
-			}
-		}
-	}, [show.id])
-
 	// Get audio to play
 	var getAudio = audios.find((audio) => audio.id == show.id)
 
@@ -61,8 +36,32 @@ const onAudioPlayer = (getLocalStorage, setErrors, auth, audios, boughtAudios, u
 			var playingArtist = getArtist
 		}
 	}
-	// console.log(show)
-	// console.log(getAudio)
+
+	// Listen for show change and autoplay song
+	useEffect(() => {
+		// Check if show is 0
+		if (show.id != 0 && show.id != "") {
+			var playPromise = audioEl.current.play();
+
+			if (playPromise != undefined) {
+				playPromise.then(() => {
+					// Automatic playback started!
+					// Show playing UI.
+					setPlayBtn(true)
+					setAudioLoader(false)
+					audioEl.current.currentTime = show.time
+					// Song ends
+					audioEl.current.addEventListener('ended', nextSong);
+					console.log("play")
+				}).catch((e) => {
+					// Auto-play was prevented
+					// Show paused UI.
+					setPlayBtn(false)
+					setAudioLoader(true)
+				});
+			}
+		}
+	}, [show.id, getAudio])
 
 	// Song titles
 	var songs = [];

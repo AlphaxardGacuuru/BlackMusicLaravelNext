@@ -35,21 +35,18 @@ const TopNavLinks = (props) => {
 						style={{
 							textAlign: "center",
 							fontWeight: "100",
-							position: "relative",
-						}}>
+						}}
+						className="position-relative">
 						<CartSVG />
+						<span className="position-absolute start-200 translate-middle badge rounded-circle bg-danger fw-lighter py-1"
+							style={{
+								fontSize: "0.6em",
+								top: "0.2em",
+							}}>
+							{props.cartItems > 0 && props.cartItems}
+						</span>
 					</a>
 				</Link>
-				<span className="badge badge-danger rounded-circle hidden"
-					style={{
-						fontWeight: "100",
-						position: "absolute",
-						right: "-0.5rem",
-						bottom: "0.5rem",
-						border: "solid #232323"
-					}}>
-					{props.cartItems > 0 && props.cartItems}
-				</span>
 			</div>
 			{/* Cart End */}
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\ChatService;
 use App\Models\Chat;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,9 @@ class ChatController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(ChatService $chartService)
     {
-        //
+        return $chartService->index();
     }
 
     /**
@@ -34,9 +35,9 @@ class ChatController extends Controller
      * @param  \App\Models\Chat  $chat
      * @return \Illuminate\Http\Response
      */
-    public function show(Chat $chat)
+    public function show($username, ChatService $chatService)
     {
-        //
+        return $chatService->show($username);
     }
 
     /**

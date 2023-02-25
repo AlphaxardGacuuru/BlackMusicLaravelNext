@@ -71,7 +71,7 @@ Route::apiResources([
     'bought-videos' => BoughtVideoController::class,
     'cart-audios' => CartAudioController::class,
     'cart-videos' => CartVideoController::class,
-    'chat' => ChatController::class,
+    'chats' => ChatController::class,
     'decos' => DecoController::class,
     'follows' => FollowController::class,
     'karaokes' => KaraokeController::class,

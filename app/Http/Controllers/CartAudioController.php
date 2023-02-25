@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\CartAudioService;
 use App\Models\CartAudio;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,9 @@ class CartAudioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(CartAudioService $cartAudioService)
     {
-        //
+        return $cartAudioService->index();
     }
 
     /**
@@ -23,9 +24,9 @@ class CartAudioController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, CartAudioService $cartAudioService)
     {
-        //
+        return $cartAudioService->store($request);
     }
 
     /**

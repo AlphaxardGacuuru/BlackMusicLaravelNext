@@ -128,12 +128,6 @@ const AudioCharts = (props) => {
 		audiosArray.reverse()
 	}
 
-	// Function for buying audio to cart
-	const onBuyAudios = (audio) => {
-		props.onCartAudios(audio)
-		setTimeout(() => router.push('/cart'), 1000)
-	}
-
 	// Function for loading more artists
 	const handleScroll = (e) => {
 		const bottom = e.target.scrollLeft >= (e.target.scrollWidth - (e.target.scrollWidth / 3));
@@ -265,8 +259,7 @@ const AudioCharts = (props) => {
 										<AudioMedia
 											{...props}
 											key={key}
-											audio={audio}
-											onBuyAudios={onBuyAudios} />
+											audio={audio} />
 									))}
 							</div>
 						))}

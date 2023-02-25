@@ -1,10 +1,21 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import onCartAudios from '@/functions/onCartAudios'
 
 import Img from 'next/image'
 import Btn from '../core/Btn'
 import CartSVG from '../../svgs/CartSVG'
 
 const AudioMedia = (props) => {
+
+	const router = useRouter()
+
+	// Buy function
+	const onBuyAudios = (audio) => {
+		onCartAudios(props, audio)
+		setTimeout(() => router.push('/cart'), 500)
+	}
+
 	return (
 		<div className="d-flex p-2">
 			<div className="audio-thumbnail">
@@ -47,7 +58,7 @@ const AudioMedia = (props) => {
 								height: '33px',
 								backgroundColor: "#232323"
 							}}
-							onClick={() => props.onCartAudios(props.audio.id)}>
+							onClick={() => onCartAudios(props, props.audio.id)}>
 							<CartSVG />
 						</button>
 					</div> :
@@ -56,7 +67,7 @@ const AudioMedia = (props) => {
 							<button
 								className="mysonar-btn white-btn"
 								style={{ minWidth: '40px', height: '33px' }}
-								onClick={() => props.onCartAudios(props.audio.id)}>
+								onClick={() => onCartAudios(props, props.audio.id)}>
 								<CartSVG />
 							</button>
 						</div>
@@ -64,7 +75,7 @@ const AudioMedia = (props) => {
 							<Btn
 								btnClass="mysonar-btn green-btn btn-2 float-right"
 								btnText="KES 10"
-								onClick={() => props.onBuyAudios(props.audio.id)} />
+								onClick={() => onBuyAudios(props.audio.id)} />
 						</div>
 					</> : ""}
 		</div>

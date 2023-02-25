@@ -20,7 +20,7 @@ const onCartVideos = (props) => {
 	const newCartVideos = props.cartVideos
 		.filter((item) => {
 			// Get the exact video
-			if (item.video_id == props.video.id) {
+			if (item.videoid == props.video.id) {
 				return false
 			} else {
 				return true

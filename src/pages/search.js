@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
 import axios from '@/lib/axios'
 
 import Img from '@/components/core/Img'
@@ -10,7 +8,6 @@ import AudioMedia from '@/components/Audio/AudioMedia'
 
 const Search = (props) => {
 
-	const router = useRouter()
 	const [searchHistory, setSearchHistory] = useState(props.getLocalStorage("searchHistory"))
 
 	// Fetch Search History
@@ -52,18 +49,6 @@ const Search = (props) => {
 				videoAlbum.name.match(props.search) &&
 				videoAlbum.username != props.auth.username
 		})
-
-	// Function for buying video to cart
-	const onBuyVideos = (video) => {
-		props.onCartVideos(video)
-		setTimeout(() => router.push('/cart'), 1000)
-	}
-
-	// Function for buying audio to cart
-	const onBuyAudios = (audio) => {
-		props.onCartAudios(audio)
-		setTimeout(() => router.push('/cart'), 1000)
-	}
 
 	// Save search
 	const onSearch = (keyword) => {
@@ -168,7 +153,6 @@ const Search = (props) => {
 								<VideoMedia
 									{...props}
 									video={video}
-									onBuyVideos={onBuyVideos}
 									onClick={() => props.setShow(0)} />
 							</div>
 						))}
@@ -187,8 +171,7 @@ const Search = (props) => {
 							<div key={key} onClick={() => onSearch(audio.name)}>
 								<AudioMedia
 									{...props}
-									audio={audio}
-									onBuyAudios={onBuyAudios} />
+									audio={audio} />
 							</div>
 						))}
 					{/* Audios End */}

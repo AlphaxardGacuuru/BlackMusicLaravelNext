@@ -68,7 +68,7 @@ class Audio extends Model
 
     public function cart()
     {
-        return $this->hasMany(CartAudio::class);
+        return $this->hasMany(CartAudio::class, 'audio_id');
     }
 
     /*

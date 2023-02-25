@@ -27,7 +27,7 @@ class SavedKaraokeService
 
         foreach ($getSavedKarokes as $savedKaraoke) {
 
-            array_push($karaokes, [
+            array_push($savedKaraokes, [
                 "id" => $savedKaraoke->karaoke->id,
                 "karaoke" => $savedKaraoke->karaoke->karaoke,
                 "audioId" => $savedKaraoke->karaoke->audio_id,
@@ -42,7 +42,7 @@ class SavedKaraokeService
                 "hasSaved" => $savedKaraoke->karaoke->hasSaved($authUsername),
                 "likes" => $savedKaraoke->karaoke->likes->count(),
                 "comments" => $savedKaraoke->karaoke->comments->count(),
-                "created_at" => $savedKaraoke->karaoke->created_at,
+                "createdAt" => $savedKaraoke->karaoke->created_at,
             ]);
         }
 

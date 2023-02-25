@@ -129,12 +129,6 @@ const VideoCharts = (props) => {
 		videosArray.reverse()
 	}
 
-	// Buy function
-	const onBuyVideos = (video) => {
-		onCartVideos(props, video)
-		setTimeout(() => router.push('/cart'), 500)
-	}
-
 	// Function for loading more artists
 	const handleScroll = (e) => {
 		const bottom = e.target.scrollLeft >= (e.target.scrollWidth - (e.target.scrollWidth / 3));
@@ -265,8 +259,7 @@ const VideoCharts = (props) => {
 											<center key={video.id} className="mx-1 mb-2">
 												<VideoMedia
 													{...props}
-													video={video}
-													onBuyVideos={onBuyVideos} />
+													video={video} />
 											</center>
 										))}
 								</span>

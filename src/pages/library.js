@@ -61,7 +61,8 @@ const Library = (props) => {
 						.map((boughtVideo, key) => (
 							<VideoMedia
 								{...props}
-								video={boughtVideo} />
+								video={boughtVideo}
+								hasBoughtVideo="true" />
 						))}
 				</div>
 				{/* Video Area End */}
@@ -82,7 +83,8 @@ const Library = (props) => {
 							<AudioMedia
 								{...props}
 								key={key}
-								audio={audio} />
+								audio={audio}
+								hasBoughtAudio="true" />
 						))}
 				</div>
 				{/* Audio Area End */}

@@ -123,7 +123,7 @@ const App = ({ Component, pageProps }) => {
 		get("audio-albums", setAudioAlbums, "audioAlbums")
 		// get("bought-audios", setBoughtAudios, "boughtAudios")
 		// get("bought-videos", setBoughtAudios, "boughtVideos")
-		// get("cart-audios", setCartAudios, "cartAudios")
+		get("cart-audios", setCartAudios, "cartAudios")
 		get("cart-videos", setCartVideos, "cartVideos")
 		get("karaokes", setKaraokes, "karaokes")
 		get("posts", setPosts, "posts")

@@ -21,27 +21,7 @@ class AudioService
 
         foreach ($getAudios as $audio) {
 
-            array_push($audios, [
-                "id" => $audio->id,
-                "audio" => $audio->audio,
-                "name" => $audio->name,
-                "username" => $audio->username,
-                "avatar" => $audio->user->avatar,
-                "ft" => $audio->ft,
-                "audioAlbumId" => $audio->audio_album_id,
-                "album" => $audio->album->name,
-                "genre" => $audio->genre,
-                "thumbnail" => $audio->thumbnail,
-                "description" => $audio->description,
-                "released" => $audio->released->format('d M Y'),
-                "hasLiked" => $audio->hasLiked($authUsername),
-                "likes" => $audio->likes->count(),
-                "comments" => $audio->comments->count(),
-                "inCart" => $audio->inCart($authUsername),
-                "hasBoughtAudio" => $audio->hasBoughtAudio($authUsername),
-                "downloads" => $audio->bought->count(),
-                "createdAt" => $audio->created_at,
-            ]);
+            array_push($audios, $this->structure($audio, $authUsername));
         }
 
         return $audios;
@@ -65,31 +45,7 @@ class AudioService
 
         $audio = [];
 
-        array_push($audio, [
-            "id" => $getAudio->id,
-            "audio" => $getAudio->audio,
-            "name" => $getAudio->name,
-			"artistName" => $getAudio->user->name,
-            "username" => $getAudio->username,
-			"avatar" => $getAudio->user->avatar,
-			"artistDecos" => $getAudio->user->decos->count(),
-            "ft" => $getAudio->ft,
-            "audioAlbumId" => $getAudio->audio_album_id,
-            "album" => $getAudio->album->name,
-            "genre" => $getAudio->genre,
-            "thumbnail" => $getAudio->thumbnail,
-            "description" => $getAudio->description,
-            "released" => $getAudio->released,
-            "hasLiked" => $getAudio->hasLiked($authUsername),
-            "likes" => $getAudio->likes->count(),
-            "comments" => $getAudio->comments->count(),
-            "inCart" => $getAudio->inCart($authUsername),
-            "hasBoughtAudio" => $getAudio->hasBoughtAudio($authUsername),
-			"hasBought1" => $getAudio->user->hasBought1($authUsername),
-			"hasFollowed" => $getAudio->user->hasFollowed($authUsername),
-            "downloads" => $getAudio->bought->count(),
-            "createdAt" => $getAudio->created_at,
-        ]);
+        array_push($audio, $this->structure($getAudio, $authUsername));
 
         return $audio;
     }
@@ -175,4 +131,33 @@ class AudioService
 
         return response()->download($src, $name);
     }
+
+	private function structure($audio, $username)
+	{
+		return [
+            "id" => $audio->id,
+            "audio" => $audio->audio,
+            "name" => $audio->name,
+			"artistName" => $audio->user->name,
+            "username" => $audio->username,
+			"avatar" => $audio->user->avatar,
+			"artistDecos" => $audio->user->decos->count(),
+            "ft" => $audio->ft,
+            "audioAlbumId" => $audio->audio_album_id,
+            "album" => $audio->album->name,
+            "genre" => $audio->genre,
+            "thumbnail" => $audio->thumbnail,
+            "description" => $audio->description,
+            "released" => $audio->released,
+            "hasLiked" => $audio->hasLiked($username),
+            "likes" => $audio->likes->count(),
+            "comments" => $audio->comments->count(),
+            "inCart" => $audio->inCart($username),
+            "hasBoughtAudio" => $audio->hasBoughtAudio($username),
+			"hasBought1" => $audio->user->hasBought1($username),
+			"hasFollowed" => $audio->user->hasFollowed($username),
+            "downloads" => $audio->bought->count(),
+            "createdAt" => $audio->created_at
+		];
+	}
 }

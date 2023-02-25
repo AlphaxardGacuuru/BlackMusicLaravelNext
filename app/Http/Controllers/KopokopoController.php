@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\KopokopoService;
 use App\Models\Kopokopo;
 use Illuminate\Http\Request;
 
@@ -23,9 +24,9 @@ class KopokopoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, KopokopoService $kopokopoService)
     {
-        //
+        return $kopokopoService->store($request);
     }
 
     /**
@@ -60,5 +61,17 @@ class KopokopoController extends Controller
     public function destroy(Kopokopo $kopokopo)
     {
         //
+    }
+
+    /**
+     * Send STK Push to Kopokopo.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Kopokopo  $kopokopo
+     * @return \Illuminate\Http\Response
+     */
+    public function stkPush(Request $request, KopokopoService $kopokopoService)
+    {
+		return $kopokopoService->stkPush($request);
     }
 }

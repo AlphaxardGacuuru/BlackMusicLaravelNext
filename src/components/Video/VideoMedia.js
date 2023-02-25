@@ -38,7 +38,7 @@ const VideoMedia = (props) => {
 					{!props.video.hasBoughtVideo && !props.hasBoughtVideo ?
 						props.video.inCart ?
 							<div>
-								<button className="btn text-light mb-1 rounded-0"
+								<button className="btn text-light mb-1 rounded-0 pt-1"
 									style={{
 										minWidth: "90px",
 										height: "33px",
@@ -51,7 +51,7 @@ const VideoMedia = (props) => {
 							<>
 								<div>
 									<button
-										className="mysonar-btn white-btn mb-1"
+										className="mysonar-btn white-btn mb-1 pt-1"
 										style={{ minWidth: '90px', height: '33px' }}
 										onClick={() => onCartVideos(props, props.video.id)}>
 										<CartSVG />

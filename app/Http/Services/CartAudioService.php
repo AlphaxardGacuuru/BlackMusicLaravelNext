@@ -25,13 +25,30 @@ class CartAudioService
 
         foreach ($getCartAudios as $cartAudio) {
             array_push($cartAudios, [
-                "id" => $cartAudio->id,
-                "audioId" => $cartAudio->audio_id,
+                "cartId" => $cartAudio->id,
+                "id" => $cartAudio->audio_id,
+                "audio" => $cartAudio->audio->audio,
                 "name" => $cartAudio->audio->name,
-                "artist" => $cartAudio->audio->username,
+                "artistName" => $cartAudio->audio->user->name,
+                "username" => $cartAudio->audio->username,
+                "avatar" => $cartAudio->audio->user->avatar,
+                "artistDecos" => $cartAudio->audio->user->decos->count(),
                 "ft" => $cartAudio->audio->ft,
+                "audioAlbumId" => $cartAudio->audio->audio_album_id,
+                "album" => $cartAudio->audio->album->name,
+                "genre" => $cartAudio->audio->genre,
                 "thumbnail" => $cartAudio->audio->thumbnail,
-                "username" => $cartAudio->username,
+                "description" => $cartAudio->audio->description,
+                "released" => $cartAudio->audio->released,
+                "hasLiked" => $cartAudio->audio->hasLiked($authUsername),
+                "likes" => $cartAudio->audio->likes->count(),
+                "comments" => $cartAudio->audio->comments->count(),
+                "inCart" => $cartAudio->audio->inCart($authUsername),
+                "hasBoughtAudio" => $cartAudio->audio->hasBoughtAudio($authUsername),
+                "hasBought1" => $cartAudio->audio->user->hasBought1($authUsername),
+                "hasFollowed" => $cartAudio->audio->user->hasFollowed($authUsername),
+                "downloads" => $cartAudio->audio->bought->count(),
+                "createdAt" => $cartAudio->audio->created_at,
             ]);
         }
 

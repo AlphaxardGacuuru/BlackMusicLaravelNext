@@ -21,27 +21,7 @@ class VideoService
 
         foreach ($getVideos as $video) {
 
-            array_push($videos, [
-                "id" => $video->id,
-                "video" => $video->video,
-                "name" => $video->name,
-                "username" => $video->username,
-                "avatar" => $video->user->avatar,
-                "ft" => $video->ft,
-                "videoAlbumId" => $video->video_album_id,
-                "album" => $video->album->name,
-                "genre" => $video->genre,
-                "thumbnail" => $video->thumbnail,
-                "description" => $video->description,
-                "released" => $video->released,
-                "hasLiked" => $video->hasLiked($authUsername),
-                "likes" => $video->likes->count(),
-                "comments" => $video->comments->count(),
-                "inCart" => $video->inCart($authUsername),
-                "hasBoughtVideo" => $video->hasBoughtVideo($authUsername),
-                "downloads" => $video->bought->count(),
-                "createdAt" => $video->created_at,
-            ]);
+            array_push($videos, $this->structure($video, $authUsername));
         }
 
         return $videos;
@@ -65,31 +45,7 @@ class VideoService
 
         $video = [];
 
-        array_push($video, [
-            "id" => $getVideo->id,
-            "video" => $getVideo->video,
-            "name" => $getVideo->name,
-			"artistName" => $getVideo->user->name,
-            "username" => $getVideo->username,
-			"avatar" => $getVideo->user->avatar,
-			"artistDecos" => $getVideo->user->decos->count(),
-            "ft" => $getVideo->ft,
-            "videoAlbumId" => $getVideo->video_album_id,
-            "album" => $getVideo->album->name,
-            "genre" => $getVideo->genre,
-            "thumbnail" => $getVideo->thumbnail,
-            "description" => $getVideo->description,
-            "released" => $getVideo->released,
-            "hasLiked" => $getVideo->hasLiked($authUsername),
-            "likes" => $getVideo->likes->count(),
-            "comments" => $getVideo->comments->count(),
-            "inCart" => $getVideo->inCart($authUsername),
-            "hasBoughtVideo" => $getVideo->hasBoughtVideo($authUsername),
-			"hasBought1" => $getVideo->user->hasBought1($authUsername),
-			"hasFollowed" => $getVideo->user->hasFollowed($authUsername),
-            "downloads" => $getVideo->bought->count(),
-            "createdAt" => $getVideo->created_at,
-        ]);
+        array_push($video, $this->structure($getVideo, $authUsername));
 
         return $video;
     }
@@ -174,4 +130,33 @@ class VideoService
 
         return response()->download($src, $name);
     }
+
+	private function structure($video, $username)
+	{
+		return [
+            "id" => $video->id,
+            "video" => $video->video,
+            "name" => $video->name,
+			"artistName" => $video->user->name,
+            "username" => $video->username,
+			"avatar" => $video->user->avatar,
+			"artistDecos" => $video->user->decos->count(),
+            "ft" => $video->ft,
+            "videoAlbumId" => $video->video_album_id,
+            "album" => $video->album->name,
+            "genre" => $video->genre,
+            "thumbnail" => $video->thumbnail,
+            "description" => $video->description,
+            "released" => $video->released,
+            "hasLiked" => $video->hasLiked($username),
+            "likes" => $video->likes->count(),
+            "comments" => $video->comments->count(),
+            "inCart" => $video->inCart($username),
+            "hasBoughtVideo" => $video->hasBoughtVideo($username),
+			"hasBought1" => $video->user->hasBought1($username),
+			"hasFollowed" => $video->user->hasFollowed($username),
+            "downloads" => $video->bought->count(),
+            "createdAt" => $video->created_at
+		];
+	}
 }

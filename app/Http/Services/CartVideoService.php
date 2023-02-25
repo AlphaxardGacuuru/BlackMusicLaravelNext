@@ -5,7 +5,7 @@ namespace App\Http\Services;
 use App\Models\CartVideo;
 
 class CartVideoService
-{	
+{
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +15,7 @@ class CartVideoService
     {
         // Check if user is logged in
         $auth = auth('sanctum')->user();
-		
+
         $authUsername = $auth ? $auth->username : '@guest';
 
         $getCartVideos = CartVideo::where('username', $authUsername)
@@ -25,13 +25,30 @@ class CartVideoService
 
         foreach ($getCartVideos as $cartVideo) {
             array_push($cartVideos, [
-                "id" => $cartVideo->id,
-                "videoId" => $cartVideo->video_id,
+                "cartId" => $cartVideo->id,
+                "id" => $cartVideo->video_id,
+                "video" => $cartVideo->video->video,
                 "name" => $cartVideo->video->name,
-                "artist" => $cartVideo->video->username,
+                "artistName" => $cartVideo->video->user->name,
+                "username" => $cartVideo->video->username,
+                "avatar" => $cartVideo->video->user->avatar,
+                "artistDecos" => $cartVideo->video->user->decos->count(),
                 "ft" => $cartVideo->video->ft,
+                "videoAlbumId" => $cartVideo->video->video_album_id,
+                "album" => $cartVideo->video->album->name,
+                "genre" => $cartVideo->video->genre,
                 "thumbnail" => $cartVideo->video->thumbnail,
-                "username" => $cartVideo->username,
+                "description" => $cartVideo->video->description,
+                "released" => $cartVideo->video->released,
+                "hasLiked" => $cartVideo->video->hasLiked($authUsername),
+                "likes" => $cartVideo->video->likes->count(),
+                "comments" => $cartVideo->video->comments->count(),
+                "inCart" => $cartVideo->video->inCart($authUsername),
+                "hasBoughtVideo" => $cartVideo->video->hasBoughtVideo($authUsername),
+                "hasBought1" => $cartVideo->video->user->hasBought1($authUsername),
+                "hasFollowed" => $cartVideo->video->user->hasFollowed($authUsername),
+                "downloads" => $cartVideo->video->bought->count(),
+                "createdAt" => $cartVideo->video->created_at,
             ]);
         }
 

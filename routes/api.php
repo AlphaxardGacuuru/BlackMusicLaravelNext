@@ -130,3 +130,6 @@ Route::prefix('filepond')->group(function () {
         Route::delete('posts/{id}', 'destroyPostMedia');
     });
 });
+
+// Kopokopo STK Push
+Route::post('stk-push', [KopokopoController::class, 'stkPush']);

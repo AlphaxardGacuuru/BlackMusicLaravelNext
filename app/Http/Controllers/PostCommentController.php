@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PostCommentedEvent;
 use App\Http\Services\PostCommentService;
-use App\Models\PostComment;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class PostCommentController extends Controller
@@ -30,7 +31,15 @@ class PostCommentController extends Controller
             'text' => 'required',
         ]);
 
-		return $postCommentService->store($request);
+        $saved = $postCommentService->store($request);
+		
+        // Dispatch Event
+		// Get post
+        $post = Post::findOrFail($request->input("id"));
+        
+        PostCommentedEvent::dispatchif($saved, $post);
+
+        return response("Comment sent", 200);
     }
 
     /**
@@ -64,6 +73,6 @@ class PostCommentController extends Controller
      */
     public function destroy($id, PostCommentService $postCommentService)
     {
-        return $postCommentService->destory($id);
+        return $postCommentService->destroy($id);
     }
 }

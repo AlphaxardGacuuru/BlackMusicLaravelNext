@@ -73,7 +73,7 @@ const SocialMediaInput = (props) => {
 				<div className='p-2'>
 					<Img
 						src={props.auth.avatar}
-						imgClass={"rounded-circle"}
+						imgClass="rounded-circle"
 						width="25px"
 						height="25px"
 						alt="Avatar" />

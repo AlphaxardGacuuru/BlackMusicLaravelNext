@@ -81,7 +81,7 @@ Route::apiResources([
     'karaoke-audios' => KaraokeAudioController::class,
     'kopokopo' => KopokopoController::class,
     'kopokopo-recipients' => KopokopoRecipientController::class,
-    // 'notifications' => NotificationController::class,
+    'notifications' => NotificationController::class,
     'posts' => PostController::class,
     'post-likes' => PostLikeController::class,
     'post-comments' => PostCommentController::class,

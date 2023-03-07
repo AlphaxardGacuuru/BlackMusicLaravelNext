@@ -3,7 +3,6 @@
 namespace App\Http\Services;
 
 use App\Models\PostComment;
-use App\Models\PostCommentLike;
 
 class PostCommentService
 {
@@ -16,7 +15,7 @@ class PostCommentService
     {
         // Check if user is logged in
         $auth = auth('sanctum')->user();
-		
+
         $authUsername = $auth ? $auth->username : '@guest';
 
         $getComments = PostComment::orderby('id', 'DESC')->get();
@@ -27,7 +26,7 @@ class PostCommentService
 
             array_push($comments, [
                 "id" => $comment->id,
-				"post_id" => $comment->post_id,
+                "post_id" => $comment->post_id,
                 "name" => $comment->user->name,
                 "username" => $comment->user->username,
                 "decos" => $comment->user->decos->count(),
@@ -55,15 +54,9 @@ class PostCommentService
         $postComment->post_id = $request->input('id');
         $postComment->username = auth('sanctum')->user()->username;
         $postComment->text = $request->input('text');
-        $postComment->media = NULL;
-        $postComment->save();
+        $postComment->media = null;
 
-		// Get user details
-        // $musician = Posts::find($request->input('id'))->users;
-        // $musician->username != auth()->user()->username &&
-        // $musician->notify(new PostCommentNotifications);
-
-        return response("Comment sent", 200);
+        return $postComment->save();
     }
 
     /**

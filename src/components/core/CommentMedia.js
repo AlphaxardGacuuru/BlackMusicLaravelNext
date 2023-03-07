@@ -17,6 +17,7 @@ const CommentMedia = (props) => {
 						<a>
 							<Img
 								src={props.comment.avatar}
+								imgClass="rounded-circle"
 								width="3em"
 								height="3em" />
 						</a>

@@ -190,7 +190,7 @@ class AudioTest extends TestCase
                 'thumbnail' => '/storage/audio-thumbnails/' . $thumbnail->hashName(),
                 'name' => 'Audio 1',
                 'ft' => null,
-                'audio_album_id' => $album->id,
+                'audioAlbumId' => $album->id,
                 'genre' => 'Country',
                 'description' => 'This is video',
             ], $escape = true);

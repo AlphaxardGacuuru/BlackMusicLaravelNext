@@ -14,6 +14,7 @@ import DiscoverSVG from '@/svgs/DiscoverSVG';
 import SearchSVG from '@/svgs/SearchSVG';
 import CartSVG from '@/svgs/CartSVG';
 import PersonSVG from '@/svgs/PersonSVG';
+import SocialMediaInput from '../core/SocialMediaInput';
 
 const Bottomnav = (props) => {
 
@@ -168,7 +169,7 @@ const Bottomnav = (props) => {
 					className="contact-form bg-white"
 					style={{ display: inputDisplay }}
 					autoComplete="off">
-					{/* <SocialMediaInput {...props} /> */}
+					<SocialMediaInput {...props} />
 				</form>
 
 				{/* Bottom Nav */}

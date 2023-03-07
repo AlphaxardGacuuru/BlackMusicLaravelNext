@@ -53,17 +53,17 @@ class AudioAlbumService
     {
         /* Handle file upload */
         if ($request->hasFile('cover')) {
-            $vCover = $request->file('cover')->store('public/audio-album-covers');
-            $vCover = substr($vCover, 7);
+            $aCover = $request->file('cover')->store('public/audio-album-covers');
+            $aCover = substr($aCover, 7);
         }
 
         /* Create new audio album */
-        $vAlbum = new AudioAlbum;
-        $vAlbum->name = $request->input('name');
-        $vAlbum->username = auth('sanctum')->user()->username;
-        $vAlbum->cover = $vCover;
-        $vAlbum->released = $request->input('released');
-        $vAlbum->save();
+        $aAlbum = new AudioAlbum;
+        $aAlbum->name = $request->input('name');
+        $aAlbum->username = auth('sanctum')->user()->username;
+        $aAlbum->cover = $aCover;
+        $aAlbum->released = $request->input('released');
+        $aAlbum->save();
 
         return response('Audio Album Created', 200);
     }
@@ -91,22 +91,22 @@ class AudioAlbumService
             Storage::disk("public")->delete($oldCover);
         }
 
-        /* Create new audio album */
-        $vAlbum = AudioAlbum::find($id);
+        /* Find new audio album */
+        $aAlbum = AudioAlbum::find($id);
 
         if ($request->filled('name')) {
-            $vAlbum->name = $request->input('name');
+            $aAlbum->name = $request->input('name');
         }
 
         if ($request->hasFile('cover')) {
-            $vAlbum->cover = $cover;
+            $aAlbum->cover = $cover;
         }
 
         if ($request->filled('released')) {
-            $vAlbum->released = $request->input('released');
+            $aAlbum->released = $request->input('released');
         }
 
-        $vAlbum->save();
+        $aAlbum->save();
 
         return response('Audio Album Edited', 200);
     }

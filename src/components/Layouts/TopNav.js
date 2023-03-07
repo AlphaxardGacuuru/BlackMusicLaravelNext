@@ -28,7 +28,7 @@ const TopNav = (props) => {
 	const [bottomMenu, setBottomMenu] = useState("")
 	const [avatarVisibility, setAvatarVisibility] = useState("none")
 	const [notificationVisibility, setNotificationVisibility] = useState("none")
-	const [notifications, setNotifications] = useState(props.getLocalStorage("notifications"))
+	const [notifications, setNotifications] = useState([])
 
 	// Get number of items in video cart
 	const vidCartItems = props.cartVideos.length
@@ -37,11 +37,11 @@ const TopNav = (props) => {
 
 	useEffect(() => {
 		// Fetch Notifications
-		// axios.get(`/api/notifications`)
-		// 	.then((res) => {
-		// 		setNotifications(res.data)
-		// 		props.setLocalStorage("notifications", res.data)
-		// 	}).catch(() => props.setErrors(['Failed to fetch notifications']))
+		axios.get(`/api/notifications`)
+			.then((res) => {
+				setNotifications(res.data)
+				// props.setLocalStorage("notifications", res.data)
+			}).catch(() => props.setErrors(['Failed to fetch notifications']))
 	}, [])
 
 	const logout = (e) => {
@@ -58,7 +58,7 @@ const TopNav = (props) => {
 	}
 
 	const onNotification = () => {
-		axios.put(`${props.url}/api/notifications/update`)
+		axios.put(`/api/notifications/update`)
 			.then((res) => {
 				// Update notifications
 				props.get("notifications", setNotifications)
@@ -66,7 +66,7 @@ const TopNav = (props) => {
 	}
 
 	const onDeleteNotifications = (id) => {
-		axios.delete(`${props.url}/api/notifications/${id}`)
+		axios.delete(`/api/notifications/${id}`)
 			.then((res) => {
 				// Update Notifications
 				props.get("notifications", setNotifications)

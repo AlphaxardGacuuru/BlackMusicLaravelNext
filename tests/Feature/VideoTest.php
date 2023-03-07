@@ -187,7 +187,7 @@ class VideoTest extends TestCase
                 'thumbnail' => '/storage/video-thumbnails/' . $thumbnail->hashName(),
                 'name' => 'Video 1',
                 'ft' => null,
-                'video_album_id' => $album->id,
+                'videoAlbumId' => $album->id,
                 'genre' => 'Country',
                 'description' => 'This is video',
             ], $escape = true);

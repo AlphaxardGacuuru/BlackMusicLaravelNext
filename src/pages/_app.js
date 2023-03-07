@@ -78,13 +78,13 @@ const App = ({ Component, pageProps }) => {
 	const [videoComments, setVideoComments] = useState([])
 
 	// Function for fetching data from API
-	const get = (endpoint, setState, storage = null) => {
+	const get = (endpoint, setState, storage = null, errors = true) => {
 		axios.get(`/api/${endpoint}`)
 			.then((res) => {
 				var data = res.data ? res.data : []
 				setState(data)
 				storage && setLocalStorage(storage, data)
-			}).catch(() => setErrors([`Failed to fetch ${endpoint}`]))
+			}).catch(() => errors && setErrors([`Failed to fetch ${endpoint}`]))
 	}
 
 	// Function for getting errors from responses
@@ -118,7 +118,7 @@ const App = ({ Component, pageProps }) => {
 			window.location.href = 'https://music.black.co.ke'
 		}
 
-		get("auth", setAuth, "auth")
+		get("auth", setAuth, "auth", false)
 		get("audios", setAudios, "audios")
 		get("audio-albums", setAudioAlbums, "audioAlbums")
 		// get("bought-audios", setBoughtAudios, "boughtAudios")

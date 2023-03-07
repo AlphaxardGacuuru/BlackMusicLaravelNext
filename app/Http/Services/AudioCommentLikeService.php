@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Events\AudioCommentLikedEvent;
 use App\Models\AudioCommentLike;
 
 class AudioCommentLikeService
@@ -32,11 +33,11 @@ class AudioCommentLikeService
 
             $message = "Comment liked";
 
-            // Show notification
-            // $audioComment = AudioComment::where('id', $request->input('comment'))->first();
-            // $audio = $audioComment->audios;
-            // $audio->users->username != auth()->user()->username &&
-            // $audio->users->notify(new AudioCommentLikeNotifications($audio->name));
+            // Dispatch Event
+            $audioComment = AudioComment::find($request->input('comment'));
+            $audio = $audioComment->audio;
+
+			AudioCommentLikedEvent::dispatch($audio);
         }
 
         return response($message, 200);

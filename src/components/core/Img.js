@@ -2,7 +2,8 @@ import Image from 'next/image'
 
 const Img = ({ src, width, height, imgClass, style, alt }) => {
 	return (
-		<div className="m-0 p-0" style={{ position: "relative", width: width, height: height }}>
+		<div className="d-flex justify-content-center position-relative m-0 p-0"
+			style={{ width: width, height: height }}>
 			<Image
 				src={src}
 				layout="fill"

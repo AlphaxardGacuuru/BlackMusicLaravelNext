@@ -47,27 +47,18 @@ class PostCommentedNotification extends Notification
                     ->line('Thank you for using our application!');
     }
 
-	public function toDatabase()
-	{
-		return [
-			'url' => '/profile/' . auth('sanctum')->user()->username,
-			'from' => auth('sanctum')->user()->username,
-			'message' => auth('sanctum')->user()->username . ' commented on your post.',
-		];
-	}
-
     /**
      * Get the array representation of the notification.
      *
      * @param  mixed  $notifiable
      * @return array
      */
-    // public function toArray($notifiable)
-    // {
-        // return [
-			// 'url' => '/profile/' . auth('sanctum')->user()->username,
-			// 'from' => auth('sanctum')->user()->username,
-			// 'message' => auth('sanctum')->user()->username . ' commented on your post.'
-        // ];
-    // }
+    public function toArray($notifiable)
+    {
+        return [
+			'url' => '/profile/' . auth('sanctum')->user()->username,
+			'from' => auth('sanctum')->user()->username,
+			'message' => auth('sanctum')->user()->username . ' commented on your post.'
+        ];
+    }
 }

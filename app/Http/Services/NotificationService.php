@@ -2,6 +2,8 @@
 
 namespace App\Http\Services;
 
+use Illuminate\Support\Facades\Notification;
+
 class NotificationService
 {
 	
@@ -13,7 +15,7 @@ class NotificationService
     public function index()
     {
         // Check if user is logged in
-        if (Auth::check()) {
+        if (auth('sanctum')->check()) {
             $getNotifications = auth('sanctum')->user()->notifications;
         } else {
             $getNotifications = [];
@@ -63,7 +65,7 @@ class NotificationService
         if ($id == 0) {
             auth('sanctum')->user()->notifications()->delete();
         } else {
-            Notifications::find($id)->delete();
+            Notification::find($id)->delete();
         }
     }
 }

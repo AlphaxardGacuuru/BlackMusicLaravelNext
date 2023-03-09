@@ -64,6 +64,11 @@ const TopNavLinks = (props) => {
 						}}
 						onClick={props.onNotification}>
 						<BellSVG />
+						<span className="position-absolute start-200 translate-middle badge rounded-circle bg-danger fw-lighter py-1"
+							style={{ fontSize: "0.6em", top: "0.2em" }}>
+							{props.notifications.filter((notification) => !notification.isRead).length > 0 &&
+								props.notifications.filter((notification) => !notification.isRead).length}
+						</span>
 					</a>
 				</Link>
 				{/* For smaller screens */}
@@ -81,17 +86,11 @@ const TopNavLinks = (props) => {
 						props.onNotification()
 					}}>
 					<BellSVG />
-				</span>
-				<span className="badge badge-danger rounded-circle"
-					style={{
-						fontWeight: "100",
-						position: "absolute",
-						right: "-0.5rem",
-						bottom: "0.5rem",
-						border: "solid #232323"
-					}}>
-					{props.notifications.filter((notification) => !notification.isRead).length > 0 &&
-						props.notifications.filter((notification) => !notification.isRead).length}
+					<span className="position-absolute start-200 translate-middle badge rounded-circle bg-danger fw-lighter py-1"
+						style={{ fontSize: "0.6em", top: "0.2em" }}>
+						{props.notifications.filter((notification) => !notification.isRead).length > 0 &&
+							props.notifications.filter((notification) => !notification.isRead).length}
+					</span>
 				</span>
 				<div
 					style={{ borderRadius: "0", backgroundColor: "#232323" }}

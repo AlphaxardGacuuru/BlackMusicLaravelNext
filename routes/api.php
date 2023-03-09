@@ -21,6 +21,7 @@ use App\Http\Controllers\KaraokeController;
 use App\Http\Controllers\KaraokeLikeController;
 use App\Http\Controllers\KopokopoController;
 use App\Http\Controllers\KopokopoRecipientController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PollController;
 use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\PostCommentLikeController;

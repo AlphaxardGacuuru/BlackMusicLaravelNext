@@ -2,9 +2,9 @@
 
 namespace App\Http\Services;
 
-use App\Models\PostLike;
+use App\Models\Follow;
 
-class PostLikeService
+class FollowService
 {
     /**
      * Store a newly created resource in storage.
@@ -14,22 +14,24 @@ class PostLikeService
      */
     public function store($request)
     {
-        $hasLiked = PostLike::where('post_id', $request->input('post'))
+        /* Add follow */
+        $hasFollowed = Follow::where('followed', $request->musician)
             ->where('username', auth('sanctum')->user()->username)
             ->exists();
 
-        if ($hasLiked) {
-            PostLike::where('post_id', $request->input('post'))
+        if ($hasFollowed) {
+            Follow::where('followed', $request->musician)
                 ->where('username', auth('sanctum')->user()->username)
                 ->delete();
 
-            $message = "Like removed";
+            $message = "Unfollowed";
         } else {
-            $postLike = new PostLike;
-            $postLike->post_id = $request->input('post');
-            $postLike->username = auth('sanctum')->user()->username;
-            $postLike->save();
-            $message = "Post liked";
+            $post = new Follow;
+            $post->followed = $request->input('musician');
+            $post->username = auth('sanctum')->user()->username;
+            $post->save();
+
+            $message = "Followed";
         }
 
         return $message;

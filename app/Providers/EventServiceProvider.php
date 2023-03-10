@@ -7,9 +7,13 @@ use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 use App\Events\AudioCommentLikedEvent;
+use App\Events\PostLikedEvent;
 use App\Events\PostCommentedEvent;
+use App\Events\FollowedEvent;
 use App\Listeners\AudioCommentLikedListener;
+use App\Listeners\PostLikedListener;
 use App\Listeners\PostCommentedListener;
+use App\Listeners\FollowedListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -23,7 +27,9 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
 		],
 		AudioCommentLikedEvent::class => [AudioCommentLikedListener::class],
-		PostCommentedEvent::class => [PostCommentedListener::class]
+		PostCommentedEvent::class => [PostCommentedListener::class],
+		PostLikedEvent::class => [PostLikedListener::class],
+		FollowedEvent::class => [FollowedListener::class]
     ];
 
     /**

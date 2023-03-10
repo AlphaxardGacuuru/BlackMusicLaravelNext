@@ -48,13 +48,13 @@ const TopNavLinks = (props) => {
 			{/* Cart End */}
 
 			{/* Notification Dropdown */}
-			<div className="dropdown me-3">
+			<div className="dropdown-center me-3">
 				<Link href="#">
 					<a
 						role="button"
 						id="dropdownMenua"
 						className="hidden"
-						data-toggle="dropdown"
+						data-bs-toggle="dropdown"
 						aria-haspopup="true"
 						aria-expanded="false"
 						style={{
@@ -80,8 +80,7 @@ const TopNavLinks = (props) => {
 						position: "relative",
 					}}
 					onClick={() => {
-						props.setBottomMenu("menu-open")
-						props.setNotificationVisibility("block")
+						props.setNMenu("menu-open")
 						props.setAvatarVisibility("none")
 						props.onNotification()
 					}}>
@@ -94,7 +93,7 @@ const TopNavLinks = (props) => {
 				</span>
 				<div
 					style={{ borderRadius: "0", backgroundColor: "#232323" }}
-					className="dropdown-menu dropdown-menu-right m-0 p-0"
+					className="dropdown-menu m-0 p-0"
 					aria-labelledby="dropdownMenuButton">
 					<div className="dropdown-header border-bottom border-dark">Notifications</div>
 					<div style={{ maxHeight: "500px", overflowY: "scroll" }}>
@@ -143,7 +142,6 @@ const TopNavLinks = (props) => {
 					onClick={() => {
 						props.setBottomMenu(props.bottomMenu == "menu-open" ? "" : "menu-open")
 						props.setAvatarVisibility("block")
-						props.setNotificationVisibility("none")
 					}}>
 					<Img
 						src={props.auth?.avatar}

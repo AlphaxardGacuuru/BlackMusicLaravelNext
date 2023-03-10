@@ -26,8 +26,8 @@ const TopNav = (props) => {
 
 	const [menu, setMenu] = useState("")
 	const [bottomMenu, setBottomMenu] = useState("")
+	const [nMenu, setNMenu] = useState("")
 	const [avatarVisibility, setAvatarVisibility] = useState("none")
-	const [notificationVisibility, setNotificationVisibility] = useState("none")
 	const [notifications, setNotifications] = useState([])
 
 	// Get number of items in video cart
@@ -76,7 +76,7 @@ const TopNav = (props) => {
 	var display
 
 	// Hide TopNav from various pages
-	router.pathname.match("/404") || 
+	router.pathname.match("/404") ||
 		router.pathname == "/karaoke/[id]" ||
 		router.pathname.match("/karaoke/create") ||
 		router.pathname.match("/privacy-policy") ||
@@ -135,10 +135,9 @@ const TopNav = (props) => {
 													{...props}
 													bottomMenu={bottomMenu}
 													setBottomMenu={setBottomMenu}
+													setNMenu={setNMenu}
 													avatarVisibility={avatarVisibility}
 													setAvatarVisibility={setAvatarVisibility}
-													notificationVisibility={notificationVisibility}
-													setNotificationVisibility={setNotificationVisibility}
 													notifications={notifications}
 													setNotifications={setNotifications}
 													vidCartItems={vidCartItems}
@@ -268,9 +267,6 @@ const TopNav = (props) => {
 					<div
 						className="d-flex align-items-center justify-content-between border-bottom border-dark">
 						<div></div>
-						<div className="dropdown-header text-white">
-							<h5 style={{ margin: "0px", display: notificationVisibility }}>Notifications</h5>
-						</div>
 						{/* <!-- Close Icon --> */}
 						<div
 							className="closeIcon float-end mr-3"
@@ -280,38 +276,6 @@ const TopNav = (props) => {
 						</div>
 					</div>
 					<br />
-
-					{/* Notifications Bottom */}
-					<div className="m-0 p-0" style={{ display: notificationVisibility }}>
-						<div style={{ maxHeight: "500px", overflowY: "scroll" }}>
-							{/* Get Notifications */}
-							{notifications
-								.map((notification, key) => (
-									<Link key={key} href={notification.url}>
-										<a
-											className="p-2"
-											style={{ display: "block", textAlign: "left" }}
-											onClick={() => {
-												setBottomMenu("")
-												// onDeleteNotifications(notification.id)
-											}}>
-											<small>{notification.message}</small>
-										</a>
-									</Link>
-								))}
-						</div>
-						{notifications.length > 0 &&
-							<div
-								className="dropdown-header"
-								style={{ cursor: "pointer" }}
-								onClick={() => {
-									setBottomMenu("")
-									onDeleteNotifications(0)
-								}}>
-								Clear notifications
-							</div>}
-					</div>
-					{/* Notifications Bottom End */}
 
 					{/* Avatar Bottom */}
 					<div className="m-0 p-0" style={{ display: avatarVisibility }}>
@@ -381,6 +345,60 @@ const TopNav = (props) => {
 				</div>
 			</div>
 			{/* Sliding Bottom Nav End */}
+
+
+			{/* Sliding Notifications Nav */}
+			<div className={nMenu}>
+				<div className="commentMenu">
+					<div
+						className="d-flex align-items-center justify-content-between border-bottom border-dark">
+						<div></div>
+						<div className="dropdown-header text-white pt-2">
+							<h5>Notifications</h5>
+						</div>
+						{/* <!-- Close Icon --> */}
+						<div
+							className="closeIcon float-end mr-3"
+							style={{ fontSize: "0.8em" }}
+							onClick={() => setNMenu("")}>
+							<CloseSVG />
+						</div>
+					</div>
+
+					{/* Notifications Bottom */}
+					<div className="m-0 p-0">
+						<div style={{ maxHeight: "500px", overflowY: "scroll" }}>
+							{/* Get Notifications */}
+							{notifications
+								.map((notification, key) => (
+									<Link key={key} href={notification.url}>
+										<a
+											className="p-2"
+											style={{ display: "block", textAlign: "left" }}
+											onClick={() => {
+												setBottomMenu("")
+												// onDeleteNotifications(notification.id)
+											}}>
+											<small>{notification.message}</small>
+										</a>
+									</Link>
+								))}
+						</div>
+						{notifications.length > 0 &&
+							<div
+								className="dropdown-header"
+								style={{ cursor: "pointer" }}
+								onClick={() => {
+									setBottomMenu("")
+									onDeleteNotifications(0)
+								}}>
+								Clear notifications
+							</div>}
+					</div>
+					{/* Notifications Bottom End */}
+				</div>
+			</div>
+			{/* Sliding Notifications Nav End */}
 		</>
 	)
 }

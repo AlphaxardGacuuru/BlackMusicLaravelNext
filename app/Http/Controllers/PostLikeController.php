@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PostLikedEvent;
 use App\Http\Services\PostLikeService;
+use App\Models\Post;
 use App\Models\PostLike;
 use Illuminate\Http\Request;
 
@@ -24,9 +26,17 @@ class PostLikeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, PostLikeService $postLikeService)
+    public function store(Request $request, PostLikeService $service)
     {
-        return $postLikeService->store($request);
+        $message = $service->store($request);		
+		
+        // Dispatch Event
+		// Get post
+        $post = Post::findOrFail($request->input("post"));
+        
+        PostLikedEvent::dispatch($post);
+
+        return response($message, 200);
     }
 
     /**

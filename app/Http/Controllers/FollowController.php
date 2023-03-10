@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\FollowedEvent;
+use App\Http\Services\FollowService;
 use App\Models\Follow;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class FollowController extends Controller
@@ -23,33 +26,15 @@ class FollowController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, FollowService $service)
     {
-        /* Add follow */
-        $hasFollowed = Follow::where('followed', $request->musician)
-            ->where('username', auth('sanctum')->user()->username)
-            ->exists();
+        $message = $service->store($request);
 
-        if ($hasFollowed) {
-            Follow::where('followed', $request->musician)
-                ->where('username', auth('sanctum')->user()->username)
-                ->delete();
+        // Dispatch Event
+        $musician = User::where('username', $request->input('musician'))
+            ->first();
 
-            $message = "Unfollowed";
-        } else {
-            $post = new Follow;
-            $post->followed = $request->input('musician');
-            $post->username = auth('sanctum')->user()->username;
-            $post->save();
-			
-            $message = "Followed";
-
-            // Notify Musician
-            // $musician = User::where('username', $request->input('musician'))
-                // ->first();
-
-            // $musician->notify(new FollowNotifications);
-        }
+		FollowedEvent::dispatch($musician);
 
         return response('You ' . $message . ' ' . $request->musician, 200);
     }

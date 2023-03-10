@@ -66,6 +66,7 @@ const PostShow = (props) => {
 				}
 				return true
 			})
+			
 		// Set new comments
 		props.setPostComments(newPostComments)
 

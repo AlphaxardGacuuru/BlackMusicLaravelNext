@@ -28,15 +28,15 @@ class PostLikeController extends Controller
      */
     public function store(Request $request, PostLikeService $service)
     {
-        $message = $service->store($request);		
+        $result = $service->store($request);		
 		
         // Dispatch Event
 		// Get post
         $post = Post::findOrFail($request->input("post"));
         
-        PostLikedEvent::dispatch($post);
+        PostLikedEvent::dispatchIf($result[0], $post);
 
-        return response($message, 200);
+        return response($result[1], 200);
     }
 
     /**

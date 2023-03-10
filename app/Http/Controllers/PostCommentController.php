@@ -14,9 +14,9 @@ class PostCommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(PostCommentService $postCommentService)
+    public function index(PostCommentService $service)
     {
-        return $postCommentService->index();
+        return $service->index();
     }
 
     /**
@@ -25,13 +25,13 @@ class PostCommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, PostCommentService $postCommentService)
+    public function store(Request $request, PostCommentService $service)
     {
         $this->validate($request, [
             'text' => 'required',
         ]);
 
-        $saved = $postCommentService->store($request);
+        $saved = $service->store($request);
 		
         // Dispatch Event
 		// Get post
@@ -71,8 +71,8 @@ class PostCommentController extends Controller
      * @param  \App\Models\PostComment  $postComment
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, PostCommentService $postCommentService)
+    public function destroy($id, PostCommentService $service)
     {
-        return $postCommentService->destroy($id);
+        return $service->destroy($id);
     }
 }

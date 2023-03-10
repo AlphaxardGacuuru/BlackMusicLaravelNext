@@ -12,9 +12,9 @@ class NotificationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(NotificationService $notificationService)
+    public function index(NotificationService $service)
     {
-        return $notificationService->index();
+        return $service->index();
     }
 
     /**
@@ -46,9 +46,9 @@ class NotificationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, NotificationService $notificationService)
+    public function update(Request $request, $id, NotificationService $service)
     {
-        return $notificationService->update($request, $id);
+        return $service->update($request, $id);
     }
 
     /**
@@ -57,8 +57,8 @@ class NotificationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, NotificationService $notificationService)
+    public function destroy($id, NotificationService $service)
     {
-        return $notificationService->destroy($id);
+        return $service->destroy($id);
     }
 }

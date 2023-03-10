@@ -13,9 +13,9 @@ class KaraokeCommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(KaraokeCommentService $karaokeCommentService)
+    public function index(KaraokeCommentService $service)
     {
-        return $karaokeCommentService->index();
+        return $service->index();
     }
 
     /**
@@ -24,13 +24,13 @@ class KaraokeCommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, KaraokeCommentService $karaokeCommentService)
+    public function store(Request $request, KaraokeCommentService $service)
     {
         $this->validate($request, [
             'text' => 'required',
         ]);
 
-		return $karaokeCommentService->store($request);
+		return $service->store($request);
     }
 
     /**
@@ -62,8 +62,8 @@ class KaraokeCommentController extends Controller
      * @param  \App\Models\KaraokeComment  $karaokeComment
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, KaraokeCommentService $karaokeCommentService)
+    public function destroy($id, KaraokeCommentService $service)
     {
-        return $karaokeCommentService->destroy($id);
+        return $service->destroy($id);
     }
 }

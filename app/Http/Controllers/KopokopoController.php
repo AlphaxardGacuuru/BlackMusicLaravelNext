@@ -24,9 +24,9 @@ class KopokopoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, KopokopoService $kopokopoService)
+    public function store(Request $request, KopokopoService $service)
     {
-        return $kopokopoService->store($request);
+        return $service->store($request);
     }
 
     /**
@@ -70,8 +70,8 @@ class KopokopoController extends Controller
      * @param  \App\Kopokopo  $kopokopo
      * @return \Illuminate\Http\Response
      */
-    public function stkPush(Request $request, KopokopoService $kopokopoService)
+    public function stkPush(Request $request, KopokopoService $service)
     {
-		return $kopokopoService->stkPush($request);
+		return $service->stkPush($request);
     }
 }

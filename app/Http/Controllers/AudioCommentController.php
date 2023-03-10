@@ -13,9 +13,9 @@ class AudioCommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(AudioCommentService $audioCommentService)
+    public function index(AudioCommentService $service)
     {
-        return $audioCommentService->index();
+        return $service->index();
     }
 
     /**
@@ -24,13 +24,13 @@ class AudioCommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, AudioCommentService $audioCommentService)
+    public function store(Request $request, AudioCommentService $service)
     {
         $this->validate($request, [
             'text' => 'required',
         ]);
 
-        return $audioCommentService->store($request);
+        return $service->store($request);
     }
 
     /**
@@ -39,9 +39,9 @@ class AudioCommentController extends Controller
      * @param  \App\Models\AudioComment  $audioComment
      * @return \Illuminate\Http\Response
      */
-    public function show($id, AudioCommentService $audioCommentService)
+    public function show($id, AudioCommentService $service)
     {
-        return $audioCommentService->show($id);
+        return $service->show($id);
     }
 
     /**
@@ -62,8 +62,8 @@ class AudioCommentController extends Controller
      * @param  \App\Models\AudioComment  $audioComment
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, AudioCommentService $audioCommentService)
+    public function destroy($id, AudioCommentService $service)
     {
-        return $audioCommentService->destroy($id);
+        return $service->destroy($id);
     }
 }

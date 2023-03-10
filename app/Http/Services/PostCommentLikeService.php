@@ -2,9 +2,9 @@
 
 namespace App\Http\Services;
 
-use App\Models\PostLike;
+use App\Models\PostCommentLike;
 
-class PostLikeService
+class PostCommentLikeService
 {
     /**
      * Store a newly created resource in storage.
@@ -14,24 +14,24 @@ class PostLikeService
      */
     public function store($request)
     {
-        $hasLiked = PostLike::where('post_id', $request->input('post'))
+        $hasLiked = PostCommentLike::where('post_comment_id', $request->input('comment'))
             ->where('username', auth('sanctum')->user()->username)
             ->exists();
 
         if ($hasLiked) {
-            PostLike::where('post_id', $request->input('post'))
+            PostCommentLike::where('post_comment_id', $request->input('comment'))
                 ->where('username', auth('sanctum')->user()->username)
                 ->delete();
 
-            $message = "Like removed";
+            $message = 'Like removed';
 			$added = false;
         } else {
-            $postLike = new PostLike;
-            $postLike->post_id = $request->input('post');
-            $postLike->username = auth('sanctum')->user()->username;
-            $postLike->save();
+			$postCommentLikes = new PostCommentLike;
+            $postCommentLikes->post_comment_id = $request->input('comment');
+            $postCommentLikes->username = auth('sanctum')->user()->username;
+            $postCommentLikes->save();
 
-            $message = "Post liked";
+            $message = 'Comment liked';
 			$added = true;
         }
 

@@ -24,9 +24,9 @@ class KaraokeLikeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, KaraokeLikeService $karaokeLikeService)
+    public function store(Request $request, KaraokeLikeService $service)
     {
-        return $karaokeLikeService->store($request);
+        return $service->store($request);
     }
 
     /**

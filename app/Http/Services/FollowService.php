@@ -25,6 +25,7 @@ class FollowService
                 ->delete();
 
             $message = "Unfollowed";
+			$added = false;
         } else {
             $post = new Follow;
             $post->followed = $request->input('musician');
@@ -32,8 +33,9 @@ class FollowService
             $post->save();
 
             $message = "Followed";
+			$added = true;
         }
 
-        return $message;
+        return [$added, $message];
     }
 }

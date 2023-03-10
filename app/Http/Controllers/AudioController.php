@@ -13,9 +13,9 @@ class AudioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(AudioService $audioService)
+    public function index(AudioService $service)
     {
-        return $audioService->index();
+        return $service->index();
     }
 
     /**
@@ -24,7 +24,7 @@ class AudioController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, AudioService $audioService)
+    public function store(Request $request, AudioService $service)
     {
         // Handle form for audio
         $this->validate($request, [
@@ -34,7 +34,7 @@ class AudioController extends Controller
             'ft' => 'nullable|exists:users,username',
         ]);
 
-        return $audioService->store($request);
+        return $service->store($request);
     }
 
     /**
@@ -43,9 +43,9 @@ class AudioController extends Controller
      * @param  \App\Models\Audio  $audio
      * @return \Illuminate\Http\Response
      */
-    public function show($id, AudioService $audioService)
+    public function show($id, AudioService $service)
     {
-        return $audioService->show($id);
+        return $service->show($id);
     }
 
     /**
@@ -55,14 +55,14 @@ class AudioController extends Controller
      * @param  \App\Models\Audio  $audio
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, AudioService $audioService)
+    public function update(Request $request, $id, AudioService $service)
     {
         $this->validate($request, [
             'name' => 'nullable|string',
             'ft' => 'nullable|exists:users,username',
         ]);
 
-        return $audioService->update($request, $id);
+        return $service->update($request, $id);
     }
 
     /**

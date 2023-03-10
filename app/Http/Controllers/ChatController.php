@@ -35,9 +35,9 @@ class ChatController extends Controller
      * @param  \App\Models\Chat  $chat
      * @return \Illuminate\Http\Response
      */
-    public function show($username, ChatService $chatService)
+    public function show($username, ChatService $service)
     {
-        return $chatService->show($username);
+        return $service->show($username);
     }
 
     /**

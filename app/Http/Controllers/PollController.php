@@ -24,9 +24,9 @@ class PollController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, PollService $pollService)
+    public function store(Request $request, PollService $service)
     {
-        return $pollService->store($request);
+        return $service->store($request);
     }
 
     /**

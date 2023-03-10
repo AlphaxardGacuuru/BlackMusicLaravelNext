@@ -13,9 +13,9 @@ class CartAudioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(CartAudioService $cartAudioService)
+    public function index(CartAudioService $service)
     {
-        return $cartAudioService->index();
+        return $service->index();
     }
 
     /**
@@ -24,9 +24,9 @@ class CartAudioController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, CartAudioService $cartAudioService)
+    public function store(Request $request, CartAudioService $service)
     {
-        return $cartAudioService->store($request);
+        return $service->store($request);
     }
 
     /**

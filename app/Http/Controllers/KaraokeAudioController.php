@@ -13,9 +13,9 @@ class KaraokeAudioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(KaraokeAudioService $karaokeAudioService)
+    public function index(KaraokeAudioService $service)
     {
-        return $karaokeAudioService->index();
+        return $service->index();
     }
 
     /**
@@ -35,9 +35,9 @@ class KaraokeAudioController extends Controller
      * @param  \App\Models\KaraokeAudio  $karaokeAudio
      * @return \Illuminate\Http\Response
      */
-    public function show($id, KaraokeAudioService $karaokeAudioService)
+    public function show($id, KaraokeAudioService $service)
     {
-        return $karaokeAudioService->show($id);
+        return $service->show($id);
     }
 
     /**

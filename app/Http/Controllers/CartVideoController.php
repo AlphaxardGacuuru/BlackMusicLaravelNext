@@ -13,9 +13,9 @@ class CartVideoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(CartVideoService $cartVideoService)
+    public function index(CartVideoService $service)
     {
-        return $cartVideoService->index();
+        return $service->index();
     }
 
     /**
@@ -24,9 +24,9 @@ class CartVideoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, CartVideoService $cartVideoService)
+    public function store(Request $request, CartVideoService $service)
     {
-		return $cartVideoService->store($request);
+		return $service->store($request);
     }
 
     /**

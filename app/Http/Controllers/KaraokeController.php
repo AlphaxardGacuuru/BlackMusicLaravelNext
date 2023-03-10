@@ -13,9 +13,9 @@ class KaraokeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(KaraokeService $karaokeService)
+    public function index(KaraokeService $service)
     {
-        return $karaokeService->index();
+        return $service->index();
     }
 
     /**

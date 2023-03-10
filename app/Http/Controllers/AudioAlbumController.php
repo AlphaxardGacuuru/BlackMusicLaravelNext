@@ -13,9 +13,9 @@ class AudioAlbumController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(AudioAlbumService $audioAlbumService)
+    public function index(AudioAlbumService $service)
     {
-		return $audioAlbumService->index();
+		return $service->index();
     }
 
     /**
@@ -24,7 +24,7 @@ class AudioAlbumController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, AudioAlbumService $audioAlbumService)
+    public function store(Request $request, AudioAlbumService $service)
     {
         $this->validate($request, [
             'name' => 'required|string',
@@ -32,7 +32,7 @@ class AudioAlbumController extends Controller
             'cover' => 'required|image|max:1999',
         ]);
 
-		return $audioAlbumService->store($request);
+		return $service->store($request);
     }
 
     /**
@@ -41,9 +41,9 @@ class AudioAlbumController extends Controller
      * @param  \App\Models\AudioAlbum  $audioAlbum
      * @return \Illuminate\Http\Response
      */
-    public function show($id, AudioAlbumService $audioAlbumService)
+    public function show($id, AudioAlbumService $service)
     {
-        return $audioAlbumService->show($id);
+        return $service->show($id);
     }
 
     /**
@@ -53,13 +53,13 @@ class AudioAlbumController extends Controller
      * @param  \App\Models\AudioAlbum  $audioAlbum
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, AudioAlbumService $audioAlbumService)
+    public function update(Request $request, $id, AudioAlbumService $service)
     {
         $this->validate($request, [
             'cover' => 'nullable|image|max:1999',
         ]);
 
-		return $audioAlbumService->update($request, $id);
+		return $service->update($request, $id);
     }
 
     /**

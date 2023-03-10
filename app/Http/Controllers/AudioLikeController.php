@@ -24,9 +24,9 @@ class AudioLikeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, AudioLikeService $audioLikeService)
+    public function store(Request $request, AudioLikeService $service)
     {
-        return $audioLikeService->store($request);
+        return $service->store($request);
     }
 
     /**

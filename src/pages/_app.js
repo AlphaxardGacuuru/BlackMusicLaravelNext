@@ -2,9 +2,9 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '@/styles/dark.css'
 import('next').NextConfig
 
-import LoginPopUp from '../components/auth/LoginPopUp';
-import TopNav from '@/components/layouts/TopNav'
-import BottomNav from '@/components/layouts/BottomNav'
+import LoginPopUp from '@/components/Auth/LoginPopUp';
+import TopNav from '@/components/Layouts/TopNav'
+import BottomNav from '@/components/Layouts/BottomNav'
 import Messages from '@/components/core/Messages'
 
 import React, { useState, useEffect, useRef } from 'react'

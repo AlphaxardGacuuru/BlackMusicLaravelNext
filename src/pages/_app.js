@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '@/styles/dark.css'
 import('next').NextConfig
 
-import LoginPopUp from '@/components/auth/LoginPopUp';
+import LoginPopUp from '../components/auth/LoginPopUp';
 import TopNav from '@/components/layouts/TopNav'
 import BottomNav from '@/components/layouts/BottomNav'
 import Messages from '@/components/core/Messages'

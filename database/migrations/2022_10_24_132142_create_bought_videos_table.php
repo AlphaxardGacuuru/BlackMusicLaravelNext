@@ -36,6 +36,8 @@ return new class extends Migration
                 ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+
+            $table->unique(['video_id', 'username']);
         });
     }
 

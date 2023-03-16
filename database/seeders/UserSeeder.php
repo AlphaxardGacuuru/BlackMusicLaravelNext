@@ -15,12 +15,24 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
+        // Check if @blackmusic exists
+        $blackDoesntExist = User::where('username', '@blackmusic')
+            ->doesntExist();
+
+        if ($blackDoesntExist) {
+            User::factory()
+                ->black()
+                ->hasKopokopos(1)
+                ->create();
+        }
+		
         User::factory()
             ->count(10)
             ->unverified()
             ->state(new Sequence(
                 ['account_type' => 'normal'],
                 ['account_type' => 'musician']))
+            ->hasKopokopos(1)
             ->create();
     }
 }

@@ -21,14 +21,14 @@ class KaraokeSeeder extends Seeder
             ->state(new Sequence(
                 ['karaoke' => 'karaokes/1.mp4'],
                 ['karaoke' => 'karaokes/2.mp4']))
-            ->hasLikes(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username])
+            ->hasLikes(1, fn(array $attributes) => ['username' => User::all()->random()->username])
             ->hasComments(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username]);
 
         $karaoke2 = Karaoke::factory()
             ->state(new Sequence(
                 ['karaoke' => 'karaokes/3.mp4'],
                 ['karaoke' => 'karaokes/4.mp4']))
-            ->hasLikes(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username])
+            ->hasLikes(1, fn(array $attributes) => ['username' => User::all()->random()->username])
             ->hasComments(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username]);
 
         for ($i = 0; $i < 5; $i++) {

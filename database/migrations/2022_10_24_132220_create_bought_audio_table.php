@@ -37,6 +37,8 @@ return new class extends Migration
                 ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+
+            $table->unique(['audio_id', 'username']);
         });
     }
 

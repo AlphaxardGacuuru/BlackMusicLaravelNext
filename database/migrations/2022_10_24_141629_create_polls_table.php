@@ -28,6 +28,8 @@ return new class extends Migration
                 ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+
+            $table->unique(['post_id', 'username']);
         });
     }
 

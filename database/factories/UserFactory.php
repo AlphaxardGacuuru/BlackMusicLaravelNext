@@ -6,6 +6,7 @@ use App\Models\Follow;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
@@ -46,10 +47,10 @@ class UserFactory extends Factory
             'username' => '@blackmusic',
             'email' => 'al@black.co.ke',
             'email_verified_at' => now(),
-            'avatar' => 'avatars/male_avatar.png',
+            'avatar' => 'avatars/male-avatar.png',
             'backdrop' => 'img/headphones.jpg',
             'phone' => '0700000000',
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => Hash::make('0700000000'),
             'remember_token' => Str::random(10),
             'bio' => fake()->catchPhrase(),
         ]);
@@ -78,13 +79,19 @@ class UserFactory extends Factory
         return $this->afterMaking(function (User $user) {
             //
         })->afterCreating(function (User $user) {
-            Follow::factory()
-                ->count(2)
-                ->state(new Sequence(
-                    ['followed' => $user->username],
-                    ['followed' => '@blackmusic']
-                ))
-                ->create(['username' => $user->username]);
+            // Check if user is @blackmusic
+            if ($user->username == '@blackmusic') {
+                Follow::factory()
+                    ->create(['username' => $user->username, 'followed' => '@blackmusic']);
+            } else {
+                Follow::factory()
+                    ->count(2)
+                    ->state(new Sequence(
+                        ['followed' => $user->username],
+                        ['followed' => '@blackmusic']
+                    ))
+                    ->create(['username' => $user->username]);
+            }
         });
     }
 }

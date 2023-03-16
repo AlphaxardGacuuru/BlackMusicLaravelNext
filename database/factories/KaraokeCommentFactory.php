@@ -36,7 +36,7 @@ class KaraokeCommentFactory extends Factory
             //
         })->afterCreating(function (KaraokeComment $comment) {
             KaraokeCommentLike::factory()
-                ->count(rand(1, 5))
+                ->count(1)
                 ->create([
                     'username' => User::all()->random()->username,
                     'karaoke_comment_id' => $comment->id,

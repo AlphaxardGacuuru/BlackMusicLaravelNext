@@ -20,7 +20,7 @@ class PostSeeder extends Seeder
             ->state(new Sequence(
                 ["media" => "post-media/1.jpg"],
                 ["media" => null]))
-            ->hasLikes(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username])
+            ->hasLikes(1, fn(array $attributes) => ['username' => User::all()->random()->username])
             ->hasComments(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username]);
 
         for ($i = 0; $i < 5; $i++) {

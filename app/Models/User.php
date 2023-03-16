@@ -110,22 +110,22 @@ class User extends Authenticatable
 
     public function boughtAudios()
     {
-        return $this->hasMany(AudioLike::class, 'username', 'username');
+        return $this->hasMany(BoughtAudio::class, 'username', 'username');
     }
 
     public function boughtVideos()
     {
-        return $this->hasMany(AudioLike::class, 'username', 'username');
+        return $this->hasMany(BoughtVideo::class, 'username', 'username');
     }
 
     public function cartAudios()
     {
-        return $this->hasMany(AudioLike::class, 'username', 'username');
+        return $this->hasMany(CartAudio::class, 'username', 'username');
     }
 
     public function cartVideos()
     {
-        return $this->hasMany(AudioLike::class, 'username', 'username');
+        return $this->hasMany(CartVideo::class, 'username', 'username');
     }
 
     public function chats()
@@ -300,6 +300,7 @@ class User extends Authenticatable
 
         // Get Total Cash paid
         $kopokopo = $user->kopokopos->sum('amount');
+
         return $kopokopo - ($totalVideos + $totalAudios);
     }
 }

@@ -30,7 +30,7 @@ class AudioSeeder extends Seeder
                 "audio" => "audios/1.mp3",
                 "audio" => "audios/2.mp3",
             ]))
-            ->hasLikes(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username])
+            ->hasLikes(1, fn(array $attributes) => ['username' => User::all()->random()->username])
             ->hasComments(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username]);
 
         $audio2 = Audio::factory()
@@ -46,7 +46,7 @@ class AudioSeeder extends Seeder
                 "audio" => "audios/3.mp3",
                 "audio" => "audios/4.mp3",
             ]))
-            ->hasLikes(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username])
+            ->hasLikes(1, fn(array $attributes) => ['username' => User::all()->random()->username])
             ->hasComments(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username]);
 
         for ($i = 0; $i < 5; $i++) {

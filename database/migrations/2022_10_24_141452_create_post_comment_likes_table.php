@@ -27,6 +27,8 @@ return new class extends Migration
                 ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+
+            $table->unique(['post_comment_id', 'username']);
         });
     }
 

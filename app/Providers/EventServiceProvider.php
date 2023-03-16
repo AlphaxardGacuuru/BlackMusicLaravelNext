@@ -11,11 +11,13 @@ use App\Events\PostLikedEvent;
 use App\Events\PostCommentLikedEvent;
 use App\Events\PostCommentedEvent;
 use App\Events\FollowedEvent;
+use App\Events\VideoBoughtEvent;
 use App\Listeners\AudioCommentLikedListener;
 use App\Listeners\PostLikedListener;
 use App\Listeners\PostCommentLikedListener;
 use App\Listeners\PostCommentedListener;
 use App\Listeners\FollowedListener;
+use App\Listeners\VideoBoughtListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -29,6 +31,7 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
 		],
 		AudioCommentLikedEvent::class => [AudioCommentLikedListener::class],
+		VideoBoughtEvent::class => [VideoBoughtListener::class],
 		PostLikedEvent::class => [PostLikedListener::class],
 		PostCommentedEvent::class => [PostCommentedListener::class],
 		PostCommentLikedEvent::class => [PostCommentLikedListener::class],

@@ -36,107 +36,53 @@ class BoughtVideoService
      */
     public function store($request)
     {
-        $permission = "";
-        $approved = [];
+        $canBuy = "";
+        $boughtVideos = [];
+        $decoArtists = [];
+
         /* Fetch songs from Cart Videos */
         $cartVideos = CartVideo::where('username', auth('sanctum')->user()->username)
             ->get();
 
         foreach ($cartVideos as $cartVideo) {
             // Get Cost of Bought Videos
-            $totalVideos = BoughtVideo::where('username', auth('sanctum')->user()->username)->count() * 20;
-            $totalAudios = BoughtAudio::where('username', auth('sanctum')->user()->username)->count() * 10;
-            $betterPhone = substr_replace(auth('sanctum')->user()->phone, '+254', 0, -9);
+            $totalVideos = BoughtVideo::where('username', auth('sanctum')->user()->username)
+                ->count() * 20;
+            $totalAudios = BoughtAudio::where('username', auth('sanctum')->user()->username)
+                ->count() * 10;
 
             // Get Total Cash paid
-            $kopokopo = Kopokopo::where('sender_phone_number', $betterPhone);
-			$kopokopoSum = $kopokopo->sum('amount');
+            $kopokopo = Kopokopo::where('username', auth('sanctum')->user()->username);
+            $kopokopoSum = $kopokopo->sum('amount');
             $balance = $kopokopoSum - ($totalVideos + $totalAudios);
 
-			// Get reference
-			$reference = $kopokopo->first()->reference;
-
             // Check if user can buy songs in cart
-            $permission = intval($balance / 20);
+            $canBuy = intval($balance / 20);
 
-            if ($permission >= 1) {
-                $bvQuery = BoughtVideo::where('username', auth('sanctum')->user()->username)
+            if ($canBuy >= 1) {
+                $notBought = BoughtVideo::where('username', auth('sanctum')->user()->username)
                     ->where('video_id', $cartVideo->video_id)
-                    ->count();
-                if ($bvQuery == 0) {
-                    /* Add song to videos_bought */
-                    $boughtVideos = new BoughtVideo;
-                    $boughtVideos->video_id = $cartVideo->video_id;
-                    $boughtVideos->reference = $reference;
-                    $boughtVideos->price = 20;
-                    $boughtVideos->username = auth('sanctum')->user()->username;
-                    $boughtVideos->name = $cartVideo->video->name;
-                    $boughtVideos->artist = $cartVideo->video->username;
-                    $boughtVideos->save();
+                    ->doesntExist();
 
-                    /* Showing video song bought notification */
-                    $user = User::where('username', $cartVideo->video->username)
-                        ->first();
-
-                    $user->notify(new BoughtVideoNotifications($cartVideo));
+                if ($notBought) {
+                    $this->storeBoughtVideo($cartVideo);
 
                     /* Add deco if necessary */
-                    /* Check if songs are 10 */
-                    $userDecos = Deco::where('username', auth('sanctum')->user()->username)
-                        ->where('artist', $cartVideo->video->username)
-                        ->count();
-                    $userVideos = BoughtVideo::where('username', auth('sanctum')->user()->username)
-                        ->where('artist', $cartVideo->video->username)
-                        ->count();
-                    $userVideos = $userVideos / 10;
-                    $decoBalance = $userVideos - $userDecos;
-                    $decoPermission = intval($decoBalance);
+                    $artist = $this->storeDeco($cartVideo);
 
-                    /* If deco balance >= 1 then add deco */
-                    if ($decoPermission >= 1) {
-                        $deco = new Deco;
-                        $deco->username = auth('sanctum')->user()->username;
-                        $deco->artist = $cartVideo->video->username;
-                        $deco->save();
-
-                        /* Add deco notification */
-                        auth('sanctum')->user()->notify(new DecoNotifications($cartVideo->video->username));
-                    }
                     /* Delete from cart */
-                    CartVideos::where('video_id', $cartVideo->video_id)
+                    CartVideo::where('video_id', $cartVideo->video_id)
                         ->where('username', auth('sanctum')->user()->username)
                         ->delete();
 
                     // Update array
-                    array_push($approved, $cartVideo->video->id);
+                    array_push($boughtVideos, $cartVideo->video);
+                    array_push($decoArtists, $artist);
                 }
             }
         }
 
-        $receiptVideos = [];
-
-        foreach ($approved as $id) {
-
-            $video = Video::find($id);
-
-            array_push($receiptVideos, [
-                "id" => $video->id,
-                "video" => $video->video,
-                "name" => $video->name,
-                "username" => $video->username,
-                "ft" => $video->ft,
-                "album" => $video->album,
-                "genre" => $video->genre,
-                "thumbnail" => $video->thumbnail,
-            ]);
-        }
-
-        // Notify User
-        if (count($receiptVideos) > 0) {
-            auth('sanctum')->user()->notify(new VideoReceiptNotifications($receiptVideos));
-        }
-
-        return response($receiptVideos, 200);
+        return [$boughtVideos, $decoArtists];
     }
 
     private function structure($video, $username)
@@ -166,5 +112,43 @@ class BoughtVideoService
             "downloads" => $video->bought->count(),
             "createdAt" => $video->created_at,
         ];
+    }
+
+    // Store Bought Video
+    private function storeBoughtVideo($cartVideo)
+    {
+        /* Add song to videos_bought */
+        $boughtVideo = new BoughtVideo;
+        $boughtVideo->video_id = $cartVideo->video_id;
+        $boughtVideo->price = 20;
+        $boughtVideo->username = auth('sanctum')->user()->username;
+        $boughtVideo->name = $cartVideo->video->name;
+        $boughtVideo->artist = $cartVideo->video->username;
+        $boughtVideo->save();
+    }
+
+    // Store Deco
+    public function storeDeco($cartVideo)
+    {
+        /* Check if songs are 10 */
+        $userDecos = Deco::where('username', auth('sanctum')->user()->username)
+            ->where('artist', $cartVideo->video->username)
+            ->count();
+        $userVideos = BoughtVideo::where('username', auth('sanctum')->user()->username)
+            ->where('artist', $cartVideo->video->username)
+            ->count();
+
+        $decoBalance = ($userVideos / 10) - $userDecos;
+        $canAddDeco = intval($decoBalance);
+
+        /* If deco balance >= 1 then add deco */
+        if ($canAddDeco >= 1) {
+            $deco = new Deco;
+            $deco->username = auth('sanctum')->user()->username;
+            $deco->artist = $cartVideo->video->username;
+            $deco->save();
+
+            return $cartVideo->video->username;
+        }
     }
 }

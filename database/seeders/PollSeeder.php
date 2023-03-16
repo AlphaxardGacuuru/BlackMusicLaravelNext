@@ -30,29 +30,18 @@ class PollSeeder extends Seeder
                 'created_at' => Carbon::now()->subHours(24),
             ]);
 
-        $poll1 = Poll::factory()
-            ->state(new Sequence(
-                ['parameter' => $post->parameter_1],
-                ['parameter' => $post->parameter_2]));
+        // Add for each user
+        $users = User::all();
 
-        $poll2 = Poll::factory()
-            ->state(new Sequence(
-                ['parameter' => $post->parameter_3],
-                ['parameter' => $post->parameter_4]));
-
-        for ($i = 0; $i < 20; $i++) {
-            $poll1->create([
-                'post_id' => $post->id,
-                'username' => User::all()->random()->username]);
-
-            $poll2->create(['post_id' => $post->id,
-                'username' => User::all()->random()->username,
-            ]);
-
-            Poll::factory()->create([
-                'parameter' => $post->parameter_5,
-                'post_id' => $post->id,
-                'username' => User::all()->random()->username]);
+        foreach ($users as $user) {
+            Poll::factory()
+                ->state(new Sequence(
+                    ['parameter' => $post->parameter_1],
+                    ['parameter' => $post->parameter_2]))
+                ->create([
+                    'post_id' => $post->id,
+                    'username' => $user->username,
+                ]);
         }
     }
 }

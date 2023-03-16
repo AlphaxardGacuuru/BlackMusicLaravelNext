@@ -36,7 +36,7 @@ class AudioCommentFactory extends Factory
             //
         })->afterCreating(function (AudioComment $comment) {
             AudioCommentLike::factory()
-                ->count(rand(1, 5))
+                ->count(1)
                 ->create([
                     'username' => User::all()->random()->username,
                     'audio_comment_id' => $comment->id,

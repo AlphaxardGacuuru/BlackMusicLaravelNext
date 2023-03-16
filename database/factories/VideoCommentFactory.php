@@ -36,7 +36,7 @@ class VideoCommentFactory extends Factory
             //
         })->afterCreating(function (VideoComment $comment) {
             VideoCommentLike::factory()
-                ->count(rand(1, 5))
+                ->count(1)
                 ->create([
                     'username' => User::all()->random()->username,
                     'video_comment_id' => $comment->id,

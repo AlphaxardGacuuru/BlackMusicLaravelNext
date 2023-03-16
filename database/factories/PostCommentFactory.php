@@ -36,7 +36,7 @@ class PostCommentFactory extends Factory
             //
         })->afterCreating(function (PostComment $comment) {
             PostCommentLike::factory()
-                ->count(rand(1, 5))
+                ->count(1)
                 ->create([
                     'username' => User::all()->random()->username,
                     'post_comment_id' => $comment->id,

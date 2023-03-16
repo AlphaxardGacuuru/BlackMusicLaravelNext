@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\VideoBoughtEvent;
+use App\Http\Services\BoughtVideoService;
 use App\Models\BoughtVideo;
 use Illuminate\Http\Request;
 
@@ -23,9 +25,15 @@ class BoughtVideoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, BoughtVideoService $service)
     {
-        //
+        $response = $service->store($request);
+
+        $hasBought = count($response[0]) > 0;
+
+        VideoBoughtEvent::dispatchIf($hasBought, $response[0], $response[1]);
+
+        return response($response[0], 200);
     }
 
     /**

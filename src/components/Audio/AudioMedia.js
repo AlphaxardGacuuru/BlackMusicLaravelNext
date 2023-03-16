@@ -65,7 +65,7 @@ const AudioMedia = (props) => {
 					<>
 						<div>
 							<button
-								className="mysonar-btn white-btn pt-1"
+								className="mysonar-btn white-btn"
 								style={{ minWidth: '40px', height: '33px' }}
 								onClick={() => onCartAudios(props, props.audio.id)}>
 								<CartSVG />

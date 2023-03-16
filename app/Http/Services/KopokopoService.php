@@ -117,7 +117,7 @@ class KopokopoService
         $kopokopo->sender_first_name = $resource['sender_first_name'];
         $kopokopo->sender_middle_name = $resource['sender_middle_name'];
         $kopokopo->sender_last_name = $resource['sender_last_name'];
-        $kopokopo->sender_username = $username;
+        $kopokopo->username = $username;
         $kopokopo->save();
     }
 }

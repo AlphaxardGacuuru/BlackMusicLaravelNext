@@ -92,7 +92,12 @@ const TopNavLinks = (props) => {
 					</span>
 				</span>
 				<div
-					style={{ borderRadius: "0", backgroundColor: "#232323" }}
+					style={{
+						borderRadius: "0",
+						backgroundColor: "#232323",
+						minWidth: "20em",
+						maxWidth: "40em"
+					}}
 					className="dropdown-menu m-0 p-0"
 					aria-labelledby="dropdownMenuButton">
 					<div className="dropdown-header border-bottom border-dark">Notifications</div>
@@ -102,7 +107,7 @@ const TopNavLinks = (props) => {
 							.map((notification, key) => (
 								<Link key={key} href={notification.url}>
 									<a
-										className="p-2 dropdown-item border-bottom text-dark border-dark"
+										className="p-2 dropdown-item border-bottom text-dark border-dark text-wrap"
 									// onClick={() => props.onDeleteNotifications(notification.id)}
 									>
 										<small>{notification.message}</small>

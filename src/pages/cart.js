@@ -198,8 +198,8 @@ const Cart = (props) => {
 												onClick={(e) => {
 													e.preventDefault()
 													setBottomMenu("menu-open")
-													// onPay()
-													STKPush(total)
+													onPay()
+													// STKPush(total)
 												}} />
 										</div>
 									</div>

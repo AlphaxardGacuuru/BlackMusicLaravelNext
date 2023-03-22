@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from '@/lib/axios'
 
-import Img from '@/components/core/Img'
+import Img from '@/components/Core/Img'
 import AvatarMedia from '@/components/User/AvatarMedia'
 import VideoMedia from '@/components/Video/VideoMedia'
 import AudioMedia from '@/components/Audio/AudioMedia'

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import axios from '@/lib/axios';
 
-import Btn from '@/components/core/Btn'
+import Btn from '@/components/Core/Btn'
 
 // Import React FilePond
 import { FilePond, registerPlugin } from 'react-filepond';

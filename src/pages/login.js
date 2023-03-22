@@ -1,4 +1,4 @@
-import Btn from '@/components/core/Btn'
+import Btn from '@/components/Core/Btn'
 import Link from 'next/link'
 import { useAuth } from '@/hooks/auth'
 import { useEffect, useState } from 'react'

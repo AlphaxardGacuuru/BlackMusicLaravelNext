@@ -1,4 +1,4 @@
-import Btn from '../core/Btn'
+import Btn from '../Core/Btn'
 
 const Poll = (props) => {
 

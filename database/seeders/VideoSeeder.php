@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\CartVideo;
 use App\Models\User;
 use App\Models\Video;
 use App\Models\VideoAlbum;
@@ -47,8 +46,8 @@ class VideoSeeder extends Seeder
                 "video" => "videos/3.mp4",
                 "video" => "videos/4.mp4",
             ]))
-            ->hasLikes(1, fn(array $attributes) => ['username' => User::all()->random()->username])
-            ->hasComments(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username]);
+            ->hasLikes(1, fn() => ['username' => User::all()->random()->username])
+            ->hasComments(rand(1, 5), fn() => ['username' => User::all()->random()->username]);
 
         for ($i = 0; $i < 5; $i++) {
             $video->create([

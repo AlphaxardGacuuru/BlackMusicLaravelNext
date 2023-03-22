@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic';
 
-import Button from '@/components/core/Btn'
-import Img from '@/components/core/Img'
+import Button from '@/components/Core/Btn'
+import Img from '@/components/Core/Img'
 
 // Import React FilePond
 import { FilePond, registerPlugin } from 'react-filepond';

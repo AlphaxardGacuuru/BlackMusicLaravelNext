@@ -36,8 +36,8 @@ class VideoBoughtListener
         auth('sanctum')->user()->notify(new VideoReceiptNotification($event->videos));
 
         /* Add deco notification */
-		foreach ($event->decoArtists as $artist) {
-			auth('sanctum')->user()->notify(new DecoNotification($artist));
-		}
+        foreach ($event->decoArtists as $artist) {
+            auth('sanctum')->user()->notify(new DecoNotification($artist));
+        }
     }
 }

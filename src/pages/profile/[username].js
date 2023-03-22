@@ -4,7 +4,7 @@ import Link from 'next/link'
 import axios from '@/lib/axios'
 
 import Img from 'next/image'
-import Btn from '../../components/core/Btn'
+import Btn from '../../components/Core/Btn'
 import LoadingVideoMedia from '../../components/video/LoadingVideoMedia'
 import LoadingAudioMedia from '../../components/audio/LoadingAudioMedia'
 

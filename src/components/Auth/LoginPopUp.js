@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import axios from '@/lib/axios'
 import { useAuth } from '@/hooks/auth'
 
-import Btn from '@/components/core/Btn'
+import Btn from '@/components/Core/Btn'
 
 import CloseSVG from '@/svgs/CloseSVG';
 

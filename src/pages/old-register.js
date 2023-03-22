@@ -1,4 +1,4 @@
-import Btn from '@/components/core/Btn'
+import Btn from '@/components/Core/Btn'
 import GuestLayout from '@/components/Layouts/GuestLayout'
 import Input from '@/components/Input'
 import InputError from '@/components/InputError'

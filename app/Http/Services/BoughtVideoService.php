@@ -17,12 +17,19 @@ class BoughtVideoService
      */
     public function index()
     {
+        // Check if user is logged in
+        $auth = auth('sanctum')->user();
+
+        $authUsername = $auth ? $auth->username : '@guest';
+
         $getBoughtVideos = BoughtVideo::all();
 
         $boughtVideos = [];
 
         foreach ($getBoughtVideos as $boughtVideo) {
-            array_push($boughtVideos, $this->structure($boughtVideo, auth('sanctum')->user()->username));
+            array_push($boughtVideos,
+                $this->structure($boughtVideo->video,
+                    $authUsername));
         }
 
         return $boughtVideos;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
-import Carousel from '@/components/core/Carousel'
+import Carousel from '@/components/Core/Carousel'
 import LoadingAudioMedia from '@/components/Audio/LoadingAudioMedia'
 import LoadingAvatarMedia from '@/components/User/LoadingAvatarMedia'
 import AudioMedia from '@/components/Audio/AudioMedia'
@@ -225,7 +225,7 @@ const AudioCharts = (props) => {
 									{props.users
 										.filter((user) => user.username == artistArray.key)
 										.map((user, key) => (
-												<AvatarMedia key={key} user={user} />
+											<AvatarMedia key={key} user={user} />
 										))}
 								</span>
 							))}

@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
-import SocialMediaInput from '@/components/core/SocialMediaInput'
+import SocialMediaInput from '@/components/Core/SocialMediaInput'
 
 const PostEdit = (props) => {
 

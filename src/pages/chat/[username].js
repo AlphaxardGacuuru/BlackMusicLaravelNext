@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import axios from 'axios'
 
-import Img from '@/components/core/Img'
+import Img from '@/components/Core/Img'
 
 const ChatThread = (props) => {
 

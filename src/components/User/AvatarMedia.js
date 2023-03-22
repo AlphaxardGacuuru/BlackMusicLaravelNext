@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import Img from '@/components/core/Img'
+import Img from '@/components/Core/Img'
 
 const AvatarMedia = (props) => {
 	return (

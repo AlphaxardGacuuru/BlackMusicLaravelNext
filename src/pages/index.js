@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import axios from '@/lib/axios'
 
-import Img from '@/components/core/Img'
+import Img from '@/components/Core/Img'
 
 import LoadingMusicianMedia from '@/components/User/LoadingMusicianMedia'
 import LoadingVideoMedia from '@/components/Video/LoadingVideoMedia'

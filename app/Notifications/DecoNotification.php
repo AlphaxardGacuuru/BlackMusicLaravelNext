@@ -56,19 +56,19 @@ class DecoNotification extends Notification
      */
     public function toArray($notifiable)
     {
-        $artists = "";
+        // $artists = "";
 
-        foreach ($this->artists as $key => $value) {
-            if ($key == 0) {
-                $artists = $value;
-            } elseif ($key == count($this->artists) - 1) {
-                $artists = $artists . " & " . $value;
-			} else {
-                $artists = $artists . ", " . $value;
-            }
-        }
+        // foreach ($this->artists as $key => $value) {
+        //     if ($key == 0) {
+        //         $artists = $value;
+        //     } elseif ($key == count($this->artists) - 1) {
+        //         $artists = $artists . " & " . $value;
+		// 	} else {
+        //         $artists = $artists . ", " . $value;
+        //     }
+        // }
 
-        $message = "Congratulations! " . $artists . " decorated you.";
+        $message = "Congratulations! " . $this->artist . " decorated you.";
 
         return [
 			'url' => '/profile/' . $this->artist,

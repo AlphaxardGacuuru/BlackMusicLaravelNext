@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import axios from '@/lib/axios'
 
-import Btn from '@/components/core/Btn'
+import Btn from '@/components/Core/Btn'
 
 const Register = (props) => {
 

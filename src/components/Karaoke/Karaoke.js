@@ -3,7 +3,7 @@ import Link from 'next/link'
 import axios from '@/lib/axios'
 import Ticker from 'react-ticker'
 
-import Img from '@/components/core/Img'
+import Img from '@/components/Core/Img'
 import KaraokeCommentSection from './KaraokeCommentSection'
 
 import CloseSVG from '@/svgs/CloseSVG'
@@ -22,7 +22,7 @@ const Karaoke = (props) => {
 	useEffect(() => {
 		// Fetch Karaoke Comments
 		props.get("karaoke-comments", props.setKaraokeComments)
-	}, [])	
+	}, [])
 
 	const [play, setPlay] = useState()
 	const [bottomOptionsMenu, setBottomOptionsMenu] = useState()

@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import axios from '@/lib/axios';
 import Link from 'next/link';
 
-import Img from '@/components/core/Img'
-import Btn from '@/components/core/Btn'
+import Img from '@/components/Core/Img'
+import Btn from '@/components/Core/Btn'
 
 // Import React FilePond
 import { FilePond, registerPlugin } from 'react-filepond';

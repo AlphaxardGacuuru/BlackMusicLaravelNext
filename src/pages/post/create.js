@@ -2,11 +2,11 @@ import { useEffect } from 'react'
 import Link from 'next/link'
 
 // const SocialMediaInput = React.lazy(() => import('@/components/core/SocialMediaInput'))
-import SocialMediaInput from '@/components/core/SocialMediaInput'
+import SocialMediaInput from '@/components/Core/SocialMediaInput'
 import CloseSVG from '@/svgs/CloseSVG'
 
 const PostCreate = (props) => {
-	
+
 	// Set states
 	useEffect(() => {
 		setTimeout(() => {

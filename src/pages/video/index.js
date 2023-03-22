@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import axios from '@/lib/axios'
 
-import Img from '@/components/core/Img'
-import Btn from '@/components/core/Btn'
+import Img from '@/components/Core/Img'
+import Btn from '@/components/Core/Btn'
 
 const Videos = (props) => {
 

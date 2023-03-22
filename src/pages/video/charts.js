@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 
 import onCartVideos from '@/functions/onCartVideos'
 
-import Carousel from '@/components/core/Carousel'
+import Carousel from '@/components/Core/Carousel'
 import LoadingAvatarMedia from '@/components/User/LoadingAvatarMedia'
 import LoadingVideoMedia from '@/components/Video/LoadingVideoMedia'
 import VideoMedia from '@/components/Video/VideoMedia'

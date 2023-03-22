@@ -1,4 +1,4 @@
-import Img from '@/components/core/Img'
+import Img from '@/components/Core/Img'
 import Link from 'next/link'
 import { useState, useRef } from 'react'
 

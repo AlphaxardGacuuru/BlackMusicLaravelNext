@@ -1,11 +1,11 @@
 import { useState, useEffect, Suspense } from 'react'
 import axios from '@/lib/axios'
 
-import CommentMedia from '@/components/core/CommentMedia'
+import CommentMedia from '@/components/Core/CommentMedia'
 
 import CloseSVG from '@/svgs/CloseSVG'
 import PostOptions from '@/components/Post/PostOptions'
-import SocialMediaInput from '../core/SocialMediaInput'
+import SocialMediaInput from '../Core/SocialMediaInput'
 
 const KaraokeCommentSection = (props) => {
 

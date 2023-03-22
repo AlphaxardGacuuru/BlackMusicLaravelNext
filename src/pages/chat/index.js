@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import axios from '@/lib/axios'
-import Img from '@/components/core/Img'
+import Img from '@/components/Core/Img'
 
 const Chat = (props) => {
 

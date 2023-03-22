@@ -7,7 +7,7 @@ import PostOptions from '@/components/Post/PostOptions'
 import LoadingPostMedia from '@/components/Post/LoadingPostMedia'
 
 const PostMedia = React.lazy(() => import('@/components/Post/PostMedia'))
-const CommentMedia = React.lazy(() => import('@/components/core/CommentMedia'))
+const CommentMedia = React.lazy(() => import('@/components/Core/CommentMedia'))
 
 
 const PostShow = (props) => {
@@ -66,7 +66,7 @@ const PostShow = (props) => {
 				}
 				return true
 			})
-			
+
 		// Set new comments
 		props.setPostComments(newPostComments)
 

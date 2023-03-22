@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 
-import Img from '@/components/core/Img'
+import Img from '@/components/Core/Img'
 
 const Carousel = () => {
 

@@ -3,13 +3,13 @@ import Link from 'next/link'
 import { useRouter } from 'next/router';
 import axios from '@/lib/axios';
 
-import Img from '@/components/core/Img'
-import Btn from '@/components/core/Btn'
+import Img from '@/components/Core/Img'
+import Btn from '@/components/Core/Btn'
 import LoadingAudioMedia from '@/components/Audio/LoadingAudioMedia'
 import PostOptions from '@/components/Post/PostOptions';
-import CommentMedia from '@/components/core/CommentMedia';
+import CommentMedia from '@/components/Core/CommentMedia';
 import AudioMedia from '@/components/Audio/AudioMedia';
-import SocialMediaInput from '@/components/core/SocialMediaInput';
+import SocialMediaInput from '@/components/Core/SocialMediaInput';
 
 import ShuffleSVG from '@/svgs/ShuffleSVG';
 import PreviousSVG from '@/svgs/PreviousSVG';
@@ -44,7 +44,7 @@ const AudioShow = (props) => {
 
 		// Check if for to play is set to audio that belongs to this page
 		if (props.audioStates.show.id != id) {
-			props.audioStates.setShow({id: id, time: 0})
+			props.audioStates.setShow({ id: id, time: 0 })
 		}
 
 		setAudio(props.data.audio[0])
@@ -128,11 +128,11 @@ const AudioShow = (props) => {
 	// Function for deleting comments
 	const onDeleteComment = (comment) => {
 		axios.delete(`/api/audio-comments/${comment}`)
-		.then((res) => {
-			props.setMessages([res.data])
-			// Update audio comments
-			props.get(`audio-comments/${id}`, props.setAudioComments)
-		}).catch((err) => props.getErrors(err))
+			.then((res) => {
+				props.setMessages([res.data])
+				// Update audio comments
+				props.get(`audio-comments/${id}`, props.setAudioComments)
+			}).catch((err) => props.getErrors(err))
 	}
 
 	// Function for buying audio to cart

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import Img from '@/components/core/Img'
+import Img from '@/components/Core/Img'
 
 import DecoSVG from '@/svgs/DecoSVG'
 import OptionsSVG from '@/svgs/OptionsSVG'

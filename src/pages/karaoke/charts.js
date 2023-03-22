@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import Carousel from '@/components/core/Carousel'
+import Carousel from '@/components/Core/Carousel'
 import LoadingKaraokeMedia from '@/components/Karaoke/LoadingKaraokeMedia'
 import KaraokeMedia from '@/components/Karaoke/KaraokeMedia'
 

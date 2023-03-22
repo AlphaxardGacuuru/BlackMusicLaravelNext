@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import onCartAudios from '@/functions/onCartAudios'
 
 import Img from 'next/image'
-import Btn from '../core/Btn'
+import Btn from '../Core/Btn'
 import CartSVG from '../../svgs/CartSVG'
 
 const AudioMedia = (props) => {

@@ -5,7 +5,7 @@ import('next').NextConfig
 import LoginPopUp from '@/components/Auth/LoginPopUp';
 import TopNav from '@/components/Layouts/TopNav'
 import BottomNav from '@/components/Layouts/BottomNav'
-import Messages from '@/components/core/Messages'
+import Messages from '@/components/Core/Messages'
 
 import React, { useState, useEffect, useRef } from 'react'
 import axios from '@/lib/axios';

@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import axios from '@/lib/axios';
 
-import Btn from '@/components/core/Btn'
-import Img from '@/components/core/Img'
+import Btn from '@/components/Core/Btn'
+import Img from '@/components/Core/Img'
 
 const VideoAlbumEdit = (props) => {
 

@@ -5,12 +5,12 @@ import axios from '@/lib/axios'
 
 import onCartVideos from '@/functions/onCartVideos'
 
-import Btn from '@/components/core/Btn'
-import Img from '@/components/core/Img'
+import Btn from '@/components/Core/Btn'
+import Img from '@/components/Core/Img'
 import PostOptions from '@/components/Post/PostOptions';
-import CommentMedia from '@/components/core/CommentMedia';
+import CommentMedia from '@/components/Core/CommentMedia';
 import VideoMedia from '@/components/Video/VideoMedia'
-import SocialMediaInput from '@/components/core/SocialMediaInput'
+import SocialMediaInput from '@/components/Core/SocialMediaInput'
 
 import ShareSVG from '@/svgs/ShareSVG'
 import CartSVG from '@/svgs/CartSVG'

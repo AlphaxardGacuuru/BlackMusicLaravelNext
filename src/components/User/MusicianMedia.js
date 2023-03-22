@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import axios from '@/lib/axios'
-import Img from '@/components/core/Img'
+import Img from '@/components/Core/Img'
 
-import Btn from '../core/Btn'
+import Btn from '../Core/Btn'
 
 import CheckSVG from '../../svgs/CheckSVG'
 

@@ -3,8 +3,8 @@ import Link from 'next/link'
 import Ticker from 'react-ticker'
 import axios from '@/lib/axios'
 
-import Img from '@/components/core/Img'
-import Button from '@/components/core/Btn'
+import Img from '@/components/Core/Img'
+import Button from '@/components/Core/Btn'
 
 import CloseSVG from '@/svgs/CloseSVG'
 import FlashSVG from '@/svgs/FlashSVG'

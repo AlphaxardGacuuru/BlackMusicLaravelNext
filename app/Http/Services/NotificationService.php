@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Notification;
 
 class NotificationService
 {
-	
+
     /**
      * Display a listing of the resource.
      *
@@ -65,7 +65,7 @@ class NotificationService
         if ($id == 0) {
             auth('sanctum')->user()->notifications()->delete();
         } else {
-            Notification::find($id)->delete();
+            auth("sanctum")->user()->notifications()->find($id)->delete();
         }
     }
 }

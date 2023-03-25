@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AudioBoughtEvent;
+use App\Http\Services\BoughtAudioService;
 use App\Models\BoughtAudio;
 use Illuminate\Http\Request;
 
@@ -12,9 +14,9 @@ class BoughtAudioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(BoughtAudioService $service)
     {
-        //
+        return $service->index();
     }
 
     /**
@@ -23,9 +25,15 @@ class BoughtAudioController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, BoughtAudioService $service)
     {
-        //
+        $response = $service->store($request);
+
+        $hasBought = count($response[0]) > 0;
+
+        AudioBoughtEvent::dispatchIf($hasBought, $response[0], $response[1]);
+
+        return response($response[0], 200);
     }
 
     /**

@@ -44,6 +44,7 @@ class BoughtVideoService
     public function store($request)
     {
         $canBuy = "";
+        $boughtVideosWithStructure = [];
         $boughtVideos = [];
         $decoArtists = [];
 
@@ -52,7 +53,7 @@ class BoughtVideoService
             ->get();
 
         foreach ($cartVideos as $cartVideo) {
-            // Get Cost of Bought Videos
+            // Get Cost of Bought Videos and Audios
             $totalVideos = BoughtVideo::where('username', auth('sanctum')->user()->username)
                 ->count() * 20;
             $totalAudios = BoughtAudio::where('username', auth('sanctum')->user()->username)
@@ -83,13 +84,19 @@ class BoughtVideoService
                         ->delete();
 
                     // Update array
+                    array_push($boughtVideosWithStructure,
+                        $this->structure($cartVideo->video,
+                            auth('sanctum')->user()->username));
+
                     array_push($boughtVideos, $cartVideo->video);
-                    array_push($decoArtists, $artist);
+
+                    // Update Deco arry
+                    $artist && array_push($decoArtists, $artist);
                 }
             }
         }
 
-        return [$boughtVideos, $decoArtists];
+        return [$boughtVideosWithStructure, $boughtVideos, $decoArtists];
     }
 
     private function structure($video, $username)
@@ -141,11 +148,13 @@ class BoughtVideoService
         $userDecos = Deco::where('username', auth('sanctum')->user()->username)
             ->where('artist', $cartVideo->video->username)
             ->count();
+
         $userVideos = BoughtVideo::where('username', auth('sanctum')->user()->username)
             ->where('artist', $cartVideo->video->username)
             ->count();
 
         $decoBalance = ($userVideos / 10) - $userDecos;
+
         $canAddDeco = intval($decoBalance);
 
         /* If deco balance >= 1 then add deco */

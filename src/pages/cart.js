@@ -8,8 +8,8 @@ import Btn from "@/components/Core/Btn"
 const Cart = props => {
     const [bottomMenu, setBottomMenu] = useState("")
     const [receipt, setReceipt] = useState("")
-    const [receiptVideos, setReceiptVideos] = useState()
-    const [receiptAudios, setReceiptAudios] = useState()
+    const [receiptVideos, setReceiptVideos] = useState([])
+    const [receiptAudios, setReceiptAudios] = useState([])
 
     // Calculate totals
     const videoTotal = props.cartVideos.length
@@ -62,7 +62,7 @@ const Cart = props => {
                             "cartVideos",
                         )
                         props.get(
-                            "videos-albums",
+                            "video-albums",
                             props.setVideoAlbums,
                             "videoAlbums",
                         )
@@ -109,7 +109,7 @@ const Cart = props => {
                             "cartAudios",
                         )
                         props.get(
-                            "audios-albums",
+                            "audio-albums",
                             props.setAudioAlbums,
                             "audioAlbums",
                         )
@@ -392,13 +392,15 @@ const Cart = props => {
                                 <h4>Videos</h4>
                             </center>
                         )}
-                        {receiptVideos.map((receiptVideo, key) => (
-                            <VideoMedia
-                                {...props}
-                                key={key}
-                                video={receiptVideo}
-                            />
-                        ))}
+                        <center>
+                            {receiptVideos.map((receiptVideo, key) => (
+                                <VideoMedia
+                                    {...props}
+                                    key={key}
+                                    video={receiptVideo}
+                                />
+                            ))}
+                        </center>
                         {/* Cart Videos End */}
 
                         {/* Cart Audios */}

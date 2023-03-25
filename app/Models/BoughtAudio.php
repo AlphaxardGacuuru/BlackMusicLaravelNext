@@ -10,4 +10,9 @@ class BoughtAudio extends Model
     use HasFactory;
 
 	protected $table = 'bought_audios';
+
+	public function audio()
+	{
+		return $this->belongsTo(Audio::class);
+	}
 }

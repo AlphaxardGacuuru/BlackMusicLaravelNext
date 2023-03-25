@@ -31,7 +31,7 @@ class BoughtVideoController extends Controller
 
         $hasBought = count($response[0]) > 0;
 
-        VideoBoughtEvent::dispatchIf($hasBought, $response[0], $response[1]);
+        VideoBoughtEvent::dispatchIf($hasBought, $response[1], $response[2]);
 
         return response($response[0], 200);
     }

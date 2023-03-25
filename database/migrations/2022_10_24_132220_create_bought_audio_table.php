@@ -19,7 +19,6 @@ return new class extends Migration
                 ->constrained('audios')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->string('reference');
             $table->string('price');
             $table->string('username');
             $table->string('name');

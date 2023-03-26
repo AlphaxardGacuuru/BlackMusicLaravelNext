@@ -46,4 +46,33 @@ class KaraokeService
 
         return $karaokes;
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Karaoke  $karaoke
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        return Karaoke::find($id);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store($request)
+    {
+        $karaoke = new Karaoke;
+        $karaoke->karaoke = $request->input("karaoke");
+        $karaoke->username = auth("sanctum")->user()->username;
+        $karaoke->audio_id = $request->input("audio_id");
+        $karaoke->description = $request->input("description");
+        $karaoke->save();
+
+		return response("Karaoke Created", 200);
+    }
 }

@@ -4,7 +4,11 @@ namespace Tests\Feature;
 
 use App\Models\Audio;
 use App\Models\AudioAlbum;
+use App\Models\AudioComment;
 use App\Models\User;
+use Database\Seeders\AudioAlbumSeeder;
+use Database\Seeders\AudioSeeder;
+use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -200,5 +204,151 @@ class AudioTest extends TestCase
 
         Storage::disk('public')->delete('audio-thumbnails/' . $thumbnail->hashName());
         Storage::disk('public')->delete('audios/' . $audioFile->hashName());
+    }
+
+    /**
+     * Audio Like
+     *
+     * @return void
+     */
+    public function test_user_can_like_audio()
+    {
+        $this->seed([
+            UserSeeder::class,
+            AudioAlbumSeeder::class,
+            AudioSeeder::class,
+        ]);
+
+        Sanctum::actingAs(
+            $user = User::factory()->create(),
+            ['*']
+        );
+
+        $audio = Audio::all()->random();
+
+        // Store
+        $response = $this->post('api/audio-likes', [
+            'audio' => $audio->id,
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas("audio_likes", [
+            "audio_id" => $audio->id,
+            "username" => $user->username,
+        ]);
+    }
+
+    /**
+     * Audio Comment
+     *
+     * @return void
+     */
+    public function test_user_can_comment_on_audio()
+    {
+        $this->seed([
+            UserSeeder::class,
+            AudioAlbumSeeder::class,
+            AudioSeeder::class,
+        ]);
+
+        Sanctum::actingAs(
+            $user = User::factory()->create(),
+            ['*']
+        );
+
+        $audio = Audio::all()->random();
+
+        // Store
+        $response = $this->post('api/audio-comments', [
+            'id' => $audio->id,
+            "text" => "Some text",
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas("audio_comments", [
+            "audio_id" => $audio->id,
+            "text" => "Some text",
+            "username" => $user->username,
+        ]);
+    }
+
+    /**
+     * Audio Comment Like
+     *
+     * @return void
+     */
+    public function test_user_can_like_audio_comment()
+    {
+        $this->seed([
+            UserSeeder::class,
+            AudioAlbumSeeder::class,
+            AudioSeeder::class,
+        ]);
+
+        Sanctum::actingAs(
+            $user = User::factory()->create(),
+            ['*']
+        );
+
+        $comment = AudioComment::all()->random();
+
+        // Store
+        $response = $this->post('api/audio-comment-likes', [
+            "comment" => $comment->id,
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas("audio_comment_likes", [
+            "audio_comment_id" => $comment->id,
+            "username" => $user->username,
+        ]);
+    }
+
+    /**
+     * Test User can buy Audios.
+     *
+     * @return void
+     */
+    public function test_user_can_buy_audios()
+    {
+        // Run the DatabaseSeeder...
+        $this->seed();
+
+        Sanctum::actingAs(
+            $user = User::all()->random(),
+            ['*']
+        );
+
+        $musician = User::all()->random();
+
+        Audio::factory()
+            ->count(10)
+            ->create([
+                'audio_album_id' => AudioAlbum::all()->random()->id,
+                "username" => $musician->username,
+            ]);
+
+        $response = $this->post('api/bought-audios');
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseCount('bought_audios', 20);
+
+        $this->assertDatabaseCount('decos', 1);
+
+        $this->assertDatabaseHas("notifications", [
+            "notifiable_id" => $user->id,
+            "type" => "App\Notifications\AudioReceiptNotification",
+        ]);
+
+        $this->assertDatabaseHas("notifications", [
+            "notifiable_id" => $user->id,
+            "type" => "App\Notifications\DecoNotification",
+        ]);
+
+        $this->assertDatabaseCount("notifications", 22);
     }
 }

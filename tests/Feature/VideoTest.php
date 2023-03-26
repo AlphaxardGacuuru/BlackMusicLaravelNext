@@ -5,6 +5,10 @@ namespace Tests\Feature;
 use App\Models\User;
 use App\Models\Video;
 use App\Models\VideoAlbum;
+use App\Models\VideoComment;
+use Database\Seeders\UserSeeder;
+use Database\Seeders\VideoAlbumSeeder;
+use Database\Seeders\VideoSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -197,5 +201,151 @@ class VideoTest extends TestCase
 
         Storage::disk('public')->delete('video-thumbnails/' . $thumbnail->hashName());
         Storage::disk('public')->delete('videos/' . $videoFile->hashName());
+    }
+
+    /**
+     * Video Like
+     *
+     * @return void
+     */
+    public function test_user_can_like_video()
+    {
+        $this->seed([
+            UserSeeder::class,
+            VideoAlbumSeeder::class,
+            VideoSeeder::class,
+        ]);
+
+        Sanctum::actingAs(
+            $user = User::factory()->create(),
+            ['*']
+        );
+
+        $video = Video::all()->random();
+
+        // Store
+        $response = $this->post('api/video-likes', [
+            'video' => $video->id,
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas("video_likes", [
+            "video_id" => $video->id,
+            "username" => $user->username,
+        ]);
+    }
+
+    /**
+     * Video Comment
+     *
+     * @return void
+     */
+    public function test_user_can_comment_on_video()
+    {
+        $this->seed([
+            UserSeeder::class,
+            VideoAlbumSeeder::class,
+            VideoSeeder::class,
+        ]);
+
+        Sanctum::actingAs(
+            $user = User::factory()->create(),
+            ['*']
+        );
+
+        $video = Video::all()->random();
+
+        // Store
+        $response = $this->post('api/video-comments', [
+            'id' => $video->id,
+            "text" => "Some text",
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas("video_comments", [
+            "video_id" => $video->id,
+            "text" => "Some text",
+            "username" => $user->username,
+        ]);
+    }
+
+    /**
+     * Video Comment Like
+     *
+     * @return void
+     */
+    public function test_user_can_like_video_comment()
+    {
+        $this->seed([
+            UserSeeder::class,
+            VideoAlbumSeeder::class,
+            VideoSeeder::class,
+        ]);
+
+        Sanctum::actingAs(
+            $user = User::factory()->create(),
+            ['*']
+        );
+
+        $comment = VideoComment::all()->random();
+
+        // Store
+        $response = $this->post('api/video-comment-likes', [
+            "comment" => $comment->id,
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas("video_comment_likes", [
+            "video_comment_id" => $comment->id,
+            "username" => $user->username,
+        ]);
+    }
+
+    /**
+     * Test User can buy Videos.
+     *
+     * @return void
+     */
+    public function test_user_can_buy_videos()
+    {
+        // Run the DatabaseSeeder...
+        $this->seed();
+
+        Sanctum::actingAs(
+            $user = User::all()->random(),
+            ['*']
+        );
+
+        $musician = User::all()->random();
+
+        Video::factory()
+            ->count(10)
+            ->create([
+                'video_album_id' => VideoAlbum::all()->random()->id,
+                "username" => $musician->username,
+            ]);
+
+        $response = $this->post('api/bought-videos');
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseCount('bought_videos', 20);
+
+        $this->assertDatabaseCount('decos', 1);
+
+        $this->assertDatabaseHas("notifications", [
+            "notifiable_id" => $user->id,
+            "type" => "App\Notifications\VideoReceiptNotification",
+        ]);
+
+        $this->assertDatabaseHas("notifications", [
+            "notifiable_id" => $user->id,
+            "type" => "App\Notifications\DecoNotification",
+        ]);
+
+        $this->assertDatabaseCount("notifications", 22);
     }
 }

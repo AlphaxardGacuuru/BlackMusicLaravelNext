@@ -36,7 +36,7 @@ class FollowController extends Controller
 
 		FollowedEvent::dispatchIf($result[0], $musician);
 
-        return response('You ' . $result[1] . ' ' . $request->musician, 200);
+        return response($result[1], 200);
     }
 
     /**

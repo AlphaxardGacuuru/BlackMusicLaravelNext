@@ -1,20 +1,20 @@
-import { useState, useEffect } from 'react'
-import axios from '@/lib/axios'
+import { useState, useEffect } from "react"
+import axios from "@/lib/axios"
 
-import VideoMedia from '@/components/Video/VideoMedia'
-import AudioMedia from '@/components/Audio/AudioMedia'
-import KaraokeMedia from '@/components/Karaoke/KaraokeMedia'
+import VideoMedia from "@/components/Video/VideoMedia"
+import AudioMedia from "@/components/Audio/AudioMedia"
+import KaraokeMedia from "@/components/Karaoke/KaraokeMedia"
 
 const Library = props => {
     const [boughtVideos, setBoughtVideos] = useState([])
     const [boughtAudios, setBoughtAudios] = useState([])
     const [savedKaraokes, setSavedKaraokes] = useState([])
-    const [tabClass, setTabClass] = useState('videos')
+    const [tabClass, setTabClass] = useState("videos")
 
     useEffect(() => {
-        props.get('bought-videos', setBoughtVideos, 'boughtVideos')
-        props.get('bought-audios', setBoughtAudios, 'boughtAudios')
-        props.get('saved-karaokes', setSavedKaraokes, 'savedKaraokes')
+        props.get("bought-videos", setBoughtVideos, "boughtVideos")
+        props.get("bought-audios", setBoughtAudios, "boughtAudios")
+        props.get("saved-karaokes", setSavedKaraokes, "savedKaraokes")
     }, [])
 
     return (
@@ -28,27 +28,27 @@ const Library = props => {
                 <div className="p-2 flex-fill anti-hidden">
                     <h4
                         className={
-                            tabClass == 'videos' ? 'active-scrollmenu' : 'p-1'
+                            tabClass == "videos" ? "active-scrollmenu" : "p-1"
                         }
-                        onClick={() => setTabClass('videos')}>
+                        onClick={() => setTabClass("videos")}>
                         <center>Videos</center>
                     </h4>
                 </div>
                 <div className="p-2 flex-fill anti-hidden">
                     <h4
                         className={
-                            tabClass == 'audios' ? 'active-scrollmenu' : 'p-1'
+                            tabClass == "audios" ? "active-scrollmenu" : "p-1"
                         }
-                        onClick={() => setTabClass('audios')}>
+                        onClick={() => setTabClass("audios")}>
                         <center>Audios</center>
                     </h4>
                 </div>
                 <div className="p-2 flex-fill anti-hidden">
                     <h4
                         className={
-                            tabClass == 'karaokes' ? 'active-scrollmenu' : 'p-1'
+                            tabClass == "karaokes" ? "active-scrollmenu" : "p-1"
                         }
-                        onClick={() => setTabClass('karaokes')}>
+                        onClick={() => setTabClass("karaokes")}>
                         <center>Karaokes</center>
                     </h4>
                 </div>
@@ -60,60 +60,56 @@ const Library = props => {
                 {/* Video Area */}
                 <div
                     className={
-                        tabClass == 'videos' ? 'col-sm-3' : 'col-sm-3 hidden'
+                        tabClass == "videos" ? "col-sm-3" : "col-sm-3 hidden"
                     }>
-                    <center className="hidden">
-                        <h4>Videos</h4>
-                    </center>
-                    {boughtVideos.length == 0 && (
-                        <center className="mt-3">
-                            <h6 style={{ color: 'grey' }}>
+                    <center>
+                        <h4 className="hidden">Videos</h4>
+                        {boughtVideos.length == 0 && (
+                            <h6 className="mt-3" style={{ color: "grey" }}>
                                 You haven't bought any videos
                             </h6>
-                        </center>
-                    )}
+                        )}
 
-                    {boughtVideos.map((video, key) => (
-                        <VideoMedia
-                            {...props}
-                            video={video}
-                            hasBoughtVideo="true"
-                        />
-                    ))}
+                        {boughtVideos.map((video, key) => (
+                            <VideoMedia
+                                {...props}
+                                video={video}
+                                hasBoughtVideo="true"
+                            />
+                        ))}
+                    </center>
                 </div>
                 {/* Video Area End */}
 
                 {/* Audio Area */}
                 <div
                     className={
-                        tabClass == 'audios' ? 'col-sm-4' : 'col-sm-4 hidden'
+                        tabClass == "audios" ? "col-sm-4" : "col-sm-4 hidden"
                     }>
-                    <center className="hidden">
-                        <h4>Audios</h4>
-                    </center>
-                    {boughtAudios.length == 0 && (
-                        <center className="mt-3">
-                            <h6 style={{ color: 'grey' }}>
+                    <center>
+                        <h4 className="hidden">Audios</h4>
+                        {boughtAudios.length == 0 && (
+                            <h6 className="mt-3" style={{ color: "grey" }}>
                                 You haven't bought any audios
                             </h6>
-                        </center>
-                    )}
+                        )}
 
-                    {boughtAudios.map((audio, key) => (
-                        <AudioMedia
-                            {...props}
-                            key={key}
-                            audio={audio}
-                            hasBoughtAudio="true"
-                        />
-                    ))}
+                        {boughtAudios.map((audio, key) => (
+                            <AudioMedia
+                                {...props}
+                                key={key}
+                                audio={audio}
+                                hasBoughtAudio="true"
+                            />
+                        ))}
+                    </center>
                 </div>
                 {/* Audio Area End */}
 
                 {/* Karaoke Area */}
                 <div
                     className={
-                        tabClass == 'karaokes' ? 'col-sm-3' : 'col-sm-3 hidden'
+                        tabClass == "karaokes" ? "col-sm-3" : "col-sm-3 hidden"
                     }>
                     <center className="hidden">
                         <h4>Karaokes</h4>
@@ -121,7 +117,7 @@ const Library = props => {
                     <div className="d-flex justify-content-around flex-wrap">
                         {savedKaraokes.length == 0 && (
                             <center className="mt-3">
-                                <h6 style={{ color: 'grey' }}>
+                                <h6 style={{ color: "grey" }}>
                                     You haven't saved any karaokes
                                 </h6>
                             </center>

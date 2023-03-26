@@ -24,9 +24,16 @@ class KaraokeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, KaraokeService $service)
     {
-        //
+        // Handle form for audio
+        $this->validate($request, [
+            "karaoke" => "required|string",
+            "audio_id" => "required",
+            "description" => "required|string",
+        ]);
+
+        return $service->store($request);
     }
 
     /**
@@ -35,9 +42,9 @@ class KaraokeController extends Controller
      * @param  \App\Models\Karaoke  $karaoke
      * @return \Illuminate\Http\Response
      */
-    public function show(Karaoke $karaoke)
+    public function show($id, KaraokeService $service)
     {
-        //
+        return $service->show($id);
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace App\Http\Services;
 
-use App\Events\AudioCommentLikedEvent;
 use App\Models\AudioCommentLike;
 
 class AudioCommentLikeService
@@ -32,14 +31,8 @@ class AudioCommentLikeService
             $audioCommentLike->save();
 
             $message = "Comment liked";
-
-            // Dispatch Event
-            $audioComment = AudioComment::find($request->input('comment'));
-            $audio = $audioComment->audio;
-
-			AudioCommentLikedEvent::dispatch($audio);
         }
 
-        return response($message, 200);
+        return $message;
     }
 }

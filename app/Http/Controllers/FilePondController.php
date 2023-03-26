@@ -248,4 +248,32 @@ class FilePondController extends Controller
         Storage::delete('public/post-media/' . $id);
         return response("Post media deleted", 200);
     }
+
+    /*
+     *
+     * Handle Karaokes
+     *
+     */
+
+    /*
+     * Handle Karaoke */
+    public function storeKaraoke(Request $request)
+    {
+        $this->validate($request, [
+            'filepond-karaoke' => 'required',
+        ]);
+
+        /* Handle Karaoke upload */
+        $karaoke = $request->file('filepond-karaoke')->store('public/karaokes');
+        $karaoke = substr($karaoke, 7);
+        return $karaoke;
+    }
+
+    /*
+     * Handle Karaoke Delete */
+    public function destroyKaraoke($id)
+    {
+        Storage::delete('public/karaokes/' . $id);
+        return response("Karaoke deleted", 200);
+    }
 }

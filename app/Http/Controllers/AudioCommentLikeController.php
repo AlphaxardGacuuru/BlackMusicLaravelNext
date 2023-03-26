@@ -26,7 +26,9 @@ class AudioCommentLikeController extends Controller
      */
     public function store(Request $request, AudioCommentLikeService $service)
     {
-        return $service->store($request);
+        $message = $service->store($request);
+
+        return response($message, 200);
     }
 
     /**

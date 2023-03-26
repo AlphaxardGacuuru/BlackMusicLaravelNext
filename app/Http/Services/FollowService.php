@@ -2,6 +2,8 @@
 
 namespace App\Http\Services;
 
+use App\Models\BoughtAudio;
+use App\Models\BoughtVideo;
 use App\Models\Follow;
 
 class FollowService
@@ -14,28 +16,43 @@ class FollowService
      */
     public function store($request)
     {
-        /* Add follow */
-        $hasFollowed = Follow::where('followed', $request->musician)
-            ->where('username', auth('sanctum')->user()->username)
+        // Check if user has bought video or audio
+        $hasBoughtVideo = BoughtVideo::where("username", auth("sanctum")->user()->username)
+            ->where("artist", $request->input("musician"))
             ->exists();
 
-        if ($hasFollowed) {
-            Follow::where('followed', $request->musician)
+        $hasBoughtAudio = BoughtAudio::where("username", auth("sanctum")->user()->username)
+            ->where("artist", $request->input("musician"))
+            ->exists();
+
+        if ($hasBoughtVideo || $hasBoughtAudio) {
+            // Check if user has followed
+            $hasFollowed = Follow::where('followed', $request->musician)
                 ->where('username', auth('sanctum')->user()->username)
-                ->delete();
+                ->exists();
 
-            $message = "Unfollowed";
-			$added = false;
-        } else {
-            $post = new Follow;
-            $post->followed = $request->input('musician');
-            $post->username = auth('sanctum')->user()->username;
-            $post->save();
+            if ($hasFollowed) {
+                Follow::where('followed', $request->musician)
+                    ->where('username', auth('sanctum')->user()->username)
+                    ->delete();
 
-            $message = "Followed";
-			$added = true;
+                $message = 'You Unfollowed ' . $request->musician;
+                $added = false;
+            } else {
+                $post = new Follow;
+                $post->followed = $request->input('musician');
+                $post->username = auth('sanctum')->user()->username;
+                $post->save();
+
+                $message = 'You Followed ' . $request->musician;
+                $added = true;
+            }
+
+            return [$added, $message];
         }
 
-        return [$added, $message];
+        $message = "You must have bought atleast one song by " . $request->musician;
+
+        return [false, $message];
     }
 }

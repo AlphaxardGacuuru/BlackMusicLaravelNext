@@ -129,6 +129,10 @@ Route::prefix('filepond')->group(function () {
 		// Post
         Route::post('posts', 'storePostMedia');
         Route::delete('posts/{id}', 'destroyPostMedia');
+		
+		// Karaoke
+        Route::post('karaokes', 'storeKaraoke');
+        Route::delete('karaokes/{id}', 'destroyKaraoke');
     });
 });
 

@@ -3,9 +3,14 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Models\Video;
+use Database\Seeders\UserSeeder;
+use Database\Seeders\VideoAlbumSeeder;
+use Database\Seeders\VideoSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -80,5 +85,80 @@ class UserTest extends TestCase
 
         // Delete Album Cover
         Storage::disk('public')->delete('avatars/' . $avatar->hashName());
+    }
+
+    /**
+     * Follow
+     *
+     * @return void
+     */
+    public function test_user_can_follow_another_user()
+    {
+        $this->seed([
+            UserSeeder::class,
+            VideoAlbumSeeder::class,
+            VideoSeeder::class,
+        ]);
+
+        Sanctum::actingAs(
+            $user = User::all()->random(),
+            ['*']
+        );
+
+        $musician = Video::all()->random();
+
+        $musician = User::where("username", $musician->username)
+            ->get()
+            ->first();
+
+        $this->post("api/bought-videos");
+
+        $response = $this->post("api/follows", [
+            "musician" => $musician->username,
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas("follows", [
+            "followed" => $musician->username,
+            "username" => $user->username,
+        ]);
+
+        $this->assertDatabaseHas("notifications", [
+            "notifiable_id" => $musician->id,
+            "type" => "App\Notifications\FollowedNotification",
+        ]);
+    }
+
+    /**
+     * Can't Follow
+     *
+     * @return void
+     */
+    public function test_user_cannot_follow_another_user()
+    {
+        $this->seed([
+            UserSeeder::class,
+            VideoAlbumSeeder::class,
+            VideoSeeder::class,
+        ]);
+
+        Sanctum::actingAs(
+            $user = User::all()->random(),
+            ['*']
+        );
+
+        $musician = Video::all()->random();
+
+        $response = $this->post("api/follows", [
+            "musician" => $musician->username,
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseMissing("follows", [
+            "followed" => $musician->username,
+            "username" => $user->username,
+        ]);
     }
 }

@@ -14,8 +14,8 @@ import LoadingPostMedia from "../../components/Post/LoadingPostMedia"
 import PostMedia from "../../components/Post/PostMedia"
 import PostOptions from "../../components/Post/PostOptions"
 
-const VideoMedia = React.lazy(() => import("../../components/video/VideoMedia"))
-const AudioMedia = React.lazy(() => import("../../components/audio/AudioMedia"))
+const VideoMedia = React.lazy(() => import("../../components/Video/VideoMedia"))
+const AudioMedia = React.lazy(() => import("../../components/Audio/AudioMedia"))
 
 const Profile = props => {
     const router = useRouter()

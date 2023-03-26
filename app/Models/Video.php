@@ -11,7 +11,7 @@ class Video extends Model
 {
     use HasFactory;
 
-	protected $dates = ['released'];
+    protected $dates = ['released'];
 
     /**
      * Accesors.
@@ -21,28 +21,28 @@ class Video extends Model
     protected function video(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => "/storage/" . $value
+            get:fn($value) => "/storage/" . $value
         );
     }
 
     protected function thumbnail(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => preg_match("/http/", $value) ? $value : "/storage/" . $value
+            get:fn($value) => preg_match("/http/", $value) ? $value : "/storage/" . $value
         );
     }
 
     protected function released(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => Carbon::parse($value)->format('d M Y'),
+            get:fn($value) => Carbon::parse($value)->format('d M Y'),
         );
     }
 
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => Carbon::parse($value)->format('d M Y'),
+            get:fn($value) => Carbon::parse($value)->format('d M Y'),
         );
     }
 

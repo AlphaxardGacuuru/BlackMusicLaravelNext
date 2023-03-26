@@ -1,53 +1,60 @@
-import Link from 'next/link'
-import axios from '@/lib/axios'
+import Link from "next/link"
+import axios from "@/lib/axios"
 
-import Img from '@/components/Core/Img'
-import Poll from './Poll'
+import Img from "@/components/Core/Img"
+import Poll from "./Poll"
 
-import DecoSVG from '../../svgs/DecoSVG'
-import OptionsSVG from '../../svgs/OptionsSVG'
-import CommentSVG from '../../svgs/CommentSVG'
-import HeartSVG from '../../svgs/HeartSVG'
-import HeartFilledSVG from '../../svgs/HeartFilledSVG'
-import ShareSVG from '../../svgs/ShareSVG'
-import Image from 'next/image'
+import DecoSVG from "../../svgs/DecoSVG"
+import OptionsSVG from "../../svgs/OptionsSVG"
+import CommentSVG from "../../svgs/CommentSVG"
+import HeartSVG from "../../svgs/HeartSVG"
+import HeartFilledSVG from "../../svgs/HeartFilledSVG"
+import ShareSVG from "../../svgs/ShareSVG"
+import Image from "next/image"
+import onFollow from "@/functions/onFollow"
 
 const PostMedia = (props) => {
+	const props2 = { ...props, user: { username: props.post.username } }
 
 	// Function for voting in poll
 	const onPoll = (post, parameter) => {
-		axios.post(`/api/polls`, {
-			post: post,
-			parameter: parameter
-		}).then((res) => {
-			props.setMessages([res.data])
-			// Update posts
-			props.get("posts", props.setPosts, "posts")
-		}).catch((err) => props.getErrors(err, true))
+		axios
+			.post(`/api/polls`, {
+				post: post,
+				parameter: parameter,
+			})
+			.then((res) => {
+				props.setMessages([res.data])
+				// Update posts
+				props.get("posts", props.setPosts, "posts")
+			})
+			.catch((err) => props.getErrors(err, true))
 	}
 
 	// Function for liking posts
 	const onPostLike = (post) => {
 		// Show like
-		const newPosts = props.posts
-			.filter((item) => {
-				// Get the exact post and change like status
-				if (item.id == post) {
-					item.hasLiked = !item.hasLiked
-				}
-				return true
-			})
+		const newPosts = props.posts.filter((item) => {
+			// Get the exact post and change like status
+			if (item.id == post) {
+				item.hasLiked = !item.hasLiked
+			}
+			return true
+		})
 		// Set new posts
 		props.setPosts(newPosts)
 
 		// Add like to database
-		axios.post(`/api/post-likes`, {
-			post: post
-		}).then((res) => {
-			props.setMessages([res.data])
-			// Update posts
-			props.get("posts", props.setPosts, "posts")
-		}).catch((err) => props.getErrors(err))
+		axios
+			.post(`/api/post-likes`, {
+				post: post,
+			})
+			.then((res) => {
+				props.setMessages([res.data])
+				// Update posts
+				props.get("posts", props.setPosts, "posts")
+			})
+			.catch((err) => props.getErrors(err))
 	}
 
 	// Web Share API for share button
@@ -57,11 +64,10 @@ const PostMedia = (props) => {
 		const shareData = {
 			title: post.text,
 			text: `Check out this post on Black Music\n`,
-			url: `https://music.black.co.ke/#/post-show/${post.id}`
+			url: `https://music.black.co.ke/#/post-show/${post.id}`,
 		}
 		// Check if data is shareble
-		navigator.canShare(shareData) &&
-			navigator.share(shareData)
+		navigator.canShare(shareData) && navigator.share(shareData)
 	}
 
 	return (
@@ -70,10 +76,12 @@ const PostMedia = (props) => {
 				<div className="avatar-thumbnail-xs" style={{ borderRadius: "50%" }}>
 					<Link href={`/profile/${props.post.username}`}>
 						<a>
-							<Img src={props.post.avatar}
+							<Img
+								src={props.post.avatar}
 								width="50px"
 								height="50px"
-								alt={'avatar'} />
+								alt={"avatar"}
+							/>
 						</a>
 					</Link>
 				</div>
@@ -84,9 +92,19 @@ const PostMedia = (props) => {
 					<small>{props.post.username}</small>
 					<span className="ms-1 lh-1" style={{ color: "gold" }}>
 						<DecoSVG />
-						<small className="ms-1 fw-lighter align-bottom" style={{ color: "inherit" }}>{props.post.decos}</small>
+						<small
+							className="ms-1 fw-lighter align-bottom"
+							style={{ color: "inherit" }}>
+							{props.post.decos}
+						</small>
 					</span>
-					<small><b><i className="float-end text-secondary me-1">{props.post.createdAt}</i></b></small>
+					<small>
+						<b>
+							<i className="float-end text-secondary me-1">
+								{props.post.createdAt}
+							</i>
+						</b>
+					</small>
 				</h6>
 				<Link href={"post/" + props.post.id}>
 					<a>
@@ -96,12 +114,14 @@ const PostMedia = (props) => {
 
 				{/* Show media */}
 				<div className="mb-1" style={{ overflow: "hidden" }}>
-					{props.post.media &&
+					{props.post.media && (
 						<Img
 							src={props.post.media}
 							width="100%"
 							height="20em"
-							alt="post-media" />}
+							alt="post-media"
+						/>
+					)}
 				</div>
 
 				{/* Polls */}
@@ -111,10 +131,15 @@ const PostMedia = (props) => {
 					parameter={props.post.parameter_1}
 					hasVoted={props.post.hasVoted1}
 					width={`${props.post.percentage1}%`}
-					bgColor={props.post.parameter_1 == props.post.winner ? "#FFD700" : "#232323"}
-					bgColor2={props.post.parameter_1 == props.post.winner ? "#FFD700" : "grey"}
+					bgColor={
+						props.post.parameter_1 == props.post.winner ? "#FFD700" : "#232323"
+					}
+					bgColor2={
+						props.post.parameter_1 == props.post.winner ? "#FFD700" : "grey"
+					}
 					text={`${props.post.parameter_1} - ${props.post.percentage1} %`}
-					onPoll={onPoll} />
+					onPoll={onPoll}
+				/>
 
 				{/* Parameter 2 */}
 				<Poll
@@ -122,10 +147,15 @@ const PostMedia = (props) => {
 					parameter={props.post.parameter_2}
 					hasVoted={props.post.hasVoted2}
 					width={`${props.post.percentage2}%`}
-					bgColor={props.post.parameter_2 == props.post.winner ? "#FFD700" : "#232323"}
-					bgColor2={props.post.parameter_2 == props.post.winner ? "#FFD700" : "grey"}
+					bgColor={
+						props.post.parameter_2 == props.post.winner ? "#FFD700" : "#232323"
+					}
+					bgColor2={
+						props.post.parameter_2 == props.post.winner ? "#FFD700" : "grey"
+					}
 					text={`${props.post.parameter_2} - ${props.post.percentage2} %`}
-					onPoll={onPoll} />
+					onPoll={onPoll}
+				/>
 
 				{/* Parameter 3 */}
 				<Poll
@@ -133,10 +163,15 @@ const PostMedia = (props) => {
 					parameter={props.post.parameter_3}
 					hasVoted={props.post.hasVoted3}
 					width={`${props.post.percentage3}%`}
-					bgColor={props.post.parameter_3 == props.post.winner ? "#FFD700" : "#232323"}
-					bgColor2={props.post.parameter_3 == props.post.winner ? "#FFD700" : "grey"}
+					bgColor={
+						props.post.parameter_3 == props.post.winner ? "#FFD700" : "#232323"
+					}
+					bgColor2={
+						props.post.parameter_3 == props.post.winner ? "#FFD700" : "grey"
+					}
 					text={`${props.post.parameter_3} - ${props.post.percentage3} %`}
-					onPoll={onPoll} />
+					onPoll={onPoll}
+				/>
 
 				{/* Parameter 4 */}
 				<Poll
@@ -144,10 +179,15 @@ const PostMedia = (props) => {
 					parameter={props.post.parameter_4}
 					hasVoted={props.post.hasVoted4}
 					width={`${props.post.percentage4}%`}
-					bgColor={props.post.parameter_4 == props.post.winner ? "#FFD700" : "#232323"}
-					bgColor2={props.post.parameter_4 == props.post.winner ? "#FFD700" : "grey"}
+					bgColor={
+						props.post.parameter_4 == props.post.winner ? "#FFD700" : "#232323"
+					}
+					bgColor2={
+						props.post.parameter_4 == props.post.winner ? "#FFD700" : "grey"
+					}
 					text={`${props.post.parameter_4} - ${props.post.percentage4} %`}
-					onPoll={onPoll} />
+					onPoll={onPoll}
+				/>
 
 				{/* Parameter 5 */}
 				<Poll
@@ -155,32 +195,49 @@ const PostMedia = (props) => {
 					parameter={props.post.parameter_5}
 					hasVoted={props.post.hasVoted5}
 					width={`${props.post.percentage5}%`}
-					bgColor={props.post.parameter_4 == props.post.winner ? "#FFD700" : "#232323"}
-					bgColor2={props.post.parameter_4 == props.post.winner ? "#FFD700" : "grey"}
+					bgColor={
+						props.post.parameter_4 == props.post.winner ? "#FFD700" : "#232323"
+					}
+					bgColor2={
+						props.post.parameter_4 == props.post.winner ? "#FFD700" : "grey"
+					}
 					text={`${props.post.parameter_5} - ${props.post.percentage5} %`}
-					onPoll={onPoll} />
+					onPoll={onPoll}
+				/>
 
 				{/* Total votes */}
-				{props.post.parameter_1 ?
-					props.post.username == props.auth?.username || !props.post.isWithin24Hrs ?
+				{props.post.parameter_1 ? (
+					props.post.username == props.auth?.username ||
+					!props.post.isWithin24Hrs ? (
 						<small style={{ color: "grey" }}>
 							<i>Total votes: {props.post.totalVotes}</i>
 							<br />
-						</small> : ""
-					: ""}
+						</small>
+					) : (
+						""
+					)
+				) : (
+					""
+				)}
 				{/* Polls End */}
 
 				{/* Post likes */}
-				{props.post.hasLiked ?
-					<a href="#"
+				{props.post.hasLiked ? (
+					<a
+						href="#"
 						style={{ color: "#fb3958" }}
 						onClick={(e) => {
 							e.preventDefault()
 							onPostLike(props.post.id)
 						}}>
-						<span style={{ color: "inherit", fontSize: "1.2em" }}><HeartFilledSVG /></span>
-						<small className="ms-1" style={{ color: "inherit" }}>{props.post.likes}</small>
-					</a> :
+						<span style={{ color: "inherit", fontSize: "1.2em" }}>
+							<HeartFilledSVG />
+						</span>
+						<small className="ms-1" style={{ color: "inherit" }}>
+							{props.post.likes}
+						</small>
+					</a>
+				) : (
 					<a
 						href="#"
 						style={{ color: "rgba(220, 220, 220, 1)" }}
@@ -188,15 +245,24 @@ const PostMedia = (props) => {
 							e.preventDefault()
 							onPostLike(props.post.id)
 						}}>
-						<span style={{ color: "inherit", fontSize: "1.2em" }}><HeartSVG /></span>
-						<small className="ms-1" style={{ color: "inherit" }}>{props.post.likes}</small>
-					</a>}
+						<span style={{ color: "inherit", fontSize: "1.2em" }}>
+							<HeartSVG />
+						</span>
+						<small className="ms-1" style={{ color: "inherit" }}>
+							{props.post.likes}
+						</small>
+					</a>
+				)}
 
 				{/* Post comments */}
 				<Link href={"/post/" + props.post.id}>
 					<a style={{ color: "rgba(220, 220, 220, 1)" }}>
-						<span className="ms-5" style={{ fontSize: "1.2em" }}><CommentSVG /></span>
-						<small className="ms-1" style={{ color: "inherit" }}>{props.post.comments}</small>
+						<span className="ms-5" style={{ fontSize: "1.2em" }}>
+							<CommentSVG />
+						</span>
+						<small className="ms-1" style={{ color: "inherit" }}>
+							{props.post.comments}
+						</small>
 					</a>
 				</Link>
 
@@ -206,7 +272,7 @@ const PostMedia = (props) => {
 					style={{
 						fontSize: "1.3em",
 						color: "rgba(220, 220, 220, 1)",
-						cursor: "pointer"
+						cursor: "pointer",
 					}}
 					onClick={() => onShare(props.post)}>
 					<ShareSVG />
@@ -221,20 +287,26 @@ const PostMedia = (props) => {
 						aria-expanded="false">
 						<OptionsSVG />
 					</a>
-					<div className="dropdown-menu dropdown-menu-right"
+					<div
+						className="dropdown-menu dropdown-menu-right"
 						style={{ borderRadius: "0", backgroundColor: "#232323" }}>
-						{props.post.username != props.auth?.username ?
-							props.post.username != "@blackmusic" &&
-							<a href="#" className="dropdown-item" onClick={(e) => {
-								e.preventDefault()
-								props.onFollow(props.post.username)
-							}}>
-								<h6>
-									{props.post.hasFollowed ?
-										`Unfollow ${props.post.username}` :
-										`Follow ${props.post.username}`}
-								</h6>
-							</a> :
+						{props.post.username != props.auth?.username ? (
+							props.post.username != "@blackmusic" && (
+								<a
+									href="#"
+									className="dropdown-item"
+									onClick={(e) => {
+										e.preventDefault()
+										onFollow(props2)
+									}}>
+									<h6>
+										{props.post.hasFollowed
+											? `Unfollow ${props.post.username}`
+											: `Follow ${props.post.username}`}
+									</h6>
+								</a>
+							)
+						) : (
 							<span>
 								<Link href={`/post/edit/${props.post.id}`}>
 									<a className="dropdown-item">
@@ -245,12 +317,13 @@ const PostMedia = (props) => {
 									href="#"
 									className="dropdown-item"
 									onClick={(e) => {
-										e.preventDefault();
+										e.preventDefault()
 										props.onDeletePost(props.post.id)
 									}}>
 									<h6>Delete post</h6>
 								</a>
-							</span>}
+							</span>
+						)}
 					</div>
 				</div>
 				{/* For small screens */}
@@ -281,7 +354,11 @@ const PostMedia = (props) => {
 				</div>
 				{/* Edited */}
 				<small>
-					<b><i className="d-block text-secondary my-1">{props.post.hasEdited && "Edited"}</i></b>
+					<b>
+						<i className="d-block text-secondary my-1">
+							{props.post.hasEdited && "Edited"}
+						</i>
+					</b>
 				</small>
 			</div>
 		</div>

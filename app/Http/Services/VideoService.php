@@ -36,9 +36,9 @@ class VideoService
     public function show($id)
     {
         // Check if user is logged in
-        $auth = auth('sanctum')->user();
+        $auth = auth("sanctum")->user();
 
-        $authUsername = $auth ? $auth->username : '@guest';
+        $authUsername = $auth ? $auth->username : "@guest";
 
         // Get Video
         $getVideo = Video::whereId($id)->get()[0];
@@ -131,16 +131,16 @@ class VideoService
         return response()->download($src, $name);
     }
 
-	private function structure($video, $username)
-	{
-		return [
+    private function structure($video, $username)
+    {
+        return [
             "id" => $video->id,
             "video" => $video->video,
             "name" => $video->name,
-			"artistName" => $video->user->name,
+            "artistName" => $video->user->name,
             "username" => $video->username,
-			"avatar" => $video->user->avatar,
-			"artistDecos" => $video->user->decos->count(),
+            "avatar" => $video->user->avatar,
+            "artistDecos" => $video->user->decos->count(),
             "ft" => $video->ft,
             "videoAlbumId" => $video->video_album_id,
             "album" => $video->album->name,
@@ -153,10 +153,10 @@ class VideoService
             "comments" => $video->comments->count(),
             "inCart" => $video->inCart($username),
             "hasBoughtVideo" => $video->hasBoughtVideo($username),
-			"hasBought1" => $video->user->hasBought1($username),
-			"hasFollowed" => $video->user->hasFollowed($username),
+            "hasBought1" => $video->user->hasBought1($username),
+            "hasFollowed" => $video->user->hasFollowed($username),
             "downloads" => $video->bought->count(),
-            "createdAt" => $video->created_at
-		];
-	}
+            "createdAt" => $video->created_at,
+        ];
+    }
 }

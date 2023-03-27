@@ -24,6 +24,7 @@ class AudioCommentLikeService
                 ->delete();
 
             $message = "Like removed";
+            $added = false;
         } else {
             $audioCommentLike = new AudioCommentLike;
             $audioCommentLike->audio_comment_id = $request->input('comment');
@@ -31,8 +32,9 @@ class AudioCommentLikeService
             $audioCommentLike->save();
 
             $message = "Comment liked";
+            $added = true;
         }
 
-        return $message;
+        return [$added, $message];
     }
 }

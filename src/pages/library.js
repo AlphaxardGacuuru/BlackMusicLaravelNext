@@ -73,6 +73,7 @@ const Library = props => {
                         {boughtVideos.map((video, key) => (
                             <VideoMedia
                                 {...props}
+								key={key}
                                 video={video}
                                 hasBoughtVideo="true"
                             />

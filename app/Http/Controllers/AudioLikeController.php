@@ -26,7 +26,9 @@ class AudioLikeController extends Controller
      */
     public function store(Request $request, AudioLikeService $service)
     {
-        return $service->store($request);
+        $result = $service->store($request);
+
+		$audio = Audio::find();
     }
 
     /**

@@ -25,11 +25,11 @@ class AudioCommentLikedListener
      */
     public function handle(AudioCommentLikedEvent $event)
     {
-        if ($event->audio->user->username != auth('sanctum')->user()->username) {
+        if ($event->comment->user->username != auth('sanctum')->user()->username) {
             return $event
-                ->audio
+                ->comment
                 ->user
-                ->notify(new AudioCommentLikedNotification($event->audio));
+                ->notify(new AudioCommentLikedNotification($event->comment));
         }
     }
 }

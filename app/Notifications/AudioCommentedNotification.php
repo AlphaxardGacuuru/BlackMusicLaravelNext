@@ -2,26 +2,24 @@
 
 namespace App\Notifications;
 
-use App\Models\Post;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class PostCommentedNotification extends Notification
+class AudioCommentedNotification extends Notification
 {
     use Queueable;
 
-	public $post;
+    public $audio;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($post)
+    public function __construct($audio)
     {
-        $this->post = $post;
+        $this->audio = $audio;
     }
 
     /**
@@ -44,9 +42,9 @@ class PostCommentedNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -58,9 +56,9 @@ class PostCommentedNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-			'url' => '/post/' . $this->post->id,
+			'url' => '/audio/' . $this->audio->id,
 			'from' => auth('sanctum')->user()->username,
-			'message' => auth('sanctum')->user()->username . ' commented on your post ' . $this->post->test
+			'message' => auth('sanctum')->user()->username . ' commented on ' . $this->audio->name
         ];
     }
 }

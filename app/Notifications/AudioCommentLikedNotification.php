@@ -11,15 +11,17 @@ class AudioCommentLikedNotification extends Notification
 {
     use Queueable;
 
-	protected $audio;
+	public $comment;
+	public $audio;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($audio)
+    public function __construct($comment, $audio)
     {
+        $this->comment = $comment;
         $this->audio = $audio;
     }
 
@@ -48,15 +50,6 @@ class AudioCommentLikedNotification extends Notification
                     ->line('Thank you for using our application!');
     }
 
-	public function toDatabase()
-	{
-		return [
-			'url' => '/profile/' . auth('sanctum')->user()->username,
-			'from' => auth('sanctum')->user()->username,
-			'message' => auth('sanctum')->user()->username . ' liked your comment on ' . $this->audio->name,
-		];
-	}
-
     /**
      * Get the array representation of the notification.
      *
@@ -66,7 +59,9 @@ class AudioCommentLikedNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+			'url' => '/audio/' . $this->comment->id,
+			'from' => auth('sanctum')->user()->username,
+			'message' => auth('sanctum')->user()->username . ' liked your comment on ' . $this->audio->name,
         ];
     }
 }

@@ -92,14 +92,7 @@ class AudioCommentService
         $audioComment->audio_id = $request->input('id');
         $audioComment->username = auth('sanctum')->user()->username;
         $audioComment->text = $request->input('text');
-        $audioComment->save();
-
-        // Show notification
-        // $audio = Audios::where('id', $request->input('id'))->first();
-        // $audio->users->username != auth()->user()->username &&
-        // $audio->users->notify(new AudioCommentNotifications($audio->name));
-
-        return response('Comment Posted', 200);
+        return $audioComment->save();
     }
 
     /**

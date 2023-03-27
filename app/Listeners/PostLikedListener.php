@@ -29,7 +29,7 @@ class PostLikedListener
     {
 		// Send Notification
         if ($event->post->username != auth('sanctum')->user()->username) {
-            $event->post->user->notify(new PostLikedNotification);
+            $event->post->user->notify(new PostLikedNotification($event->post));
         }
     }
 }

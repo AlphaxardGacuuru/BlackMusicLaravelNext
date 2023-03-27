@@ -11,14 +11,18 @@ class PostCommentLikedNotification extends Notification
 {
     use Queueable;
 
+	public $comment;
+	public $post;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($comment, $post)
     {
-        //
+        $this->comment = $comment;
+        $this->post = $post;
     }
 
     /**
@@ -55,9 +59,9 @@ class PostCommentLikedNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-			'url' => '/profile/' . auth('sanctum')->user()->username,
+			'url' => '/post/' . $this->post->id,
 			'from' => auth('sanctum')->user()->username,
-			'message' => auth('sanctum')->user()->username . ' liked your comment.',
+			'message' => auth('sanctum')->user()->username . ' liked your comment on ' . $this->post->text,
         ];
     }
 }

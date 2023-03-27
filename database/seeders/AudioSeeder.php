@@ -50,14 +50,19 @@ class AudioSeeder extends Seeder
             ->hasComments(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username]);
 
         for ($i = 0; $i < 5; $i++) {
+            $album1 = AudioAlbum::all()->random();
+            $album2 = AudioAlbum::all()->random();
+            // $album1 = AudioAlbum::where('username', '@blackmusic')->get()->random();
+            // $album2 = AudioAlbum::where('username', '@blackmusic')->get()->random();
+			
             $audio->create([
-                'audio_album_id' => AudioAlbum::all()->random()->id,
-                'username' => AudioAlbum::all()->random()->username,
+                'audio_album_id' => $album1->id,
+                'username' => $album1->username,
             ]);
 
             $audio2->create([
-                'audio_album_id' => AudioAlbum::all()->random()->id,
-                'username' => AudioAlbum::all()->random()->username,
+                'audio_album_id' => $album2->id,
+                'username' => $album2->username,
             ]);
         }
     }

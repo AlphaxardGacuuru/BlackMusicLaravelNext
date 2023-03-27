@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\AudioCommentedEvent;
+use App\Notifications\AudioCommentedNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -26,6 +27,8 @@ class AudioCommentedListener
      */
     public function handle(AudioCommentedEvent $event)
     {
-        //
+        if ($event->audio->user->username != auth('sanctum')->user()->username) {
+            $event->audio->user->notify(new AudioCommentedNotification($event->audio));
+        }
     }
 }

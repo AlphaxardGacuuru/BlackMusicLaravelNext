@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\PostCommentLikedEvent;
 use App\Http\Services\PostCommentLikeService;
+use App\Models\Post;
 use App\Models\PostComment;
 use App\Models\PostCommentLike;
 use Illuminate\Http\Request;
@@ -33,7 +34,9 @@ class PostCommentLikeController extends Controller
 		// Dispatch
         $comment = PostComment::findOrFail($request->input("comment"));
 
-		PostCommentLikedEvent::dispatchif($result[0], $comment);
+		$post = Post::find($comment->post_id);
+
+		PostCommentLikedEvent::dispatchif($result[0], $comment, $post);
 
         return response($result[1], 200);
     }

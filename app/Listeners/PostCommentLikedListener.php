@@ -26,7 +26,7 @@ class PostCommentLikedListener
     public function handle(PostCommentLikedEvent $event)
     {
         if ($event->comment->username != auth('sanctum')->user()->username) {
-            $event->comment->user->notify(new PostCommentLikedNotification($event->comment));
+            $event->comment->user->notify(new PostCommentLikedNotification($event->comment, $event->post));
         }
     }
 }

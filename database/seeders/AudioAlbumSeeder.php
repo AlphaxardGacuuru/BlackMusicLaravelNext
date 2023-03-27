@@ -29,6 +29,8 @@ class AudioAlbumSeeder extends Seeder
         for ($i = 0; $i < 5; $i++) {
             $audio->create(['username' => User::all()->random()->username]);
             $audio2->create(['username' => User::all()->random()->username]);
+            // $audio->create(['username' => '@blackmusic']);
+            // $audio2->create(['username' => '@blackmusic']);
         }
     }
 }

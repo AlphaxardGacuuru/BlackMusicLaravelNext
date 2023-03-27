@@ -24,6 +24,7 @@ class AudioLikeService
                 ->delete();
 
             $message = "Like removed";
+            $added = false;
         } else {
             $audioLike = new AudioLike;
             $audioLike->audio_id = $request->input('audio');
@@ -31,13 +32,9 @@ class AudioLikeService
             $audioLike->save();
 
             $message = "Audio liked";
-
-            // Show notification
-            // $audio = Audios::where('id', $request->input('audio'))->first();
-            // $audio->users->username != auth()->user()->username &&
-            // $audio->users->notify(new AudioLikeNotifications($audio->name));
+            $added = true;
         }
 
-        return response($message, 200);
+        return [$added, $message];
     }
 }

@@ -16,15 +16,17 @@ class PostCommentLikedEvent
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
 	public $comment;
+	public $post;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(PostComment $comment)
+    public function __construct($comment, $post)
     {
-        $this->comment = $comment;
+		$this->comment = $comment;
+		$this->post = $post;
     }
 
     /**

@@ -47,6 +47,7 @@ class UserFactory extends Factory
             'username' => '@blackmusic',
             'email' => 'al@black.co.ke',
             'email_verified_at' => now(),
+			'account_type' => 'musician',
             'avatar' => 'avatars/male-avatar.png',
             'backdrop' => 'img/headphones.jpg',
             'phone' => '0700000000',

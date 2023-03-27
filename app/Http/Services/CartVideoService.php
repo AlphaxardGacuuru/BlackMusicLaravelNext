@@ -68,8 +68,6 @@ class CartVideoService
             ->where('username', auth('sanctum')->user()->username)
             ->exists();
 
-			$inCart = false;
-
         /* Insert or Remove from cart */
         if ($inCart) {
             CartVideo::where('video_id', $request->input('video'))

@@ -29,6 +29,8 @@ class VideoAlbumSeeder extends Seeder
         for ($i = 0; $i < 5; $i++) {
             $video->create(['username' => User::all()->random()->username]);
             $video2->create(['username' => User::all()->random()->username]);
+            // $video->create(['username' => "@blackmusic"]);
+            // $video2->create(['username' => "@blackmusic"]);
         }
     }
 }

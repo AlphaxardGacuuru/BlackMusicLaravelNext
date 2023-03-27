@@ -50,14 +50,19 @@ class VideoSeeder extends Seeder
             ->hasComments(rand(1, 5), fn() => ['username' => User::all()->random()->username]);
 
         for ($i = 0; $i < 5; $i++) {
+            $album1 = VideoAlbum::all()->random();
+            $album2 = VideoAlbum::all()->random();
+            // $album1 = VideoAlbum::where('username', '@blackmusic')->get()->random();
+            // $album2 = VideoAlbum::where('username', '@blackmusic')->get()->random();
+
             $video->create([
-                'video_album_id' => VideoAlbum::all()->random()->id,
-                'username' => VideoAlbum::all()->random()->username,
+                'video_album_id' => $album1->id,
+                'username' => $album1->username,
             ]);
 
             $video2->create([
-                'video_album_id' => VideoAlbum::all()->random()->id,
-                'username' => VideoAlbum::all()->random()->username,
+                'video_album_id' => $album2->id,
+                'username' => $album2->username,
             ]);
         }
     }

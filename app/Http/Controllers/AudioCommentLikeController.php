@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\AudioCommentLikedEvent;
 use App\Http\Services\AudioCommentLikeService;
+use App\Models\Audio;
 use App\Models\AudioComment;
 use App\Models\AudioCommentLike;
 use Illuminate\Http\Request;
@@ -30,9 +31,13 @@ class AudioCommentLikeController extends Controller
     {
         $result = $service->store($request);
 
-		$audioComment = AudioComment::find($request->input("comment"));
+		// $comment = AudioComment::find($request->input("comment"));
+		$comment = AudioComment::where("id", $request->input("comment"))->get()->first();
 
-		AudioCommentLikedEvent::dispatchIf($result[0], $audioComment);
+		// $audio = Audio::find($comment->id);
+		$audio = Audio::where("id", $comment->id)->get()->first();
+
+		AudioCommentLikedEvent::dispatchIf($result[0], $comment, $audio);
 
         return response($result[1], 200);
     }

@@ -15,6 +15,7 @@ class PostCommentedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+	public $comment;
 	public $post;
 
     /**
@@ -22,8 +23,9 @@ class PostCommentedEvent
      *
      * @return void
      */
-    public function __construct(Post $post)
+    public function __construct($comment, $post)
     {
+        $this->comment = $comment;
         $this->post = $post;
     }
 

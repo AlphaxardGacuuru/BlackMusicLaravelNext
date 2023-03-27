@@ -124,7 +124,6 @@ const LoginPopUp = (props) => {
 											btnText="Login" />
 									</form>
 									<br />
-									<br />
 
 									<Btn
 										btnClass="mysonar-btn"

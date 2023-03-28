@@ -18,7 +18,7 @@ const VideoMedia = props => {
 
     return (
         <span
-            className="mx-2 pt-0 px-0 pb-2"
+            className="mx-2 pt-0 px-0 pb-2 my-card"
             style={{ display: "inline-block" }}
             onClick={() => {
                 props.audioStates.pauseSong()

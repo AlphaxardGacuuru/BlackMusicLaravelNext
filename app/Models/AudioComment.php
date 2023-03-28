@@ -28,6 +28,11 @@ class AudioComment extends Model
 		return $this->belongsTo(User::class, "username", "username");
 	}
 
+	public function audio()
+	{
+		return $this->belongsTo(Audio::class);
+	}
+
 	public function likes()
 	{
 		return $this->hasMany(AudioCommentLike::class);

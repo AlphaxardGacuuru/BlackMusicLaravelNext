@@ -94,7 +94,7 @@ const TopNav = props => {
             <div id="MyElement" style={{ display: display }} className={menu}>
                 {/* <!-- ***** Header Area Start ***** --> */}
                 <header
-                    style={{ backgroundColor: "#232323" }}
+                    style={{ backgroundColor: "#232323", boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 1)" }}
                     className="header-area">
                     <div className="container-fluid p-0">
                         <div className="row">

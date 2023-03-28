@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AudioCommentLikedNotification extends Notification
+class VideoCommentLikedNotification extends Notification
 {
     use Queueable;
 
@@ -57,9 +57,9 @@ class AudioCommentLikedNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-			'url' => '/audio/' . $this->comment->audio->id,
+			'url' => '/video/' . $this->comment->video->id,
 			'from' => auth('sanctum')->user()->username,
-			'message' => auth('sanctum')->user()->username . ' liked your comment on ' . $this->comment->audio->name,
+			'message' => auth('sanctum')->user()->username . ' liked your comment on ' . $this->comment->video->name,
         ];
     }
 }

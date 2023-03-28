@@ -24,21 +24,17 @@ class VideoCommentLikeService
                 ->delete();
 
             $message = "Like removed";
+			$added = false;
         } else {
-            $videoCommentLike = new VideoCommentLike;
+			$videoCommentLike = new VideoCommentLike;
             $videoCommentLike->video_comment_id = $request->input('comment');
             $videoCommentLike->username = auth('sanctum')->user()->username;
             $videoCommentLike->save();
-
+			
             $message = "Comment liked";
-
-            // Show notification
-            // $videoComment = VideoComment::where('id', $request->input('comment'))->first();
-            // $video = $videoComment->videos;
-            // $video->users->username != auth()->user()->username &&
-            // $video->users->notify(new VideoCommentLikeNotifications($video->name));
+			$added = true;
         }
 
-        return response($message, 200);
+		return [$added, $message];
     }
 }

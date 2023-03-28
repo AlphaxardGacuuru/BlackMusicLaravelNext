@@ -3,24 +3,23 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AudioCommentLikedNotification extends Notification
+class VideoCommentedNotification extends Notification
 {
     use Queueable;
 
-	public $comment;
+    public $video;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($comment)
+    public function __construct($video)
     {
-        $this->comment = $comment;
+        $this->video = $video;
     }
 
     /**
@@ -43,9 +42,9 @@ class AudioCommentLikedNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -57,9 +56,9 @@ class AudioCommentLikedNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-			'url' => '/audio/' . $this->comment->audio->id,
-			'from' => auth('sanctum')->user()->username,
-			'message' => auth('sanctum')->user()->username . ' liked your comment on ' . $this->comment->audio->name,
+            'url' => '/video/' . $this->video->id,
+            'from' => auth('sanctum')->user()->username,
+            'message' => auth('sanctum')->user()->username . ' commented on ' . $this->video->name,
         ];
     }
 }

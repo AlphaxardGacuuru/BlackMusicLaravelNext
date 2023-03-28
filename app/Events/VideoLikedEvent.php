@@ -10,20 +10,20 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class AudioCommentLikedEvent
+class VideoLikedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-	public $comment;
+	public $video;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($comment)
+    public function __construct($video)
     {
-        $this->comment = $comment;
+        $this->video = $video;
     }
 
     /**

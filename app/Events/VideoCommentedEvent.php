@@ -4,26 +4,24 @@ namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class AudioCommentLikedEvent
+class VideoCommentedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-	public $comment;
+    public $video;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($comment)
+    public function __construct($video)
     {
-        $this->comment = $comment;
+        $this->video = $video;
     }
 
     /**

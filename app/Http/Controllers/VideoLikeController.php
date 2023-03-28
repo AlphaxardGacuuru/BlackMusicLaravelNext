@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\VideoLikedEvent;
 use App\Http\Services\VideoLikeService;
+use App\Models\Video;
 use App\Models\VideoLike;
 use Illuminate\Http\Request;
 
@@ -26,7 +28,13 @@ class VideoLikeController extends Controller
      */
     public function store(Request $request, VideoLikeService $videoLikeService)
     {
-        return $videoLikeService->store($request);
+        $result = $videoLikeService->store($request);
+
+        $video = Video::find($request->input("video"));
+
+        VideoLikedEvent::dispatchIf($result[0], $video);
+
+        return response($result[1], 200);
     }
 
     /**

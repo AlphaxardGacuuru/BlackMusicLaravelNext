@@ -24,20 +24,17 @@ class VideoLikeService
                 ->delete();
 
             $message = "Like removed";
+			$added = false;
         } else {
-            $videoLike = new VideoLike;
+			$videoLike = new VideoLike;
             $videoLike->video_id = $request->input('video');
             $videoLike->username = auth('sanctum')->user()->username;
             $videoLike->save();
-
+			
             $message = "Video liked";
-
-            // Show notification
-            // $video = Videos::where('id', $request->input('video'))->first();
-            // $video->users->username != auth()->user()->username &&
-            // $video->users->notify(new VideoLikeNotifications($video->name));
+			$added = true;
         }
 
-        return response($message, 200);
+		return [$added, $message];
     }
 }

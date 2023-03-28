@@ -11,6 +11,9 @@ use App\Events\PostCommentedEvent;
 use App\Events\PostCommentLikedEvent;
 use App\Events\PostLikedEvent;
 use App\Events\VideoBoughtEvent;
+use App\Events\VideoCommentedEvent;
+use App\Events\VideoCommentLikedEvent;
+use App\Events\VideoLikedEvent;
 use App\Listeners\AudioBoughtListener;
 use App\Listeners\AudioCommentedListener;
 use App\Listeners\AudioCommentLikedListener;
@@ -20,6 +23,9 @@ use App\Listeners\PostCommentedListener;
 use App\Listeners\PostCommentLikedListener;
 use App\Listeners\PostLikedListener;
 use App\Listeners\VideoBoughtListener;
+use App\Listeners\VideoCommentedListener;
+use App\Listeners\VideoCommentLikedListener;
+use App\Listeners\VideoLikedListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -36,6 +42,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        VideoLikedEvent::class => [VideoLikedListener::class],
+        VideoCommentedEvent::class => [VideoCommentedListener::class],
+        VideoCommentLikedEvent::class => [VideoCommentLikedListener::class],
         AudioLikedEvent::class => [AudioLikedListener::class],
         AudioCommentedEvent::class => [AudioCommentedListener::class],
         AudioCommentLikedEvent::class => [AudioCommentLikedListener::class],

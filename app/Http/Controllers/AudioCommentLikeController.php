@@ -31,13 +31,9 @@ class AudioCommentLikeController extends Controller
     {
         $result = $service->store($request);
 
-		// $comment = AudioComment::find($request->input("comment"));
-		$comment = AudioComment::where("id", $request->input("comment"))->get()->first();
+        $comment = AudioComment::find($request->input("comment"));
 
-		// $audio = Audio::find($comment->id);
-		$audio = Audio::where("id", $comment->id)->get()->first();
-
-		AudioCommentLikedEvent::dispatchIf($result[0], $comment, $audio);
+        AudioCommentLikedEvent::dispatchIf($result[0], $comment);
 
         return response($result[1], 200);
     }

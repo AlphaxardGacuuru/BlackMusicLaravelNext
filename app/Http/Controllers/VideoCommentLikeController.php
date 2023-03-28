@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\VideoCommentLikedEvent;
 use App\Http\Services\VideoCommentLikeService;
+use App\Models\VideoComment;
 use App\Models\VideoCommentLike;
 use Illuminate\Http\Request;
 
@@ -26,7 +28,13 @@ class VideoCommentLikeController extends Controller
      */
     public function store(Request $request, VideoCommentLikeService $videoCommentLikeService)
     {
-        return $videoCommentLikeService->store($request);
+        $result = $videoCommentLikeService->store($request);
+
+        $comment = VideoComment::find($request->input("comment"));
+
+        VideoCommentLikedEvent::dispatchIf($result[0], $comment);
+
+        return response($result[1], 200);
     }
 
     /**

@@ -68,7 +68,7 @@ class VideoCommentService
                 "username" => $videoComment->username,
                 "name" => $videoComment->user->name,
                 "avatar" => $videoComment->user->avatar,
-				"decos" => $videoComment->user->decos->count(),
+                "decos" => $videoComment->user->decos->count(),
                 "hasLiked" => $videoComment->hasLiked($authUsername),
                 "likes" => $videoComment->likes->count(),
                 "createdAt" => $videoComment->created_at,
@@ -91,14 +91,8 @@ class VideoCommentService
         $videoComment->video_id = $request->input('id');
         $videoComment->username = auth('sanctum')->user()->username;
         $videoComment->text = $request->input('text');
-        $videoComment->save();
 
-        // Show notification
-        // $video = Videos::where('id', $request->input('id'))->first();
-        // $video->users->username != auth()->user()->username &&
-        // $video->users->notify(new VideoCommentNotifications($video->name));
-
-        return response('Comment Posted', 200);
+        return $videoComment->save();
     }
 
     /**

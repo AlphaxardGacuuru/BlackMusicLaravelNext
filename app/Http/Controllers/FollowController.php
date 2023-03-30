@@ -31,8 +31,7 @@ class FollowController extends Controller
         $result = $service->store($request);
 
         // Dispatch Event
-        $musician = User::where('username', $request->input('musician'))
-            ->first();
+        $musician = User::where('username', $request->input('musician'))->first();
 
 		FollowedEvent::dispatchIf($result[0], $musician);
 

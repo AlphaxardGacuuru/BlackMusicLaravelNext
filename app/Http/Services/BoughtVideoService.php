@@ -7,6 +7,7 @@ use App\Models\BoughtVideo;
 use App\Models\CartVideo;
 use App\Models\Deco;
 use App\Models\Kopokopo;
+use Illuminate\Support\Facades\DB;
 
 class BoughtVideoService
 {
@@ -73,15 +74,22 @@ class BoughtVideoService
                     ->doesntExist();
 
                 if ($notBought) {
-                    $this->storeBoughtVideo($cartVideo);
 
-                    /* Add deco if necessary */
-                    $artist = $this->storeDeco($cartVideo);
+                    // Transaction to make sure a video is bought and remove from cart and if user qualifies, a deco is saved
+                    $artist = DB::transaction(function() use($cartVideo) {
 
-                    /* Delete from cart */
-                    CartVideo::where('video_id', $cartVideo->video_id)
-                        ->where('username', auth('sanctum')->user()->username)
-                        ->delete();
+                        $this->storeBoughtVideo($cartVideo);
+
+                        /* Add deco if necessary */
+                        $artist = $this->storeDeco($cartVideo);
+
+                        /* Delete from cart */
+                        CartVideo::where('video_id', $cartVideo->video_id)
+                            ->where('username', auth('sanctum')->user()->username)
+                            ->delete();
+
+                        return $artist;
+                    });
 
                     // Update array
                     array_push($boughtVideosWithStructure,

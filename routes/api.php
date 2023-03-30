@@ -109,7 +109,9 @@ Route::get('audios/download', [AudioController::class, 'download']);
 // Filepond Controller
 Route::prefix('filepond')->group(function () {
     Route::controller(FilePondController::class)->group(function () {
+		// User
         Route::post('avatar/{id}', 'updateAvatar');
+
         // Video
         Route::post('video-thumbnail', 'storeVideoThumbnail');
         Route::post('video-thumbnail/{id}', 'updateVideoThumbnail');
@@ -133,6 +135,10 @@ Route::prefix('filepond')->group(function () {
 		// Karaoke
         Route::post('karaokes', 'storeKaraoke');
         Route::delete('karaokes/{id}', 'destroyKaraoke');
+		
+		// Chat
+        Route::post('chats', 'storeChatMedia');
+        Route::delete('chats/{id}', 'deleteChatMedia');
     });
 });
 

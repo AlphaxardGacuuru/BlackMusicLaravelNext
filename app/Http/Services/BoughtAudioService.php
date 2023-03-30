@@ -7,6 +7,7 @@ use App\Models\BoughtVideo;
 use App\Models\CartAudio;
 use App\Models\Deco;
 use App\Models\Kopokopo;
+use Illuminate\Support\Facades\DB;
 
 class BoughtAudioService
 {
@@ -72,15 +73,22 @@ class BoughtAudioService
                     ->doesntExist();
 
                 if ($notBought) {
-                    $this->storeBoughtAudio($cartAudio);
 
-                    /* Add deco if necessary */
-                    $artist = $this->storeDeco($cartAudio);
+                    // Transaction to make sure a video is bought and remove from cart and if user qualifies, a deco is saved
+                    $artist = DB::transaction(function() use($cartAudio) {
 
-                    /* Delete from cart */
-                    CartAudio::where('audio_id', $cartAudio->audio_id)
-                        ->where('username', auth('sanctum')->user()->username)
-                        ->delete();
+                        $this->storeBoughtAudio($cartAudio);
+
+                        /* Add deco if necessary */
+                        $artist = $this->storeDeco($cartAudio);
+
+                        /* Delete from cart */
+                        CartAudio::where('audio_id', $cartAudio->audio_id)
+                            ->where('username', auth('sanctum')->user()->username)
+                            ->delete();
+
+                        return $artist;
+                    });
 
                     // Update array
                     array_push($boughtAudios, $cartAudio->audio);
@@ -141,7 +149,7 @@ class BoughtAudioService
         $userDecos = Deco::where('username', auth('sanctum')->user()->username)
             ->where('artist', $cartAudio->audio->username)
             ->count();
-			
+
         $userAudios = BoughtAudio::where('username', auth('sanctum')->user()->username)
             ->where('artist', $cartAudio->audio->username)
             ->count();

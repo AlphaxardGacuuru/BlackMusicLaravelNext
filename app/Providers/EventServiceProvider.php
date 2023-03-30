@@ -6,6 +6,7 @@ use App\Events\AudioBoughtEvent;
 use App\Events\AudioCommentedEvent;
 use App\Events\AudioCommentLikedEvent;
 use App\Events\AudioLikedEvent;
+use App\Events\ChatEvent;
 use App\Events\FollowedEvent;
 use App\Events\PostCommentedEvent;
 use App\Events\PostCommentLikedEvent;
@@ -18,6 +19,7 @@ use App\Listeners\AudioBoughtListener;
 use App\Listeners\AudioCommentedListener;
 use App\Listeners\AudioCommentLikedListener;
 use App\Listeners\AudioLikedListener;
+use App\Listeners\ChatListener;
 use App\Listeners\FollowedListener;
 use App\Listeners\PostCommentedListener;
 use App\Listeners\PostCommentLikedListener;
@@ -42,6 +44,7 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        ChatEvent::class => [ChatListener::class],
         VideoLikedEvent::class => [VideoLikedListener::class],
         VideoCommentedEvent::class => [VideoCommentedListener::class],
         VideoCommentLikedEvent::class => [VideoCommentLikedListener::class],

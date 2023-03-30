@@ -6,6 +6,7 @@ use App\Models\AudioAlbum;
 use App\Models\User;
 use App\Models\VideoAlbum;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserService
@@ -19,7 +20,7 @@ class UserService
     {
         // Check if user is logged in
         $auth = auth('sanctum')->user();
-		
+
         $authUsername = $auth ? $auth->username : '@guest';
 
         $getUsers = User::all();
@@ -57,10 +58,10 @@ class UserService
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-	public function show($id)
-	{
-		return User::find($id);
-	}
+    public function show($id)
+    {
+        return User::find($id);
+    }
 
     /**
      * Update the specified resource in storage.
@@ -87,21 +88,25 @@ class UserService
 
             $user->account_type = $request->input('account_type');
 
-            /* Create new video album */
-            $vAlbum = new VideoAlbum;
-            $vAlbum->name = "Singles";
-            $vAlbum->username = auth('sanctum')->user()->username;
-            $vAlbum->cover = "video-album-covers/musical-note.png";
-            $vAlbum->released = Carbon::now();
-            $vAlbum->save();
+            DB::transaction(function () {
 
-            /* Create new audio album */
-            $aAlbum = new AudioAlbum;
-            $aAlbum->name = "Singles";
-            $aAlbum->username = auth('sanctum')->user()->username;
-            $aAlbum->cover = "audio-album-covers/musical-note.png";
-            $vAlbum->released = Carbon::now();
-            $aAlbum->save();
+                /* Create new video album */
+                $vAlbum = new VideoAlbum;
+                $vAlbum->name = "Singles";
+                $vAlbum->username = auth('sanctum')->user()->username;
+                $vAlbum->cover = "video-album-covers/musical-note.png";
+                $vAlbum->released = Carbon::now();
+                $vAlbum->save();
+
+                /* Create new audio album */
+                $aAlbum = new AudioAlbum;
+                $aAlbum->name = "Singles";
+                $aAlbum->username = auth('sanctum')->user()->username;
+                $aAlbum->cover = "audio-album-covers/musical-note.png";
+                $vAlbum->released = Carbon::now();
+                $aAlbum->save();
+
+            });
         }
 
         if ($request->filled('bio')) {

@@ -32,7 +32,7 @@ const AudioShow = (props) => {
 	let { id } = router.query
 
 	// Set State
-	const [audio, setAudio] = useState(props.data.audio)
+	const [audio, setAudio] = useState({})
 	const [tabClass, setTabClass] = useState("comments")
 	const [bottomMenu, setBottomMenu] = useState("")
 	const [commentToEdit, setCommentToEdit] = useState()
@@ -631,24 +631,24 @@ const AudioShow = (props) => {
 }
 
 // This gets called on every request
-export async function getServerSideProps(context) {
-	const { id } = context.query
+// export async function getServerSideProps(context) {
+	// const { id } = context.query
 
-	var data = {
-		audio: null,
-		comments: null,
-	}
+	// var data = {
+		// audio: null,
+		// comments: null,
+	// }
 
 	// Fetch Audio
-	await axios.get(`/api/audios/${id}`).then((res) => (data.audio = res.data))
+	// await axios.get(`/api/audios/${id}`).then((res) => (data.audio = res.data))
 
 	// Fetch Audio Comments
-	await axios
-		.get(`/api/audio-comments/${id}`)
-		.then((res) => (data.comments = res.data))
+	// await axios
+		// .get(`/api/audio-comments/${id}`)
+		// .then((res) => (data.comments = res.data))
 
 	// Pass data to the page via props
-	return { props: { data } }
-}
+	// return { props: { data } }
+// }
 
 export default AudioShow

@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef, Suspense } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import onCartVideos from '@/functions/onCartVideos'
-
 import Carousel from '@/components/Core/Carousel'
 import LoadingAvatarMedia from '@/components/User/LoadingAvatarMedia'
 import LoadingVideoMedia from '@/components/Video/LoadingVideoMedia'

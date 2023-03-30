@@ -1,30 +1,25 @@
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import axios from 'axios'
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { useRouter } from "next/router"
 
-import Img from '@/components/Core/Img'
+import Img from "@/components/Core/Img"
+import axios from "@/lib/axios"
+import TrashSVG from "@/svgs/TrashSVG"
+import BackSVG from "@/svgs/BackSVG"
 
 const ChatThread = (props) => {
-
 	const router = useRouter()
 
-	let { username } = router.query;
+	let { username } = router.query
 
+	const [chats, setChats] = useState([])
 	const [showDelete, setShowDelete] = useState()
-	const [chat, setChat] = useState(props.getLocalStorage("chat"))
-	const [chatThreads, setChatThreads] = useState(props.getLocalStorage("chatThreads"))
 
 	useEffect(() => {
-		// Fetch Chat Threads
-		props.get(`chats`, setChatThreads)
-
 		// Fetch Chat
-		props.get(`chats/${username}`, setChat)
-	}, [])
+		props.get(`chats/${username}`, setChats)
 
-	// Set states
-	useEffect(() => {
+		// Set states
 		setTimeout(() => {
 			props.setTo(username)
 			props.setPlaceholder("Message")
@@ -34,80 +29,31 @@ const ChatThread = (props) => {
 			props.setShowEmojiPicker(false)
 			props.setShowImagePicker(false)
 			props.setShowPollPicker(false)
-			props.setUrlTo("/chat")
-			props.setUrlToTwo(`/chat/1`)
-			props.setStateToUpdate(() => setChat)
-			props.setStateToUpdateTwo(() => setChatThreads)
+			props.setUrlTo("chats")
+			props.setUrlToTwo()
+			props.setStateToUpdate(() => props.setChatThreads)
+			props.setStateToUpdateTwo()
 			props.setEditing(false)
 		}, 1000)
-	}, [])
+	}, [username])
 
 	// Function for deleting chat
 	const onDeleteChat = (id) => {
-		axios.delete(`${props.url}/api/chat/${id}`)
+		axios
+			.delete(`/api/chats/${id}`)
 			.then((res) => {
 				props.setMessages([res.data])
-				// Update chat
-				axios.get(`${props.url}/api/chat`)
-					.then((res) => setChat(res.data))
-				// Update chat
-				axios.get(`${props.url}/api/chat/1`)
-					.then((res) => setChatThreads(res.data))
-			}).catch((err) => props.getErrors)
-	}
-
-	const onDeleteNotifications = (id) => {
-		axios.delete(`/api/notifications/${id}`)
-			.then((res) => {
-				// Update Notifications
-				axios.get(`/api/notifications`)
-					.then((res) => props.setNotifications(res.data))
+				// Update chats
+				props.get(`chats/${username}`, setChats)
 			})
+			.catch((err) => props.getErrors(err))
 	}
-
-	// Function to Update Chat
-	const checkChat = () => {
-		axios.get(`/api/chat`)
-			.then((res) => {
-				// Get new length of chat
-				var currentChatLength = chat
-					.filter((chatItem) => {
-						return chatItem.username == username &&
-							chatItem.to == props.auth.username ||
-							chatItem.username == props.auth.username &&
-							chatItem.to == username
-					}).length
-
-				// Get old length of chat
-				var newChatLength = res.data
-					.filter((chatItem) => {
-						return chatItem.username == username &&
-							chatItem.to == props.auth.username ||
-							chatItem.username == props.auth.username &&
-							chatItem.to == username
-					}).length
-
-				// Update chat if new one arrives
-				if (newChatLength > currentChatLength) {
-					setChat(res.data)
-					// onDeleteNotifications(0)
-					console.log("checking chat")
-				}
-			})
-	}
-
-	// Trigger function in intervals 
-	useEffect(() => {
-		const chatInterval = setInterval(() => checkChat(), 2000)
-
-		return () => clearInterval(chatInterval)
-	}, [])
 
 	// Ensure latest chat is always visible
 	useEffect(() => {
 		// Scroll to the bottom of the page
 		window.scrollTo(0, document.body.scrollHeight)
-	}, [chat])
+	}, [chats])
 
 	// // Long hold to show delete button
 	// var chatDiv = useRef(null)
@@ -144,18 +90,8 @@ const ChatThread = (props) => {
 									{/* <!-- Logo Area  --> */}
 									<div className="logo-area">
 										<Link href="/chat">
-											<a>
-												<svg
-													width="30"
-													height="30"
-													viewBox="0 0 16 16"
-													className="bi bi-arrow-left-short"
-													fill="currentColor"
-													xmlns="http://www.w3.org/2000/svg">
-													<path fillRule="evenodd"
-														d="M7.854 4.646a.5.5 0 0 1 0 .708L5.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z" />
-													<path fillRule="evenodd" d="M4.5 8a.5.5 0 0 1 .5-.5h6.5a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z" />
-												</svg>
+											<a className="fs-6">
+												<BackSVG />
 											</a>
 										</Link>
 									</div>
@@ -164,16 +100,21 @@ const ChatThread = (props) => {
 									<div className="menu-content-area d-flex align-items-center">
 										<div className="text-white">
 											<center>
-												<h6 className="m-0"
+												<h6
+													className="m-0"
 													style={{
 														width: "100%",
 														whiteSpace: "nowrap",
 														overflow: "hidden",
-														textOverflow: "clip"
+														textOverflow: "clip",
 													}}>
 													<b className="text-white">
-														{props.users.find((user) => user.username == username) &&
-															props.users.find((user) => user.username == username).name}
+														{props.users.find(
+															(user) => user.username == username
+														) &&
+															props.users.find(
+																(user) => user.username == username
+															).name}
 													</b>
 													<br />
 													<small className="text-white">{username}</small>
@@ -185,12 +126,21 @@ const ChatThread = (props) => {
 									<div className="menu-content-area d-flex align-items-center">
 										<div>
 											<Link href={`/profile/${username}`}>
-												<Img
-													src={props.users.find((user) => user.username == username) &&
-														props.users.find((user) => user.username == username).avatar}
-													imgClass="rounded-circle"
-													width="40px"
-													height="40px" />
+												<a>
+													<Img
+														src={
+															props.users.find(
+																(user) => user.username == username
+															) &&
+															props.users.find(
+																(user) => user.username == username
+															).avatar
+														}
+														imgClass="rounded-circle"
+														width="40px"
+														height="40px"
+													/>
+												</a>
 											</Link>
 										</div>
 									</div>
@@ -207,72 +157,71 @@ const ChatThread = (props) => {
 				{/* <!-- ***** Call to Action Area Start ***** --> */}
 				<div className="sonar-call-to-action-area section-padding-0-100">
 					<div className="backEnd-content">
-						<h2 className="p-2" style={{ color: "rgba(255,255,255,0.1)" }}>Chat</h2>
+						<h2 className="p-2" style={{ color: "rgba(255,255,255,0.1)" }}>
+							Chat
+						</h2>
 					</div>
-					{chat
-						.filter((chatItem) => {
-							return chatItem.username == username &&
-								chatItem.to == props.auth.username ||
-								chatItem.username == props.auth.username &&
-								chatItem.to == username
-						}).map((chatItem, key) => (
-							<div
-								key={key}
-								className={`d-flex
-								${chatItem.username == props.auth.username ?
-										"flex-row-reverse" :
-										"text-light"}`}>
-								{chatItem.username == props.auth.username &&
-									showDelete &&
-									<div
-										style={{
-											cursor: "pointer",
-											backgroundColor: chatItem.username == props.auth.username && "gold"
-										}}
-										className="rounded-0 border border-secondary border-right-0 border-top-0 border-bottom-0 p-2 my-1 mx-0"
-										onClick={() => onDeleteChat(chatItem.id)}>
-										<span style={{ color: "#232323" }}>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												width="16"
-												height="16"
-												fill="currentColor"
-												className="bi bi-trash"
-												viewBox="0 0 16 16">
-												<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
-												<path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
-											</svg>
-										</span>
-									</div>}
+					{chats.map((chatItem, key) => (
+						<div
+							key={key}
+							className={`d-flex
+								${
+									chatItem.username == props.auth.username
+										? "flex-row-reverse"
+										: "text-light"
+								}`}>
+							{chatItem.username == props.auth.username && showDelete && (
 								<div
-									className="rounded-0 border border-0 p-2 my-1 mx-0"
 									style={{
-										backgroundColor: chatItem.username == props.auth.username ? "#FFD700" : "#232323",
-										maxWidth: "90%",
-										wordWrap: "break-word"
+										cursor: "pointer",
+										backgroundColor:
+											chatItem.username == props.auth.username && "gold",
 									}}
-									onClick={() => chatItem.username == props.auth.username && setShowDelete(!showDelete)}>
-									{chatItem.text}
-
-									{/* Show media */}
-									<div className="mb-1" style={{ overflow: "hidden" }}>
-										{chatItem.media &&
-											<Img
-												src={`storage/${chatItem.media}`}
-												width="100%"
-												height="auto"
-												alt={'help-post-media'} />}
-									</div>
-									<small className={chatItem.username == props.auth.username ?
-										"text-dark m-0 p-1" :
-										"text-muted m-0 p-1"}>
-										<i className="float-end m-0">
-											{chatItem.created_at}
-										</i>
-									</small>
+									className="rounded-0 border border-secondary border-right-0 border-top-0 border-bottom-0 p-2 my-1 mx-0"
+									onClick={() => onDeleteChat(chatItem.id)}>
+									<span style={{ color: "#232323" }}>
+										<TrashSVG />
+									</span>
 								</div>
+							)}
+							<div
+								className="rounded-0 border-0 p-2 my-1 mx-0"
+								style={{
+									backgroundColor:
+										chatItem.username == props.auth.username
+											? "#FFD700"
+											: "#232323",
+									maxWidth: "90%",
+									wordWrap: "break-word",
+								}}
+								onClick={() =>
+									chatItem.username == props.auth.username &&
+									setShowDelete(!showDelete)
+								}>
+								{chatItem.text}
+
+								{/* Show media */}
+								<div className="mb-1" style={{ overflow: "hidden" }}>
+									{chatItem.media && (
+										<Img
+											src={chatItem.media}
+											width="100%"
+											height="auto"
+											alt={"chat-media"}
+										/>
+									)}
+								</div>
+								<small
+									className={
+										chatItem.username == props.auth.username
+											? "text-dark m-0 p-1"
+											: "text-muted m-0 p-1"
+									}>
+									<i className="float-end m-0">{chatItem.createdAt}</i>
+								</small>
 							</div>
-						))}
+						</div>
+					))}
 				</div>
 				<br />
 				<br className="hidden" />

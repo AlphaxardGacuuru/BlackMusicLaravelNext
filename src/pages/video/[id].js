@@ -32,15 +32,6 @@ const VideoShow = (props) => {
 	const [commentToEdit, setCommentToEdit] = useState()
 	const [commentDeleteLink, setCommentDeleteLink] = useState()
 
-	// Define new props for onFollow
-	const props2 = {
-		...props,
-		user: { username: video.username },
-		video: video,
-		setVideo: setVideo,
-		videoId: id
-	}
-
 	useEffect(() => {
 		// setVideo(props.data.video[0])
 		// props.setVideoComments(props.data.comments)

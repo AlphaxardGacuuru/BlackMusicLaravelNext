@@ -92,6 +92,7 @@ class AudioCommentService
         $audioComment->audio_id = $request->input('id');
         $audioComment->username = auth('sanctum')->user()->username;
         $audioComment->text = $request->input('text');
+		
         return $audioComment->save();
     }
 

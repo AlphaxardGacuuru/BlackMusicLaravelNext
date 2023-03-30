@@ -68,8 +68,10 @@ const App = ({ Component, pageProps }) => {
 	const [boughtVideos, setBoughtVideos] = useState(getLocalStorage("boughtVideos"))
 	const [cartAudios, setCartAudios] = useState(getLocalStorage("cartAudios"))
 	const [cartVideos, setCartVideos] = useState(getLocalStorage("cartVideos"))
+	const [chatThreads, setChatThreads] = useState(getLocalStorage("chatThreads"))
 	const [karaokes, setKaraokes] = useState([])
 	const [karaokeComments, setKaraokeComments] = useState([])
+	const [savedKaraokes, setSavedKaraokes] = useState([])
 	const [posts, setPosts] = useState(getLocalStorage("posts"))
 	const [postComments, setPostComments] = useState([])
 	const [users, setUsers] = useState(getLocalStorage("users"))
@@ -229,6 +231,7 @@ const App = ({ Component, pageProps }) => {
 		boughtVideos, setBoughtVideos,
 		cartAudios, setCartAudios,
 		cartVideos, setCartVideos,
+		chatThreads, setChatThreads,
 		posts, setPosts,
 		postComments, setPostComments,
 		users, setUsers,
@@ -237,6 +240,7 @@ const App = ({ Component, pageProps }) => {
 		videoComments, setVideoComments,
 		karaokes, setKaraokes,
 		karaokeComments, setKaraokeComments,
+		savedKaraokes, setSavedKaraokes,
 		// Search 
 		onSearchIconClick,
 		searchInput,

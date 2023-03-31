@@ -123,8 +123,8 @@ class AudioTest extends TestCase
         Storage::assertExists('public/audio-thumbnails/' . $thumbnail->hashName());
         Storage::assertExists('public/audios/' . $audio->hashName());
 
-        Storage::disk('public')->delete('audio-thumbnails/' . $thumbnail->hashName());
-        Storage::disk('public')->delete('audios/' . $audio->hashName());
+        Storage::delete('public/audio-thumbnails/' . $thumbnail->hashName());
+        Storage::delete('public/audios/' . $audio->hashName());
     }
 
     /**
@@ -202,8 +202,8 @@ class AudioTest extends TestCase
         Storage::assertExists('public/audio-thumbnails/' . $thumbnail->hashName());
         Storage::assertExists('public/audios/' . $audioFile->hashName());
 
-        Storage::disk('public')->delete('audio-thumbnails/' . $thumbnail->hashName());
-        Storage::disk('public')->delete('audios/' . $audioFile->hashName());
+        Storage::delete('public/audio-thumbnails/' . $thumbnail->hashName());
+        Storage::delete('public/audios/' . $audioFile->hashName());
     }
 
     /**

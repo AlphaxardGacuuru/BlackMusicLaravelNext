@@ -76,7 +76,7 @@ class AudioAlbumTest extends TestCase
 
         Storage::assertExists('public/audio-album-covers/' . $cover->hashName());
 
-        Storage::disk('public')->delete('audio-album-covers/' . $cover->hashName());
+        Storage::delete('public/audio-album-covers/' . $cover->hashName());
     }
 
     /**
@@ -129,6 +129,6 @@ class AudioAlbumTest extends TestCase
         Storage::assertExists('public/audio-album-covers/' . $cover->hashName());
 
         // Delete Album Cover
-        Storage::disk('public')->delete('audio-album-covers/' . $cover->hashName());
+        Storage::delete('public/audio-album-covers/' . $cover->hashName());
     }
 }

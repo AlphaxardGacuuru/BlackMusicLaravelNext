@@ -124,8 +124,12 @@ class ChatService
      */
     public function destroy($id)
     {
-        $chatItem = Chat::where('id', $id)->first();
-        Storage::delete('public/' . $chatItem->media);
+        $chatItem = Chat::find($id);
+
+        $media = substr($chatItem->media, 9);
+
+        Storage::delete('public/' . $media);
+
         Chat::find($id)->delete();
 
         return response("Chat deleted", 200);

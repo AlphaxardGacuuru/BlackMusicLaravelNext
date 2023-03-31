@@ -50,7 +50,7 @@ const App = ({ Component, pageProps }) => {
 	const [errors, setErrors] = useState([])
 	const [login, setLogin] = useState()
 	const [auth, setAuth] = useState(
-		getLocalStorage("auth") &&
+		getLocalStorage("auth") ||
 		{
 			"name": "Guest",
 			"username": "@guest",

@@ -1,24 +1,18 @@
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 import Link from "next/link"
-import { useRouter } from "next/router"
-import axios from "@/lib/axios"
 import Img from "@/components/Core/Img"
+
 import ChatSVG from "@/svgs/ChatSVG"
 import ImageSVG from "@/svgs/ImageSVG"
 
 const Chat = (props) => {
-	const router = useRouter()
 
 	// Fetch Help Threads
 	useEffect(() => {
-		props.get("chats", props.setChatThreads)
+		props.get("chats", props.setChatThreads, "chatThreads")
 	}, [])
 
-	var checkLocation = true
-
-	if (props.show != 0) {
-		checkLocation = router.pathname.match(/audio-show/)
-	}
+	var raise = props.audioStates.show.id != 0 && props.audioStates.show.id != undefined
 
 	return (
 		<div className="row">
@@ -26,12 +20,12 @@ const Chat = (props) => {
 			<div className="col-sm-4">
 				{/* Chat button */}
 				<Link href="/chat/new">
-					<a id="chatFloatBtn" className={`${!checkLocation && "mb-5"}`}>
+					<a id="chatFloatBtn" className={raise ? "mb-5" : undefined}>
 						<ChatSVG />
 					</a>
 				</Link>
 
-				{/* Start Thread */}
+				{/* Default Thread */}
 				{props.chatThreads.length == 0 && (
 					<div className="d-flex">
 						<div className="p-2">

@@ -101,7 +101,7 @@ class KaraokeTest extends TestCase
 
         Storage::assertExists('public/karaokes/' . $karaoke->hashName());
 
-        Storage::disk('public')->delete('karaokes/' . $karaoke->hashName());
+        Storage::delete('public/karaokes/' . $karaoke->hashName());
     }
 
     /**

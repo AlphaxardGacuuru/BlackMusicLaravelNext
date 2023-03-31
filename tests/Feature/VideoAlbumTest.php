@@ -76,7 +76,7 @@ class VideoAlbumTest extends TestCase
 
         Storage::assertExists('public/video-album-covers/' . $cover->hashName());
 
-        Storage::disk('public')->delete('video-album-covers/' . $cover->hashName());
+        Storage::delete('public/video-album-covers/' . $cover->hashName());
     }
 
     /**
@@ -129,6 +129,6 @@ class VideoAlbumTest extends TestCase
         Storage::assertExists('public/video-album-covers/' . $cover->hashName());
 
         // Delete Album Cover
-        Storage::disk('public')->delete('video-album-covers/' . $cover->hashName());
+        Storage::delete('public/video-album-covers/' . $cover->hashName());
     }
 }

@@ -50,7 +50,7 @@ class UserTest extends TestCase
         Storage::assertExists('public/avatars/' . $avatar->hashName());
 
         // Delete Album Cover
-        Storage::disk('public')->delete('avatars/' . $avatar->hashName());
+        Storage::delete('public/avatars/' . $avatar->hashName());
     }
 
     /**
@@ -84,7 +84,7 @@ class UserTest extends TestCase
         Storage::assertMissing('public/avatars/' . $avatar->hashName());
 
         // Delete Album Cover
-        Storage::disk('public')->delete('avatars/' . $avatar->hashName());
+        Storage::delete('public/avatars/' . $avatar->hashName());
     }
 
     /**

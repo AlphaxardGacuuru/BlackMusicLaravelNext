@@ -120,8 +120,8 @@ class VideoTest extends TestCase
         Storage::assertExists('public/video-thumbnails/' . $thumbnail->hashName());
         Storage::assertExists('public/videos/' . $video->hashName());
 
-        Storage::disk('public')->delete('video-thumbnails/' . $thumbnail->hashName());
-        Storage::disk('public')->delete('videos/' . $video->hashName());
+        Storage::delete('public/video-thumbnails/' . $thumbnail->hashName());
+        Storage::delete('public/videos/' . $video->hashName());
     }
 
     /**
@@ -199,8 +199,8 @@ class VideoTest extends TestCase
         Storage::assertExists('public/video-thumbnails/' . $thumbnail->hashName());
         Storage::assertExists('public/videos/' . $videoFile->hashName());
 
-        Storage::disk('public')->delete('video-thumbnails/' . $thumbnail->hashName());
-        Storage::disk('public')->delete('videos/' . $videoFile->hashName());
+        Storage::delete('public/video-thumbnails/' . $thumbnail->hashName());
+        Storage::delete('public/videos/' . $videoFile->hashName());
     }
 
     /**

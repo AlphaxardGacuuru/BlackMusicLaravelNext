@@ -83,7 +83,7 @@ class PostTest extends TestCase
 
         Storage::assertExists('public/post-media/' . $image->hashName());
 
-        Storage::disk('public')->delete('post-media/' . $image->hashName());
+        Storage::delete('public/post-media/' . $image->hashName());
     }
 
     /**
@@ -143,7 +143,7 @@ class PostTest extends TestCase
 
         Storage::assertExists('public/post-media/' . $image->hashName());
 
-        Storage::disk('public')->delete('post-media/' . $image->hashName());
+        Storage::delete('public/post-media/' . $image->hashName());
     }
 
     /**

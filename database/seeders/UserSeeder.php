@@ -22,6 +22,7 @@ class UserSeeder extends Seeder
         if ($blackDoesntExist) {
             User::factory()
                 ->black()
+				->al()
                 ->hasKopokopos(1)
                 ->create();
         }

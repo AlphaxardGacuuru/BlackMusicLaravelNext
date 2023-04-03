@@ -22,3 +22,10 @@ require __DIR__.'/auth.php';
 
 // Get Auth
 Route::get('auth', [UserController::class, 'auth']);
+
+// Mailables
+Route::get('/mailable/audio-receipt', function () {
+    $audios = App\Models\Audio::all();
+
+    return new App\Mail\AudioReceiptMail($audios);
+});

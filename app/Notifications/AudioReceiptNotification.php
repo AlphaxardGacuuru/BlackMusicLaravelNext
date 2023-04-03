@@ -2,8 +2,8 @@
 
 namespace App\Notifications;
 
+use App\Mail\AudioReceiptMail;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -11,7 +11,7 @@ class AudioReceiptNotification extends Notification
 {
     use Queueable;
 
-	public $audios;
+    public $audios;
 
     /**
      * Create a new notification instance.
@@ -31,7 +31,7 @@ class AudioReceiptNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', 'mail'];
     }
 
     /**
@@ -42,10 +42,8 @@ class AudioReceiptNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        return (new AudioReceiptMail($this->audios))
+            ->to($notifiable->email);
     }
 
     /**

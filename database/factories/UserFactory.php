@@ -58,6 +58,28 @@ class UserFactory extends Factory
     }
 
     /**
+     * Add Alphaxard Account
+     *
+     * @return static
+     */
+    public function al()
+    {
+        return $this->state(fn(array $attributes) => [
+            'name' => 'Alphaxard Gacuuru',
+            'username' => '@alphaxardG',
+            'email' => 'alphaxardgacuuru47@gmail.com',
+            'email_verified_at' => now(),
+			'account_type' => 'normal',
+            'avatar' => 'avatars/male-avatar.png',
+            'backdrop' => 'img/headphones.jpg',
+            'phone' => '0700364446',
+            'password' => Hash::make('0700364446'),
+            'remember_token' => Str::random(10),
+            'bio' => fake()->catchPhrase(),
+        ]);
+    }
+
+    /**
      * Indicate that the model's email address should be unverified.
      *
      * @return static

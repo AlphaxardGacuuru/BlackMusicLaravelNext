@@ -32,7 +32,7 @@ class BoughtVideoNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database', 'mail'];
+        return ['database'];
     }
 
     /**
@@ -43,8 +43,7 @@ class BoughtVideoNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new VideoReceiptMail($this->video))
-            ->to($notifiable->email);
+		// 
     }
 
     /**

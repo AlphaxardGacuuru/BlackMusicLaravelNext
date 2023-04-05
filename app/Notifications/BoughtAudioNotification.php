@@ -2,7 +2,6 @@
 
 namespace App\Notifications;
 
-use App\Mail\BoughtAudioMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -32,7 +31,7 @@ class BoughtAudioNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database', 'mail'];
+        return ['database'];
     }
 
     /**
@@ -43,8 +42,7 @@ class BoughtAudioNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new BoughtAudioMail($this->audio))
-                    ->to($notifiable->email);
+		// 
     }
 
     /**

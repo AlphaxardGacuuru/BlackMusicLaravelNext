@@ -37,6 +37,23 @@ const App = ({ Component, pageProps }) => {
 		}
 	}
 
+	// Function for checking local storage
+	const getLocalStorageAuth = (state) => {
+		if (typeof window !== "undefined" && localStorage.getItem(state)) {
+			return JSON.parse(localStorage.getItem(state))
+		} else {
+			return {
+				name: "Guest",
+				username: "@guest",
+				avatar: "/storage/profile-pics/male_avatar.png",
+				account_type: "normal",
+				decos: 0,
+				posts: 0,
+				fans: 0,
+			}
+		}
+	}
+
 	// Function to set local storage
 	const setLocalStorage = (state, data) => {
 		localStorage.setItem(state, JSON.stringify(data))
@@ -48,29 +65,12 @@ const App = ({ Component, pageProps }) => {
 	const [messages, setMessages] = useState([])
 	const [errors, setErrors] = useState([])
 	const [login, setLogin] = useState()
-	const [auth, setAuth] = useState(
-		getLocalStorage("auth").length > 0
-			? getLocalStorage("auth")
-			: {
-					name: "Guest",
-					username: "@guest",
-					avatar: "/storage/profile-pics/male_avatar.png",
-					account_type: "normal",
-					decos: 0,
-					posts: 0,
-					fans: 0,
-			  }
-	)
-
+	const [auth, setAuth] = useState(getLocalStorageAuth("auth"))
 	const [audioAlbums, setAudioAlbums] = useState(getLocalStorage("audioAlbums"))
 	const [audios, setAudios] = useState(getLocalStorage("audios"))
 	const [audioComments, setAudioComments] = useState([])
-	const [boughtAudios, setBoughtAudios] = useState(
-		getLocalStorage("boughtAudios")
-	)
-	const [boughtVideos, setBoughtVideos] = useState(
-		getLocalStorage("boughtVideos")
-	)
+	const [boughtAudios, setBoughtAudios] = useState(getLocalStorage("boughtAudios"))
+	const [boughtVideos, setBoughtVideos] = useState(getLocalStorage("boughtVideos"))
 	const [cartAudios, setCartAudios] = useState(getLocalStorage("cartAudios"))
 	const [cartVideos, setCartVideos] = useState(getLocalStorage("cartVideos"))
 	const [chatThreads, setChatThreads] = useState(getLocalStorage("chatThreads"))
@@ -140,14 +140,7 @@ const App = ({ Component, pageProps }) => {
 
 	console.log("rendered")
 
-	const audioStates = onAudioPlayer(
-		getLocalStorage,
-		setErrors,
-		auth,
-		audios,
-		boughtAudios,
-		users
-	)
+	const audioStates = onAudioPlayer(getLocalStorage, setErrors, auth, audios, boughtAudios, users)
 
 	// Search State
 	const [search, setSearch] = useState("!@#$%^&")
@@ -215,10 +208,7 @@ const App = ({ Component, pageProps }) => {
 				// Updated State One
 				get(urlTo, stateToUpdate)
 				// Updated State Two
-				urlToTwo &&
-					axios
-						.get(`/api/${urlToTwo}`)
-						.then((res) => stateToUpdateTwo(res.data))
+				urlToTwo && axios.get(`/api/${urlToTwo}`).then((res) => stateToUpdateTwo(res.data))
 				// Clear text unless editing
 				!editing && setText("")
 				setShowMentionPicker(false)

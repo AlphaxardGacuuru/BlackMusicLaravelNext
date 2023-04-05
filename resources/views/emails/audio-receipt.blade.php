@@ -1,5 +1,5 @@
 <x-mail::message>
-# Congratulations! You just purchased {{ count($audios) }} audio{{ count($audios) > 1 ? "s" : "" }}.
+# Congratulations! You just purchased {{ count($audios) }} audio{{ count($audios) > 1 ? "s" : "" }} at a cost of KES {{ count($audios) * 10 }}.
 
 Thank you for supporting Kenyan artists, here's your receipt.
 

@@ -24,6 +24,7 @@ use App\Listeners\FollowedListener;
 use App\Listeners\PostCommentedListener;
 use App\Listeners\PostCommentLikedListener;
 use App\Listeners\PostLikedListener;
+use App\Listeners\RegisteredListener;
 use App\Listeners\VideoBoughtListener;
 use App\Listeners\VideoCommentedListener;
 use App\Listeners\VideoCommentLikedListener;
@@ -43,6 +44,7 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+            RegisteredListener::class,
         ],
         ChatEvent::class => [ChatListener::class],
         VideoLikedEvent::class => [VideoLikedListener::class],

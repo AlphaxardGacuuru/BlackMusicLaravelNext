@@ -47,7 +47,7 @@ class UserFactory extends Factory
             'username' => '@blackmusic',
             'email' => 'al@black.co.ke',
             'email_verified_at' => now(),
-			'account_type' => 'musician',
+            'account_type' => 'musician',
             'avatar' => 'avatars/male-avatar.png',
             'backdrop' => 'img/headphones.jpg',
             'phone' => '0700000000',
@@ -69,7 +69,7 @@ class UserFactory extends Factory
             'username' => '@alphaxardG',
             'email' => 'alphaxardgacuuru47@gmail.com',
             'email_verified_at' => now(),
-			'account_type' => 'normal',
+            'account_type' => 'normal',
             'avatar' => 'avatars/male-avatar.png',
             'backdrop' => 'img/headphones.jpg',
             'phone' => '0700364446',
@@ -105,7 +105,16 @@ class UserFactory extends Factory
             // Check if user is @blackmusic
             if ($user->username == '@blackmusic') {
                 Follow::factory()
-                    ->create(['username' => $user->username, 'followed' => '@blackmusic']);
+                    ->create([
+                        'username' => $user->username,
+                        'followed' => '@blackmusic',
+                    ]);
+            } elseif ($user->username == '@alphaxardG') {
+                Follow::factory()
+                    ->create([
+                        'username' => $user->username,
+                        'followed' => '@alphaxardG',
+                    ]);
             } else {
                 Follow::factory()
                     ->count(2)

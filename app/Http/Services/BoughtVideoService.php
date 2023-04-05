@@ -23,7 +23,7 @@ class BoughtVideoService
 
         $authUsername = $auth ? $auth->username : '@guest';
 
-        $getBoughtVideos = BoughtVideo::all();
+        $getBoughtVideos = BoughtVideo::where("username", $authUsername)->get();
 
         $boughtVideos = [];
 

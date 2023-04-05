@@ -8,17 +8,14 @@ Thanks for singing up! You've just joined the best online music store in Kenya. 
 	<li>Sell your own videos and audios.</li>
 </ul>
 
-and much more! To get you started we picked an awesome song for you.
+and much more! To get you started checkout our awesome songs.
 
-@component('mail::button', ['url' => 'https://music.black.co.ke', 'color' => 'primary'])
-CHECK OUT THIS SONG
+@component('mail::button', ['url' => $url, 'color' => "primary"])
+CHECK THEM OUT
 @endcomponent
 
 Thank you and we're excited to have you!<br>
-{{ config('app.name') }}
 
-{{-- @component('mail::panel')
 Alphaxard Gacuuru,<br>
-Founder.	
-@endcomponent --}}
+Founder, Black Music.
 @endcomponent

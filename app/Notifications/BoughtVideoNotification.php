@@ -2,9 +2,9 @@
 
 namespace App\Notifications;
 
+use App\Mail\VideoReceiptMail;
 use App\Models\Video;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -12,7 +12,7 @@ class BoughtVideoNotification extends Notification
 {
     use Queueable;
 
-	public $video;
+    public $video;
 
     /**
      * Create a new notification instance.
@@ -32,7 +32,7 @@ class BoughtVideoNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', 'mail'];
     }
 
     /**
@@ -43,10 +43,8 @@ class BoughtVideoNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        return (new VideoReceiptMail($this->video))
+            ->to($notifiable->email);
     }
 
     /**
@@ -58,10 +56,10 @@ class BoughtVideoNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-			'url' => '/profile/' . auth('sanctum')->user()->username,
-			'from' => auth('sanctum')->user()->username,
-			'id' => $this->video->username,
-			'message' => auth('sanctum')->user()->username . ' bought ' . $this->video->name,
+            'url' => '/profile/' . auth('sanctum')->user()->username,
+            'from' => auth('sanctum')->user()->username,
+            'id' => $this->video->username,
+            'message' => auth('sanctum')->user()->username . ' bought ' . $this->video->name,
         ];
     }
 }

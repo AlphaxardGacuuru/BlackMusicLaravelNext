@@ -23,7 +23,7 @@ class BoughtAudioService
 
         $authUsername = $auth ? $auth->username : '@guest';
 
-        $getBoughtAudios = BoughtAudio::all();
+        $getBoughtAudios = BoughtAudio::where("username", $authUsername)->get();
 
         $boughtAudios = [];
 
@@ -49,8 +49,7 @@ class BoughtAudioService
         $decoArtists = [];
 
         /* Fetch songs from Cart Audios */
-        $cartAudios = CartAudio::where('username', auth('sanctum')->user()->username)
-            ->get();
+        $cartAudios = CartAudio::where('username', auth('sanctum')->user()->username)->get();
 
         foreach ($cartAudios as $cartAudio) {
             // Get Cost of Bought Videos and Audios
@@ -75,7 +74,7 @@ class BoughtAudioService
                 if ($notBought) {
 
                     // Transaction to make sure a video is bought and remove from cart and if user qualifies, a deco is saved
-                    $artist = DB::transaction(function() use($cartAudio) {
+                    $artist = DB::transaction(function () use ($cartAudio) {
 
                         $this->storeBoughtAudio($cartAudio);
 

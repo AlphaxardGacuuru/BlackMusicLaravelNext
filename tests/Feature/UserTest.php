@@ -161,4 +161,28 @@ class UserTest extends TestCase
             "username" => $user->username,
         ]);
     }
+
+    /**
+     * Can't Follow
+     *
+     * @return void
+     */
+    public function test_user_can_become_musician()
+    {
+        Sanctum::actingAs(
+            $user = User::factory()->create(),
+            ['*']
+        );
+
+        $response = $this->post("api/users/{{ $user->id }}", [
+            "account_type" => "musician",
+            "_method" => "put",
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas("users", [
+            "account_type" => "musician",
+        ]);
+    }
 }

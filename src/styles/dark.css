@@ -1416,26 +1416,31 @@ div.hidden-scroll span {
 }
 
 .audio-text {
+	max-width: 8em;
+	cursor: pointer;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: clip;
+	text-align: left;
 	cursor: pointer;
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
 	.audio-text {
-		max-width: 7em;
+		max-width: 8em;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: clip;
-		cursor: pointer;
+		text-align: left;
 	}
 }
 
 @media only screen and (max-width: 767px) {
 	.audio-text {
-		max-width: 7em;
+		max-width: 8em;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: clip;
-		cursor: pointer;
 	}
 }
 

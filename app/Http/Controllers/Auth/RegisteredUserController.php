@@ -3,15 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Models\Follow;
+use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\WelcomeMail;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class RegisteredUserController extends Controller
@@ -29,7 +28,7 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'username' => [
-				'required',
+                'required',
                 'string',
                 'startsWith:@',
                 'min:2',
@@ -38,51 +37,49 @@ class RegisteredUserController extends Controller
                 'regex:/^\S+$/',
             ],
             'phone' => [
-				'required',
+                'required',
                 'string',
                 'startsWith:0',
                 'min:10',
                 'max:10',
                 'unique:users',
             ],
-			'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-			'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        // Notify User
-        // Mail::to($request->email)
-            // ->send(new WelcomeMail($request->username));
+        DB::transaction(function () use ($request) {
+            $user = User::create([
+                'name' => $request->name,
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->phone),
+                'phone' => $request->phone,
+                'avatar' => $request->avatar,
+                'withdrawal' => '1000',
+            ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->phone),
-            'phone' => $request->phone,
-            'avatar' => $request->avatar,
-            'withdrawal' => '1000',
-        ]);
+            /* User should follow themselves */
+            $follow = new Follow;
+            $follow->followed = $request->username;
+            $follow->username = $request->username;
+            $follow->save();
 
-        /* User should follow themselves */
-        $follow = new Follow;
-        $follow->followed = $request->username;
-        $follow->username = $request->username;
-        $follow->save();
+            /* User should follow @blackmusic */
+            $follow = new Follow;
+            $follow->followed = '@blackmusic';
+            $follow->username = $request->username;
+            $follow->save();
 
-        /* User should follow @blackmusic */
-        $follow = new Follow;
-        $follow->followed = '@blackmusic';
-        $follow->username = $request->username;
-        $follow->save();
+            event(new Registered($user));
 
-        event(new Registered($user));
-
-        Auth::login($user, $remember = true);
+            Auth::login($user, $remember = true);
+        });
 
         // return response()->noContent();
 
-		/*
-		* Create Token */
+        /*
+         * Create Token */
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {

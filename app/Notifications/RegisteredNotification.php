@@ -2,26 +2,26 @@
 
 namespace App\Notifications;
 
-use App\Mail\BoughtAudioMail;
+use App\Mail\WelcomeMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class BoughtAudioNotification extends Notification
+class RegisteredNotification extends Notification
 {
     use Queueable;
 
-	public $audio;
+	public $user;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($audio)
+    public function __construct($user)
     {
-        $this->audio = $audio;
+        $this->user = $user;
     }
 
     /**
@@ -43,8 +43,8 @@ class BoughtAudioNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new BoughtAudioMail($this->audio))
-                    ->to($notifiable->email);
+        return (new WelcomeMail($notifiable->username))
+		->to($notifiable->email);
     }
 
     /**
@@ -56,10 +56,9 @@ class BoughtAudioNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-			'url' => '/profile/' . auth('sanctum')->user()->username,
-			'from' => auth('sanctum')->user()->username,
-			'id' => $this->audio->username,
-			'message' => auth('sanctum')->user()->username . ' bought ' . $this->audio->name,
+			'url' => '/profile/@blackmusic',
+			'from' => '@blackmusic',
+			'message' => 'Welcome ' . $this->user->username . ' to Black Music.',
         ];
     }
 }

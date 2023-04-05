@@ -1,26 +1,25 @@
-import 'bootstrap/dist/css/bootstrap.css';
-import '@/styles/dark.css'
-import('next').NextConfig
+import "bootstrap/dist/css/bootstrap.css"
+import "@/styles/dark.css"
+import("next").NextConfig
 
-import LoginPopUp from '@/components/Auth/LoginPopUp';
-import TopNav from '@/components/Layouts/TopNav'
-import BottomNav from '@/components/Layouts/BottomNav'
-import Messages from '@/components/Core/Messages'
+import LoginPopUp from "@/components/Auth/LoginPopUp"
+import TopNav from "@/components/Layouts/TopNav"
+import BottomNav from "@/components/Layouts/BottomNav"
+import Messages from "@/components/Core/Messages"
 
-import React, { useState, useEffect, useRef } from 'react'
-import axios from '@/lib/axios';
-import AudioPlayer from '@/components/Audio/AudioPlayer';
-import onAudioPlayer from '@/functions/onAudioPlayer';
+import React, { useState, useEffect, useRef } from "react"
+import axios from "@/lib/axios"
+import AudioPlayer from "@/components/Audio/AudioPlayer"
+import onAudioPlayer from "@/functions/onAudioPlayer"
 
 const App = ({ Component, pageProps }) => {
-
 	/*
-	*
-	* Register service worker */
+	 *
+	 * Register service worker */
 	if (typeof window !== "undefined" && window.location.href.match(/https/)) {
-		if ('serviceWorker' in navigator) {
-			window.addEventListener('load', () => {
-				navigator.serviceWorker.register('/sw.js')
+		if ("serviceWorker" in navigator) {
+			window.addEventListener("load", () => {
+				navigator.serviceWorker.register("/sw.js")
 				// .then((reg) => console.log('Service worker registered', reg))
 				// .catch((err) => console.log('Service worker not registered', err));
 			})
@@ -50,22 +49,28 @@ const App = ({ Component, pageProps }) => {
 	const [errors, setErrors] = useState([])
 	const [login, setLogin] = useState()
 	const [auth, setAuth] = useState(
-		getLocalStorage("auth") ||
-		{
-			"name": "Guest",
-			"username": "@guest",
-			"avatar": "/storage/profile-pics/male_avatar.png",
-			"account_type": "normal",
-			"decos": 0,
-			"posts": 0,
-			"fans": 0
-		})
+		getLocalStorage("auth").length > 0
+			? getLocalStorage("auth")
+			: {
+					name: "Guest",
+					username: "@guest",
+					avatar: "/storage/profile-pics/male_avatar.png",
+					account_type: "normal",
+					decos: 0,
+					posts: 0,
+					fans: 0,
+			  }
+	)
 
 	const [audioAlbums, setAudioAlbums] = useState(getLocalStorage("audioAlbums"))
 	const [audios, setAudios] = useState(getLocalStorage("audios"))
 	const [audioComments, setAudioComments] = useState([])
-	const [boughtAudios, setBoughtAudios] = useState(getLocalStorage("boughtAudios"))
-	const [boughtVideos, setBoughtVideos] = useState(getLocalStorage("boughtVideos"))
+	const [boughtAudios, setBoughtAudios] = useState(
+		getLocalStorage("boughtAudios")
+	)
+	const [boughtVideos, setBoughtVideos] = useState(
+		getLocalStorage("boughtVideos")
+	)
 	const [cartAudios, setCartAudios] = useState(getLocalStorage("cartAudios"))
 	const [cartVideos, setCartVideos] = useState(getLocalStorage("cartVideos"))
 	const [chatThreads, setChatThreads] = useState(getLocalStorage("chatThreads"))
@@ -81,12 +86,14 @@ const App = ({ Component, pageProps }) => {
 
 	// Function for fetching data from API
 	const get = (endpoint, setState, storage = null, errors = true) => {
-		axios.get(`/api/${endpoint}`)
+		axios
+			.get(`/api/${endpoint}`)
 			.then((res) => {
 				var data = res.data ? res.data : []
 				setState(data)
 				storage && setLocalStorage(storage, data)
-			}).catch(() => errors && setErrors([`Failed to fetch ${endpoint}`]))
+			})
+			.catch(() => errors && setErrors([`Failed to fetch ${endpoint}`]))
 	}
 
 	// Function for getting errors from responses
@@ -103,21 +110,20 @@ const App = ({ Component, pageProps }) => {
 
 	// Reset Messages and Errors to null after 3 seconds
 	if (errors.length > 0 || messages.length > 0) {
-		setTimeout(() => setErrors([]), 2900);
-		setTimeout(() => setMessages([]), 2900);
+		setTimeout(() => setErrors([]), 2900)
+		setTimeout(() => setMessages([]), 2900)
 	}
 
 	// Fetch data on page load
 	useEffect(() => {
-
 		// Import Js for Bootstrap
-		import("bootstrap/dist/js/bootstrap");
+		import("bootstrap/dist/js/bootstrap")
 
 		// Redirect if URL is not secure
 		var unsecureUrl = window.location.href.match(/http:\/\/music.black.co.ke/)
 
 		if (unsecureUrl) {
-			window.location.href = 'https://music.black.co.ke'
+			window.location.href = "https://music.black.co.ke"
 		}
 
 		get("auth", setAuth, "auth", false)
@@ -130,12 +136,18 @@ const App = ({ Component, pageProps }) => {
 		get("users", setUsers, "users")
 		get("videos", setVideos, "videos")
 		get("video-albums", setVideoAlbums, "videoAlbums")
-
 	}, [])
 
 	console.log("rendered")
 
-	const audioStates = onAudioPlayer(getLocalStorage, setErrors, auth, audios, boughtAudios, users)
+	const audioStates = onAudioPlayer(
+		getLocalStorage,
+		setErrors,
+		auth,
+		audios,
+		boughtAudios,
+		users
+	)
 
 	// Search State
 	const [search, setSearch] = useState("!@#$%^&")
@@ -181,20 +193,21 @@ const App = ({ Component, pageProps }) => {
 		e.preventDefault()
 
 		// Add form data to FormData object
-		formData.append("text", text);
-		id && formData.append("id", id);
-		to && formData.append("to", to);
-		media && formData.append("media", media);
-		para1 && formData.append("para1", para1);
-		para2 && formData.append("para2", para2);
-		para3 && formData.append("para3", para3);
-		para4 && formData.append("para4", para4);
-		para5 && formData.append("para5", para5);
-		editing && formData.append("_method", "put");
+		formData.append("text", text)
+		id && formData.append("id", id)
+		to && formData.append("to", to)
+		media && formData.append("media", media)
+		para1 && formData.append("para1", para1)
+		para2 && formData.append("para2", para2)
+		para3 && formData.append("para3", para3)
+		para4 && formData.append("para4", para4)
+		para5 && formData.append("para5", para5)
+		editing && formData.append("_method", "put")
 
 		// Send data to HelpPostsController
 		// Get csrf cookie from Laravel inorder to send a POST request
-		axios.post(`/api/${urlTo}`, formData)
+		axios
+			.post(`/api/${urlTo}`, formData)
 			.then((res) => {
 				setMessages([res.data])
 				// Clear Media
@@ -203,7 +216,8 @@ const App = ({ Component, pageProps }) => {
 				get(urlTo, stateToUpdate)
 				// Updated State Two
 				urlToTwo &&
-					axios.get(`/api/${urlToTwo}`)
+					axios
+						.get(`/api/${urlToTwo}`)
 						.then((res) => stateToUpdateTwo(res.data))
 				// Clear text unless editing
 				!editing && setText("")
@@ -211,64 +225,110 @@ const App = ({ Component, pageProps }) => {
 				setShowEmojiPicker(false)
 				setShowImagePicker(false)
 				setShowPollPicker(false)
-			}).catch((err) => getErrors(err))
+			})
+			.catch((err) => getErrors(err))
 	}
 
 	// All states
 	const GLOBAL_STATE = {
 		baseUrl,
-		get, getErrors,
-		getLocalStorage, setLocalStorage,
-		login, setLogin,
+		get,
+		getErrors,
+		getLocalStorage,
+		setLocalStorage,
+		login,
+		setLogin,
 		url,
-		auth, setAuth,
-		messages, setMessages,
-		errors, setErrors,
-		audioAlbums, setAudioAlbums,
-		audios, setAudios,
-		audioComments, setAudioComments,
-		boughtAudios, setBoughtAudios,
-		boughtVideos, setBoughtVideos,
-		cartAudios, setCartAudios,
-		cartVideos, setCartVideos,
-		chatThreads, setChatThreads,
-		posts, setPosts,
-		postComments, setPostComments,
-		users, setUsers,
-		videoAlbums, setVideoAlbums,
-		videos, setVideos,
-		videoComments, setVideoComments,
-		karaokes, setKaraokes,
-		karaokeComments, setKaraokeComments,
-		savedKaraokes, setSavedKaraokes,
-		// Search 
+		auth,
+		setAuth,
+		messages,
+		setMessages,
+		errors,
+		setErrors,
+		audioAlbums,
+		setAudioAlbums,
+		audios,
+		setAudios,
+		audioComments,
+		setAudioComments,
+		boughtAudios,
+		setBoughtAudios,
+		boughtVideos,
+		setBoughtVideos,
+		cartAudios,
+		setCartAudios,
+		cartVideos,
+		setCartVideos,
+		chatThreads,
+		setChatThreads,
+		posts,
+		setPosts,
+		postComments,
+		setPostComments,
+		users,
+		setUsers,
+		videoAlbums,
+		setVideoAlbums,
+		videos,
+		setVideos,
+		videoComments,
+		setVideoComments,
+		karaokes,
+		setKaraokes,
+		karaokeComments,
+		setKaraokeComments,
+		savedKaraokes,
+		setSavedKaraokes,
+		// Search
 		onSearchIconClick,
 		searchInput,
-		search, setSearch,
+		search,
+		setSearch,
 		// Audio Player
 		audioStates,
 		// Social Input
-		id, setId,
-		to, setTo,
-		text, setText,
-		media, setMedia,
-		para1, setPara1,
-		para2, setPara2,
-		para3, setPara3,
-		para4, setPara4,
-		para5, setPara5,
-		placeholder, setPlaceholder,
-		urlTo, setUrlTo,
-		urlToTwo, setUrlToTwo,
-		stateToUpdate, setStateToUpdate,
-		stateToUpdateTwo, setStateToUpdateTwo,
-		showImage, setShowImage,
-		showPoll, setShowPoll,
-		showMentionPicker, setShowMentionPicker,
-		showEmojiPicker, setShowEmojiPicker,
-		showImagePicker, setShowImagePicker,
-		showPollPicker, setShowPollPicker,
-		editing, setEditing,
+		id,
+		setId,
+		to,
+		setTo,
+		text,
+		setText,
+		media,
+		setMedia,
+		para1,
+		setPara1,
+		para2,
+		setPara2,
+		para3,
+		setPara3,
+		para4,
+		setPara4,
+		para5,
+		setPara5,
+		placeholder,
+		setPlaceholder,
+		urlTo,
+		setUrlTo,
+		urlToTwo,
+		setUrlToTwo,
+		stateToUpdate,
+		setStateToUpdate,
+		stateToUpdateTwo,
+		setStateToUpdateTwo,
+		showImage,
+		setShowImage,
+		showPoll,
+		setShowPoll,
+		showMentionPicker,
+		setShowMentionPicker,
+		showEmojiPicker,
+		setShowEmojiPicker,
+		showImagePicker,
+		setShowImagePicker,
+		showPollPicker,
+		setShowPollPicker,
+		editing,
+		setEditing,
 		onSubmit,
 	}
 

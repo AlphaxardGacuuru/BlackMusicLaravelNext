@@ -19,14 +19,24 @@ class UserSeeder extends Seeder
         $blackDoesntExist = User::where('username', '@blackmusic')
             ->doesntExist();
 
+        // Check if @alphaxardG exists
+        $alDoesntExist = User::where('username', '@alphaxardG')
+            ->doesntExist();
+
         if ($blackDoesntExist) {
             User::factory()
                 ->black()
-				->al()
                 ->hasKopokopos(1)
                 ->create();
         }
-		
+
+        if ($alDoesntExist) {
+            User::factory()
+                ->al()
+                ->hasKopokopos(1)
+                ->create();
+        }
+
         User::factory()
             ->count(10)
             ->unverified()

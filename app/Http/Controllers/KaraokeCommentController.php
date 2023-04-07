@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\KaraokeCommentService;
 use App\Models\KaraokeComment;
+use App\Services\KaraokeCommentService;
 use Illuminate\Http\Request;
 
 class KaraokeCommentController extends Controller
@@ -30,7 +30,7 @@ class KaraokeCommentController extends Controller
             'text' => 'required',
         ]);
 
-		return $service->store($request);
+        return $service->store($request);
     }
 
     /**

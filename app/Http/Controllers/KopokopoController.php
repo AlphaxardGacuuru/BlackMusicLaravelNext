@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\KopokopoService;
 use App\Models\Kopokopo;
+use App\Services\KopokopoService;
 use Illuminate\Http\Request;
 
 class KopokopoController extends Controller
@@ -72,6 +72,6 @@ class KopokopoController extends Controller
      */
     public function stkPush(Request $request, KopokopoService $service)
     {
-		return $service->stkPush($request);
+        return $service->stkPush($request);
     }
 }

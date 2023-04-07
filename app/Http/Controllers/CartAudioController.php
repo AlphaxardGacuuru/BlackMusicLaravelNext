@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\CartAudioService;
 use App\Models\CartAudio;
+use App\Services\CartAudioService;
 use Illuminate\Http\Request;
 
 class CartAudioController extends Controller

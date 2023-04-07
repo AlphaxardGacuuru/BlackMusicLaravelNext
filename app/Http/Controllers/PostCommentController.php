@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Events\PostCommentedEvent;
-use App\Http\Services\PostCommentService;
 use App\Models\Post;
+use App\Services\PostCommentService;
 use Illuminate\Http\Request;
 
 class PostCommentController extends Controller
@@ -32,11 +32,11 @@ class PostCommentController extends Controller
         ]);
 
         $response = $service->store($request);
-		
+
         // Dispatch Event
-		// Get post
+        // Get post
         $post = Post::findOrFail($request->input("id"));
-        
+
         PostCommentedEvent::dispatchif($response["saved"], $response["comment"], $post);
 
         return response("Comment sent", 200);

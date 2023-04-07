@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\CartVideoService;
 use App\Models\CartVideo;
+use App\Services\CartVideoService;
 use Illuminate\Http\Request;
 
 class CartVideoController extends Controller
@@ -26,7 +26,7 @@ class CartVideoController extends Controller
      */
     public function store(Request $request, CartVideoService $service)
     {
-		return $service->store($request);
+        return $service->store($request);
     }
 
     /**

@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\VideoUploadedEvent;
-use App\Http\Services\VideoService;
 use App\Models\Video;
+use App\Services\VideoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\VideoAlbumService;
 use App\Models\VideoAlbum;
+use App\Services\VideoAlbumService;
 use Illuminate\Http\Request;
 
 class VideoAlbumController extends Controller
@@ -15,7 +15,7 @@ class VideoAlbumController extends Controller
      */
     public function index(VideoAlbumService $videoAlbumService)
     {
-		return $videoAlbumService->index();
+        return $videoAlbumService->index();
     }
 
     /**
@@ -30,7 +30,7 @@ class VideoAlbumController extends Controller
             'cover' => 'required|image|max:1999',
         ]);
 
-		return $videoAlbumService->store($request);
+        return $videoAlbumService->store($request);
     }
 
     /**
@@ -57,7 +57,7 @@ class VideoAlbumController extends Controller
             'cover' => 'nullable|image|max:1999',
         ]);
 
-		return $videoAlbumService->update($request, $id);
+        return $videoAlbumService->update($request, $id);
     }
 
     /**

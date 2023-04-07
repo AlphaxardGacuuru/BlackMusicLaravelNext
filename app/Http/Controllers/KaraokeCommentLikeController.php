@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\KaraokeCommentLikeService;
 use App\Models\KaraokeCommentLike;
+use App\Services\KaraokeCommentLikeService;
 use Illuminate\Http\Request;
 
 class KaraokeCommentLikeController extends Controller

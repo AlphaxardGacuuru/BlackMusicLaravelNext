@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\SearchService;
 use App\Models\Search;
+use App\Services\SearchService;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller

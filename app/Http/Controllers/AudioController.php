@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\AudioService;
 use App\Models\Audio;
+use App\Services\AudioService;
 use Illuminate\Http\Request;
 
 class AudioController extends Controller

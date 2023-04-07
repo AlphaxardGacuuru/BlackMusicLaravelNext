@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Events\PostCommentLikedEvent;
-use App\Http\Services\PostCommentLikeService;
 use App\Models\Post;
 use App\Models\PostComment;
 use App\Models\PostCommentLike;
+use App\Services\PostCommentLikeService;
 use Illuminate\Http\Request;
 
 class PostCommentLikeController extends Controller
@@ -31,12 +31,12 @@ class PostCommentLikeController extends Controller
     {
         $result = $service->store($request);
 
-		// Dispatch
+        // Dispatch
         $comment = PostComment::findOrFail($request->input("comment"));
 
-		$post = Post::find($comment->post_id);
+        $post = Post::find($comment->post_id);
 
-		PostCommentLikedEvent::dispatchif($result[0], $comment, $post);
+        PostCommentLikedEvent::dispatchif($result[0], $comment, $post);
 
         return response($result[1], 200);
     }

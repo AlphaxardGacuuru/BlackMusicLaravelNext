@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Events\AudioBoughtEvent;
-use App\Http\Services\BoughtAudioService;
 use App\Models\BoughtAudio;
+use App\Services\BoughtAudioService;
 use Illuminate\Http\Request;
 
 class BoughtAudioController extends Controller

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Events\VideoBoughtEvent;
-use App\Http\Services\BoughtVideoService;
 use App\Models\BoughtVideo;
+use App\Services\BoughtVideoService;
 use Illuminate\Http\Request;
 
 class BoughtVideoController extends Controller

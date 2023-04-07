@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\AudioAlbumService;
 use App\Models\AudioAlbum;
+use App\Services\AudioAlbumService;
 use Illuminate\Http\Request;
 
 class AudioAlbumController extends Controller
@@ -15,7 +15,7 @@ class AudioAlbumController extends Controller
      */
     public function index(AudioAlbumService $service)
     {
-		return $service->index();
+        return $service->index();
     }
 
     /**
@@ -32,7 +32,7 @@ class AudioAlbumController extends Controller
             'cover' => 'required|image|max:1999',
         ]);
 
-		return $service->store($request);
+        return $service->store($request);
     }
 
     /**
@@ -59,7 +59,7 @@ class AudioAlbumController extends Controller
             'cover' => 'nullable|image|max:1999',
         ]);
 
-		return $service->update($request, $id);
+        return $service->update($request, $id);
     }
 
     /**

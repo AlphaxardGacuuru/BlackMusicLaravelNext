@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\SavedKaraokeService;
 use App\Models\SavedKaraoke;
+use App\Services\SavedKaraokeService;
 use Illuminate\Http\Request;
 
 class SavedKaraokeController extends Controller
@@ -30,7 +30,7 @@ class SavedKaraokeController extends Controller
         $this->validate($request, [
             'id' => 'required|integer',
         ]);
-		
+
         return $savedKaraokeService->store($request);
     }
 

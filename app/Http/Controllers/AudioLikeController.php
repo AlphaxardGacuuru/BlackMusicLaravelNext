@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Events\AudioLikedEvent;
-use App\Http\Services\AudioLikeService;
 use App\Models\Audio;
 use App\Models\AudioLike;
+use App\Services\AudioLikeService;
 use Illuminate\Http\Request;
 
 class AudioLikeController extends Controller
@@ -30,11 +30,11 @@ class AudioLikeController extends Controller
     {
         $result = $service->store($request);
 
-		$audio = Audio::find($request->input("audio"));
+        $audio = Audio::find($request->input("audio"));
 
-		AudioLikedEvent::dispatchIf($result[0], $audio);
+        AudioLikedEvent::dispatchIf($result[0], $audio);
 
-		return response($result[1], 200);
+        return response($result[1], 200);
     }
 
     /**

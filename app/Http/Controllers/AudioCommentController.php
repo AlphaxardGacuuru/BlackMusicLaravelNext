@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Events\AudioCommentedEvent;
-use App\Http\Services\AudioCommentService;
 use App\Models\Audio;
 use App\Models\AudioComment;
+use App\Services\AudioCommentService;
 use Illuminate\Http\Request;
 
 class AudioCommentController extends Controller
@@ -34,11 +34,11 @@ class AudioCommentController extends Controller
 
         $saved = $service->store($request);
 
-		$audio = Audio::find($request->input("id"));
+        $audio = Audio::find($request->input("id"));
 
-		AudioCommentedEvent::dispatchIf($saved, $audio);
+        AudioCommentedEvent::dispatchIf($saved, $audio);
 
-		return response("Comment Posted", 200);
+        return response("Comment Posted", 200);
     }
 
     /**

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Events\FollowedEvent;
-use App\Http\Services\FollowService;
 use App\Models\Follow;
 use App\Models\User;
+use App\Services\FollowService;
 use Illuminate\Http\Request;
 
 class FollowController extends Controller
@@ -33,7 +33,7 @@ class FollowController extends Controller
         // Dispatch Event
         $musician = User::where('username', $request->input('musician'))->first();
 
-		FollowedEvent::dispatchIf($response["added"], $musician);
+        FollowedEvent::dispatchIf($response["added"], $musician);
 
         return response($response["message"], 200);
     }

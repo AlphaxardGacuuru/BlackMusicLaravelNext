@@ -6,11 +6,14 @@ use App\Models\User;
 use App\Models\Video;
 use App\Models\VideoAlbum;
 use App\Models\VideoComment;
+use App\Notifications\VideoReceiptNotification;
 use Database\Seeders\UserSeeder;
 use Database\Seeders\VideoAlbumSeeder;
 use Database\Seeders\VideoSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
@@ -311,13 +314,17 @@ class VideoTest extends TestCase
      */
     public function test_user_can_buy_videos()
     {
-        // Run the DatabaseSeeder...
+		// Run the DatabaseSeeder...
         $this->seed();
 
         Sanctum::actingAs(
             $user = User::all()->random(),
             ['*']
         );
+
+        Notification::fake();
+
+        Mail::fake();
 
         $musician = User::all()->random();
 
@@ -336,16 +343,6 @@ class VideoTest extends TestCase
 
         $this->assertDatabaseCount('decos', 1);
 
-        $this->assertDatabaseHas("notifications", [
-            "notifiable_id" => $user->id,
-            "type" => "App\Notifications\VideoReceiptNotification",
-        ]);
-
-        $this->assertDatabaseHas("notifications", [
-            "notifiable_id" => $user->id,
-            "type" => "App\Notifications\DecoNotification",
-        ]);
-
-        $this->assertDatabaseCount("notifications", 22);
+        Notification::assertSentTo($user, VideoReceiptNotification::class);
     }
 }

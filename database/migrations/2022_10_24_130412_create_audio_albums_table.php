@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('username');
             $table->string('name');
             $table->string('cover')->default('audio-album-covers/musical-note.png');
-            $table->timestamp('released');
+            $table->timestamp('released')->nullable();
             $table->timestamps();
 
             $table->foreign('username')

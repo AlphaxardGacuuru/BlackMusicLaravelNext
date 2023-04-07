@@ -48,11 +48,11 @@ class FollowService
                 $added = true;
             }
 
-            return [$added, $message];
+            return ["added" => $added, "message" => $message];
         }
 
         $message = "You must have bought atleast one song by " . $request->musician;
 
-        return [false, $message];
+        return ["added" => false, "message" => $message];
     }
 }

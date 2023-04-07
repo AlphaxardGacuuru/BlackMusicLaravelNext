@@ -16,7 +16,6 @@ class PostCommentedEvent
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
 	public $comment;
-	public $post;
 
     /**
      * Create a new event instance.

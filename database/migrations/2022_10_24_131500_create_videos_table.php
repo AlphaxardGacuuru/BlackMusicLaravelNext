@@ -24,9 +24,9 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->string('genre');
-            $table->string('thumbnail');
-            $table->string('description');
-            $table->timestamp('released');
+            $table->string('thumbnail')->nullable();
+            $table->string('description')->nullable();
+            $table->timestamp('released')->nullable();
             $table->timestamps();
 
             $table->foreign('username')

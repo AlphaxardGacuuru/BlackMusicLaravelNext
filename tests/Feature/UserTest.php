@@ -4,11 +4,14 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Models\Video;
+use App\Notifications\FollowedNotification;
 use Database\Seeders\UserSeeder;
 use Database\Seeders\VideoAlbumSeeder;
 use Database\Seeders\VideoSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
@@ -101,33 +104,32 @@ class UserTest extends TestCase
         ]);
 
         Sanctum::actingAs(
-            $user = User::all()->random(),
+            $user = User::get()->first(),
             ['*']
         );
 
-        $musician = Video::all()->random();
+        Notification::fake();
 
-        $musician = User::where("username", $musician->username)
-            ->get()
-            ->first();
+        Mail::fake();
 
-        $this->post("api/bought-videos");
+        $musician = Video::get()->first()->user;
 
-        $response = $this->post("api/follows", [
+        $response1 = $this->post("api/bought-videos");
+
+        $response1->assertStatus(200);
+
+        $response2 = $this->post("api/follows", [
             "musician" => $musician->username,
         ]);
 
-        $response->assertStatus(200);
+        $response2->assertStatus(200);
 
         $this->assertDatabaseHas("follows", [
             "followed" => $musician->username,
             "username" => $user->username,
         ]);
 
-        $this->assertDatabaseHas("notifications", [
-            "notifiable_id" => $musician->id,
-            "type" => "App\Notifications\FollowedNotification",
-        ]);
+        Notification::assertSentTo($musician, FollowedNotification::class);
     }
 
     /**
@@ -144,7 +146,7 @@ class UserTest extends TestCase
         ]);
 
         Sanctum::actingAs(
-            $user = User::all()->random(),
+            $user = User::factory()->create(),
             ['*']
         );
 
@@ -163,18 +165,18 @@ class UserTest extends TestCase
     }
 
     /**
-     * Can't Follow
+     * Can become musician
      *
      * @return void
      */
     public function test_user_can_become_musician()
     {
         Sanctum::actingAs(
-            $user = User::factory()->create(),
+            $user = User::factory()->black()->create(),
             ['*']
         );
 
-        $response = $this->post("api/users/{{ $user->id }}", [
+        $response = $this->post("api/users/" . $user->id, [
             "account_type" => "musician",
             "_method" => "put",
         ]);
@@ -182,6 +184,7 @@ class UserTest extends TestCase
         $response->assertStatus(200);
 
         $this->assertDatabaseHas("users", [
+            "id" => $user->id,
             "account_type" => "musician",
         ]);
     }

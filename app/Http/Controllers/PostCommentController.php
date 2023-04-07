@@ -31,13 +31,13 @@ class PostCommentController extends Controller
             'text' => 'required',
         ]);
 
-        $saved = $service->store($request);
+        $response = $service->store($request);
 		
         // Dispatch Event
 		// Get post
         $post = Post::findOrFail($request->input("id"));
         
-        PostCommentedEvent::dispatchif($saved, $post);
+        PostCommentedEvent::dispatchif($response["saved"], $response["comment"], $post);
 
         return response("Comment sent", 200);
     }

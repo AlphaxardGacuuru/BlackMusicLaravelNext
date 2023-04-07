@@ -346,7 +346,7 @@ class AudioTest extends TestCase
 
         $this->assertDatabaseCount('decos', 1);
 
-        Notification::assertNotSentTo($user, AudioReceiptNotification::class);
+        Notification::assertSentTo($user, AudioReceiptNotification::class);
 
         // Mail::assertSent(AudioReceiptMail::class);
 

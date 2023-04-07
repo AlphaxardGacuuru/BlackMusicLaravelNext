@@ -60,7 +60,7 @@ class PostCommentedNotification extends Notification
         return [
 			'url' => '/post/' . $this->post->id,
 			'from' => auth('sanctum')->user()->username,
-			'message' => auth('sanctum')->user()->username . ' commented on your post ' . $this->post->test
+			'message' => auth('sanctum')->user()->username . ' commented on ' . $this->post->test
         ];
     }
 }

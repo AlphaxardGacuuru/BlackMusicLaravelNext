@@ -56,7 +56,9 @@ class PostCommentService
         $postComment->text = $request->input('text');
         $postComment->media = null;
 
-        return $postComment->save();
+        $saved = $postComment->save();
+
+		return ["saved" => $saved, "comment" => $postComment];
     }
 
     /**

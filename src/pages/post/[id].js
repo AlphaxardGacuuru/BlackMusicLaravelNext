@@ -1,18 +1,16 @@
-import React, { useState, useEffect, Suspense } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import axios from '@/lib/axios'
+import React, { useState, useEffect, Suspense } from "react"
+import Link from "next/link"
+import { useRouter } from "next/router"
+import axios from "@/lib/axios"
 
-import PostOptions from '@/components/Post/PostOptions'
-import LoadingPostMedia from '@/components/Post/LoadingPostMedia'
-import BackSVG from '@/svgs/BackSVG'
+import PostOptions from "@/components/Post/PostOptions"
+import LoadingPostMedia from "@/components/Post/LoadingPostMedia"
+import BackSVG from "@/svgs/BackSVG"
 
-const PostMedia = React.lazy(() => import('@/components/Post/PostMedia'))
-const CommentMedia = React.lazy(() => import('@/components/Core/CommentMedia'))
-
+const PostMedia = React.lazy(() => import("@/components/Post/PostMedia"))
+const CommentMedia = React.lazy(() => import("@/components/Core/CommentMedia"))
 
 const PostShow = (props) => {
-
 	const router = useRouter()
 
 	// Get id from URL
@@ -49,48 +47,55 @@ const PostShow = (props) => {
 
 	// Function for deleting posts
 	const onDeletePost = (id) => {
-		axios.delete(`/api/posts/${id}`).then((res) => {
-			props.setMessages([res.data])
-			// Update posts
-			props.get("posts", props.setPosts, "posts")
-		}).catch((err) => props.getErrors(err))
+		axios
+			.delete(`/api/posts/${id}`)
+			.then((res) => {
+				props.setMessages([res.data])
+				// Update posts
+				props.get("posts", props.setPosts, "posts")
+			})
+			.catch((err) => props.getErrors(err))
 	}
 
 	// Function for liking comments
 	const onCommentLike = (id) => {
 		// Show like
-		const newPostComments = props.postComments
-			.filter((item) => {
-				// Get the exact comment and change like status
-				if (item.id == id) {
-					item.hasLiked = !item.hasLiked
-				}
-				return true
-			})
+		const newPostComments = props.postComments.filter((item) => {
+			// Get the exact comment and change like status
+			if (item.id == id) {
+				item.hasLiked = !item.hasLiked
+			}
+			return true
+		})
 
 		// Set new comments
 		props.setPostComments(newPostComments)
 
 		// Add like to database
-		axios.post(`/api/post-comment-likes`, {
-			comment: id
-		}).then((res) => {
-			props.setMessages([res.data])
-			// Update Post Comments
-			props.get("post-comments", props.setPostComments)
-		}).catch((err) => props.getErrors(err))
+		axios
+			.post(`/api/post-comment-likes`, {
+				comment: id,
+			})
+			.then((res) => {
+				props.setMessages([res.data])
+				// Update Post Comments
+				props.get("post-comments", props.setPostComments)
+			})
+			.catch((err) => props.getErrors(err))
 	}
 
 	// Function for deleting comments
 	const onDeleteComment = (id) => {
-		axios.delete(`/api/post-comments/${id}`)
+		axios
+			.delete(`/api/post-comments/${id}`)
 			.then((res) => {
 				props.setMessages([res.data])
 				// Update Post Comments
 				props.get("post-comments", props.setPostComments)
 				// Update Posts
 				props.get("posts", props.setPosts, "posts")
-			}).catch((err) => props.getErrors(err))
+			})
+			.catch((err) => props.getErrors(err))
 	}
 
 	var dummyArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -100,12 +105,16 @@ const PostShow = (props) => {
 			<div className="row">
 				<div className="col-sm-4"></div>
 				<div className="col-sm-4">
-					<div className="my-2 ml-2">
+					<div className="d-flex my-2">
 						<Link href="/">
 							<a>
 								<BackSVG />
 							</a>
 						</Link>
+						<h1 className="mx-auto">Post</h1>
+							<a className="invisible">
+								<BackSVG />
+							</a>
 					</div>
 					{props.posts
 						.filter((post) => post.id == id)
@@ -119,7 +128,8 @@ const PostShow = (props) => {
 									setPostToEdit={setPostToEdit}
 									setEditLink={setEditLink}
 									setDeleteLink={setDeleteLink}
-									setUnfollowLink={setUnfollowLink} />
+									setUnfollowLink={setUnfollowLink}
+								/>
 							</Suspense>
 						))}
 
@@ -129,7 +139,9 @@ const PostShow = (props) => {
 						{/* Loading Comment items */}
 						{dummyArray
 							.filter(() => props.postComments.length < 1)
-							.map((item, key) => (<LoadingPostMedia key={key} />))}
+							.map((item, key) => (
+								<LoadingPostMedia key={key} />
+							))}
 
 						{props.postComments
 							.filter((comment) => comment.post_id == id)
@@ -142,7 +154,8 @@ const PostShow = (props) => {
 										setCommentDeleteLink={setCommentDeleteLink}
 										setCommentToEdit={setCommentToEdit}
 										onCommentLike={onCommentLike}
-										onDeleteComment={onDeleteComment} />
+										onDeleteComment={onDeleteComment}
+									/>
 								</Suspense>
 							))}
 					</div>
@@ -163,7 +176,8 @@ const PostShow = (props) => {
 				onDeletePost={onDeletePost}
 				commentToEdit={commentToEdit}
 				commentDeleteLink={commentDeleteLink}
-				onDeleteComment={onDeleteComment} />
+				onDeleteComment={onDeleteComment}
+			/>
 			{/* Sliding Bottom Nav end */}
 		</>
 	)

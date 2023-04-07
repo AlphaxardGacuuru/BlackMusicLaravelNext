@@ -1,12 +1,11 @@
-import { useEffect } from 'react'
-import Link from 'next/link'
+import { useEffect } from "react"
+import Link from "next/link"
 
 // const SocialMediaInput = React.lazy(() => import('@/components/core/SocialMediaInput'))
-import SocialMediaInput from '@/components/Core/SocialMediaInput'
-import CloseSVG from '@/svgs/CloseSVG'
+import SocialMediaInput from "@/components/Core/SocialMediaInput"
+import CloseSVG from "@/svgs/CloseSVG"
 
 const PostCreate = (props) => {
-
 	// Set states
 	useEffect(() => {
 		setTimeout(() => {
@@ -28,24 +27,29 @@ const PostCreate = (props) => {
 			<div className="col-sm-4"></div>
 			<div className="col-sm-4">
 				<div className="contact-form">
-					<div className="d-flex justify-content-between mb-1">
+					<div className="d-flex justify-content-between my-2">
 						{/* <!-- Close Icon --> */}
 						<div className="text-white">
-							{props.media ?
+							{props.media ? (
 								<span style={{ fontSize: "1.2em" }}>
 									<CloseSVG />
-								</span> :
+								</span>
+							) : (
 								<Link href="/">
-									<a style={{ fontSize: "1.2em" }}><CloseSVG /></a>
-								</Link>}
+									<a style={{ fontSize: "1.2em" }}>
+										<CloseSVG />
+									</a>
+								</Link>
+							)}
 						</div>
+						<h1>Post Create</h1>
+						<a className="invisible">
+							<CloseSVG />
+						</a>
 					</div>
 
 					{/* Social Input */}
-					<form
-						onSubmit={props.onSubmit}
-						className="contact-form bg-white"
-						autoComplete="off">
+					<form onSubmit={props.onSubmit} className="contact-form bg-white" autoComplete="off">
 						<SocialMediaInput {...props} />
 					</form>
 				</div>

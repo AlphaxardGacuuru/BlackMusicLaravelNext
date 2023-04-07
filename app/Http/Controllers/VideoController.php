@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\VideoUploadedEvent;
 use App\Http\Services\VideoService;
 use App\Models\Video;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class VideoController extends Controller
@@ -17,7 +17,7 @@ class VideoController extends Controller
      */
     public function index(VideoService $videoService)
     {
-		return $videoService->index();
+        return $videoService->index();
     }
 
     /**
@@ -36,7 +36,11 @@ class VideoController extends Controller
             'ft' => 'nullable|exists:users,username',
         ]);
 
-		return $videoService->store($request);
+        $response = $videoService->store($request);
+
+        // VideoUploadedEvent::dispatchIf($response["saved"], $response["video"]);
+
+        return response('Video Uploaded', 200);
     }
 
     /**
@@ -47,7 +51,7 @@ class VideoController extends Controller
      */
     public function show($id, VideoService $videoService)
     {
-		return $videoService->show($id);
+        return $videoService->show($id);
     }
 
     /**
@@ -64,7 +68,7 @@ class VideoController extends Controller
             'ft' => 'nullable|exists:users,username',
         ]);
 
-		return $videoService->update($request, $id);
+        return $videoService->update($request, $id);
     }
 
     /**

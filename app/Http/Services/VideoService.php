@@ -63,9 +63,9 @@ class VideoService
         $video->thumbnail = $request->input('thumbnail');
         $video->description = $request->input('description');
         $video->released = $request->input('released');
-        $video->save();
+        $saved = $video->save();
 
-        return response('Video Uploaded', 200);
+        return ["saved" => $saved, "video" => $video];
     }
 
     /* Create new video song */

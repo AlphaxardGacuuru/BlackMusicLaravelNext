@@ -2,11 +2,18 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use App\Models\Video;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class VideoService
 {
+    /**
+     * Display a listing of the resource.
+     *
+     */
     public function index()
     {
         // Check if user is logged in
@@ -20,7 +27,6 @@ class VideoService
         $videos = [];
 
         foreach ($getVideos as $video) {
-
             array_push($videos, $this->structure($video, $authUsername));
         }
 
@@ -30,8 +36,6 @@ class VideoService
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\AudioAlbum  $audioAlbum
-     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
@@ -50,6 +54,10 @@ class VideoService
         return $video;
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     */
     public function store($request)
     {
         /* Create new video song */
@@ -68,7 +76,10 @@ class VideoService
         return ["saved" => $saved, "video" => $video];
     }
 
-    /* Create new video song */
+    /**
+     * Update the specified resource in storage.
+     *
+     */
     public function update($request, $id)
     {
         $video = Video::find($id);
@@ -118,6 +129,10 @@ class VideoService
         return response('Video Edited', 200);
     }
 
+    /**
+     * Download Video.
+     *
+     */
     public function download($video, $id)
     {
         $video = Video::find($id);
@@ -131,6 +146,126 @@ class VideoService
         return response()->download($src, $name);
     }
 
+    /**
+     * Newly Released Chart
+     *
+     */
+    public function newlyReleased()
+    {
+        // Get Videos
+        $newlyReleased = Video::orderBy("id", "desc")->get();
+
+        return response($this->chart($newlyReleased), 200);
+    }
+
+    /**
+     * Trending Chart
+     *
+     */
+    public function trending()
+    {
+        $trending = DB::table('bought_videos')
+            ->select('video_id', DB::raw('count(*) as bought'))
+            ->where("created_at", ">=", Carbon::now()->subWeek())
+            ->groupBy('video_id')
+            ->orderBy('bought', 'DESC')
+            ->get();
+
+        return response($this->chart($trending, true), 200);
+    }
+
+    /**
+     * Top Downloaded
+     *
+     */
+    public function topDownloaded()
+    {
+        $topDownloaded = DB::table('bought_videos')
+            ->select('video_id', DB::raw('count(*) as bought'))
+            ->groupBy('video_id')
+            ->orderBy('bought', 'DESC')
+            ->get();
+
+        return response($this->chart($topDownloaded, true), 200);
+    }
+
+    /**
+     * Top Liked
+     *
+     */
+    public function topLiked()
+    {
+        $topLiked = DB::table('video_likes')
+            ->select('video_id', DB::raw('count(*) as likes'))
+            ->groupBy('video_id')
+            ->orderBy('likes', 'DESC')
+            ->get();
+
+        return response($this->chart($topLiked, true), 200);
+    }
+
+    /**
+     * Structure charts
+     *
+     */
+    public function chart($list, $loop = false)
+    {
+        // Check if user is logged in
+        $auth = auth('sanctum')->user();
+
+        $authUsername = $auth ? $auth->username : '@guest';
+
+        $videoModel = $list;
+
+        // Check if items should be fetched
+        if ($loop) {
+            $videoModel = [];
+
+            foreach ($list as $item) {
+                $video = Video::find($item->video_id);
+
+                array_push($videoModel, $video);
+            }
+        }
+
+        $videos = [];
+
+        $chartArtists = [];
+
+        // Populate Videos and Artists array
+        foreach ($videoModel as $video) {
+            array_push($videos, $this->structure($video, $authUsername));
+            array_push($chartArtists, $video->username);
+        }
+
+        // Count occurrences of artists
+        $chartArtists = array_count_values($chartArtists);
+
+        // Sort artists based on most occurences
+        arsort($chartArtists);
+
+        // Get usernames only
+        $chartArtists = array_keys($chartArtists);
+
+        $artists = [];
+
+        // Get Artists
+        foreach ($chartArtists as $artist) {
+            $getArtist = User::where("username", $artist)->first();
+
+            $userService = new UserService;
+
+            array_push($artists, $userService->structure($getArtist, $authUsername));
+        }
+
+        return ["artists" => $artists, "videos" => $videos];
+    }
+
+
+    /**
+     * Structure Video
+     *
+     */
     private function structure($video, $username)
     {
         return [

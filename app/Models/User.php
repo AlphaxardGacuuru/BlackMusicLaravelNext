@@ -292,14 +292,14 @@ class User extends Authenticatable
     }
 
     // Get balance
-    public function balance($user)
+    public function balance()
     {
         // Get Cost of Bought Videos at each price
-        $totalVideos = $user->boughtVideos->count() * 20;
-        $totalAudios = $user->boughtAudios->count() * 10;
+        $totalVideos = $this->boughtVideos->count() * 20;
+        $totalAudios = $this->boughtAudios->count() * 10;
 
         // Get Total Cash paid
-        $kopokopo = $user->kopokopos->sum('amount');
+        $kopokopo = $this->kopokopos->sum('amount');
 
         return $kopokopo - ($totalVideos + $totalAudios);
     }

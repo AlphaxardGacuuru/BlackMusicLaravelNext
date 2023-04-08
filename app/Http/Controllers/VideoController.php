@@ -85,12 +85,23 @@ class VideoController extends Controller
      * Display a listing of the charts.
      *
      */
-    public function charts()
+    public function newlyReleased(VideoService $service)
     {
-        return DB::table('video_likes')
-            ->select('video_id', DB::raw('count(*) as likes'))
-            ->groupBy('video_id')
-            ->orderBy('likes', 'DESC')
-            ->get();
+        return $service->newlyReleased();
+    }
+
+    public function trending(VideoService $service)
+    {
+        return $service->trending();
+    }
+
+    public function topDownloaded(VideoService $service)
+    {
+		return $service->topDownloaded();
+    }
+
+    public function topLiked(VideoService $service)
+    {
+		return $service->topLiked();
     }
 }

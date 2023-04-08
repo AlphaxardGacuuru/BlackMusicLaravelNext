@@ -30,23 +30,7 @@ class UserService
         // Get Users
         foreach ($getUsers as $user) {
 
-            array_push($users, [
-                "id" => $user->id,
-                "name" => $user->name,
-                "username" => $user->username,
-                "avatar" => $user->avatar,
-                "backdrop" => $user->backdrop,
-                "account_type" => $user->account_type,
-                "bio" => $user->bio,
-                "withdrawal" => $user->withdrawal,
-                "posts" => $user->posts->count(),
-                "following" => $user->follows->count() - 1,
-                "fans" => $user->fans(),
-                "hasFollowed" => $user->hasFollowed($authUsername),
-                "hasBought1" => $user->hasBought1($authUsername),
-                "decos" => $user->decos->count(),
-                "created_at" => $user->created_at,
-            ]);
+            array_push($users, $this->structure($user, $authUsername));
         }
 
         return $users;
@@ -132,24 +116,31 @@ class UserService
     {
         $auth = auth('sanctum')->user();
 
+        return $this->structure($auth, $auth->username);
+    }
+
+    public function structure($user, $authUsername)
+    {
         return [
-            "id" => $auth->id,
-            "name" => $auth->name,
-            "username" => $auth->username,
-            "email" => $auth->email,
-            "phone" => $auth->phone,
-            "account_type" => $auth->account_type,
-            "avatar" => $auth->avatar,
-            "backdrop" => $auth->backdrop,
-            "bio" => $auth->bio,
-            "dob" => $auth->dob,
-            "withdrawal" => $auth->withdrawal,
-            "decos" => $auth->decos->count(),
-            "fans" => $auth->fans($auth),
-            "following" => $auth->follows->count(),
-            "posts" => $auth->posts->count(),
-            "balance" => $auth->balance($auth),
-            "created_at" => $auth->created_at,
+            "id" => $user->id,
+            "name" => $user->name,
+            "username" => $user->username,
+            "email" => $user->email,
+            "phone" => $user->phone,
+            "avatar" => $user->avatar,
+            "backdrop" => $user->backdrop,
+            "account_type" => $user->account_type,
+            "dob" => $user->dob,
+            "bio" => $user->bio,
+            "withdrawal" => $user->withdrawal,
+            "posts" => $user->posts->count(),
+            "following" => $user->follows->count() - 1,
+            "fans" => $user->fans(),
+            "hasFollowed" => $user->hasFollowed($authUsername),
+            "hasBought1" => $user->hasBought1($authUsername),
+            "decos" => $user->decos->count(),
+            "balance" => $user->balance(),
+            "created_at" => $user->created_at,
         ];
     }
 }

@@ -101,8 +101,14 @@ Route::apiResources([
 ]);
 // });
 
-Route::get('video-charts', [VideoController::class, 'charts']);
+// Video 
+Route::get('video-charts/newly-released', [VideoController::class, 'newlyReleased']);
+Route::get('video-charts/trending', [VideoController::class, 'trending']);
+Route::get('video-charts/top-downloaded', [VideoController::class, 'topDownloaded']);
+Route::get('video-charts/top-liked', [VideoController::class, 'topLiked']);
 Route::get('videos/download', [VideoController::class, 'download']);
+
+// Audio
 Route::get('audio-charts', [AudioController::class, 'charts']);
 Route::get('audios/download', [AudioController::class, 'download']);
 

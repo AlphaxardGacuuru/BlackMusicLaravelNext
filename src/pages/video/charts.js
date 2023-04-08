@@ -1,135 +1,97 @@
-import React, { useState, useEffect, useRef, Suspense } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
+import React, { useState, useEffect, useRef, Suspense } from "react"
+import Link from "next/link"
+import { useRouter } from "next/router"
 
-import Carousel from '@/components/Core/Carousel'
-import LoadingAvatarMedia from '@/components/User/LoadingAvatarMedia'
-import LoadingVideoMedia from '@/components/Video/LoadingVideoMedia'
-import VideoMedia from '@/components/Video/VideoMedia'
-import AvatarMedia from '@/components/User/AvatarMedia'
+import Carousel from "@/components/Core/Carousel"
+import LoadingAvatarMedia from "@/components/User/LoadingAvatarMedia"
+import LoadingVideoMedia from "@/components/Video/LoadingVideoMedia"
+import VideoMedia from "@/components/Video/VideoMedia"
+import AvatarMedia from "@/components/User/AvatarMedia"
 
 const VideoCharts = (props) => {
+	const [newlyReleased, setNewlyReleased] = useState([])
+	const [trending, setTrending] = useState([])
+	const [topDownloaded, setTopDownloaded] = useState([])
+	const [topLiked, setTopLiked] = useState([])
 
 	useEffect(() => {
-		// Fetch Video Albums
-		props.get("video-albums", props.setVideoAlbums, "videoAlbums")
-		// Fetch Videos
-		props.get("videos", props.setVideos, "videos")
+		// Fetch Newly Released Videos
+		props.get("video-charts/newly-released", setNewlyReleased)
+		// Fetch Trending Videos
+		props.get("video-charts/trending", setTrending)
+		// Fetch Top Downloaded Videos
+		props.get("video-charts/top-downloaded", setTopDownloaded)
+		// Fetch Top Liked Videos
+		props.get("video-charts/top-liked", setTopLiked)
 
 		// Load more on page bottom
 		window.onscroll = function (ev) {
 			if (router.pathname.match(/video-charts/)) {
-				const bottom = (window.innerHeight + window.scrollY) >=
-					(document.body.offsetHeight - document.body.offsetHeight / 16)
+				const bottom =
+					window.innerHeight + window.scrollY >= document.body.offsetHeight - document.body.offsetHeight / 16
 
 				if (bottom) {
 					setVideoSlice(videoSlice + 8)
 				}
-			};
+			}
 		}
 	}, [])
 
 	const router = useRouter()
 
-	//Declare States 
+	//Declare States
 	const [chart, setChart] = useState("Newly Released")
 	const [genre, setGenre] = useState("All")
-	const [artistSlice, setArtistSlice] = useState(10)
-	const [videoSlice, setVideoSlice] = useState(10)
+	const [artistSlice, setArtistSlice] = useState(8)
+	const [videoSlice, setVideoSlice] = useState(8)
 
 	// Array for links
 	const charts = ["Newly Released", "Trending", "Top Downloaded", "Top Liked"]
-	const genres = ["All", "Afro", "Benga", "Blues", "Boomba", "Country", "Cultural", "EDM", "Genge", "Gospel", "Hiphop", "Jazz", "Music of Kenya", "Pop", "R&B", "Rock", "Sesube", "Taarab"]
-
-	// Set class for chart link
-	const onChart = (chartItem) => {
-		setChart(chartItem)
-	}
-
-	// Set class for genre link
-	const onGenre = (genreItem) => {
-		setGenre(genreItem)
-	}
+	const genres = [
+		"All",
+		"Afro",
+		"Benga",
+		"Blues",
+		"Boomba",
+		"Country",
+		"Cultural",
+		"EDM",
+		"Genge",
+		"Gospel",
+		"Hiphop",
+		"Jazz",
+		"Music of Kenya",
+		"Pop",
+		"R&B",
+		"Rock",
+		"Sesube",
+		"Taarab",
+	]
 
 	// Set state for chart list
 	if (chart == "Newly Released") {
-		var chartList = props.videos
+		var chartList = newlyReleased
 	} else if (chart == "Trending") {
-		var chartList = props.boughtVideos
+		var chartList = trending
 	} else if (chart == "Top Downloaded") {
-		var chartList = props.boughtVideos
+		var chartList = topDownloaded
 	} else {
-		var chartList = props.videoLikes
+		var chartList = topLiked
 	}
 
-	// Array for video id and frequency
-	var artistsArray = []
-	var videosArray = []
-
 	// Generate Arrays
-	chartList.filter((item) => {
+	chartList.videos?.filter((video) => {
 		// Filter for genres
-		// If genre is All then allow all videos
 		if (genre == "All") {
 			return true
 		} else {
-			// For Newly Released
-			if (chart == "Newly Released") {
-				return item.genre == genre
-			}
-
-			return props.videos.find((video) => video.id == item.video_id).genre == genre
-		}
-	}).forEach((video) => {
-
-		// Set variable for id to be fetched
-		if (chart == "Newly Released") {
-			var getId = video.username
-			var getIdTwo = video.id
-		} else if (chart == "Trending") {
-			var getId = video.artist
-			var getIdTwo = video.video_id
-		} else if (chart == "Top Downloaded") {
-			var getId = video.artist
-			var getIdTwo = video.video_id
-		} else {
-			var getId = props.videos.find((item) => item.id == video.video_id).username
-			var getIdTwo = video.video_id
-		}
-
-		// Populate Artists array
-		if (artistsArray.some((index) => index.key == getId)) {
-			// Increment value if it exists
-			var item = artistsArray.find((index) => index.key == getId)
-			item && item.value++
-		} else {
-			// Add item if it doesn't exist
-			artistsArray.push({ key: getId, value: 1 })
-		}
-
-		// Populate Videos array
-		if (videosArray.some((index) => index.key == getIdTwo)) {
-			// Increment value if it exists
-			var item = videosArray.find((index) => index.key == getIdTwo)
-			item && item.value++
-		} else {
-			// Add item if it doesn't exist
-			videosArray.push({ key: getIdTwo, value: 1 })
+			return video.genre == genre
 		}
 	})
 
-	// Sort array in descending order depending on the value
-	artistsArray.sort((a, b) => b.value - a.value)
-	videosArray.sort((a, b) => b.value - a.value)
-
-	// Reverse list if chart is Newly Released
-	if (chart == "Newly Released") {
-		videosArray.reverse()
-	}
-
 	// Function for loading more artists
 	const handleScroll = (e) => {
-		const bottom = e.target.scrollLeft >= (e.target.scrollWidth - (e.target.scrollWidth / 3));
+		const bottom = e.target.scrollLeft >= e.target.scrollWidth - e.target.scrollWidth / 3
 
 		if (bottom) {
 			setArtistSlice(artistSlice + 10)
@@ -173,13 +135,13 @@ const VideoCharts = (props) => {
 			<div id="chartsMenu" className="hidden-scroll m-0">
 				{charts.map((chartItem, key) => (
 					<span key={key}>
-						<a href="#" onClick={(e) => {
-							e.preventDefault()
-							onChart(chartItem)
-						}}>
-							<h5 className={chart == chartItem ? "active-scrollmenu m-0" : "m-0"}>
-								{chartItem}
-							</h5>
+						<a
+							href="#"
+							onClick={(e) => {
+								e.preventDefault()
+								setChart(chartItem)
+							}}>
+							<h5 className={chart == chartItem ? "active-scrollmenu m-0" : "m-0"}>{chartItem}</h5>
 						</a>
 					</span>
 				))}
@@ -189,13 +151,13 @@ const VideoCharts = (props) => {
 			<div id="video-chartsMenu" className="hidden-scroll m-0">
 				{genres.map((genreItem, key) => (
 					<span key={key}>
-						<a href="#" onClick={(e) => {
-							e.preventDefault()
-							onGenre(genreItem)
-						}}>
-							<h6 className={genre == genreItem ? "active-scrollmenu m-0" : "m-0"}>
-								{genreItem}
-							</h6>
+						<a
+							href="#"
+							onClick={(e) => {
+								e.preventDefault()
+								setGenre(genreItem)
+							}}>
+							<h6 className={genre == genreItem ? "active-scrollmenu m-0" : "m-0"}>{genreItem}</h6>
 						</a>
 					</span>
 				))}
@@ -210,24 +172,20 @@ const VideoCharts = (props) => {
 					<div className="hidden-scroll" onScroll={handleScroll}>
 						{/* Loading animation */}
 						{dummyArray
-							.filter(() => props.users.length < 1)
-							.map((item, key) => (<LoadingAvatarMedia key={key} />))}
+							.filter(() => chartList.length < 1)
+							.map((item, key) => (
+								<LoadingAvatarMedia key={key} />
+							))}
 
 						{/*  Echo Artists  */}
-						{artistsArray
-							.filter((artist) => artist.key !=
-								props.auth.username &&
-								artist.key != "@blackmusic")
-							.slice(0, artistSlice)
-							.map((artistArray, key) => (
-								<span key={key} style={{ padding: "5px" }}>
-									{props.users
-										.filter((user) => user.username == artistArray.key)
-										.map((user, key) => (
-											<AvatarMedia key={key} user={user} />
-										))}
-								</span>
-							))}
+						<span style={{ padding: "5px" }}>
+							{chartList.artists
+								?.filter((artist) => artist.username != "@blackmusic")
+								.slice(0, artistSlice)
+								.map((artist, key) => (
+									<AvatarMedia key={key} user={artist} />
+								))}
+						</span>
 						{/* Echo Artists End */}
 					</div>
 					{/* <!-- ****** Artists Area End ****** - */}
@@ -238,7 +196,7 @@ const VideoCharts = (props) => {
 					<div className="d-flex flex-wrap justify-content-center" onScroll={handleScroll}>
 						{/* Loading Video items */}
 						{dummyArray
-							.filter(() => props.videos.length < 1)
+							.filter(() => chartList.length < 1)
 							.map((item, key) => (
 								<center className="mx-1 mb-2">
 									<LoadingVideoMedia key={key} />
@@ -246,20 +204,14 @@ const VideoCharts = (props) => {
 							))}
 
 						{/* Real Video items */}
-						{videosArray
+						{chartList.videos
+							?.filter((video) => video.username != "@blackmusic")
 							.slice(0, videoSlice)
-							.map((videoArray, key) => (
-								<span key={key} style={{ textAlign: "center" }}>
-									{props.videos
-										.filter((video) => video.id == videoArray.key &&
-											video.username != "@blackmusic")
-										.map((video, key) => (
-											<center key={video.id} className="mx-1 mb-2">
-												<VideoMedia
-													{...props}
-													video={video} />
-											</center>
-										))}
+							.map((video, key) => (
+								<span style={{ textAlign: "center" }}>
+									<center key={video.id} className="mx-1 mb-2">
+										<VideoMedia {...props} video={video} />
+									</center>
 								</span>
 							))}
 					</div>

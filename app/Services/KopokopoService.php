@@ -7,7 +7,7 @@ use App\Models\User;
 
 // use Kopokopo\SDK\K2;
 
-class KopokopoService
+class KopokopoService extends Service
 {
     /**
      * Send STK Push to Kopokopo.

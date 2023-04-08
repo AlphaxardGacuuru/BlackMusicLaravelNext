@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\KaraokeAudio;
 
-class KaraokeAudioService
+class KaraokeAudioService extends Service
 {
     /**
      * Display a listing of the resource.

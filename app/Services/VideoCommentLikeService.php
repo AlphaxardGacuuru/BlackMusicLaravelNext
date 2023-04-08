@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\VideoCommentLike;
 
-class VideoCommentLikeService
+class VideoCommentLikeService extends Service
 {
     /**
      * Store a newly created resource in storage.

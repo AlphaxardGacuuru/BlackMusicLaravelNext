@@ -6,7 +6,7 @@ use App\Models\Chat;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
-class ChatService
+class ChatService extends Service
 {
     /**
      * Display a listing of the resource.
@@ -15,13 +15,8 @@ class ChatService
      */
     public function index()
     {
-        // Check if user is logged in
-        $auth = auth('sanctum')->user();
-
-        $authUsername = $auth ? $auth->username : '@guest';
-
-        $getChat = Chat::where('username', $authUsername)
-            ->orWhere('to', $authUsername)
+        $getChat = Chat::where('username', $this->username)
+            ->orWhere('to', $this->username)
             ->orderBy('id', 'DESC')
             ->get();
 
@@ -38,16 +33,16 @@ class ChatService
         $chatThreadsZero = array_unique($chatThreadsZero);
 
         // Remove auth username
-        $key = array_search($authUsername, $chatThreadsZero);
+        $key = array_search($this->username, $chatThreadsZero);
 
         unset($chatThreadsZero[$key]);
 
         // Get threads
         foreach ($chatThreadsZero as $key => $username) {
-            $chat = Chat::where('username', $authUsername)
+            $chat = Chat::where('username', $this->username)
                 ->where('to', $username)
                 ->orWhere('username', $username)
-                ->where('to', $authUsername)
+                ->where('to', $this->username)
                 ->orderBy('id', 'DESC')
                 ->first();
 
@@ -77,22 +72,17 @@ class ChatService
      */
     public function show($username)
     {
-        // Check if user is logged in
-        $auth = auth('sanctum')->user();
-
-        $authUsername = $auth ? $auth->username : '@guest';
-
-        $getChat = Chat::where("username", $authUsername)
+        $getChat = Chat::where("username", $this->username)
             ->where("to", $username)
             ->orWhere("username", $username)
-            ->where("to", $authUsername)
+            ->where("to", $this->username)
             ->orderBy('id', 'ASC')->get();
 
         $chat = [];
 
         // Populate array
         foreach ($getChat as $chatItem) {
-            array_push($chat, $this->structure($chatItem, $authUsername));
+            array_push($chat, $this->structure($chatItem, $this->username));
         }
 
         return $chat;

@@ -9,7 +9,7 @@ use App\Models\Deco;
 use App\Models\Kopokopo;
 use Illuminate\Support\Facades\DB;
 
-class BoughtVideoService
+class BoughtVideoService extends Service
 {
     /**
      * Display a listing of the resource.
@@ -18,19 +18,14 @@ class BoughtVideoService
      */
     public function index()
     {
-        // Check if user is logged in
-        $auth = auth('sanctum')->user();
-
-        $authUsername = $auth ? $auth->username : '@guest';
-
-        $getBoughtVideos = BoughtVideo::where("username", $authUsername)->get();
+        $getBoughtVideos = BoughtVideo::where("username", $this->username)->get();
 
         $boughtVideos = [];
 
         foreach ($getBoughtVideos as $boughtVideo) {
             array_push($boughtVideos,
                 $this->structure($boughtVideo->video,
-                    $authUsername));
+                    $this->username));
         }
 
         return $boughtVideos;

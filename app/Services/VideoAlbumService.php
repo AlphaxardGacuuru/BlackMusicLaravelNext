@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\VideoAlbum;
 use Illuminate\Support\Facades\Storage;
 
-class VideoAlbumService
+class VideoAlbumService extends Service
 {
     // Get Video Albums
     public function index()

@@ -5,15 +5,10 @@ namespace App\Services;
 use App\Models\Audio;
 use Illuminate\Support\Facades\Storage;
 
-class AudioService
+class AudioService extends Service
 {
     public function index()
     {
-        // Check if user is logged in
-        $auth = auth('sanctum')->user();
-
-        $authUsername = $auth ? $auth->username : '@guest';
-
         // Get Audios
         $getAudios = Audio::orderBy('id', 'ASC')->get();
 
@@ -21,7 +16,7 @@ class AudioService
 
         foreach ($getAudios as $audio) {
 
-            array_push($audios, $this->structure($audio, $authUsername));
+            array_push($audios, $this->structure($audio, $this->username));
         }
 
         return $audios;
@@ -35,17 +30,12 @@ class AudioService
      */
     public function show($id)
     {
-        // Check if user is logged in
-        $auth = auth('sanctum')->user();
-
-        $authUsername = $auth ? $auth->username : '@guest';
-
         // Get Audio
         $getAudio = Audio::whereId($id)->get()[0];
 
         $audio = [];
 
-        array_push($audio, $this->structure($getAudio, $authUsername));
+        array_push($audio, $this->structure($getAudio, $this->username));
 
         return $audio;
     }

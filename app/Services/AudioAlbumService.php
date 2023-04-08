@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\AudioAlbum;
 use Illuminate\Support\Facades\Storage;
 
-class AudioAlbumService
+class AudioAlbumService extends Service
 {
     /**
      * Display a listing of the resource.

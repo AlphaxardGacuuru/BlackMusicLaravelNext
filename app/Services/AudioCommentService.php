@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\AudioComment;
 
-class AudioCommentService
+class AudioCommentService extends Service
 {
     /**
      * Display a listing of the resource.
@@ -13,11 +13,6 @@ class AudioCommentService
      */
     public function index()
     {
-        // Check if user is logged in
-        $auth = auth('sanctum')->user();
-
-        $authUsername = $auth ? $auth->username : '@guest';
-
         $getAudioComments = AudioComment::orderBy('id', 'DESC')->get();
 
         $audioComments = [];
@@ -32,7 +27,7 @@ class AudioCommentService
                 "name" => $audioComment->user->name,
                 "avatar" => $audioComment->user->avatar,
                 "decos" => $audioComment->user->decos->count(),
-                "hasLiked" => $audioComment->hasLiked($authUsername),
+                "hasLiked" => $audioComment->hasLiked($this->username),
                 "likes" => $audioComment->likes->count(),
                 "createdAt" => $audioComment->created_at,
             ]);
@@ -49,11 +44,6 @@ class AudioCommentService
      */
     public function show($id)
     {
-        // Check if user is logged in
-        $auth = auth('sanctum')->user();
-
-        $authUsername = $auth ? $auth->username : '@guest';
-
         $getAudioComments = AudioComment::where("audio_id", $id)
             ->orderBy('id', 'DESC')
             ->get();
@@ -70,7 +60,7 @@ class AudioCommentService
                 "name" => $audioComment->user->name,
                 "avatar" => $audioComment->user->avatar,
                 "decos" => $audioComment->user->decos->count(),
-                "hasLiked" => $audioComment->hasLiked($authUsername),
+                "hasLiked" => $audioComment->hasLiked($this->username),
                 "likes" => $audioComment->likes->count(),
                 "createdAt" => $audioComment->created_at,
             ]);

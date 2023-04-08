@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\AudioLike;
 
-class AudioLikeService
+class AudioLikeService extends Service
 {
     /**
      * Store a newly created resource in storage.

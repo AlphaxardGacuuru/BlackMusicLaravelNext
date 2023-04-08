@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\PostComment;
 
-class PostCommentService
+class PostCommentService extends Service
 {
     /**
      * Display a listing of the resource.
@@ -13,11 +13,6 @@ class PostCommentService
      */
     public function index()
     {
-        // Check if user is logged in
-        $auth = auth('sanctum')->user();
-
-        $authUsername = $auth ? $auth->username : '@guest';
-
         $getComments = PostComment::orderby('id', 'DESC')->get();
 
         $comments = [];
@@ -33,7 +28,7 @@ class PostCommentService
                 "avatar" => $comment->user->avatar,
                 "text" => $comment->text,
                 "likes" => $comment->likes->count(),
-                "hasLiked" => $comment->hasLiked($authUsername),
+                "hasLiked" => $comment->hasLiked($this->username),
                 "created_at" => $comment->created_at,
             ]);
         }

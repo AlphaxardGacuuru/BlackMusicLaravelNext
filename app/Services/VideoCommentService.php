@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\VideoComment;
 
-class VideoCommentService
+class VideoCommentService extends Service
 {
     /**
      * Display a listing of the resource.
@@ -13,11 +13,6 @@ class VideoCommentService
      */
     public function index()
     {
-        // Check if user is logged in
-        $auth = auth('sanctum')->user();
-
-        $authUsername = $auth ? $auth->username : '@guest';
-
         $getVideoComments = VideoComment::orderBy('id', 'DESC')->get();
 
         $videoComments = [];
@@ -31,7 +26,7 @@ class VideoCommentService
                 "username" => $videoComment->username,
                 "name" => $videoComment->user->name,
                 "avatar" => $videoComment->user->avatar,
-                "hasLiked" => $videoComment->hasLiked($authUsername),
+                "hasLiked" => $videoComment->hasLiked($this->username),
                 "likes" => $videoComment->likes->count(),
                 "createdAt" => $videoComment->created_at,
             ]);
@@ -48,11 +43,6 @@ class VideoCommentService
      */
     public function show($id)
     {
-        // Check if user is logged in
-        $auth = auth('sanctum')->user();
-
-        $authUsername = $auth ? $auth->username : '@guest';
-
         $getVideoComments = VideoComment::where("video_id", $id)
             ->orderBy('id', 'DESC')
             ->get();
@@ -69,7 +59,7 @@ class VideoCommentService
                 "name" => $videoComment->user->name,
                 "avatar" => $videoComment->user->avatar,
                 "decos" => $videoComment->user->decos->count(),
-                "hasLiked" => $videoComment->hasLiked($authUsername),
+                "hasLiked" => $videoComment->hasLiked($this->username),
                 "likes" => $videoComment->likes->count(),
                 "createdAt" => $videoComment->created_at,
             ]);

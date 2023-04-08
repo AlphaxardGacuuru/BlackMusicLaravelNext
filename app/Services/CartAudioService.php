@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\CartAudio;
 
-class CartAudioService
+class CartAudioService extends Service
 {
     /**
      * Display a listing of the resource.
@@ -13,12 +13,7 @@ class CartAudioService
      */
     public function index()
     {
-        // Check if user is logged in
-        $auth = auth('sanctum')->user();
-
-        $authUsername = $auth ? $auth->username : '@guest';
-
-        $getCartAudios = CartAudio::where('username', $authUsername)
+        $getCartAudios = CartAudio::where('username', $this->username)
             ->get();
 
         $cartAudios = [];
@@ -40,13 +35,13 @@ class CartAudioService
                 "thumbnail" => $cartAudio->audio->thumbnail,
                 "description" => $cartAudio->audio->description,
                 "released" => $cartAudio->audio->released,
-                "hasLiked" => $cartAudio->audio->hasLiked($authUsername),
+                "hasLiked" => $cartAudio->audio->hasLiked($this->username),
                 "likes" => $cartAudio->audio->likes->count(),
                 "comments" => $cartAudio->audio->comments->count(),
-                "inCart" => $cartAudio->audio->inCart($authUsername),
-                "hasBoughtAudio" => $cartAudio->audio->hasBoughtAudio($authUsername),
-                "hasBought1" => $cartAudio->audio->user->hasBought1($authUsername),
-                "hasFollowed" => $cartAudio->audio->user->hasFollowed($authUsername),
+                "inCart" => $cartAudio->audio->inCart($this->username),
+                "hasBoughtAudio" => $cartAudio->audio->hasBoughtAudio($this->username),
+                "hasBought1" => $cartAudio->audio->user->hasBought1($this->username),
+                "hasFollowed" => $cartAudio->audio->user->hasFollowed($this->username),
                 "downloads" => $cartAudio->audio->bought->count(),
                 "createdAt" => $cartAudio->audio->created_at,
             ]);

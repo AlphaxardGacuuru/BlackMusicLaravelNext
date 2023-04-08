@@ -9,7 +9,7 @@ use App\Models\Deco;
 use App\Models\Kopokopo;
 use Illuminate\Support\Facades\DB;
 
-class BoughtAudioService
+class BoughtAudioService extends Service
 {
     /**
      * Display a listing of the resource.
@@ -18,19 +18,14 @@ class BoughtAudioService
      */
     public function index()
     {
-        // Check if user is logged in
-        $auth = auth('sanctum')->user();
-
-        $authUsername = $auth ? $auth->username : '@guest';
-
-        $getBoughtAudios = BoughtAudio::where("username", $authUsername)->get();
+        $getBoughtAudios = BoughtAudio::where("username", $this->username)->get();
 
         $boughtAudios = [];
 
         foreach ($getBoughtAudios as $boughtAudio) {
             array_push($boughtAudios,
                 $this->structure($boughtAudio->audio,
-                    $authUsername));
+                    $this->username));
         }
 
         return $boughtAudios;

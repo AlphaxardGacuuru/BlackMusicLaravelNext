@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\KaraokeCommentLike;
 
-class KaraokeCommentLikeService
+class KaraokeCommentLikeService extends Service
 {
     /**
      * Store a newly created resource in storage.

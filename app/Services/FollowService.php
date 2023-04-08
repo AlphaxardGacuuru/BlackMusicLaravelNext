@@ -6,7 +6,7 @@ use App\Models\BoughtAudio;
 use App\Models\BoughtVideo;
 use App\Models\Follow;
 
-class FollowService
+class FollowService extends Service
 {
     /**
      * Store a newly created resource in storage.

@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\SavedKaraoke;
 
-class SavedKaraokeService
+class SavedKaraokeService extends Service
 {
     /**
      * Display a listing of the resource.
@@ -13,13 +13,8 @@ class SavedKaraokeService
      */
     public function index()
     {
-        // Check if user is logged in
-        $auth = auth('sanctum')->user();
-
-        $authUsername = $auth ? $auth->username : '@guest';
-
         // Get saved Karaokes
-        $getSavedKarokes = SavedKaraoke::where('username', $authUsername)
+        $getSavedKarokes = SavedKaraoke::where('username', $this->username)
             ->orderBy('id', 'ASC')
             ->get();
 
@@ -38,8 +33,8 @@ class SavedKaraokeService
                 "avatar" => $savedKaraoke->karaoke->user->avatar,
                 "decos" => $savedKaraoke->karaoke->user->decos->count(),
                 "description" => $savedKaraoke->karaoke->description,
-                "hasLiked" => $savedKaraoke->karaoke->hasLiked($authUsername),
-                "hasSaved" => $savedKaraoke->karaoke->hasSaved($authUsername),
+                "hasLiked" => $savedKaraoke->karaoke->hasLiked($this->username),
+                "hasSaved" => $savedKaraoke->karaoke->hasSaved($this->username),
                 "likes" => $savedKaraoke->karaoke->likes->count(),
                 "comments" => $savedKaraoke->karaoke->comments->count(),
                 "createdAt" => $savedKaraoke->karaoke->created_at,

@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-class VideoService
+class VideoService extends Service
 {
     /**
      * Display a listing of the resource.
@@ -16,18 +16,13 @@ class VideoService
      */
     public function index()
     {
-        // Check if user is logged in
-        $auth = auth('sanctum')->user();
-
-        $authUsername = $auth ? $auth->username : '@guest';
-
         // Get Videos
         $getVideos = Video::orderBy('id', 'ASC')->get();
 
         $videos = [];
 
         foreach ($getVideos as $video) {
-            array_push($videos, $this->structure($video, $authUsername));
+            array_push($videos, $this->structure($video, $this->username));
         }
 
         return $videos;
@@ -39,17 +34,12 @@ class VideoService
      */
     public function show($id)
     {
-        // Check if user is logged in
-        $auth = auth("sanctum")->user();
-
-        $authUsername = $auth ? $auth->username : "@guest";
-
         // Get Video
         $getVideo = Video::whereId($id)->get()[0];
 
         $video = [];
 
-        array_push($video, $this->structure($getVideo, $authUsername));
+        array_push($video, $this->structure($getVideo, $this->username));
 
         return $video;
     }
@@ -64,7 +54,7 @@ class VideoService
         $video = new Video;
         $video->video = $request->input('video');
         $video->name = $request->input('name');
-        $video->username = auth('sanctum')->user()->username;
+        $video->username = $this->username;
         $video->ft = $request->input('ft');
         $video->video_album_id = $request->input('video_album_id');
         $video->genre = $request->input('genre');
@@ -210,11 +200,6 @@ class VideoService
      */
     public function chart($list, $loop = false)
     {
-        // Check if user is logged in
-        $auth = auth('sanctum')->user();
-
-        $authUsername = $auth ? $auth->username : '@guest';
-
         $videoModel = $list;
 
         // Check if items should be fetched
@@ -234,7 +219,7 @@ class VideoService
 
         // Populate Videos and Artists array
         foreach ($videoModel as $video) {
-            array_push($videos, $this->structure($video, $authUsername));
+            array_push($videos, $this->structure($video, $this->username));
             array_push($chartArtists, $video->username);
         }
 
@@ -255,12 +240,11 @@ class VideoService
 
             $userService = new UserService;
 
-            array_push($artists, $userService->structure($getArtist, $authUsername));
+            array_push($artists, $userService->structure($getArtist, $this->username));
         }
 
         return ["artists" => $artists, "videos" => $videos];
     }
-
 
     /**
      * Structure Video

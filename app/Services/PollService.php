@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Poll;
 
-class PollService
+class PollService extends Service
 {
     public function store($request)
     {

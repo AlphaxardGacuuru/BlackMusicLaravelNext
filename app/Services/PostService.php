@@ -5,14 +5,10 @@ namespace App\Services;
 use App\Models\Post;
 use Illuminate\Support\Facades\Storage;
 
-class PostService
+class PostService extends Service
 {
     public function index()
     {
-        // Check if user is logged in
-        $auth = auth('sanctum')->user();
-        $authUsername = $auth ? $auth->username : '@guest';
-
         // Get Posts
         $getPosts = Post::orderBy('id', 'DESC')->get();
 
@@ -53,11 +49,11 @@ class PostService
                 "parameter_3" => $post->parameter_3,
                 "parameter_4" => $post->parameter_4,
                 "parameter_5" => $post->parameter_5,
-                "hasVoted1" => $post->hasVoted($post, $authUsername, $post->parameter_1),
-                "hasVoted2" => $post->hasVoted($post, $authUsername, $post->parameter_2),
-                "hasVoted3" => $post->hasVoted($post, $authUsername, $post->parameter_3),
-                "hasVoted4" => $post->hasVoted($post, $authUsername, $post->parameter_4),
-                "hasVoted5" => $post->hasVoted($post, $authUsername, $post->parameter_5),
+                "hasVoted1" => $post->hasVoted($post, $this->username, $post->parameter_1),
+                "hasVoted2" => $post->hasVoted($post, $this->username, $post->parameter_2),
+                "hasVoted3" => $post->hasVoted($post, $this->username, $post->parameter_3),
+                "hasVoted4" => $post->hasVoted($post, $this->username, $post->parameter_4),
+                "hasVoted5" => $post->hasVoted($post, $this->username, $post->parameter_5),
                 "percentage1" => $percentage1,
                 "percentage2" => $percentage2,
                 "percentage3" => $percentage3,
@@ -66,8 +62,8 @@ class PostService
                 "winner" => $winner,
                 "totalVotes" => $post->polls->count(),
                 "isWithin24Hrs" => $post->isWithin24Hrs($post),
-                "hasFollowed" => $post->hasFollowed($post, $authUsername),
-                "hasLiked" => $post->hasLiked($post, $authUsername),
+                "hasFollowed" => $post->hasFollowed($post, $this->username),
+                "hasLiked" => $post->hasLiked($post, $this->username),
                 "hasEdited" => $post->hasEdited($post),
                 "likes" => $post->likes->count(),
                 "comments" => $post->comments->count(),

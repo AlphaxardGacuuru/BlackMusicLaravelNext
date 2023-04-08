@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\CartVideo;
 
-class CartVideoService
+class CartVideoService extends Service
 {
     /**
      * Display a listing of the resource.
@@ -13,12 +13,7 @@ class CartVideoService
      */
     public function index()
     {
-        // Check if user is logged in
-        $auth = auth('sanctum')->user();
-
-        $authUsername = $auth ? $auth->username : '@guest';
-
-        $getCartVideos = CartVideo::where('username', $authUsername)
+        $getCartVideos = CartVideo::where('username', $this->username)
             ->get();
 
         $cartVideos = [];
@@ -40,13 +35,13 @@ class CartVideoService
                 "thumbnail" => $cartVideo->video->thumbnail,
                 "description" => $cartVideo->video->description,
                 "released" => $cartVideo->video->released,
-                "hasLiked" => $cartVideo->video->hasLiked($authUsername),
+                "hasLiked" => $cartVideo->video->hasLiked($this->username),
                 "likes" => $cartVideo->video->likes->count(),
                 "comments" => $cartVideo->video->comments->count(),
-                "inCart" => $cartVideo->video->inCart($authUsername),
-                "hasBoughtVideo" => $cartVideo->video->hasBoughtVideo($authUsername),
-                "hasBought1" => $cartVideo->video->user->hasBought1($authUsername),
-                "hasFollowed" => $cartVideo->video->user->hasFollowed($authUsername),
+                "inCart" => $cartVideo->video->inCart($this->username),
+                "hasBoughtVideo" => $cartVideo->video->hasBoughtVideo($this->username),
+                "hasBought1" => $cartVideo->video->user->hasBought1($this->username),
+                "hasFollowed" => $cartVideo->video->user->hasFollowed($this->username),
                 "downloads" => $cartVideo->video->bought->count(),
                 "createdAt" => $cartVideo->video->created_at,
             ]);

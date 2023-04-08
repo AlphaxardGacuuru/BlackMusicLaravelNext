@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\PostLike;
 
-class PostLikeService
+class PostLikeService extends Service
 {
     /**
      * Store a newly created resource in storage.

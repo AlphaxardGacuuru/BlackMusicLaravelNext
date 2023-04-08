@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class UserService
+class UserService extends Service
 {
     /**
      * Display a listing of the resource.
@@ -18,11 +18,6 @@ class UserService
      */
     public function index()
     {
-        // Check if user is logged in
-        $auth = auth('sanctum')->user();
-
-        $authUsername = $auth ? $auth->username : '@guest';
-
         $getUsers = User::all();
 
         $users = [];
@@ -30,7 +25,7 @@ class UserService
         // Get Users
         foreach ($getUsers as $user) {
 
-            array_push($users, $this->structure($user, $authUsername));
+            array_push($users, $this->structure($user));
         }
 
         return $users;
@@ -116,10 +111,10 @@ class UserService
     {
         $auth = auth('sanctum')->user();
 
-        return $this->structure($auth, $auth->username);
+        return $this->structure($auth);
     }
 
-    public function structure($user, $authUsername)
+    public function structure($user)
     {
         return [
             "id" => $user->id,
@@ -136,8 +131,8 @@ class UserService
             "posts" => $user->posts->count(),
             "following" => $user->follows->count() - 1,
             "fans" => $user->fans(),
-            "hasFollowed" => $user->hasFollowed($authUsername),
-            "hasBought1" => $user->hasBought1($authUsername),
+            "hasFollowed" => $user->hasFollowed($this->username),
+            "hasBought1" => $user->hasBought1($this->username),
             "decos" => $user->decos->count(),
             "balance" => $user->balance(),
             "created_at" => $user->created_at,

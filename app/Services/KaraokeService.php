@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Karaoke;
 
-class KaraokeService
+class KaraokeService extends Service
 {
     /**
      * Display a listing of the resource.
@@ -14,10 +14,6 @@ class KaraokeService
      */
     public function index()
     {
-        // Check if user is logged in
-        $auth = auth('sanctum')->user();
-        $authUsername = $auth ? $auth->username : '@guest';
-
         // Get Karaokes
         $getKaraokes = Karaoke::orderBy('id', 'ASC')->get();
 
@@ -36,8 +32,8 @@ class KaraokeService
                 "avatar" => $karaoke->user->avatar,
                 "decos" => $karaoke->user->decos->count(),
                 "description" => $karaoke->description,
-                "hasLiked" => $karaoke->hasLiked($authUsername),
-                "hasSaved" => $karaoke->hasSaved($authUsername),
+                "hasLiked" => $karaoke->hasLiked($this->username),
+                "hasSaved" => $karaoke->hasSaved($this->username),
                 "likes" => $karaoke->likes->count(),
                 "comments" => $karaoke->comments->count(),
                 "created_at" => $karaoke->created_at,

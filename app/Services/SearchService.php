@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Search;
 
-class SearchService
+class SearchService extends Service
 {
     /**
      * Display a listing of the resource.
@@ -13,12 +13,7 @@ class SearchService
      */
     public function index()
     {
-        // Check if user is logged in
-        $auth = auth('sanctum')->user();
-
-        $authUsername = $auth ? $auth->username : '@guest';
-
-        return Search::where('username', $authUsername)->get();
+        return Search::where('username', $this->username)->get();
     }
 
     /**

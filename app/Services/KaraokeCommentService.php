@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\KaraokeComment;
 
-class KaraokeCommentService
+class KaraokeCommentService extends Service
 {
 
     /**
@@ -14,10 +14,6 @@ class KaraokeCommentService
      */
     public function index()
     {
-        // Check if user is logged in
-        $auth = auth('sanctum')->user();
-        $authUsername = $auth ? $auth->username : '@guest';
-
         $getKaraokeComments = KaraokeComment::orderBy('id', 'DESC')->get();
 
         $karaokeComments = [];
@@ -31,7 +27,7 @@ class KaraokeCommentService
                 "username" => $karaokeComment->username,
                 "name" => $karaokeComment->user->name,
                 "avatar" => $karaokeComment->user->avatar,
-                "hasLiked" => $karaokeComment->hasLiked($authUsername),
+                "hasLiked" => $karaokeComment->hasLiked($this->username),
                 "likes" => $karaokeComment->likes->count(),
                 "created_at" => $karaokeComment->created_at,
             ]);

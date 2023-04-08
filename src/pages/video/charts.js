@@ -9,21 +9,36 @@ import VideoMedia from "@/components/Video/VideoMedia"
 import AvatarMedia from "@/components/User/AvatarMedia"
 
 const VideoCharts = (props) => {
+	const router = useRouter()
+
+	//Declare States
+	const [chart, setChart] = useState("Newly Released")
+	const [genre, setGenre] = useState("All")
+	const [artistSlice, setArtistSlice] = useState(8)
+	const [videoSlice, setVideoSlice] = useState(8)
 	const [newlyReleased, setNewlyReleased] = useState([])
 	const [trending, setTrending] = useState([])
 	const [topDownloaded, setTopDownloaded] = useState([])
 	const [topLiked, setTopLiked] = useState([])
 
 	useEffect(() => {
-		// Fetch Newly Released Videos
-		props.get("video-charts/newly-released", setNewlyReleased)
-		// Fetch Trending Videos
-		props.get("video-charts/trending", setTrending)
-		// Fetch Top Downloaded Videos
-		props.get("video-charts/top-downloaded", setTopDownloaded)
-		// Fetch Top Liked Videos
-		props.get("video-charts/top-liked", setTopLiked)
+		// Set state for chart list
+		if (chart == "Newly Released") {
+			// Fetch Newly Released Videos
+			props.get("video-charts/newly-released", setNewlyReleased)
+		} else if (chart == "Trending") {
+			// Fetch Trending Videos
+			props.get("video-charts/trending", setTrending)
+		} else if (chart == "Top Downloaded") {
+			// Fetch Top Downloaded Videos
+			props.get("video-charts/top-downloaded", setTopDownloaded)
+		} else {
+			// Fetch Top Liked Videos
+			props.get("video-charts/top-liked", setTopLiked)
+		}
+	}, [chart])
 
+	useEffect(() => {
 		// Load more on page bottom
 		window.onscroll = function (ev) {
 			if (router.pathname.match(/video-charts/)) {
@@ -36,14 +51,6 @@ const VideoCharts = (props) => {
 			}
 		}
 	}, [])
-
-	const router = useRouter()
-
-	//Declare States
-	const [chart, setChart] = useState("Newly Released")
-	const [genre, setGenre] = useState("All")
-	const [artistSlice, setArtistSlice] = useState(8)
-	const [videoSlice, setVideoSlice] = useState(8)
 
 	// Array for links
 	const charts = ["Newly Released", "Trending", "Top Downloaded", "Top Liked"]
@@ -78,16 +85,6 @@ const VideoCharts = (props) => {
 	} else {
 		var chartList = topLiked
 	}
-
-	// Generate Arrays
-	chartList.videos?.filter((video) => {
-		// Filter for genres
-		if (genre == "All") {
-			return true
-		} else {
-			return video.genre == genre
-		}
-	})
 
 	// Function for loading more artists
 	const handleScroll = (e) => {
@@ -206,6 +203,7 @@ const VideoCharts = (props) => {
 						{/* Real Video items */}
 						{chartList.videos
 							?.filter((video) => video.username != "@blackmusic")
+							.filter((video) => (genre == "All" ? true : video.genre == genre))
 							.slice(0, videoSlice)
 							.map((video, key) => (
 								<span style={{ textAlign: "center" }}>

@@ -80,12 +80,23 @@ class AudioController extends Controller
      * Display a listing of the charts.
      *
      */
-    public function charts()
+    public function newlyReleased(AudioService $service)
     {
-        return DB::table('audio_likes')
-            ->select('audio_id', DB::raw('count(*) as likes'))
-            ->groupBy('audio_id')
-            ->orderBy('likes', 'DESC')
-            ->get();
+        return $service->newlyReleased();
+    }
+
+    public function trending(AudioService $service)
+    {
+        return $service->trending();
+    }
+
+    public function topDownloaded(AudioService $service)
+    {
+		return $service->topDownloaded();
+    }
+
+    public function topLiked(AudioService $service)
+    {
+		return $service->topLiked();
     }
 }

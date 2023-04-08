@@ -101,15 +101,18 @@ Route::apiResources([
 ]);
 // });
 
-// Video 
+// Video Charts
 Route::get('video-charts/newly-released', [VideoController::class, 'newlyReleased']);
 Route::get('video-charts/trending', [VideoController::class, 'trending']);
 Route::get('video-charts/top-downloaded', [VideoController::class, 'topDownloaded']);
 Route::get('video-charts/top-liked', [VideoController::class, 'topLiked']);
 Route::get('videos/download', [VideoController::class, 'download']);
 
-// Audio
-Route::get('audio-charts', [AudioController::class, 'charts']);
+// Audio Charts
+Route::get('audio-charts/newly-released', [AudioController::class, 'newlyReleased']);
+Route::get('audio-charts/trending', [AudioController::class, 'trending']);
+Route::get('audio-charts/top-downloaded', [AudioController::class, 'topDownloaded']);
+Route::get('audio-charts/top-liked', [AudioController::class, 'topLiked']);
 Route::get('audios/download', [AudioController::class, 'download']);
 
 // Filepond Controller

@@ -3,20 +3,26 @@
 namespace App\Services;
 
 use App\Models\Audio;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class AudioService extends Service
 {
     public function index()
     {
-        // Get Audios
+        /**
+         * Display a listing of the resource.
+         *
+         */
         $getAudios = Audio::orderBy('id', 'ASC')->get();
 
         $audios = [];
 
         foreach ($getAudios as $audio) {
 
-            array_push($audios, $this->structure($audio, $this->username));
+            array_push($audios, $this->structure($audio));
         }
 
         return $audios;
@@ -25,8 +31,6 @@ class AudioService extends Service
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\AudioAlbum  $audioAlbum
-     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
@@ -35,11 +39,15 @@ class AudioService extends Service
 
         $audio = [];
 
-        array_push($audio, $this->structure($getAudio, $this->username));
+        array_push($audio, $this->structure($getAudio));
 
         return $audio;
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     */
     public function store($request)
     {
         /* Create new audio song */
@@ -58,7 +66,10 @@ class AudioService extends Service
         return response('Audio Uploaded', 200);
     }
 
-    /* Create new audio song */
+    /**
+     * Update the specified resource in storage.
+     *
+     */
     public function update($request, $id)
     {
         $audio = Audio::find($id);
@@ -108,7 +119,10 @@ class AudioService extends Service
         return response('Audio Edited', 200);
     }
 
-    // Download Audio
+    /**
+     * Download Audio.
+     *
+     */
     public function download($id)
     {
         $audio = Audio::find($id);
@@ -122,7 +136,117 @@ class AudioService extends Service
         return response()->download($src, $name);
     }
 
-    private function structure($audio, $username)
+    /**
+     * Newly Released Chart
+     *
+     */
+    public function newlyReleased()
+    {
+        // Get Audios
+        $newlyReleased = Audio::orderBy("id", "desc")->get();
+
+        return response($this->chart($newlyReleased), 200);
+    }
+
+    /**
+     * Trending Chart
+     *
+     */
+    public function trending()
+    {
+        $trending = DB::table('bought_audios')
+            ->select('audio_id', DB::raw('count(*) as bought'))
+            ->where("created_at", ">=", Carbon::now()->subWeek())
+            ->groupBy('audio_id')
+            ->orderBy('bought', 'DESC')
+            ->get();
+
+        return response($this->chart($trending, true), 200);
+    }
+
+    /**
+     * Top Downloaded
+     *
+     */
+    public function topDownloaded()
+    {
+        $topDownloaded = DB::table('bought_audios')
+            ->select('audio_id', DB::raw('count(*) as bought'))
+            ->groupBy('audio_id')
+            ->orderBy('bought', 'DESC')
+            ->get();
+
+        return response($this->chart($topDownloaded, true), 200);
+    }
+
+    /**
+     * Top Liked
+     *
+     */
+    public function topLiked()
+    {
+        $topLiked = DB::table('audio_likes')
+            ->select('audio_id', DB::raw('count(*) as likes'))
+            ->groupBy('audio_id')
+            ->orderBy('likes', 'DESC')
+            ->get();
+
+        return response($this->chart($topLiked, true), 200);
+    }
+
+    /**
+     * Structure charts
+     *
+     */
+    public function chart($list, $loop = false)
+    {
+        $audioModel = $list;
+
+        // Check if items should be fetched
+        if ($loop) {
+            $audioModel = [];
+
+            foreach ($list as $item) {
+                $audio = Audio::find($item->audio_id);
+
+                array_push($audioModel, $audio);
+            }
+        }
+
+        $audios = [];
+
+        $chartArtists = [];
+
+        // Populate Audios and Artists array
+        foreach ($audioModel as $audio) {
+            array_push($audios, $this->structure($audio, $this->username));
+            array_push($chartArtists, $audio->username);
+        }
+
+        // Count occurrences of artists
+        $chartArtists = array_count_values($chartArtists);
+
+        // Sort artists based on most occurences
+        arsort($chartArtists);
+
+        // Get usernames only
+        $chartArtists = array_keys($chartArtists);
+
+        $artists = [];
+
+        // Get Artists
+        foreach ($chartArtists as $artist) {
+            $getArtist = User::where("username", $artist)->first();
+
+            $userService = new UserService;
+
+            array_push($artists, $userService->structure($getArtist, $this->username));
+        }
+
+        return ["artists" => $artists, "audios" => $audios];
+    }
+
+    private function structure($audio)
     {
         return [
             "id" => $audio->id,
@@ -139,13 +263,13 @@ class AudioService extends Service
             "thumbnail" => $audio->thumbnail,
             "description" => $audio->description,
             "released" => $audio->released,
-            "hasLiked" => $audio->hasLiked($username),
+            "hasLiked" => $audio->hasLiked($this->username),
             "likes" => $audio->likes->count(),
             "comments" => $audio->comments->count(),
-            "inCart" => $audio->inCart($username),
-            "hasBoughtAudio" => $audio->hasBoughtAudio($username),
-            "hasBought1" => $audio->user->hasBought1($username),
-            "hasFollowed" => $audio->user->hasFollowed($username),
+            "inCart" => $audio->inCart($this->username),
+            "hasBoughtAudio" => $audio->hasBoughtAudio($this->username),
+            "hasBought1" => $audio->user->hasBought1($this->username),
+            "hasFollowed" => $audio->user->hasFollowed($this->username),
             "downloads" => $audio->bought->count(),
             "createdAt" => $audio->created_at,
         ];

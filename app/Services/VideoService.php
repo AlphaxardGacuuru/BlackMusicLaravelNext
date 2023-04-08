@@ -22,7 +22,7 @@ class VideoService extends Service
         $videos = [];
 
         foreach ($getVideos as $video) {
-            array_push($videos, $this->structure($video, $this->username));
+            array_push($videos, $this->structure($video));
         }
 
         return $videos;
@@ -39,7 +39,7 @@ class VideoService extends Service
 
         $video = [];
 
-        array_push($video, $this->structure($getVideo, $this->username));
+        array_push($video, $this->structure($getVideo));
 
         return $video;
     }
@@ -54,7 +54,7 @@ class VideoService extends Service
         $video = new Video;
         $video->video = $request->input('video');
         $video->name = $request->input('name');
-        $video->username = $this->username;
+        $video->username = auth("sanctum")->user()->username;
         $video->ft = $request->input('ft');
         $video->video_album_id = $request->input('video_album_id');
         $video->genre = $request->input('genre');
@@ -219,7 +219,7 @@ class VideoService extends Service
 
         // Populate Videos and Artists array
         foreach ($videoModel as $video) {
-            array_push($videos, $this->structure($video, $this->username));
+            array_push($videos, $this->structure($video));
             array_push($chartArtists, $video->username);
         }
 
@@ -240,7 +240,7 @@ class VideoService extends Service
 
             $userService = new UserService;
 
-            array_push($artists, $userService->structure($getArtist, $this->username));
+            array_push($artists, $userService->structure($getArtist));
         }
 
         return ["artists" => $artists, "videos" => $videos];
@@ -250,7 +250,7 @@ class VideoService extends Service
      * Structure Video
      *
      */
-    private function structure($video, $username)
+    private function structure($video)
     {
         return [
             "id" => $video->id,
@@ -267,13 +267,13 @@ class VideoService extends Service
             "thumbnail" => $video->thumbnail,
             "description" => $video->description,
             "released" => $video->released,
-            "hasLiked" => $video->hasLiked($username),
+            "hasLiked" => $video->hasLiked($this->username),
             "likes" => $video->likes->count(),
             "comments" => $video->comments->count(),
-            "inCart" => $video->inCart($username),
-            "hasBoughtVideo" => $video->hasBoughtVideo($username),
-            "hasBought1" => $video->user->hasBought1($username),
-            "hasFollowed" => $video->user->hasFollowed($username),
+            "inCart" => $video->inCart($this->username),
+            "hasBoughtVideo" => $video->hasBoughtVideo($this->username),
+            "hasBought1" => $video->user->hasBought1($this->username),
+            "hasFollowed" => $video->user->hasFollowed($this->username),
             "downloads" => $video->bought->count(),
             "createdAt" => $video->created_at,
         ];

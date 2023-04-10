@@ -38,6 +38,7 @@ use App\Http\Controllers\VideoCommentLikeController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\VideoLikeController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -153,3 +154,5 @@ Route::prefix('filepond')->group(function () {
 
 // Kopokopo STK Push
 Route::post('stk-push', [KopokopoController::class, 'stkPush']);
+
+Broadcast::routes(['middleware' => ['auth:sanctum']]);

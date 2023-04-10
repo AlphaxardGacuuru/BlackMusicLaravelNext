@@ -176,7 +176,7 @@ const AudioEdit = (props) => {
 														key={key}
 														value={audioAlbum.id}
 														className="bg-dark text-light"
-														selected={editAudio.audioAlbumId == audioAlbum.id ? true : false}>
+														selected={editAudio?.audioAlbumId == audioAlbum.id ? true : false}>
 														{audioAlbum.name}
 													</option>
 												))}

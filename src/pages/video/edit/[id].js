@@ -121,13 +121,10 @@ const VideoEdit = (props) => {
 						<div className="col-12">
 							<div className="contact-form text-center call-to-action-content wow fadeInUp" data-wow-delay="0.5s">
 								<h2>Edit Video</h2>
-								{editVideo &&
+								{editVideo && (
 									<div className="d-flex text-start">
 										<div className="thumbnail">
-											<Img
-												src={editVideo.thumbnail}
-												width="8em"
-												height="4em" />
+											<Img src={editVideo.thumbnail} width="8em" height="4em" />
 										</div>
 										<div className="px-2">
 											<h1 className="my-0">{editVideo.name}</h1>
@@ -137,7 +134,8 @@ const VideoEdit = (props) => {
 											</h6>
 											<small className="ml-1">{editVideo.released}</small>
 										</div>
-									</div>}
+									</div>
+								)}
 								<br />
 								<div className="form-group">
 									<form onSubmit={onSubmit}>
@@ -146,7 +144,8 @@ const VideoEdit = (props) => {
 											name="name"
 											className="form-control"
 											placeholder={editVideo?.name}
-											onChange={(e) => setName(e.target.value)} />
+											onChange={(e) => setName(e.target.value)}
+										/>
 										<br />
 										<br />
 
@@ -159,21 +158,20 @@ const VideoEdit = (props) => {
 											name="ft"
 											className="form-control"
 											placeholder={editVideo?.ft}
-											onChange={(e) => setFt(e.target.value)} />
+											onChange={(e) => setFt(e.target.value)}
+										/>
 										<br />
 										<br />
 
-										<select
-											name='album'
-											className='form-control'
-											onChange={(e) => setVideoAlbumId(e.target.value)}>
+										<select name="album" className="form-control" onChange={(e) => setVideoAlbumId(e.target.value)}>
 											{props.videoAlbums
 												.filter((videoAlbum) => videoAlbum.username == props.auth.username)
 												.map((videoAlbum, key) => (
 													<option
 														key={key}
 														value={videoAlbum.id}
-														className="bg-dark text-light">
+														className="bg-dark text-light"
+														selected={editVideo?.videoAlbumId == videoAlbum.id ? true : false}>
 														{videoAlbum.name}
 													</option>
 												))}
@@ -182,15 +180,18 @@ const VideoEdit = (props) => {
 										<br />
 
 										<select
-											name='genre'
-											className='form-control'
-											placeholder='Select video genre'
-											onChange={(e) => { setGenre(e.target.value) }}>
+											name="genre"
+											className="form-control"
+											placeholder="Select video genre"
+											onChange={(e) => {
+												setGenre(e.target.value)
+											}}>
 											{genres.map((genre, key) => (
-												<option key={key}
+												<option
+													key={key}
 													value={genre}
 													className="bg-dark text-light"
-													selected={genre == editVideo.genre ? true : false}>
+													selected={genre == editVideo?.genre ? true : false}>
 													{genre}
 												</option>
 											))}
@@ -206,7 +207,8 @@ const VideoEdit = (props) => {
 											className="form-control"
 											style={{ colorScheme: "dark" }}
 											placeholder={editVideo?.released}
-											onChange={(e) => setReleased(e.target.value)} />
+											onChange={(e) => setReleased(e.target.value)}
+										/>
 										<br />
 										<br />
 
@@ -229,36 +231,39 @@ const VideoEdit = (props) => {
 											name="filepond-thumbnail"
 											labelIdle='Drag & Drop your Image or <span class="filepond--label-action text-dark"> Browse </span>'
 											imageCropAspectRatio="16:9"
-											acceptedFileTypes={['image/*']}
+											acceptedFileTypes={["image/*"]}
 											stylePanelAspectRatio="16:9"
 											allowRevert={false}
 											server={{
 												url: `${props.url}/api/filepond`,
 												process: {
 													url: `/video-thumbnail/${editVideo?.id}`,
-													onload: res => {
+													onload: (res) => {
 														// Update Videos
-														axios.get(`${props.url}/api/videos`)
-															.then((res) => props.setVideos(res.data))
+														axios.get(`${props.url}/api/videos`).then((res) => props.setVideos(res.data))
 													},
-													onerror: (err) => console.log(err.response.data)
+													onerror: (err) => console.log(err.response.data),
 												},
 												revert: {
 													url: `/video-thumbnail/${thumbnail.substr(17)}`,
-													onload: res => props.setMessages([res]),
+													onload: (res) => props.setMessages([res]),
 												},
-											}} />
+											}}
+										/>
 										<br />
 										<br />
 
 										<label className="text-light">Upload Video</label>
-										<h6 className="text-primary">If the video is too large you can upload it to Youtube for compression, download it, delete it, then upload it here.</h6>
+										<h6 className="text-primary">
+											If the video is too large you can upload it to Youtube for compression, download it, delete it,
+											then upload it here.
+										</h6>
 										<br />
 
 										<FilePond
 											name="filepond-video"
 											labelIdle='Drag & Drop your Video or <span class="filepond--label-action text-dark"> Browse </span>'
-											acceptedFileTypes={['video/*']}
+											acceptedFileTypes={["video/*"]}
 											stylePanelAspectRatio="16:9"
 											maxFileSize="200000000"
 											allowRevert={false}
@@ -268,25 +273,27 @@ const VideoEdit = (props) => {
 													url: `/video/${editVideo?.id}`,
 													onload: (res) => {
 														// Update Videos
-														axios.get(`${props.url}/api/videos`)
-															.then((res) => props.setVideos(res.data))
+														axios.get(`${props.url}/api/videos`).then((res) => props.setVideos(res.data))
 													},
-													onerror: (err) => console.log(err.response.data)
+													onerror: (err) => console.log(err.response.data),
 												},
 												revert: {
 													url: `/video/${video}`,
-													onload: res => {
+													onload: (res) => {
 														props.setMessages([res])
 													},
 												},
-											}} />
+											}}
+										/>
 										<br />
 										<br />
 
 										<Btn btnText="edit video" loading={btnLoading} />
 									</form>
 									<br />
-									<Link href="/video"><a className="btn sonar-btn btn-2">studio</a></Link>
+									<Link href="/video">
+										<a className="btn sonar-btn btn-2">studio</a>
+									</Link>
 								</div>
 							</div>
 						</div>

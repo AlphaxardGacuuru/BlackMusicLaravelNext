@@ -1,18 +1,29 @@
 import "bootstrap/dist/css/bootstrap.css"
 import "@/styles/dark.css"
-import("next").NextConfig
+// import("next").NextConfig
+
+import React, { useState, useEffect, useRef } from "react"
+import axios from "@/lib/axios"
 
 import LoginPopUp from "@/components/Auth/LoginPopUp"
 import TopNav from "@/components/Layouts/TopNav"
 import BottomNav from "@/components/Layouts/BottomNav"
 import Messages from "@/components/Core/Messages"
-
-import React, { useState, useEffect, useRef } from "react"
-import axios from "@/lib/axios"
 import AudioPlayer from "@/components/Audio/AudioPlayer"
 import onAudioPlayer from "@/functions/onAudioPlayer"
+import EchoConfig from "@/lib/echo"
 
 const App = ({ Component, pageProps }) => {
+	useEffect(() => {
+		EchoConfig()
+
+		var postId = 7
+
+		Echo.private(`post-comments.${postId}`).listen("PostCommentedEvent", (e) => {
+			return console.log(e)
+		})
+	}, [])
+
 	/*
 	 *
 	 * Register service worker */

@@ -11,11 +11,12 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PostCommentedEvent
+class PostCommentedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
 	public $comment;
+	public $post;
 
     /**
      * Create a new event instance.
@@ -35,6 +36,6 @@ class PostCommentedEvent
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new PrivateChannel('post-comments.' . $this->post->id);
     }
 }

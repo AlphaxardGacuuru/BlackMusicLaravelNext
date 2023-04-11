@@ -5,10 +5,20 @@ namespace App\Services;
 use App\Models\Kopokopo;
 use App\Models\User;
 
-// use Kopokopo\SDK\K2;
+use Kopokopo\SDK\K2;
 
 class KopokopoService extends Service
 {
+	/*
+	*
+     * Display a listing of the resource.
+	*
+	*/ 
+	public function index()
+	{
+		// 
+	}
+
     /**
      * Send STK Push to Kopokopo.
      *
@@ -61,7 +71,7 @@ class KopokopoService extends Service
             'firstName' => $firstname,
             'lastName' => $lastname,
             'phoneNumber' => $betterPhone,
-            // 'amount' => $request->input('amount'),
+            'amount' => $request->input('amount'),
             'amount' => '+254700364446',
             'currency' => 'KES',
             'email' => auth('sanctum')->user()->email,
@@ -75,7 +85,7 @@ class KopokopoService extends Service
             // => 'https://sandbox.kopokopo.com/api/v1/incoming_payments/247b1bd8-f5a0-4b71-a898-f62f67b8ae1c'
             return response('Request sent to your phone', 200);
         } else {
-            return response($response['status'], 400);
+            return response($response, 400);
         }
     }
 
@@ -96,6 +106,7 @@ class KopokopoService extends Service
 
         // Get username
         $betterPhone = substr_replace($resource['sender_phone_number'], '0', 0, -9);
+
         $username = User::where('phone', $betterPhone)
             ->first()
             ->username;

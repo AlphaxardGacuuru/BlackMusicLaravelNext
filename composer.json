@@ -8,6 +8,7 @@
         "php": "^8.0.2",
         "beyondcode/laravel-websockets": "^1.14",
         "doctrine/dbal": "^3.5",
+        "fabianmuema/kopokopo": "dev-main",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",

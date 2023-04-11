@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '05952e6ab0a6b2dcecd70e9bf37bcf225191c372',
+        'reference' => 'a3765215c216d04d84437f6b4f1e7f7c2938c963',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -146,6 +146,17 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../evenement/evenement',
             'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'fabianmuema/kopokopo' => array(
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '3e776c2d4d62e8ea12b71ac54bbf033bfe450e4a',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../fabianmuema/kopokopo',
+            'aliases' => array(
+                0 => '9999999-dev',
+            ),
             'dev_requirement' => false,
         ),
         'facade/ignition-contracts' => array(
@@ -466,7 +477,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '05952e6ab0a6b2dcecd70e9bf37bcf225191c372',
+            'reference' => 'a3765215c216d04d84437f6b4f1e7f7c2938c963',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "294a675f0ecce817112f28bedba39112",
+    "content-hash": "b48b2fa7203232aca0b662ca81c7667f",
     "packages": [
         {
             "name": "beyondcode/laravel-websockets",
@@ -964,6 +964,55 @@
                 "source": "https://github.com/igorw/evenement/tree/master"
             },
             "time": "2017-07-23T21:35:13+00:00"
+        },
+        {
+            "name": "fabianmuema/kopokopo",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fabianmuema/kopokopo.git",
+                "reference": "3e776c2d4d62e8ea12b71ac54bbf033bfe450e4a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fabianmuema/kopokopo/zipball/3e776c2d4d62e8ea12b71ac54bbf033bfe450e4a",
+                "reference": "3e776c2d4d62e8ea12b71ac54bbf033bfe450e4a",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Kopokopo\\SDK\\": "src/",
+                    "Kopokopo\\SDK\\Data\\": "src/data",
+                    "Kopokopo\\SDK\\Tests\\": "tests",
+                    "Kopokopo\\SDK\\Helpers\\": "src/helpers",
+                    "Kopokopo\\SDK\\Requests\\": "src/requests"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabian Muema",
+                    "email": "muemafabian@gmail.com"
+                }
+            ],
+            "description": "Update of the kopo kopo php sdk",
+            "homepage": "https://github.com/fabianmuema/kopokopo",
+            "support": {
+                "issues": "https://github.com/fabianmuema/kopokopo/issues",
+                "source": "https://github.com/fabianmuema/kopokopo/tree/main"
+            },
+            "time": "2023-04-01T14:18:03+00:00"
         },
         {
             "name": "facade/ignition-contracts",
@@ -10573,7 +10622,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "fabianmuema/kopokopo": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

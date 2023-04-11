@@ -21,7 +21,7 @@ const Cart = (props) => {
 	// Send STKPush
 	const STKPush = (amount) => {
 		axios
-			.post(`/api/stk-push/`, { amount: amount })
+			.post(`/api/stk-push`, { amount: amount })
 			.then((res) => props.setMessages([res.data]))
 			.catch((err) => props.getErrors(err, true))
 	}
@@ -117,9 +117,7 @@ const Cart = (props) => {
 							{/* Cart Videos */}
 							{props.cartVideos.length > 0 && (
 								<>
-									<h3 className="pt-4 pb-2 border-bottom border-dark">
-										Videos
-									</h3>
+									<h3 className="pt-4 pb-2 border-bottom border-dark">Videos</h3>
 									<hr />
 								</>
 							)}
@@ -146,9 +144,7 @@ const Cart = (props) => {
 						{props.cartAudios.length > 0 && (
 							<>
 								<center>
-									<h3 className="pt-4 pb-2 border-bottom border-dark">
-										Audios
-									</h3>
+									<h3 className="pt-4 pb-2 border-bottom border-dark">Audios</h3>
 								</center>
 								<hr />
 							</>
@@ -175,9 +171,7 @@ const Cart = (props) => {
 							<h3 className="pt-4 pb-2 border-bottom border-dark">Total</h3>
 							<hr />
 							<h3 className="text-success"> KES {total}</h3>
-							<h5 className="text-success">
-								Your account balance: KES {props.auth.balance}
-							</h5>
+							<h5 className="text-success">Your account balance: KES {props.auth.balance}</h5>
 							<br />
 
 							{/* {{-- Collapse --}} */}
@@ -196,10 +190,7 @@ const Cart = (props) => {
 									<div className="collapse" id="collapseExample">
 										<div className="">
 											<br />
-											<h5>
-												Once you click the button below a pop up will appear on
-												your phone asking you to pay
-											</h5>
+											<h5>Once you click the button below a pop up will appear on your phone asking you to pay</h5>
 											<h4 className="text-success">KES {total}</h4>
 											<h5>to</h5>
 											<h4 style={{ color: "dodgerblue" }}>Kopokopo</h4>
@@ -213,8 +204,8 @@ const Cart = (props) => {
 												onClick={(e) => {
 													e.preventDefault()
 													setBottomMenu("menu-open")
-													onPay()
-													// STKPush(total)
+													// onPay()
+													STKPush(total)
 												}}
 											/>
 										</div>
@@ -272,27 +263,13 @@ const Cart = (props) => {
 
 					<center>
 						<h5>
-							Request was sent to{" "}
-							<span style={{ color: "dodgerblue" }}>{props.auth.phone}</span>
+							Request was sent to <span style={{ color: "dodgerblue" }}>{props.auth.phone}</span>
 						</h5>
 						<br />
 
 						<h6>Checking payment</h6>
 						<div id="sonar-load" className="mt-4 mb-4"></div>
 					</center>
-
-					{/* {videoTotal > 0 && <h5 className="">Videos {videoTotal}</h5>}
-					{audioTotal > 0 && <h5 className="mb-2">Audios {audioTotal}</h5>}
-
-					<h4 className="text-success mb-2">Total KES {total}</h4>
-					<h5 className="text-success">Mpesa (STK Push) <span>{props.auth.phone}</span></h5>
-					<br />
-
-					<Button
-						btnClass="mysonar-btn green-btn"
-						btnText="pay"
-						btnStyle={{ width: "80%" }}
-						onClick={onPay} /> */}
 
 					<br />
 					<br />
@@ -310,9 +287,7 @@ const Cart = (props) => {
 						</div>
 
 						{/* <!-- Close Icon --> */}
-						<div
-							className="closeIcon p-2 float-right"
-							onClick={() => setReceipt("")}>
+						<div className="closeIcon p-2 float-right" onClick={() => setReceipt("")}>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								width="40"

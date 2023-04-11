@@ -13,9 +13,9 @@ class KopokopoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(KopokopoService $service)
     {
-        //
+        return $service->index();
     }
 
     /**

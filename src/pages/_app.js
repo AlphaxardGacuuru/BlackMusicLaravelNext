@@ -11,18 +11,8 @@ import BottomNav from "@/components/Layouts/BottomNav"
 import Messages from "@/components/Core/Messages"
 import AudioPlayer from "@/components/Audio/AudioPlayer"
 import onAudioPlayer from "@/functions/onAudioPlayer"
-import EchoConfig from "@/lib/echo"
 
 const App = ({ Component, pageProps }) => {
-	useEffect(() => {
-		EchoConfig()
-
-		var postId = 7
-
-		Echo.private(`post-comments.${postId}`).listen("PostCommentedEvent", (e) => {
-			return console.log(e)
-		})
-	}, [])
 
 	/*
 	 *

@@ -42,7 +42,7 @@ const PostCreate = (props) => {
 								</Link>
 							)}
 						</div>
-						<h1>Post Create</h1>
+						<h1>Create Post</h1>
 						<a className="invisible">
 							<CloseSVG />
 						</a>

@@ -48,9 +48,9 @@ class PostCommentController extends Controller
      * @param  \App\Models\PostComment  $postComment
      * @return \Illuminate\Http\Response
      */
-    public function show(PostComment $postComment)
+    public function show($id, PostCommentService $service)
     {
-        //
+        return $service->show($id);
     }
 
     /**

@@ -1072,6 +1072,58 @@
             "install-path": "../evenement/evenement"
         },
         {
+            "name": "fabianmuema/kopokopo",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fabianmuema/kopokopo.git",
+                "reference": "3e776c2d4d62e8ea12b71ac54bbf033bfe450e4a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fabianmuema/kopokopo/zipball/3e776c2d4d62e8ea12b71ac54bbf033bfe450e4a",
+                "reference": "3e776c2d4d62e8ea12b71ac54bbf033bfe450e4a",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7"
+            },
+            "time": "2023-04-01T14:18:03+00:00",
+            "default-branch": true,
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Kopokopo\\SDK\\": "src/",
+                    "Kopokopo\\SDK\\Data\\": "src/data",
+                    "Kopokopo\\SDK\\Tests\\": "tests",
+                    "Kopokopo\\SDK\\Helpers\\": "src/helpers",
+                    "Kopokopo\\SDK\\Requests\\": "src/requests"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabian Muema",
+                    "email": "muemafabian@gmail.com"
+                }
+            ],
+            "description": "Update of the kopo kopo php sdk",
+            "homepage": "https://github.com/fabianmuema/kopokopo",
+            "support": {
+                "issues": "https://github.com/fabianmuema/kopokopo/issues",
+                "source": "https://github.com/fabianmuema/kopokopo/tree/main"
+            },
+            "install-path": "../fabianmuema/kopokopo"
+        },
+        {
             "name": "facade/ignition-contracts",
             "version": "1.0.2",
             "version_normalized": "1.0.2.0",

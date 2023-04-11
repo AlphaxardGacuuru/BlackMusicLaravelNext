@@ -47,8 +47,7 @@ export default function Home(props) {
 
 	// Function for loading more artists
 	const handleScroll = (e) => {
-		const bottom =
-			e.target.scrollLeft >= e.target.scrollWidth - e.target.scrollWidth / 3
+		const bottom = e.target.scrollLeft >= e.target.scrollWidth - e.target.scrollWidth / 3
 
 		if (bottom) {
 			setVideoSlice(videoSlice + 10)
@@ -58,8 +57,7 @@ export default function Home(props) {
 	// Random array for dummy loading elements
 	const dummyArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
-	var raise =
-		props.audioStates.show.id != 0 && props.audioStates.show.id != undefined
+	var raise = props.audioStates.show.id != 0 && props.audioStates.show.id != undefined
 
 	return (
 		<>
@@ -85,17 +83,10 @@ export default function Home(props) {
 				<div className="col-sm-3 hidden">
 					<div className="d-flex">
 						<div className="p-2">
-							<div
-								className="avatar-thumbnail-sm"
-								style={{ borderRadius: "50%" }}>
+							<div className="avatar-thumbnail-sm" style={{ borderRadius: "50%" }}>
 								<Link href={`/profile/${props.auth?.username}`}>
 									<a>
-										<Img
-											src={props.auth?.avatar}
-											width="100px"
-											height="100px"
-											alt="avatar"
-										/>
+										<Img src={props.auth?.avatar} width="100px" height="100px" alt="avatar" />
 									</a>
 								</Link>
 							</div>
@@ -123,9 +114,7 @@ export default function Home(props) {
 							</h6>
 							<span style={{ color: "gold" }}>
 								<DecoSVG />
-								<small
-									className="ms-1 fw-lighter align-bottom"
-									style={{ color: "inherit" }}>
+								<small className="ms-1 fw-lighter align-bottom" style={{ color: "inherit" }}>
 									{props.auth?.decos}
 								</small>
 							</span>
@@ -134,16 +123,12 @@ export default function Home(props) {
 					<div className="d-flex">
 						<div className="p-2 flex-fill">
 							<h6>Posts</h6>
-							<span style={{ color: "rgba(220, 220, 220, 1)" }}>
-								{props.auth?.posts}
-							</span>
+							<span style={{ color: "rgba(220, 220, 220, 1)" }}>{props.auth?.posts}</span>
 							<br />
 						</div>
 						<div className="p-2 flex-fill">
 							<h6>Fans</h6>
-							<span style={{ color: "rgba(220, 220, 220, 1)" }}>
-								{props.auth?.fans}
-							</span>
+							<span style={{ color: "rgba(220, 220, 220, 1)" }}>{props.auth?.fans}</span>
 							<br />
 						</div>
 					</div>
@@ -160,9 +145,7 @@ export default function Home(props) {
 
 						{/* Loading Musician items */}
 						{dummyArray
-							.filter(
-								() => props.users.filter((user) => user.account_type).length < 1
-							)
+							.filter(() => props.users.filter((user) => user.account_type).length < 1)
 							.map((item, key) => (
 								<LoadingMusicianMedia key={key} />
 							))}
@@ -203,11 +186,7 @@ export default function Home(props) {
 								.slice(0, videoSlice)
 								.map((video, key) => (
 									<Suspense key={key} fallback={<LoadingVideoMedia />}>
-										<VideoMedia
-											{...props}
-											video={video}
-											onClick={() => props.setShow(0)}
-										/>
+										<VideoMedia {...props} video={video} onClick={() => props.setShow(0)} />
 									</Suspense>
 								))}
 						</div>
@@ -225,24 +204,20 @@ export default function Home(props) {
 
 						{/* Posts */}
 						{props.posts
-							.filter(
-								(post) =>
-									post.hasFollowed || props.auth?.username == "@blackmusic"
-							)
+							.filter((post) => post.hasFollowed || props.auth?.username == "@blackmusic")
 							.map((post, key) => (
-								<Suspense key={key} fallback={<LoadingPostMedia />}>
-									<PostMedia
-										{...props}
-										post={post}
-										setBottomMenu={setBottomMenu}
-										setUserToUnfollow={setUserToUnfollow}
-										setPostToEdit={setPostToEdit}
-										setEditLink={setEditLink}
-										setDeleteLink={setDeleteLink}
-										onDeletePost={onDeletePost}
-										setUnfollowLink={setUnfollowLink}
-									/>
-								</Suspense>
+								<PostMedia
+									{...props}
+									key={key}
+									post={post}
+									setBottomMenu={setBottomMenu}
+									setUserToUnfollow={setUserToUnfollow}
+									setPostToEdit={setPostToEdit}
+									setEditLink={setEditLink}
+									setDeleteLink={setDeleteLink}
+									onDeletePost={onDeletePost}
+									setUnfollowLink={setUnfollowLink}
+								/>
 							))}
 					</div>
 				</div>

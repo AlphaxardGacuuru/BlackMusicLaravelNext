@@ -17,6 +17,7 @@ const PostShow = (props) => {
 	// Get id from URL
 	const { id } = router.query
 
+	const [newPostComments, setNewPostComments] = useState()
 	const [postComments, setPostComments] = useState(props.comments)
 	const [bottomMenu, setBottomMenu] = useState("")
 	const [userToUnfollow, setUserToUnfollow] = useState()
@@ -28,11 +29,12 @@ const PostShow = (props) => {
 	const [unfollowLink, setUnfollowLink] = useState()
 
 	useEffect(() => {
+		// Instantiate Echo
 		EchoConfig()
 
 		Echo.private(`post-comments.${id}`).listen("PostCommentedEvent", (e) => {
 			console.log(e.comment)
-			setPostComments([...postComments, e.comment])
+			setNewPostComments(e.comment)
 		})
 
 		// Fetch Post Comments
@@ -53,6 +55,13 @@ const PostShow = (props) => {
 		props.setStateToUpdateTwo(() => props.setPosts)
 		props.setEditing(false)
 	}, 100)
+
+	/*
+	 * Function for deleting posts */
+	const onAddComments = () => {
+		setPostComments([newPostComments, ...postComments])
+		setNewPostComments()
+	}
 
 	/*
 	 * Function for deleting posts */
@@ -115,6 +124,15 @@ const PostShow = (props) => {
 	return (
 		<>
 			<div className="row">
+				<center>
+					<h6
+						id="snackbar-up"
+						style={{ cursor: "pointer" }}
+						className={newPostComments && "show"}
+						onClick={onAddComments}>
+						<div>New Comments</div>
+					</h6>
+				</center>
 				<div className="col-sm-4"></div>
 				<div className="col-sm-4">
 					<div className="d-flex my-2">
@@ -132,17 +150,17 @@ const PostShow = (props) => {
 						.filter((post) => post.id == id)
 						.map((post, key) => (
 							<span key={key}>
-							<PostMedia
-								{...props}
-								key={key}
-								post={post}
-								setBottomMenu={setBottomMenu}
-								setUserToUnfollow={setUserToUnfollow}
-								setPostToEdit={setPostToEdit}
-								setEditLink={setEditLink}
-								setDeleteLink={setDeleteLink}
-								setUnfollowLink={setUnfollowLink}
-							/>
+								<PostMedia
+									{...props}
+									key={key}
+									post={post}
+									setBottomMenu={setBottomMenu}
+									setUserToUnfollow={setUserToUnfollow}
+									setPostToEdit={setPostToEdit}
+									setEditLink={setEditLink}
+									setDeleteLink={setDeleteLink}
+									setUnfollowLink={setUnfollowLink}
+								/>
 							</span>
 						))}
 

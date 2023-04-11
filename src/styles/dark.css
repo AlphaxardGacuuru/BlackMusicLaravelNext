@@ -949,6 +949,131 @@ a:focus {
 	}
 }
 
+#snackbar-up {
+	visibility: hidden;
+	min-width: 250px;
+	margin-left: -125px;
+	margin-right: -125px;
+	padding: 10px;
+	color: #fff;
+	text-align: center;
+	/* Center the snackbar */
+	left: 50%;
+	right: 50%;
+	top: 30px;
+	position: fixed;
+	background-color: #232323;
+	transition: 0.3s;
+	z-index: 10000002;
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#snackbar-up.show {
+	visibility: visible;
+	/* Show the snackbar */
+	/* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+  However, delay the fade out process for 2.5 seconds */
+	-webkit-animation: fadeInUp 0.5s, fadeOutUp 0.5s 2.5s;
+	animation: fadeInUp 0.5s, fadeOutUp 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadeInUp {
+	from {
+		top: 0;
+		opacity: 0;
+	}
+
+	to {
+		top: 30px;
+		opacity: 1;
+	}
+}
+
+@keyframes fadeInUp {
+	from {
+		top: 0;
+		opacity: 0;
+	}
+
+	to {
+		top: 30px;
+		opacity: 1;
+	}
+}
+
+@-webkit-keyframes fadeOutUp {
+	from {
+		top: 30px;
+		opacity: 1;
+	}
+
+	to {
+		top: 0;
+		opacity: 0;
+	}
+}
+
+@keyframes fadeOutUp {
+	from {
+		top: 30px;
+		opacity: 1;
+	}
+
+	to {
+		top: 0;
+		opacity: 0;
+	}
+}
+
+@-webkit-keyframes fadeInUp {
+	from {
+		top: 0;
+		opacity: 0;
+	}
+
+	to {
+		top: 30px;
+		opacity: 1;
+	}
+}
+
+@keyframes fadeInUp {
+	from {
+		top: 0;
+		opacity: 0;
+	}
+
+	to {
+		top: 30px;
+		opacity: 1;
+	}
+}
+
+@-webkit-keyframes fadeOutUp {
+	from {
+		top: 30px;
+		opacity: 1;
+	}
+
+	to {
+		top: 0;
+		opacity: 0;
+	}
+}
+
+@keyframes fadeOutUp {
+	from {
+		top: 30px;
+		opacity: 1;
+	}
+
+	to {
+		top: 0;
+		opacity: 0;
+	}
+}
+
 /* card */
 .my-card {
 	/* Add shadows to create the "card" effect */

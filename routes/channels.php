@@ -18,7 +18,6 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-Broadcast::channel('post-comments.{postId}', function ($user, $postId) {
-    // return $user->username === Post::findOrNew($postId)->username;
+Broadcast::channel('post-comments', function ($user) {
 	return true;
 });

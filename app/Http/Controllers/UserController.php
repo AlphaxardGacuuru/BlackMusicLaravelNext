@@ -35,9 +35,9 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show($id, UserService $userService)
+    public function show($username, UserService $userService)
     {
-        return $userService->show($id);
+        return $userService->show($username);
     }
 
     /**

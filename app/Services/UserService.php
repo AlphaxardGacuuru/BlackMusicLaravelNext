@@ -37,9 +37,11 @@ class UserService extends Service
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($username)
     {
-        return User::find($id);
+        $getUser = User::where("username", $username)->first();
+
+		return response($this->structure($getUser), 200);
     }
 
     /**

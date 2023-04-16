@@ -1,26 +1,27 @@
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import axios from '@/lib/axios';
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { useRouter } from "next/router"
+import axios from "@/lib/axios"
+import ssrAxios from "@/lib/ssrAxios"
 
-import Btn from '@/components/Core/Btn'
-import Img from '@/components/Core/Img'
+import Btn from "@/components/Core/Btn"
+import Img from "@/components/Core/Img"
 
 // Import React FilePond
-import { FilePond, registerPlugin } from 'react-filepond';
+import { FilePond, registerPlugin } from "react-filepond"
 
 // Import FilePond styles
-import 'filepond/dist/filepond.min.css';
+import "filepond/dist/filepond.min.css"
 
 // Import the Image EXIF Orientation and Image Preview plugins
 // Note: These need to be installed separately
-import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
-import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
-import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
-import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation"
+import FilePondPluginImagePreview from "filepond-plugin-image-preview"
+import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type"
+import FilePondPluginImageCrop from "filepond-plugin-image-crop"
+import FilePondPluginImageTransform from "filepond-plugin-image-transform"
+import FilePondPluginFileValidateSize from "filepond-plugin-file-validate-size"
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
 
 // Register the plugins
 registerPlugin(
@@ -30,20 +31,35 @@ registerPlugin(
 	FilePondPluginImageCrop,
 	FilePondPluginImageTransform,
 	FilePondPluginFileValidateSize
-);
+)
 
 const AudioEdit = (props) => {
-
 	// Get history for page location
 	const router = useRouter()
 
-	let { id } = router.query;
-
-	// Get Audio Album info
-	const editAudio = props.audios.find((audio) => audio.id == id)
+	let { id } = router.query
 
 	// List of Genres
-	const genres = ["All", "Afro", "Benga", "Blues", "Boomba", "Country", "Cultural", "EDM", "Genge", "Gospel", "Hiphop", "Jazz", "Music of Kenya", "Pop", "R&B", "Rock", "Sesube", "Taarab"]
+	const genres = [
+		"All",
+		"Afro",
+		"Benga",
+		"Blues",
+		"Boomba",
+		"Country",
+		"Cultural",
+		"EDM",
+		"Genge",
+		"Gospel",
+		"Hiphop",
+		"Jazz",
+		"Music of Kenya",
+		"Pop",
+		"R&B",
+		"Rock",
+		"Sesube",
+		"Taarab",
+	]
 
 	// Declare states
 	const [formData, setFormData] = useState()
@@ -54,13 +70,25 @@ const AudioEdit = (props) => {
 	const [released, setReleased] = useState("")
 	const [description, setDescription] = useState("")
 	const [thumbnail, setThumbnail] = useState("")
-	const [audio, setAudio] = useState("");
+	const [audio, setAudio] = useState("")
 	const [btnLoading, setBtnLoading] = useState()
 
+	// Get Artist's Audio Albums
+	const [artistAudioAlbums, setArtistAudioAlbums] = useState(
+		props.getLocalStorage("artistAudioAlbums")
+	)
+
 	useEffect(() => {
+		props.get(
+			`artist/audio-albums/${props.auth?.username}`,
+			setArtistAudioAlbums,
+			"artistAudioAlbums",
+			false
+		)
+
 		// Declare new FormData object for form data
 		setFormData(new FormData())
-	}, [])
+	}, [props.auth])
 
 	const onSubmit = (e) => {
 		e.preventDefault()
@@ -69,27 +97,29 @@ const AudioEdit = (props) => {
 		setBtnLoading(true)
 
 		// Add form data to FormData object
-		formData.append("name", name);
-		formData.append("ft", ft);
-		formData.append("audio_album_id", audioAlbumId);
-		formData.append("genre", genre);
-		formData.append("released", released);
-		formData.append("description", description);
-		formData.append("audio", audio);
-		formData.append("thumbnail", thumbnail);
-		formData.append("_method", 'put');
+		formData.append("name", name)
+		formData.append("ft", ft)
+		formData.append("audio_album_id", audioAlbumId)
+		formData.append("genre", genre)
+		formData.append("released", released)
+		formData.append("description", description)
+		formData.append("audio", audio)
+		formData.append("thumbnail", thumbnail)
+		formData.append("_method", "put")
 
 		// Send data to AudiosController
 		// Get csrf cookie from Laravel inorder to send a POST request
-		axios.get('sanctum/csrf-cookie').then(() => {
-			axios.post(`/api/audios/${id}`, formData)
+		axios.get("sanctum/csrf-cookie").then(() => {
+			axios
+				.post(`/api/audios/${id}`, formData)
 				.then((res) => {
 					props.setMessages([res.data])
 					// Update Audios
 					props.get("audios", props.setAudios, "audios")
 					// Remove loader for button
 					setBtnLoading(false)
-				}).catch((err) => {
+				})
+				.catch((err) => {
 					// Remove loader for button
 					setBtnLoading(false)
 					props.getErrors(err)
@@ -121,25 +151,31 @@ const AudioEdit = (props) => {
 				<div className="container">
 					<div className="row">
 						<div className="col-12">
-							<div className="contact-form text-center call-to-action-content wow fadeInUp" data-wow-delay="0.5s">
+							<div
+								className="contact-form text-center call-to-action-content wow fadeInUp"
+								data-wow-delay="0.5s">
 								<h2>Edit Audio</h2>
-								{editAudio &&
+								{props.audio && (
 									<div className="d-flex text-start">
 										<div className="thumbnail">
 											<Img
-												src={editAudio.thumbnail}
+												src={props.audio.thumbnail}
 												width="10em"
-												height="10em" />
+												height="10em"
+											/>
 										</div>
 										<div className="px-2">
-											<h1 className="my-0">{editAudio.name}</h1>
+											<h1 className="my-0">{props.audio.name}</h1>
 											<h6 className="my-0">
-												<small>{editAudio.username}</small>
-												<small className="ms-1">{editAudio.ft}</small>
+												<small>{props.audio.username}</small>
+												<small className="ms-1">{props.audio.ft}</small>
 											</h6>
-											<small className="float-start">{editAudio.released}</small>
+											<small className="float-start">
+												{props.audio.released}
+											</small>
 										</div>
-									</div>}
+									</div>
+								)}
 								<br />
 								<div className="form-group">
 									<form onSubmit={onSubmit}>
@@ -147,8 +183,9 @@ const AudioEdit = (props) => {
 											type="text"
 											name="name"
 											className="form-control"
-											placeholder={editAudio?.name}
-											onChange={(e) => setName(e.target.value)} />
+											placeholder={props.audio?.name}
+											onChange={(e) => setName(e.target.value)}
+										/>
 										<br />
 										<br />
 
@@ -160,40 +197,46 @@ const AudioEdit = (props) => {
 											type="text"
 											name="ft"
 											className="form-control"
-											placeholder={editAudio?.ft}
-											onChange={(e) => setFt(e.target.value)} />
+											placeholder={props.audio?.ft}
+											onChange={(e) => setFt(e.target.value)}
+										/>
 										<br />
 										<br />
 
 										<select
-											name='album'
-											className='form-control'
+											name="album"
+											className="form-control"
 											onChange={(e) => setAudioAlbumId(e.target.value)}>
-											{props.audioAlbums
-												.filter((audioAlbum) => audioAlbum.username == props.auth.username)
-												.map((audioAlbum, key) => (
-													<option
-														key={key}
-														value={audioAlbum.id}
-														className="bg-dark text-light"
-														selected={editAudio?.audioAlbumId == audioAlbum.id ? true : false}>
-														{audioAlbum.name}
-													</option>
-												))}
+											{artistAudioAlbums.map((audioAlbum, key) => (
+												<option
+													key={key}
+													value={audioAlbum.id}
+													className="bg-dark text-light"
+													selected={
+														props.audio?.audioAlbumId == audioAlbum.id
+															? true
+															: false
+													}>
+													{audioAlbum.name}
+												</option>
+											))}
 										</select>
 										<br />
 										<br />
 
 										<select
-											name='genre'
-											className='form-control'
-											placeholder='Select audio genre'
-											onChange={(e) => { setGenre(e.target.value) }}>
+											name="genre"
+											className="form-control"
+											placeholder="Select audio genre"
+											onChange={(e) => {
+												setGenre(e.target.value)
+											}}>
 											{genres.map((genre, key) => (
-												<option key={key}
+												<option
+													key={key}
 													value={genre}
 													className="bg-dark text-light"
-													selected={genre == editAudio?.genre ? true : false}>
+													selected={genre == props.audio?.genre ? true : false}>
 													{genre}
 												</option>
 											))}
@@ -208,8 +251,9 @@ const AudioEdit = (props) => {
 											name="released"
 											className="form-control"
 											style={{ colorScheme: "dark" }}
-											placeholder={editAudio?.released}
-											onChange={(e) => setReleased(e.target.value)} />
+											placeholder={props.audio?.released}
+											onChange={(e) => setReleased(e.target.value)}
+										/>
 										<br />
 										<br />
 
@@ -217,10 +261,12 @@ const AudioEdit = (props) => {
 											type="text"
 											name="description"
 											className="form-control"
-											placeholder={editAudio?.description}
+											placeholder={props.audio?.description}
 											cols="30"
 											rows="10"
-											onChange={(e) => setDescription(e.target.value)}></textarea>
+											onChange={(e) =>
+												setDescription(e.target.value)
+											}></textarea>
 										<br />
 										<br />
 
@@ -232,64 +278,61 @@ const AudioEdit = (props) => {
 											name="filepond-thumbnail"
 											labelIdle='Drag & Drop your Image or <span class="filepond--label-action text-dark"> Browse </span>'
 											imageCropAspectRatio="16:9"
-											acceptedFileTypes={['image/*']}
+											acceptedFileTypes={["image/*"]}
 											stylePanelAspectRatio="16:9"
 											allowRevert={false}
 											server={{
 												url: `${props.url}/api/filepond`,
 												process: {
-													url: `/audio-thumbnail/${editAudio?.id}`,
-													onload: res => {
-														// Update Audios
-														axios.get(`${props.url}/api/audios`)
-															.then((res) => props.setAudios(res.data))
-													},
-													onerror: (err) => console.log(err.response.data)
+													url: `/audio-thumbnail/${props.audio?.id}`,
+													onerror: (err) => console.log(err.response.data),
 												},
 												revert: {
 													url: `/audio-thumbnail/${thumbnail.substr(17)}`,
-													onload: res => props.setMessages([res]),
+													onload: (res) => props.setMessages([res]),
 												},
-											}} />
+											}}
+										/>
 										<br />
 										<br />
 
 										<label className="text-light">Upload Audio</label>
-										<h6 className="text-primary">If the audio is too large you can upload it to Youtube for compression, download it, delete it, then upload it here.</h6>
+										<h6 className="text-primary">
+											If the audio is too large you can upload it to Youtube for
+											compression, download it, delete it, then upload it here.
+										</h6>
 										<br />
 
 										<FilePond
 											name="filepond-audio"
 											labelIdle='Drag & Drop your Audio or <span class="filepond--label-action text-dark"> Browse </span>'
-											acceptedFileTypes={['audio/*']}
+											acceptedFileTypes={["audio/*"]}
 											stylePanelAspectRatio="16:9"
 											maxFileSize="200000000"
 											allowRevert={false}
 											server={{
 												url: `${props.url}/api/filepond`,
 												process: {
-													url: `/audio/${editAudio?.id}`,
-													onload: (res) => {
-														// Update Audios
-														axios.get(`${props.url}/api/audios`)
-															.then((res) => props.setAudios(res.data))
-													},
-													onerror: (err) => console.log(err.response.data)
+													url: `/audio/${props.audio?.id}`,
+													onerror: (err) => console.log(err.response.data),
 												},
 												revert: {
 													url: `/audio/${audio}`,
-													onload: res => {
+													onload: (res) => {
 														props.setMessages([res])
 													},
 												},
-											}} />
+											}}
+										/>
 										<br />
 										<br />
 
 										<Btn btnText="edit audio" loading={btnLoading} />
 									</form>
 									<br />
-									<Link href="/audio"><a className="btn sonar-btn btn-2">studio</a></Link>
+									<Link href="/audio">
+										<a className="btn sonar-btn btn-2">studio</a>
+									</Link>
 								</div>
 							</div>
 						</div>
@@ -298,6 +341,19 @@ const AudioEdit = (props) => {
 			</div>
 		</div>
 	)
+}
+
+// This gets called on every request
+export async function getServerSideProps(context) {
+	const { id } = context.query
+
+	var audio
+
+	// Fetch Post Comments
+	await ssrAxios.get(`/api/audios/${id}`).then((res) => (audio = res.data[0]))
+
+	// Pass data to the page via props
+	return { props: { audio } }
 }
 
 export default AudioEdit

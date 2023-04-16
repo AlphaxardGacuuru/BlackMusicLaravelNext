@@ -1,29 +1,30 @@
-import React, { useState, Suspense } from "react"
+import React, { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import axios from "@/lib/axios"
 
 import Img from "next/image"
 import Btn from "../../components/Core/Btn"
-import LoadingVideoMedia from "../../components/Video/LoadingVideoMedia"
-import LoadingAudioMedia from "../../components/Audio/LoadingAudioMedia"
 
 import CheckSVG from "../../svgs/CheckSVG"
 import DecoSVG from "../../svgs/DecoSVG"
-import LoadingPostMedia from "../../components/Post/LoadingPostMedia"
 import PostMedia from "../../components/Post/PostMedia"
 import PostOptions from "../../components/Post/PostOptions"
-import onFollow from "@/functions/onFollow"
+import ssrAxios from "@/lib/ssrAxios"
 
-const VideoMedia = React.lazy(() => import("../../components/Video/VideoMedia"))
-const AudioMedia = React.lazy(() => import("../../components/Audio/AudioMedia"))
+import VideoMedia from "@/components/Video/VideoMedia"
+import AudioMedia from "@/components/Audio/AudioMedia"
 
 const Profile = (props) => {
 	const router = useRouter()
 
 	let { username } = router.query
 
-	const props2 = { ...props, user: { username: username } }
+	const [artistVideoAlbums, setArtistVideoAlbums] = useState(props.artistVideoAlbums)
+	const [artistVideos, setVideos] = useState(props.artistVideos)
+	const [artistPosts, setArtistPosts] = useState(props.artistPosts)
+	const [artistAudioAlbums, setArtistAudioAlbums] = useState(props.artistAudioAlbums)
+	const [artistAudios, setAudios] = useState(props.artistAudios)
 
 	const [tabClass, setTabClass] = useState("videos")
 	const [bottomMenu, setBottomMenu] = useState("")
@@ -33,34 +34,35 @@ const Profile = (props) => {
 	const [deleteLink, setDeleteLink] = useState()
 	const [unfollowLink, setUnfollowLink] = useState()
 
-	// Get Profile info
-	if (props.users.find((user) => user.username == username)) {
-		var profile = props.users.find((user) => user.username == username)
-	} else {
-		var profile = []
-	}
+	useEffect(() => {
+		props.get(`artist/video-albums/${username}`, setArtistVideoAlbums)
+		props.get(`artist/videos/${username}`, setVideos, "artistVideos", false)
+		props.get(`artist/posts/${username}`, setArtistPosts)
+		props.get(`artist/audio-albums/${username}`, setArtistAudioAlbums)
+		props.get(`artist/audios/${username}`, setAudios)
+	}, [])
 
-	// Function for buying video to cart
-	const onBuyVideos = (video) => {
-		props.onCartVideos(video)
-		setTimeout(() => router.push("/cart"), 1000)
-	}
+	/*
+	 * Function for following Musicans */
+	const onFollow = () => {
+		// Show follow
+		setHasFollowed(!hasFollowed)
 
-	// Function for buying audio to cart
-	const onBuyAudios = (audio) => {
-		props.onCartAudios(audio)
-		setTimeout(() => router.push("/cart"), 1000)
+		// Add follow
+		axios
+			.post(`/api/follows`, { musician: props.user.username })
+			.then((res) => props.setMessages([res.data]))
+			.catch((err) => props.getErrors(err, true))
 	}
 
 	// Function for deleting posts
 	const onDeletePost = (id) => {
+		// Remove deleted post
+		setDeletedIds([...deletedIds, id])
+
 		axios
-			.delete(`${props.url}/api/posts/${id}`)
-			.then((res) => {
-				props.setMessages([res.data])
-				// Update posts
-				props.get("posts", props.setPosts, "posts")
-			})
+			.delete(`/api/posts/${id}`)
+			.then((res) => props.setMessages([res.data]))
 			.catch((err) => props.getErrors(err, true))
 	}
 
@@ -69,7 +71,7 @@ const Profile = (props) => {
 			<div
 				className="row p-0 m-0"
 				style={{
-					backgroundImage: `url('${profile.backdrop}')`,
+					backgroundImage: `url('${props.user.backdrop}')`,
 					backgroundPosition: "center",
 					backgroundSize: "cover",
 					position: "relative",
@@ -86,20 +88,15 @@ const Profile = (props) => {
 								top: "70px",
 								left: "10px",
 							}}>
-							{props.users
-								.filter((user) => user.username == username)
-								.map((profile, key) => (
-									<Img
-										key={key}
-										style={{
-											position: "absolute",
-											zIndex: "99",
-										}}
-										className="avatar hover-img"
-										src={profile.avatar}
-										layout="fill"
-									/>
-								))}
+							<Img
+								style={{
+									position: "absolute",
+									zIndex: "99",
+								}}
+								className="avatar hover-img"
+								src={props.user.avatar}
+								layout="fill"
+							/>
 						</div>
 					</div>
 				</div>
@@ -115,7 +112,7 @@ const Profile = (props) => {
 					<br className="anti-hidden" />
 					{/* Check whether user has bought at least one song from musician */}
 					{/* Check whether user has followed musician and display appropriate Btn */}
-					{profile.username == props.auth?.username ? (
+					{props.user.username == props.auth?.username ? (
 						<Link href="/profile/edit">
 							<a>
 								<Btn
@@ -124,19 +121,19 @@ const Profile = (props) => {
 								/>
 							</a>
 						</Link>
-					) : profile.username != "@blackmusic" ? (
-						profile.hasFollowed ? (
+					) : props.user.username != "@blackmusic" ? (
+						props.user.hasFollowed ? (
 							<button
 								className="btn float-end rounded-0 text-light"
 								style={{ backgroundColor: "#232323" }}
-								onClick={() => onFollow(props2)}>
+								onClick={onFollow}>
 								Followed
 								<CheckSVG />
 							</button>
-						) : profile.hasBought1 ? (
+						) : props.user.hasBought1 ? (
 							<Btn
 								btnClass="mysonar-btn white-btn float-end"
-								onClick={() => onFollow(props2)}
+								onClick={onFollow}
 								btnText="follow"
 							/>
 						) : (
@@ -154,26 +151,26 @@ const Profile = (props) => {
 						""
 					)}
 					<div>
-						<h3>{profile.name}</h3>
+						<h3>{props.user.name}</h3>
 						<h5>
-							{profile.username}
+							{props.user.username}
 							<span style={{ color: "gold" }} className="ms-2">
 								<DecoSVG />
-								<small className="ms-1">{profile.decos}</small>
+								<small className="ms-1">{props.user.decos}</small>
 							</span>
 						</h5>
-						<h6>{profile.bio}</h6>
+						<h6>{props.user.bio}</h6>
 					</div>
 					<div className="d-flex flex-row">
 						<div className="p-2">
 							<span>Following</span>
 							<br />
-							<span>{profile.following}</span>
+							<span>{props.user.following}</span>
 						</div>
 						<div className="p-2">
 							<span>Fans</span>
 							<br />
-							<span>{profile.fans}</span>
+							<span>{props.user.fans}</span>
 						</div>
 					</div>
 				</div>
@@ -213,9 +210,7 @@ const Profile = (props) => {
 					<center className="hidden">
 						<h4>Videos</h4>
 					</center>
-					{props.videoAlbums.filter(
-						(videoAlbum) => videoAlbum.username == username
-					).length == 0 && (
+					{artistVideoAlbums.length == 0 && (
 						<center className="mt-3">
 							<h6 style={{ color: "grey" }}>
 								{username} does not have any videos
@@ -224,38 +219,30 @@ const Profile = (props) => {
 					)}
 
 					{/* Video Albums */}
-					{props.videoAlbums
-						.filter((videoAlbum) => videoAlbum.username == username)
-						.map((videoAlbum, key) => (
-							<div key={videoAlbum.id} className="mb-5">
-								<div className="d-flex">
-									<div className="p-2">
-										<Img
-											src={videoAlbum.cover}
-											width="100px"
-											height="100px"
-											alt="album cover"
-										/>
-									</div>
-									<div className="p-2">
-										<small>Video Album</small>
-										<h1>{videoAlbum.name}</h1>
-										<h6>{videoAlbum.created_at}</h6>
-									</div>
+					{artistVideoAlbums.map((videoAlbum, key) => (
+						<div key={videoAlbum.id} className="mb-5">
+							<div className="d-flex">
+								<div className="p-2">
+									<Img
+										src={videoAlbum.cover}
+										width="100px"
+										height="100px"
+										alt="album cover"
+									/>
 								</div>
-								{props.videos
-									.filter((video) => video.videoAlbumId == videoAlbum.id)
-									.map((video, index) => (
-										<Suspense key={video.id} fallback={<LoadingVideoMedia />}>
-											<VideoMedia
-												{...props}
-												video={video}
-												onBuyVideos={onBuyVideos}
-											/>
-										</Suspense>
-									))}
+								<div className="p-2">
+									<small>Video Album</small>
+									<h1>{videoAlbum.name}</h1>
+									<h6>{videoAlbum.created_at}</h6>
+								</div>
 							</div>
-						))}
+							{artistVideos
+								.filter((video) => video.videoAlbumId == videoAlbum.id)
+								.map((video, index) => (
+									<VideoMedia {...props} key={key} video={video} />
+								))}
+						</div>
+					))}
 					{/* Videos Albums End */}
 				</div>
 
@@ -263,7 +250,7 @@ const Profile = (props) => {
 					<center className="hidden">
 						<h4>Posts</h4>
 					</center>
-					{props.posts.filter((post) => post.username == username).length ==
+					{artistPosts.filter((post) => post.username == username).length ==
 						0 && (
 						<center>
 							<h6 style={{ color: "grey" }}>
@@ -273,26 +260,24 @@ const Profile = (props) => {
 					)}
 
 					{/* <!-- Posts area --> */}
-					{props.posts
-						.filter((post) => post.username == username)
+					{artistPosts
 						.filter(
 							(post) =>
 								post.hasFollowed || props.auth?.username == "@blackmusic"
 						)
 						.map((post, key) => (
-							<Suspense key={key} fallback={<LoadingPostMedia />}>
-								<PostMedia
-									{...props}
-									post={post}
-									setBottomMenu={setBottomMenu}
-									setUserToUnfollow={setUserToUnfollow}
-									setPostToEdit={setPostToEdit}
-									setEditLink={setEditLink}
-									setDeleteLink={setDeleteLink}
-									onDeletePost={onDeletePost}
-									setUnfollowLink={setUnfollowLink}
-								/>
-							</Suspense>
+							<PostMedia
+								{...props}
+								key={key}
+								post={post}
+								setBottomMenu={setBottomMenu}
+								setUserToUnfollow={setUserToUnfollow}
+								setPostToEdit={setPostToEdit}
+								setEditLink={setEditLink}
+								setDeleteLink={setDeleteLink}
+								onDeletePost={onDeletePost}
+								setUnfollowLink={setUnfollowLink}
+							/>
 						))}
 				</div>
 				{/* <!-- Posts area end --> */}
@@ -300,9 +285,7 @@ const Profile = (props) => {
 					<center className="hidden">
 						<h4>Audios</h4>
 					</center>
-					{props.audioAlbums.filter(
-						(audioAlbum) => audioAlbum.username == username
-					).length == 0 && (
+					{artistAudioAlbums.length == 0 && (
 						<center className="mt-3">
 							<h6 style={{ color: "grey" }}>
 								{username} does not have any audios
@@ -311,38 +294,30 @@ const Profile = (props) => {
 					)}
 
 					{/* Audio Albums */}
-					{props.audioAlbums
-						.filter((audioAlbum) => audioAlbum.username == username)
-						.map((audioAlbum, key) => (
-							<div key={audioAlbum.id} className="mb-5">
-								<div className="d-flex">
-									<div className="p-2">
-										<Img
-											src={audioAlbum.cover}
-											width="100px"
-											height="100px"
-											alt={"album cover"}
-										/>
-									</div>
-									<div className="p-2">
-										<small>Audio Album</small>
-										<h1>{audioAlbum.name}</h1>
-										<h6>{audioAlbum.created_at}</h6>
-									</div>
+					{artistAudioAlbums.map((audioAlbum, key) => (
+						<div key={audioAlbum.id} className="mb-5">
+							<div className="d-flex">
+								<div className="p-2">
+									<Img
+										src={audioAlbum.cover}
+										width="100px"
+										height="100px"
+										alt={"album cover"}
+									/>
 								</div>
-								{props.audios
-									.filter((audio) => audio.audioAlbumId == audioAlbum.id)
-									.map((audio, key) => (
-										<Suspense key={audio.id} fallback={<LoadingAudioMedia />}>
-											<AudioMedia
-												{...props}
-												audio={audio}
-												onBuyAudios={onBuyAudios}
-											/>
-										</Suspense>
-									))}
+								<div className="p-2">
+									<small>Audio Album</small>
+									<h1>{audioAlbum.name}</h1>
+									<h6>{audioAlbum.created_at}</h6>
+								</div>
 							</div>
-						))}
+							{artistAudios
+								.filter((audio) => audio.audioAlbumId == audioAlbum.id)
+								.map((audio, key) => (
+									<AudioMedia {...props} key={key} audio={audio} />
+								))}
+						</div>
+					))}
 					{/* Audio Albums End */}
 				</div>
 				<div className="col-sm-1"></div>
@@ -363,6 +338,52 @@ const Profile = (props) => {
 			{/* Sliding Bottom Nav end */}
 		</>
 	)
+}
+
+// This gets called on every request
+export async function getServerSideProps(context) {
+	const { username } = context.query
+
+	var data = {
+		user: {},
+		artistVideoAlbums: {},
+		artistVideos: {},
+		artistPosts: {},
+		artistAudioAlbums: {},
+		artistAudios: {},
+	}
+
+	// Fetch User
+	await ssrAxios
+		.get(`/api/users/${username}`)
+		.then((res) => (data.user = res.data))
+
+	// Fetch Artist's Video Albums
+	await ssrAxios
+		.get(`/api/artist/video-albums/${username}`)
+		.then((res) => (data.artistVideoAlbums = res.data))
+
+	// Fetch Artist's Videos
+	await ssrAxios
+		.get(`/api/artist/videos/${username}`)
+		.then((res) => (data.artistVideos = res.data))
+
+	// Fetch Artist's Posts
+	await ssrAxios
+		.get(`/api/artist/posts/${username}`)
+		.then((res) => (data.artistPosts = res.data))
+
+	// Fetch Artist's Audio Albums
+	await ssrAxios
+		.get(`/api/artist/audio-albums/${username}`)
+		.then((res) => (data.artistAudioAlbums = res.data))
+
+	// Fetch Artist's Audios
+	await ssrAxios
+		.get(`/api/artist/audios/${username}`)
+		.then((res) => (data.artistAudios = res.data))
+
+	return { props: data }
 }
 
 export default Profile

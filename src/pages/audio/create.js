@@ -32,8 +32,11 @@ registerPlugin(
 );
 
 const AudioCreate = (props) => {
-
 	// Declare states
+	// Get Artist's Audio Albums
+	const [artistAudioAlbums, setArtistAudioAlbums] = useState(
+		props.getLocalStorage("artistAudioAlbums")
+	)
 	const [formData, setFormData] = useState()
 	const [audio, setAudio] = useState("")
 	const [name, setName] = useState("")
@@ -43,13 +46,19 @@ const AudioCreate = (props) => {
 	const [released, setReleased] = useState("")
 	const [description, setDescription] = useState("")
 	const [thumbnail, setThumbnail] = useState("")
-	const [files, setFiles] = useState([]);
+	const [files, setFiles] = useState([])
 	const [loadingBtn, setLoadingBtn] = useState()
 
 	// Get history for page location
 	const router = useRouter()
 
 	useEffect(() => {
+		props.get(
+			`artist/audio-albums/${props.auth?.username}`,
+			setArtistAudioAlbums,
+			"artistAudioAlbums",
+			false
+		)
 		// Declare new FormData object for form data
 		setFormData(new FormData())
 	}, [])
@@ -61,28 +70,28 @@ const AudioCreate = (props) => {
 		setLoadingBtn(true)
 
 		// Add form data to FormData object
-		formData.append("audio", audio);
-		formData.append("thumbnail", thumbnail);
-		formData.append("name", name);
-		formData.append("username", props.auth?.username);
-		formData.append("ft", ft);
-		formData.append("audio_album_id", audioAlbumId);
-		formData.append("genre", genre);
-		formData.append("released", released);
-		formData.append("description", description);
-		formData.append("files", files);
+		formData.append("audio", audio)
+		formData.append("thumbnail", thumbnail)
+		formData.append("name", name)
+		formData.append("username", props.auth?.username)
+		formData.append("ft", ft)
+		formData.append("audio_album_id", audioAlbumId)
+		formData.append("genre", genre)
+		formData.append("released", released)
+		formData.append("description", description)
+		formData.append("files", files)
 
 		// Send data to AudioController
 		// Get csrf cookie from Laravel inorder to send a POST request
-		axios.post(`/api/audios`, formData)
+		axios
+			.post(`/api/audios`, formData)
 			.then((res) => {
 				props.setMessages([res.data])
-				// Update Audios
-				props.get("audios", props.setAudios, "audios")
 				// Remove loader for button
 				setLoadingBtn(false)
-				setTimeout(() => router.push('/audio'), 500)
-			}).catch((err) => {
+				setTimeout(() => router.push("/audio"), 500)
+			})
+			.catch((err) => {
 				// Remove loader for button
 				setLoadingBtn(false)
 				props.getErrors(err)
@@ -113,7 +122,9 @@ const AudioCreate = (props) => {
 				<div className="container">
 					<div className="row">
 						<div className="col-12">
-							<div className="contact-form text-center call-to-action-content wow fadeInUp" data-wow-delay="0.5s">
+							<div
+								className="contact-form text-center call-to-action-content wow fadeInUp"
+								data-wow-delay="0.5s">
 								<h2>Upload your audio</h2>
 								<h5>It's free</h5>
 								<br />
@@ -125,7 +136,8 @@ const AudioCreate = (props) => {
 											className="form-control"
 											placeholder="Audio name"
 											required={true}
-											onChange={(e) => setName(e.target.value)} />
+											onChange={(e) => setName(e.target.value)}
+										/>
 										<br />
 										<br />
 
@@ -138,18 +150,20 @@ const AudioCreate = (props) => {
 											name="ft"
 											className="form-control"
 											placeholder="Featuring Artist e.g. @JohnDoe"
-											onChange={(e) => setFt(e.target.value)} />
+											onChange={(e) => setFt(e.target.value)}
+										/>
 										<br />
 										<br />
 
 										<select
-											name='album'
-											className='form-control'
+											name="album"
+											className="form-control"
 											required={true}
 											onChange={(e) => setAudioAlbumId(e.target.value)}>
-											<option defaultValue value="">Select Album</option>
-											{props.audioAlbums
-												.filter((audioAlbum) => audioAlbum.username == props.auth?.username)
+											<option defaultValue value="">
+												Select Album
+											</option>
+											{artistAudioAlbums
 												.map((audioAlbum, key) => (
 													<option
 														key={key}
@@ -163,29 +177,67 @@ const AudioCreate = (props) => {
 										<br />
 
 										<select
-											name='genre'
-											className='form-control'
-											placeholder='Select audio genre'
+											name="genre"
+											className="form-control"
+											placeholder="Select audio genre"
 											required={true}
 											onChange={(e) => setGenre(e.target.value)}>
-											<option defaultValue value="">Select Genre</option>
-											<option value="Afro" className="bg-dark text-light">Afro</option>
-											<option value="Benga" className="bg-dark text-light">Benga</option>
-											<option value="Blues" className="bg-dark text-light">Blues</option>
-											<option value="Boomba" className="bg-dark text-light">Boomba</option>
-											<option value="Country" className="bg-dark text-light">Country</option>
-											<option value="Cultural" className="bg-dark text-light">Cultural</option>
-											<option value="EDM" className="bg-dark text-light">EDM</option>
-											<option value="Genge" className="bg-dark text-light">Genge</option>
-											<option value="Gospel" className="bg-dark text-light">Gospel</option>
-											<option value="Hiphop" className="bg-dark text-light">Hiphop</option>
-											<option value="Jazz" className="bg-dark text-light">Jazz</option>
-											<option value="Music of Kenya" className="bg-dark text-light">Music of Kenya</option>
-											<option value="Pop" className="bg-dark text-light">Pop</option>
-											<option value="R&B" className="bg-dark text-light">R&B</option>
-											<option value="Rock" className="bg-dark text-light">Rock</option>
-											<option value="Sesube" className="bg-dark text-light">Sesube</option>
-											<option value="Taarab" className="bg-dark text-light">Taarab</option>
+											<option defaultValue value="">
+												Select Genre
+											</option>
+											<option value="Afro" className="bg-dark text-light">
+												Afro
+											</option>
+											<option value="Benga" className="bg-dark text-light">
+												Benga
+											</option>
+											<option value="Blues" className="bg-dark text-light">
+												Blues
+											</option>
+											<option value="Boomba" className="bg-dark text-light">
+												Boomba
+											</option>
+											<option value="Country" className="bg-dark text-light">
+												Country
+											</option>
+											<option value="Cultural" className="bg-dark text-light">
+												Cultural
+											</option>
+											<option value="EDM" className="bg-dark text-light">
+												EDM
+											</option>
+											<option value="Genge" className="bg-dark text-light">
+												Genge
+											</option>
+											<option value="Gospel" className="bg-dark text-light">
+												Gospel
+											</option>
+											<option value="Hiphop" className="bg-dark text-light">
+												Hiphop
+											</option>
+											<option value="Jazz" className="bg-dark text-light">
+												Jazz
+											</option>
+											<option
+												value="Music of Kenya"
+												className="bg-dark text-light">
+												Music of Kenya
+											</option>
+											<option value="Pop" className="bg-dark text-light">
+												Pop
+											</option>
+											<option value="R&B" className="bg-dark text-light">
+												R&B
+											</option>
+											<option value="Rock" className="bg-dark text-light">
+												Rock
+											</option>
+											<option value="Sesube" className="bg-dark text-light">
+												Sesube
+											</option>
+											<option value="Taarab" className="bg-dark text-light">
+												Taarab
+											</option>
 										</select>
 										<br />
 										<br />
@@ -198,7 +250,8 @@ const AudioCreate = (props) => {
 											className="form-control"
 											placeholder="Released"
 											required={true}
-											onChange={(e) => setReleased(e.target.value)} />
+											onChange={(e) => setReleased(e.target.value)}
+										/>
 										<br />
 										<br />
 
@@ -210,8 +263,9 @@ const AudioCreate = (props) => {
 											cols="30"
 											rows="10"
 											required={true}
-											onChange={(e) => setDescription(e.target.value)}>
-										</textarea>
+											onChange={(e) =>
+												setDescription(e.target.value)
+											}></textarea>
 
 										<label className="text-light">Upload Audio Thumbnail</label>
 										<br />
@@ -221,32 +275,36 @@ const AudioCreate = (props) => {
 											name="filepond-thumbnail"
 											labelIdle='Drag & Drop your Image or <span class="filepond--label-action text-dark"> Browse </span>'
 											imageCropAspectRatio="16:9"
-											acceptedFileTypes={['image/*']}
+											acceptedFileTypes={["image/*"]}
 											stylePanelAspectRatio="16:9"
 											allowRevert={true}
 											server={{
 												url: `${props.baseUrl}/api/filepond`,
 												process: {
 													url: "/audio-thumbnail",
-													onload: res => setThumbnail(res),
-													onerror: (err) => console.log(err.response.data)
+													onload: (res) => setThumbnail(res),
+													onerror: (err) => console.log(err.response.data),
 												},
 												revert: {
 													url: `/audio-thumbnail/${thumbnail.substr(17)}`,
-													onload: res => props.setMessages([res]),
+													onload: (res) => props.setMessages([res]),
 												},
-											}} />
+											}}
+										/>
 										<br />
 										<br />
 
 										<label className="text-light">Upload Audio</label>
-										<h6 className="text-primary">If the audio is too large you can upload it to Youtube for compression, download it, delete it, then upload it here.</h6>
+										<h6 className="text-primary">
+											If the audio is too large you can upload it to Youtube for
+											compression, download it, delete it, then upload it here.
+										</h6>
 										<br />
 
 										<FilePond
 											name="filepond-audio"
 											labelIdle='Drag & Drop your Audio or <span class="filepond--label-action text-dark"> Browse </span>'
-											acceptedFileTypes={['audio/*']}
+											acceptedFileTypes={["audio/*"]}
 											stylePanelAspectRatio="16:9"
 											maxFileSize="200000000"
 											allowRevert={true}
@@ -254,16 +312,17 @@ const AudioCreate = (props) => {
 												url: `${props.baseUrl}/api/filepond`,
 												process: {
 													url: "/audio",
-													onload: res => setAudio(res),
-													onerror: (err) => console.log(err.response.data)
+													onload: (res) => setAudio(res),
+													onerror: (err) => console.log(err.response.data),
 												},
 												revert: {
 													url: `/audio/${audio.substr(7)}`,
-													onload: res => {
+													onload: (res) => {
 														props.setMessages([res])
 													},
 												},
-											}} />
+											}}
+										/>
 										<br />
 										<br />
 
@@ -281,11 +340,17 @@ const AudioCreate = (props) => {
 											<div className="">
 												<br />
 												<h3>Before you upload</h3>
-												<h6>By uploading you agree that you <b>own</b> this song.</h6>
-												<h6>Audios are sold at
-													<b style={{ color: "green" }}> KES 10</b>, Black Music takes
-													<b style={{ color: "green" }}> 50% (KES 5)</b> and the musician takes
-													<b style={{ color: "green" }}> 50% (KES 5)</b>.</h6>
+												<h6>
+													By uploading you agree that you <b>own</b> this song.
+												</h6>
+												<h6>
+													Audios are sold at
+													<b style={{ color: "green" }}> KES 10</b>, Black Music
+													takes
+													<b style={{ color: "green" }}> 50% (KES 5)</b> and the
+													musician takes
+													<b style={{ color: "green" }}> 50% (KES 5)</b>.
+												</h6>
 												<br />
 												<Btn btnText="upload audio" loading={loadingBtn} />
 											</div>
@@ -295,14 +360,16 @@ const AudioCreate = (props) => {
 									<br />
 									<br />
 
-									<Link href="/audio"><a className="btn sonar-btn btn-2">studio</a></Link>
+									<Link href="/audio">
+										<a className="btn sonar-btn btn-2">studio</a>
+									</Link>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div >
+		</div>
 	)
 }
 

@@ -99,4 +99,11 @@ class AudioController extends Controller
     {
 		return $service->topLiked();
     }
+
+	/*
+	* Artist's Audios */
+	public function artistAudios($username, AudioService $service)
+	{
+		return $service->artistAudios($username);
+	} 
 }

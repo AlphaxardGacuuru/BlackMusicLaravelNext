@@ -1,26 +1,27 @@
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import axios from '@/lib/axios';
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { useRouter } from "next/router"
+import axios from "@/lib/axios"
+import ssrAxios from "@/lib/ssrAxios"
 
-import Btn from '@/components/Core/Btn'
-import Img from '@/components/Core/Img'
+import Btn from "@/components/Core/Btn"
+import Img from "@/components/Core/Img"
 
 // Import React FilePond
-import { FilePond, registerPlugin } from 'react-filepond';
+import { FilePond, registerPlugin } from "react-filepond"
 
 // Import FilePond styles
-import 'filepond/dist/filepond.min.css';
+import "filepond/dist/filepond.min.css"
 
 // Import the Image EXIF Orientation and Image Preview plugins
 // Note: These need to be installed separately
-import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
-import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
-import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
-import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation"
+import FilePondPluginImagePreview from "filepond-plugin-image-preview"
+import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type"
+import FilePondPluginImageCrop from "filepond-plugin-image-crop"
+import FilePondPluginImageTransform from "filepond-plugin-image-transform"
+import FilePondPluginFileValidateSize from "filepond-plugin-file-validate-size"
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
 
 // Register the plugins
 registerPlugin(
@@ -30,20 +31,51 @@ registerPlugin(
 	FilePondPluginImageCrop,
 	FilePondPluginImageTransform,
 	FilePondPluginFileValidateSize
-);
+)
 
 const VideoEdit = (props) => {
-
+	console.log(props)
 	// Get history for page location
 	const router = useRouter()
 
-	let { id } = router.query;
+	let { id } = router.query
 
-	// Get Audio Album info
-	const editVideo = props.videos.find((video) => video.id == id)
+	// Get Artist's Video Albums
+	const [artistVideoAlbums, setArtistVideoAlbums] = useState(
+		props.getLocalStorage("artistVideoAlbums")
+	)
+
+	useEffect(() => {
+		// Get Artist Video Albums
+		props.get(
+			`artist/video-albums/${props.auth?.username}`,
+			setArtistVideoAlbums,
+			"artistVideoAlbums",
+			false
+		)
+	}, [props.auth])
 
 	// List of Genres
-	const genres = ["All", "Afro", "Benga", "Blues", "Boomba", "Country", "Cultural", "EDM", "Genge", "Gospel", "Hiphop", "Jazz", "Music of Kenya", "Pop", "R&B", "Rock", "Sesube", "Taarab"]
+	const genres = [
+		"All",
+		"Afro",
+		"Benga",
+		"Blues",
+		"Boomba",
+		"Country",
+		"Cultural",
+		"EDM",
+		"Genge",
+		"Gospel",
+		"Hiphop",
+		"Jazz",
+		"Music of Kenya",
+		"Pop",
+		"R&B",
+		"Rock",
+		"Sesube",
+		"Taarab",
+	]
 
 	// Declare states
 	const [formData, setFormData] = useState()
@@ -54,7 +86,7 @@ const VideoEdit = (props) => {
 	const [released, setReleased] = useState("")
 	const [description, setDescription] = useState("")
 	const [thumbnail, setThumbnail] = useState("")
-	const [video, setVideo] = useState("");
+	const [video, setVideo] = useState("")
 	const [btnLoading, setBtnLoading] = useState()
 
 	useEffect(() => {
@@ -69,26 +101,28 @@ const VideoEdit = (props) => {
 		setBtnLoading(true)
 
 		// Add form data to FormData object
-		formData.append("name", name);
-		formData.append("ft", ft);
-		formData.append("video_album_id", videoAlbumId);
-		formData.append("genre", genre);
-		formData.append("released", released);
-		formData.append("description", description);
-		formData.append("video", video);
-		formData.append("thumbnail", thumbnail);
-		formData.append("_method", 'put');
+		formData.append("name", name)
+		formData.append("ft", ft)
+		formData.append("video_album_id", videoAlbumId)
+		formData.append("genre", genre)
+		formData.append("released", released)
+		formData.append("description", description)
+		formData.append("video", video)
+		formData.append("thumbnail", thumbnail)
+		formData.append("_method", "put")
 
 		// Send data to VideosController
 		// Get csrf cookie from Laravel inorder to send a POST request
-		axios.post(`${props.url}/api/videos/${id}`, formData)
+		axios
+			.post(`${props.url}/api/videos/${id}`, formData)
 			.then((res) => {
 				props.setMessages([res.data])
 				// Update Videos
 				props.get("videos", props.setVideos, "videos")
 				// Remove loader for button
 				setBtnLoading(false)
-			}).catch(err => {
+			})
+			.catch((err) => {
 				// Remove loader for button
 				setBtnLoading(false)
 				props.getErrors(err)
@@ -119,23 +153,27 @@ const VideoEdit = (props) => {
 				<div className="container">
 					<div className="row">
 						<div className="col-12">
-							<div className="contact-form text-center call-to-action-content wow fadeInUp" data-wow-delay="0.5s">
+							<div
+								className="contact-form text-center call-to-action-content wow fadeInUp"
+								data-wow-delay="0.5s">
 								<h2>Edit Video</h2>
-								{editVideo && (
-									<div className="d-flex text-start">
-										<div className="thumbnail">
-											<Img src={editVideo.thumbnail} width="8em" height="4em" />
-										</div>
-										<div className="px-2">
-											<h1 className="my-0">{editVideo.name}</h1>
-											<h6 className="my-0">
-												<small>{editVideo.username}</small>
-												<small className="ml-1">{editVideo.ft}</small>
-											</h6>
-											<small className="ml-1">{editVideo.released}</small>
-										</div>
+								<div className="d-flex text-start">
+									<div className="thumbnail">
+										<Img
+											src={props.video?.thumbnail}
+											width="8em"
+											height="4em"
+										/>
 									</div>
-								)}
+									<div className="px-2">
+										<h1 className="my-0">{props.video.name}</h1>
+										<h6 className="my-0">
+											<small>{props.video.username}</small>
+											<small className="ml-1">{props.video.ft}</small>
+										</h6>
+										<small className="ml-1">{props.video.released}</small>
+									</div>
+								</div>
 								<br />
 								<div className="form-group">
 									<form onSubmit={onSubmit}>
@@ -143,7 +181,7 @@ const VideoEdit = (props) => {
 											type="text"
 											name="name"
 											className="form-control"
-											placeholder={editVideo?.name}
+											placeholder={props.video?.name}
 											onChange={(e) => setName(e.target.value)}
 										/>
 										<br />
@@ -157,24 +195,29 @@ const VideoEdit = (props) => {
 											type="text"
 											name="ft"
 											className="form-control"
-											placeholder={editVideo?.ft}
+											placeholder={props.video?.ft}
 											onChange={(e) => setFt(e.target.value)}
 										/>
 										<br />
 										<br />
 
-										<select name="album" className="form-control" onChange={(e) => setVideoAlbumId(e.target.value)}>
-											{props.videoAlbums
-												.filter((videoAlbum) => videoAlbum.username == props.auth.username)
-												.map((videoAlbum, key) => (
-													<option
-														key={key}
-														value={videoAlbum.id}
-														className="bg-dark text-light"
-														selected={editVideo?.videoAlbumId == videoAlbum.id ? true : false}>
-														{videoAlbum.name}
-													</option>
-												))}
+										<select
+											name="album"
+											className="form-control"
+											onChange={(e) => setVideoAlbumId(e.target.value)}>
+											{artistVideoAlbums.map((videoAlbum, key) => (
+												<option
+													key={key}
+													value={videoAlbum.id}
+													className="bg-dark text-light"
+													selected={
+														props.video?.videoAlbumId == videoAlbum.id
+															? true
+															: false
+													}>
+													{videoAlbum.name}
+												</option>
+											))}
 										</select>
 										<br />
 										<br />
@@ -191,7 +234,7 @@ const VideoEdit = (props) => {
 													key={key}
 													value={genre}
 													className="bg-dark text-light"
-													selected={genre == editVideo?.genre ? true : false}>
+													selected={genre == props.video?.genre ? true : false}>
 													{genre}
 												</option>
 											))}
@@ -206,7 +249,7 @@ const VideoEdit = (props) => {
 											name="released"
 											className="form-control"
 											style={{ colorScheme: "dark" }}
-											placeholder={editVideo?.released}
+											placeholder={props.video?.released}
 											onChange={(e) => setReleased(e.target.value)}
 										/>
 										<br />
@@ -216,10 +259,12 @@ const VideoEdit = (props) => {
 											type="text"
 											name="description"
 											className="form-control"
-											placeholder={editVideo?.description}
+											placeholder={props.video?.description}
 											cols="30"
 											rows="10"
-											onChange={(e) => setDescription(e.target.value)}></textarea>
+											onChange={(e) =>
+												setDescription(e.target.value)
+											}></textarea>
 										<br />
 										<br />
 
@@ -237,11 +282,7 @@ const VideoEdit = (props) => {
 											server={{
 												url: `${props.url}/api/filepond`,
 												process: {
-													url: `/video-thumbnail/${editVideo?.id}`,
-													onload: (res) => {
-														// Update Videos
-														axios.get(`${props.url}/api/videos`).then((res) => props.setVideos(res.data))
-													},
+													url: `/video-thumbnail/${props.video?.id}`,
 													onerror: (err) => console.log(err.response.data),
 												},
 												revert: {
@@ -255,8 +296,8 @@ const VideoEdit = (props) => {
 
 										<label className="text-light">Upload Video</label>
 										<h6 className="text-primary">
-											If the video is too large you can upload it to Youtube for compression, download it, delete it,
-											then upload it here.
+											If the video is too large you can upload it to Youtube for
+											compression, download it, delete it, then upload it here.
 										</h6>
 										<br />
 
@@ -270,11 +311,7 @@ const VideoEdit = (props) => {
 											server={{
 												url: `${props.url}/api/filepond`,
 												process: {
-													url: `/video/${editVideo?.id}`,
-													onload: (res) => {
-														// Update Videos
-														axios.get(`${props.url}/api/videos`).then((res) => props.setVideos(res.data))
-													},
+													url: `/video/${props.video?.id}`,
 													onerror: (err) => console.log(err.response.data),
 												},
 												revert: {
@@ -302,6 +339,19 @@ const VideoEdit = (props) => {
 			</div>
 		</div>
 	)
+}
+
+// This gets called on every request
+export async function getServerSideProps(context) {
+	const { id } = context.query
+
+	var video
+
+	// Fetch Post Comments
+	await ssrAxios.get(`/api/videos/${id}`).then((res) => (video = res.data[0]))
+
+	// Pass data to the page via props
+	return { props: { video } }
 }
 
 export default VideoEdit

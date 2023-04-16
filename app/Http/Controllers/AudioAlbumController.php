@@ -72,4 +72,11 @@ class AudioAlbumController extends Controller
     {
         //
     }
+
+	/*
+	* Artist's Audio Albums */
+	public function artistAudioAlbums($username, AudioAlbumService $service)
+	{
+		return $service->artistAudioAlbums($username);
+	} 
 }

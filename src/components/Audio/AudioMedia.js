@@ -1,18 +1,32 @@
 import Link from "next/link"
 import { useRouter } from "next/router"
-import onCartAudios from "@/functions/onCartAudios"
+import axios from "@/lib/axios"
 
 import Img from "next/image"
 import Btn from "../Core/Btn"
 import CartSVG from "../../svgs/CartSVG"
+import { useState } from "react"
 
 const AudioMedia = (props) => {
 	const router = useRouter()
 
+	const [inCart, setInCart] = useState(props.audio.inCart)
+
 	// Buy function
-	const onBuyAudios = (audio) => {
-		onCartAudios(props, audio)
+	const onBuyAudios = () => {
+		onCartAudios()
 		setTimeout(() => router.push("/cart"), 500)
+	}
+
+	// Function for adding audio to cart
+	const onCartAudios = () => {
+		// Add Audio to Cart
+		axios
+			.post(`/api/cart-audios`, {
+				audio: props.audio.id,
+			})
+			.then((res) => props.setMessages([res.data]))
+			.catch((err) => props.getErrors(err, true))
 	}
 
 	return (
@@ -49,7 +63,7 @@ const AudioMedia = (props) => {
 			</div>
 			{props.audio.hasBoughtAudio || props.hasBoughtAudio ? (
 				""
-			) : props.audio.inCart ? (
+			) : inCart ? (
 				<div>
 					<button
 						className="btn text-light rounded-0 pt-1"
@@ -58,7 +72,10 @@ const AudioMedia = (props) => {
 							height: "33px",
 							backgroundColor: "#232323",
 						}}
-						onClick={() => onCartAudios(props, props.audio.id)}>
+						onClick={() => {
+							setInCart(!inCart)
+							onCartAudios()
+						}}>
 						<CartSVG />
 					</button>
 				</div>
@@ -68,7 +85,10 @@ const AudioMedia = (props) => {
 						<button
 							className="mysonar-btn white-btn"
 							style={{ minWidth: "40px", height: "33px" }}
-							onClick={() => onCartAudios(props, props.audio.id)}>
+							onClick={() => {
+								setInCart(!inCart)
+								onCartAudios()
+							}}>
 							<CartSVG />
 						</button>
 					</div>
@@ -76,7 +96,7 @@ const AudioMedia = (props) => {
 						<Btn
 							btnClass="mysonar-btn green-btn btn-2 float-right"
 							btnText="KES 10"
-							onClick={() => onBuyAudios(props.audio.id)}
+							onClick={() => onBuyAudios()}
 						/>
 					</div>
 				</>

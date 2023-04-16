@@ -246,6 +246,21 @@ class VideoService extends Service
         return ["artists" => $artists, "videos" => $videos];
     }
 
+    /*
+     * Artist's Videos */
+    public function artistVideos($username)
+    {
+        $getArtistVideos = Video::where("username", $username)->get();
+
+        $artistVideos = [];
+
+        foreach ($getArtistVideos as $video) {
+            array_push($artistVideos, $this->structure($video));
+        }
+
+        return $artistVideos;
+    }
+
     /**
      * Structure Video
      *

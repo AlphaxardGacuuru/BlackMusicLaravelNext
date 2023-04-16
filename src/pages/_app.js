@@ -13,7 +13,6 @@ import AudioPlayer from "@/components/Audio/AudioPlayer"
 import onAudioPlayer from "@/functions/onAudioPlayer"
 
 const App = ({ Component, pageProps }) => {
-
 	/*
 	 *
 	 * Register service worker */
@@ -67,23 +66,9 @@ const App = ({ Component, pageProps }) => {
 	const [errors, setErrors] = useState([])
 	const [login, setLogin] = useState()
 	const [auth, setAuth] = useState(getLocalStorageAuth("auth"))
-	const [audioAlbums, setAudioAlbums] = useState(getLocalStorage("audioAlbums"))
-	const [audios, setAudios] = useState(getLocalStorage("audios"))
-	const [audioComments, setAudioComments] = useState([])
-	const [boughtAudios, setBoughtAudios] = useState(getLocalStorage("boughtAudios"))
-	const [boughtVideos, setBoughtVideos] = useState(getLocalStorage("boughtVideos"))
-	const [cartAudios, setCartAudios] = useState(getLocalStorage("cartAudios"))
-	const [cartVideos, setCartVideos] = useState(getLocalStorage("cartVideos"))
-	const [chatThreads, setChatThreads] = useState(getLocalStorage("chatThreads"))
-	const [karaokes, setKaraokes] = useState([])
-	const [karaokeComments, setKaraokeComments] = useState([])
-	const [savedKaraokes, setSavedKaraokes] = useState([])
-	const [posts, setPosts] = useState(getLocalStorage("posts"))
-	const [postComments, setPostComments] = useState([])
-	const [users, setUsers] = useState(getLocalStorage("users"))
-	const [videoAlbums, setVideoAlbums] = useState(getLocalStorage("videoAlbums"))
-	const [videos, setVideos] = useState(getLocalStorage("videos"))
-	const [videoComments, setVideoComments] = useState([])
+	// Search State
+	const [search, setSearch] = useState("!@#$%^&")
+	const searchInput = useRef(null)
 
 	// Function for fetching data from API
 	const get = (endpoint, setState, storage = null, errors = true) => {
@@ -109,12 +94,6 @@ const App = ({ Component, pageProps }) => {
 		setErrors(newError)
 	}
 
-	// Reset Messages and Errors to null after 3 seconds
-	if (errors.length > 0 || messages.length > 0) {
-		setTimeout(() => setErrors([]), 2900)
-		setTimeout(() => setMessages([]), 2900)
-	}
-
 	// Fetch data on page load
 	useEffect(() => {
 		// Import Js for Bootstrap
@@ -128,24 +107,11 @@ const App = ({ Component, pageProps }) => {
 		}
 
 		get("auth", setAuth, "auth", false)
-		get("audios", setAudios, "audios")
-		get("audio-albums", setAudioAlbums, "audioAlbums")
-		get("cart-audios", setCartAudios, "cartAudios")
-		get("cart-videos", setCartVideos, "cartVideos")
-		get("karaokes", setKaraokes, "karaokes")
-		get("posts", setPosts, "posts")
-		get("users", setUsers, "users")
-		get("videos", setVideos, "videos")
-		get("video-albums", setVideoAlbums, "videoAlbums")
 	}, [])
 
 	console.log("rendered")
 
-	const audioStates = onAudioPlayer(getLocalStorage, setErrors, auth, audios, boughtAudios, users)
-
-	// Search State
-	const [search, setSearch] = useState("!@#$%^&")
-	const searchInput = useRef(null)
+	const audioStates = onAudioPlayer(getLocalStorage, get, setErrors, auth)
 
 	// Function to focus on search input
 	const onSearchIconClick = () => {
@@ -198,7 +164,6 @@ const App = ({ Component, pageProps }) => {
 		para5 && formData.append("para5", para5)
 		editing && formData.append("_method", "put")
 
-		// Send data to HelpPostsController
 		// Get csrf cookie from Laravel inorder to send a POST request
 		axios
 			.post(`/api/${urlTo}`, formData)
@@ -236,40 +201,6 @@ const App = ({ Component, pageProps }) => {
 		setMessages,
 		errors,
 		setErrors,
-		audioAlbums,
-		setAudioAlbums,
-		audios,
-		setAudios,
-		audioComments,
-		setAudioComments,
-		boughtAudios,
-		setBoughtAudios,
-		boughtVideos,
-		setBoughtVideos,
-		cartAudios,
-		setCartAudios,
-		cartVideos,
-		setCartVideos,
-		chatThreads,
-		setChatThreads,
-		posts,
-		setPosts,
-		postComments,
-		setPostComments,
-		users,
-		setUsers,
-		videoAlbums,
-		setVideoAlbums,
-		videos,
-		setVideos,
-		videoComments,
-		setVideoComments,
-		karaokes,
-		setKaraokes,
-		karaokeComments,
-		setKaraokeComments,
-		savedKaraokes,
-		setSavedKaraokes,
 		// Search
 		onSearchIconClick,
 		searchInput,

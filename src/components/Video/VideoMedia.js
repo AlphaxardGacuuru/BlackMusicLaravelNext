@@ -1,19 +1,33 @@
 import Link from "next/link"
 import { useRouter } from "next/router"
-import onCartVideos from "@/functions/onCartVideos"
+import axios from "@/lib/axios"
 
 import Img from "next/image"
 import Btn from "../Core/Btn"
 
 import CartSVG from "@/svgs/CartSVG"
+import { useState } from "react"
 
 const VideoMedia = (props) => {
 	const router = useRouter()
 
+	const [inCart, setInCart] = useState(props.video.inCart)
+
 	// Buy function
-	const onBuyVideos = (video) => {
-		onCartVideos(props, video)
+	const onBuyVideos = () => {
+		onCartVideos()
 		setTimeout(() => router.push("/cart"), 500)
+	}
+
+	// Function for adding video to cart
+	const onCartVideos = () => {
+		// Add Video to Cart
+		axios
+			.post(`/api/cart-videos`, {
+				video: props.video.id,
+			})
+			.then((res) => props.setMessages([res.data]))
+			.catch((err) => props.getErrors(err, true))
 	}
 
 	return (
@@ -36,7 +50,7 @@ const VideoMedia = (props) => {
 					""
 				) : (
 					<div className="d-flex justify-content-around video-media-overlay">
-						{props.video.inCart ? (
+						{inCart ? (
 							<div>
 								<button
 									className="btn text-light mb-1 rounded-0 pt-1"
@@ -45,7 +59,10 @@ const VideoMedia = (props) => {
 										height: "33px",
 										backgroundColor: "#232323",
 									}}
-									onClick={() => onCartVideos(props, props.video.id)}>
+									onClick={() => {
+										setInCart(!inCart)
+										onCartVideos()
+									}}>
 									<CartSVG />
 								</button>
 							</div>
@@ -58,7 +75,10 @@ const VideoMedia = (props) => {
 											minWidth: "90px",
 											height: "33px",
 										}}
-										onClick={() => onCartVideos(props, props.video.id)}>
+										onClick={() => {
+											setInCart(!inCart)
+											onCartVideos()
+										}}>
 										<CartSVG />
 									</button>
 								</div>
@@ -66,7 +86,7 @@ const VideoMedia = (props) => {
 									<Btn
 										btnClass="mysonar-btn green-btn btn-2"
 										btnText="KES 20"
-										onClick={() => onBuyVideos(props.video.id)}
+										onClick={() => onBuyVideos()}
 									/>
 								</div>
 							</>

@@ -36,6 +36,6 @@ class PostCommentedEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('post-comments.' . $this->post->id);
+        return new PrivateChannel('post-comments');
     }
 }

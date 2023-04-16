@@ -69,4 +69,11 @@ class BoughtAudioController extends Controller
     {
         //
     }
+
+	/*
+	* Artist's Bought Audios */
+	public function artistBoughtAudios($username, BoughtAudioService $service)
+	{
+		return $service->artistBoughtAudios($username);
+	} 
 }

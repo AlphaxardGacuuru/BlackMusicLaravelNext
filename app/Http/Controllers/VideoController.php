@@ -104,4 +104,11 @@ class VideoController extends Controller
     {
 		return $service->topLiked();
     }
+
+	/*
+	* Artist's Videos */
+	public function artistVideos($username, VideoService $service)
+	{
+		return $service->artistVideos($username);
+	} 
 }

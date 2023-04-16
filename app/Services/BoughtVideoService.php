@@ -24,8 +24,7 @@ class BoughtVideoService extends Service
 
         foreach ($getBoughtVideos as $boughtVideo) {
             array_push($boughtVideos,
-                $this->structure($boughtVideo->video,
-                    $this->username));
+                $this->structure($boughtVideo->video));
         }
 
         return $boughtVideos;
@@ -102,35 +101,6 @@ class BoughtVideoService extends Service
         return [$boughtVideosWithStructure, $boughtVideos, $decoArtists];
     }
 
-    private function structure($video, $username)
-    {
-        return [
-            "id" => $video->id,
-            "video" => $video->video,
-            "name" => $video->name,
-            "artistName" => $video->user->name,
-            "username" => $video->username,
-            "avatar" => $video->user->avatar,
-            "artistDecos" => $video->user->decos->count(),
-            "ft" => $video->ft,
-            "videoAlbumId" => $video->video_album_id,
-            "album" => $video->album->name,
-            "genre" => $video->genre,
-            "thumbnail" => $video->thumbnail,
-            "description" => $video->description,
-            "released" => $video->released,
-            "hasLiked" => $video->hasLiked($username),
-            "likes" => $video->likes->count(),
-            "comments" => $video->comments->count(),
-            "inCart" => $video->inCart($username),
-            "hasBoughtVideo" => $video->hasBoughtVideo($username),
-            "hasBought1" => $video->user->hasBought1($username),
-            "hasFollowed" => $video->user->hasFollowed($username),
-            "downloads" => $video->bought->count(),
-            "createdAt" => $video->created_at,
-        ];
-    }
-
     // Store Bought Video
     private function storeBoughtVideo($cartVideo)
     {
@@ -169,5 +139,49 @@ class BoughtVideoService extends Service
 
             return $cartVideo->video->username;
         }
+    }
+
+	/*
+	* Artist's Bought Videos */
+	public function artistBoughtVideos($username)
+	{
+		$getArtistBoughtVideos = BoughtVideo::where("artist", $username)->get();
+
+		$artistBoughtVideos = [];
+
+		foreach ($getArtistBoughtVideos as $boughtVideo) {
+		array_push($artistBoughtVideos, $this->structure($boughtVideo->video));
+		}
+
+		return $artistBoughtVideos;
+	} 
+
+    private function structure($video)
+    {
+        return [
+            "id" => $video->id,
+            "video" => $video->video,
+            "name" => $video->name,
+            "artistName" => $video->user->name,
+            "username" => $video->username,
+            "avatar" => $video->user->avatar,
+            "artistDecos" => $video->user->decos->count(),
+            "ft" => $video->ft,
+            "videoAlbumId" => $video->video_album_id,
+            "album" => $video->album->name,
+            "genre" => $video->genre,
+            "thumbnail" => $video->thumbnail,
+            "description" => $video->description,
+            "released" => $video->released,
+            "hasLiked" => $video->hasLiked($this->username),
+            "likes" => $video->likes->count(),
+            "comments" => $video->comments->count(),
+            "inCart" => $video->inCart($this->username),
+            "hasBoughtVideo" => $video->hasBoughtVideo($this->username),
+            "hasBought1" => $video->user->hasBought1($this->username),
+            "hasFollowed" => $video->user->hasFollowed($this->username),
+            "downloads" => $video->bought->count(),
+            "createdAt" => $video->created_at,
+        ];
     }
 }

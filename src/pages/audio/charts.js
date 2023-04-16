@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
+import ssrAxios from "@/lib/ssrAxios"
 
 import Carousel from "@/components/Core/Carousel"
 import LoadingAudioMedia from "@/components/Audio/LoadingAudioMedia"
@@ -16,10 +17,11 @@ const AudioCharts = (props) => {
 	const [genre, setGenre] = useState("All")
 	const [artistSlice, setArtistSlice] = useState(8)
 	const [audioSlice, setAudioSlice] = useState(8)
-	const [newlyReleased, setNewlyReleased] = useState([])
-	const [trending, setTrending] = useState([])
-	const [topDownloaded, setTopDownloaded] = useState([])
-	const [topLiked, setTopLiked] = useState([])
+	// Charts
+	const [newlyReleased, setNewlyReleased] = useState(props.newlyReleased)
+	const [trending, setTrending] = useState(props.trending)
+	const [topDownloaded, setTopDownloaded] = useState(props.topDownloaded)
+	const [topLiked, setTopLiked] = useState(props.topLiked)
 
 	useEffect(() => {
 		// Set state for chart list
@@ -43,7 +45,8 @@ const AudioCharts = (props) => {
 		window.onscroll = function (ev) {
 			if (router.pathname.match(/audio-charts/)) {
 				const bottom =
-					window.innerHeight + window.scrollY >= document.body.offsetHeight - document.body.offsetHeight / 16
+					window.innerHeight + window.scrollY >=
+					document.body.offsetHeight - document.body.offsetHeight / 16
 
 				if (bottom) {
 					setAudioSlice(audioSlice + 8)
@@ -88,7 +91,8 @@ const AudioCharts = (props) => {
 
 	// Function for loading more artists
 	const handleScroll = (e) => {
-		const bottom = e.target.scrollLeft >= e.target.scrollWidth - e.target.scrollWidth / 3
+		const bottom =
+			e.target.scrollLeft >= e.target.scrollWidth - e.target.scrollWidth / 3
 
 		if (bottom) {
 			setArtistSlice(artistSlice + 10)
@@ -138,7 +142,12 @@ const AudioCharts = (props) => {
 								e.preventDefault()
 								setChart(chartItem)
 							}}>
-							<h5 className={chart == chartItem ? "active-scrollmenu m-0" : "m-0"}>{chartItem}</h5>
+							<h5
+								className={
+									chart == chartItem ? "active-scrollmenu m-0" : "m-0"
+								}>
+								{chartItem}
+							</h5>
 						</a>
 					</span>
 				))}
@@ -154,7 +163,12 @@ const AudioCharts = (props) => {
 								e.preventDefault()
 								setGenre(genreItem)
 							}}>
-							<h6 className={genre == genreItem ? "active-scrollmenu m-0" : "m-0"}>{genreItem}</h6>
+							<h6
+								className={
+									genre == genreItem ? "active-scrollmenu m-0" : "m-0"
+								}>
+								{genreItem}
+							</h6>
 						</a>
 					</span>
 				))}
@@ -219,6 +233,37 @@ const AudioCharts = (props) => {
 			</div>
 		</>
 	)
+}
+
+// This gets called on every request
+export async function getServerSideProps(context) {
+
+	var data = {
+		newlyReleased: [],
+		trending: [],
+		topDownloaded: [],
+		topLiked: [],
+	}
+
+	// Fetch Newly Released
+	await ssrAxios
+		.get(`/api/audio-charts/newly-released`)
+		.then((res) => (data.newlyReleased = res.data))
+	// Fetch Trending
+	await ssrAxios
+		.get(`/api/audio-charts/trending`)
+		.then((res) => (data.trending = res.data))
+	// Fetch Top Downloaded
+	await ssrAxios
+		.get(`/api/audio-charts/top-downloaded`)
+		.then((res) => (data.topDownloaded = res.data))
+	// Fetch Top Downloaded
+	await ssrAxios
+		.get(`/api/audio-charts/top-liked`)
+		.then((res) => (data.topLiked = res.data))
+
+	// Pass data to the page via props
+	return { props: data }
 }
 
 export default AudioCharts

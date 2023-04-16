@@ -6,8 +6,12 @@ import DecoSVG from '@/svgs/DecoSVG'
 import OptionsSVG from '@/svgs/OptionsSVG'
 import HeartSVG from '@/svgs/HeartSVG'
 import HeartFilledSVG from '@/svgs/HeartFilledSVG'
+import { useState } from 'react'
 
 const CommentMedia = (props) => {
+
+	const [hasLiked, setHasLiked] = useState(props.comment.hasLiked);
+	
 
 	return (
 		<div className="d-flex">
@@ -54,8 +58,9 @@ const CommentMedia = (props) => {
 					onClick={(e) => {
 						e.preventDefault()
 						props.onCommentLike(props.comment.id)
+						setHasLiked(!hasLiked)
 					}}>
-					{props.comment.hasLiked ?
+					{hasLiked ?
 						<span style={{ color: "#fb3958" }}>
 							<HeartFilledSVG />
 							<small

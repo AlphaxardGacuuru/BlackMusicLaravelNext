@@ -10,49 +10,34 @@ import CommentSVG from "../../svgs/CommentSVG"
 import HeartSVG from "../../svgs/HeartSVG"
 import HeartFilledSVG from "../../svgs/HeartFilledSVG"
 import ShareSVG from "../../svgs/ShareSVG"
-import Image from "next/image"
 import onFollow from "@/functions/onFollow"
+import { useState } from "react"
 
 const PostMedia = (props) => {
+	// Set a standart user key in props
 	const props2 = { ...props, user: { username: props.post.username } }
+
+	const [hasLiked, setHasLiked] = useState(props.post.hasLiked)
 
 	// Function for voting in poll
 	const onPoll = (post, parameter) => {
 		axios
-			.post(`/api/polls`, {
-				post: post,
-				parameter: parameter,
-			})
-			.then((res) => {
-				props.setMessages([res.data])
-				// Update posts
-				props.get("posts", props.setPosts, "posts")
-			})
+			.post(`/api/polls`, { post: post, parameter: parameter })
+			.then((res) => props.setMessages([res.data]))
 			.catch((err) => props.getErrors(err, true))
 	}
 
 	// Function for liking posts
 	const onPostLike = (post) => {
-		// Show like
-		const newPosts = props.posts.filter((item) => {
-			// Get the exact post and change like status
-			if (item.id == post) {
-				item.hasLiked = !item.hasLiked
-			}
-			return true
-		})
-		// Set new posts
-		props.setPosts(newPosts)
+		setHasLiked(!hasLiked)
 
 		// Add like to database
 		axios
-			.post(`/api/post-likes`, {
-				post: post,
-			})
+			.post(`/api/post-likes`, { post: post })
 			.then((res) => {
 				props.setMessages([res.data])
 				// Update posts
-				props.get("posts", props.setPosts, "posts")
+				props.setPosts && props.get("posts", props.setPosts, "posts")
 			})
 			.catch((err) => props.getErrors(err))
 	}
@@ -222,7 +207,7 @@ const PostMedia = (props) => {
 				{/* Polls End */}
 
 				{/* Post likes */}
-				{props.post.hasLiked ? (
+				{hasLiked ? (
 					<a
 						href="#"
 						style={{ color: "#fb3958" }}

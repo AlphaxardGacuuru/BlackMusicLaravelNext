@@ -1,3 +1,4 @@
+import { useState } from "react"
 import Link from "next/link"
 import Img from "@/components/Core/Img"
 import Btn from "../Core/Btn"
@@ -7,6 +8,8 @@ import onFollow from "@/functions/onFollow"
 import CheckSVG from "../../svgs/CheckSVG"
 
 const MusiciansMedia = (props) => {
+	const [hasFollowed, setHasFollowed] = useState(props.user.hasFollowed)
+
 	return (
 		<div className="d-flex">
 			<div className="p-2">
@@ -45,19 +48,25 @@ const MusiciansMedia = (props) => {
 				{/* Check whether user has bought at least one song from user */}
 				{/* Check whether user has followed user and display appropriate button */}
 				{props.user.hasBought1 || props.auth?.username == "@blackmusic" ? (
-					props.user.hasFollowed ? (
+					hasFollowed ? (
 						<button
 							className={"btn float-right rounded-0 text-light"}
 							style={{ backgroundColor: "#232323" }}
-							onClick={() => onFollow(props, props.user.username)}>
+							onClick={() => {
+								setHasFollowed(!hasFollowed)
+								onFollow(props, props.user.username)
+							}}>
 							Followed
 							<CheckSVG />
 						</button>
 					) : (
 						<Btn
 							btnClass={"mysonar-btn white-btn float-right"}
-							onClick={() => onFollow(props, props.user.username)}
-							btnText={"follow"}
+							onClick={() => {
+								setHasFollowed(!hasFollowed)
+								onFollow(props, props.user.username)
+							}}
+							btnText="follow"
 						/>
 					)
 				) : (
@@ -68,7 +77,7 @@ const MusiciansMedia = (props) => {
 								`You must have bought atleast one song by ${props.user.username}`,
 							])
 						}
-						btnText={"follow"}
+						btnText="follow"
 					/>
 				)}
 			</div>

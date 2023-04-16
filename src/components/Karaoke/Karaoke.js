@@ -1,30 +1,26 @@
-import { useState, useEffect, useRef } from 'react'
-import Link from 'next/link'
-import axios from '@/lib/axios'
-import Ticker from 'react-ticker'
+import { useState, useEffect, useRef } from "react"
+import Link from "next/link"
+import axios from "@/lib/axios"
+import Ticker from "react-ticker"
 
-import Img from '@/components/Core/Img'
-import KaraokeCommentSection from './KaraokeCommentSection'
+import Img from "@/components/Core/Img"
+import KaraokeCommentSection from "./KaraokeCommentSection"
 
-import CloseSVG from '@/svgs/CloseSVG'
-import CommentSVG from '@/svgs/CommentSVG'
-import DecoSVG from '@/svgs/DecoSVG'
-import HeartFilledSVG from '@/svgs/HeartFilledSVG'
-import HeartSVG from '@/svgs/HeartSVG'
-import BookmarkSVG from '@/svgs/BookmarkSVG'
-import BookmarkFilledSVG from '@/svgs/BookmarkFilledSVG'
-import ShareSVG from '@/svgs/ShareSVG'
-import MusicNoteSVG from '@/svgs/MusicNoteSVG'
-import PlayFilledSVG from '@/svgs/PlayFilledSVG'
+import CloseSVG from "@/svgs/CloseSVG"
+import CommentSVG from "@/svgs/CommentSVG"
+import DecoSVG from "@/svgs/DecoSVG"
+import HeartFilledSVG from "@/svgs/HeartFilledSVG"
+import HeartSVG from "@/svgs/HeartSVG"
+import BookmarkSVG from "@/svgs/BookmarkSVG"
+import BookmarkFilledSVG from "@/svgs/BookmarkFilledSVG"
+import ShareSVG from "@/svgs/ShareSVG"
+import MusicNoteSVG from "@/svgs/MusicNoteSVG"
+import PlayFilledSVG from "@/svgs/PlayFilledSVG"
 
 const Karaoke = (props) => {
-
-	useEffect(() => {
-		// Fetch Karaoke Comments
-		props.get("karaoke-comments", props.setKaraokeComments)
-	}, [])
-
 	const [play, setPlay] = useState()
+	const [hasLiked, setHasLiked] = useState()
+	const [hasSaved, setHasSaved] = useState()
 	const [bottomOptionsMenu, setBottomOptionsMenu] = useState()
 
 	// ID for video
@@ -40,52 +36,31 @@ const Karaoke = (props) => {
 	const spiningRecord = useRef()
 
 	const onKaraokeLike = () => {
-		// Show like
-		const newKaraokes = props.karaokes
-			.filter((item) => {
-				// Get the exact karaoke and change like status
-				if (item.id == props.karaoke.id) {
-					item.hasLiked = !item.hasLiked
-				}
-				return true
-			})
-
-		// Set new karaokes
-		props.setKaraokes(newKaraokes)
+		setHasLiked(!hasLiked)
 
 		// Add like to database
-		axios.post(`/api/karaoke-likes`, {
-			karaoke: props.karaoke.id
-		}).then((res) => {
-			props.setMessages([res.data])
-			// Update karaoke
-			props.get("karaokes", props.setKaraokes)
-		}).catch((err) => props.getErrors(err))
+		axios
+			.post(`/api/karaoke-likes`, {
+				karaoke: props.karaoke.id,
+			})
+			.then((res) => {
+				props.setMessages([res.data])
+				// Update karaoke
+				props.get("karaokes", props.setKaraokes)
+			})
+			.catch((err) => props.getErrors(err))
 	}
 
 	const onKaraokeSave = () => {
-		// Show Save
-		const newKaraokes = props.karaokes
-			.filter((item) => {
-				// Get the exact karaoke and change save status
-				if (item.id == props.karaoke.id) {
-					item.hasSaved = !item.hasSaved
-				}
-				return true
-			})
-		// Set new karaokes
-		props.setKaraokes(newKaraokes)
+		// Change icon
+		setHasSaved(!hasSaved)
 
 		// Save Karaoke
-		axios.post('api/saved-karaokes', {
-			id: props.karaoke.id
-		}).then((res) => {
-			props.setMessages([res.data])
-			// Update karaoke
-			props.get("karaokes", props.setKaraokes)
-		}).catch((err) => props.getErrors(err))
+		axios
+			.post("api/saved-karaokes", { id: props.karaoke.id })
+			.then((res) => props.setMessages([res.data]))
+			.catch((err) => props.getErrors(err))
 	}
-
 
 	// Web Share API for share button
 	// Share must be triggered by "user activation"
@@ -94,11 +69,10 @@ const Karaoke = (props) => {
 		const shareData = {
 			title: props.karaoke.audio,
 			text: `Check out this karaoke on Black Music\n`,
-			url: `https://music.black.co.ke/#/karaoke-show/${props.karaoke.id}`
+			url: `https://music.black.co.ke/#/karaoke-show/${props.karaoke.id}`,
 		}
 		// Check if data is shareble
-		navigator.canShare(shareData) &&
-			navigator.share(shareData)
+		navigator.canShare(shareData) && navigator.share(shareData)
 	}
 
 	// Pause or Play Video
@@ -122,13 +96,12 @@ const Karaoke = (props) => {
 		karaokeDescription.current.style.display = d == "none" ? "block" : "none"
 
 		var t = showDescription.current.innerHTML
-		showDescription.current.innerHTML = t == "show more" ? "show less" : "show more"
+		showDescription.current.innerHTML =
+			t == "show more" ? "show less" : "show more"
 	}
 
 	return (
-		<div
-			id={props.karaoke.id}
-			className="single-karaoke">
+		<div id={props.karaoke.id} className="single-karaoke">
 			<video
 				ref={video}
 				src={props.karaoke.karaoke}
@@ -140,11 +113,9 @@ const Karaoke = (props) => {
 				autoPlay
 				loop
 				playsInline
-				onClick={play ? onPlay : onPause}>
-			</video>
+				onClick={play ? onPlay : onPause}></video>
 			{/* Floating Video Info Top */}
-			<div
-				style={{ position: "absolute", top: 0 }}>
+			<div style={{ position: "absolute", top: 0 }}>
 				<div className="d-flex">
 					{/* Close Icon */}
 					<div className="">
@@ -174,20 +145,29 @@ const Karaoke = (props) => {
 				{/* Horizontal Content */}
 				<div className="d-flex pe-2">
 					<div className="p-1 flex-grow-1 align-self-end">
-						<div className="m-1"
+						<div
+							className="m-1"
 							style={{
 								width: "100%",
 								whiteSpace: "nowrap",
 								overflow: "hidden",
-								textOverflow: "clip"
+								textOverflow: "clip",
 							}}>
 							<b>{props.karaoke.name}</b>
 							<small>{props.karaoke.username}</small>
 							<span className="ms-1" style={{ color: "gold" }}>
 								<DecoSVG />
-								<small className="ms-1" style={{ color: "inherit" }}>{props.karaoke.decos}</small>
+								<small className="ms-1" style={{ color: "inherit" }}>
+									{props.karaoke.decos}
+								</small>
 							</span>
-							<small><b><i className="text-secondary d-block">{props.karaoke.created_at}</i></b></small>
+							<small>
+								<b>
+									<i className="text-secondary d-block">
+										{props.karaoke.created_at}
+									</i>
+								</b>
+							</small>
 						</div>
 						{/* Description */}
 						<p
@@ -229,7 +209,9 @@ const Karaoke = (props) => {
 						{/* Vertical Content */}
 						<div className="d-flex flex-column mb-2">
 							{/* Avatar */}
-							<div className="avatar-thumbnail-xs mb-3" style={{ borderRadius: "50%" }}>
+							<div
+								className="avatar-thumbnail-xs mb-3"
+								style={{ borderRadius: "50%" }}>
 								<center>
 									<Link href={`/profile/${props.karaoke.username}`}>
 										<a>
@@ -237,7 +219,8 @@ const Karaoke = (props) => {
 												src={props.karaoke.avatar}
 												width="50px"
 												height="50px"
-												alt="avatar" />
+												alt="avatar"
+											/>
 										</a>
 									</Link>
 								</center>
@@ -248,28 +231,28 @@ const Karaoke = (props) => {
 									<span
 										className="p-0"
 										style={{ fontSize: "2em" }}
-										onClick={() => onKaraokeLike(props, props.karaoke.id)}>
-										{props.karaoke.hasLiked ?
+										onClick={onKaraokeLike}>
+										{hasLiked ? (
 											<span style={{ color: "#fb3958" }}>
 												<HeartFilledSVG />
-												<h6 className="mb-2"
-													style={{ color: "inherit" }}>
+												<h6 className="mb-2" style={{ color: "inherit" }}>
 													{props.karaoke.likes}
 												</h6>
-											</span> :
+											</span>
+										) : (
 											<span style={{ color: "rgba(220, 220, 220, 1)" }}>
 												<HeartSVG />
-												<h6
-													className="mb-2"
-													style={{ color: "inherit" }}>
+												<h6 className="mb-2" style={{ color: "inherit" }}>
 													{props.karaoke.likes}
 												</h6>
-											</span>}
+											</span>
+										)}
 									</span>
 								</center>
 							</div>
 							{/* Karaoke Comments */}
-							<div style={{ color: "rgba(220, 220, 220, 1)", cursor: "pointer" }}>
+							<div
+								style={{ color: "rgba(220, 220, 220, 1)", cursor: "pointer" }}>
 								<center>
 									<span
 										className="p-0"
@@ -277,9 +260,7 @@ const Karaoke = (props) => {
 										onClick={() => setBottomOptionsMenu("menu-open")}>
 										<CommentSVG />
 									</span>
-									<h6
-										className="mb-2"
-										style={{ color: "inherit" }}>
+									<h6 className="mb-2" style={{ color: "inherit" }}>
 										{props.karaoke.comments}
 									</h6>
 								</center>
@@ -290,14 +271,16 @@ const Karaoke = (props) => {
 									<span
 										className="mb-2 p-0"
 										style={{ fontSize: "2em" }}
-										onClick={() => onKaraokeSave(props, props.karaoke.id)}>
-										{props.karaoke.hasSaved ?
+										onClick={onKaraokeSave}>
+										{hasSaved ? (
 											<span style={{ color: "#FFD700" }}>
 												<BookmarkFilledSVG />
-											</span> :
+											</span>
+										) : (
 											<span style={{ color: "rgba(220, 220, 220, 1)" }}>
 												<BookmarkSVG />
-											</span>}
+											</span>
+										)}
 									</span>
 								</center>
 							</div>
@@ -317,19 +300,21 @@ const Karaoke = (props) => {
 								<center>
 									<div ref={spiningRecord} className="rotate-record">
 										<Link href={`/audio-show/${props.karaoke.audio_id}`}>
-											<a onClick={() => {
-												props.setShow(props.karaoke.audio_id)
-												props.setLocalStorage("show", {
-													"id": props.karaoke.audio_id,
-													"time": 0
-												})
-											}}>
+											<a
+												onClick={() => {
+													props.setShow(props.karaoke.audio_id)
+													props.setLocalStorage("show", {
+														id: props.karaoke.audio_id,
+														time: 0,
+													})
+												}}>
 												<Img
 													src={props.karaoke.audioThumbnail}
 													imgClass="rounded-circle"
 													width="50px"
 													height="50px"
-													alt="current audio" />
+													alt="current audio"
+												/>
 											</a>
 										</Link>
 									</div>
@@ -346,7 +331,8 @@ const Karaoke = (props) => {
 			<KaraokeCommentSection
 				{...props}
 				bottomOptionsMenu={bottomOptionsMenu}
-				setBottomOptionsMenu={setBottomOptionsMenu} />
+				setBottomOptionsMenu={setBottomOptionsMenu}
+			/>
 		</div>
 	)
 }

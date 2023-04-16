@@ -3,8 +3,6 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import axios from "@/lib/axios"
 
-import onCartVideos from "@/functions/onCartVideos"
-
 import Btn from "@/components/Core/Btn"
 import Img from "@/components/Core/Img"
 import PostOptions from "@/components/Post/PostOptions"
@@ -14,11 +12,11 @@ import SocialMediaInput from "@/components/Core/SocialMediaInput"
 
 import ShareSVG from "@/svgs/ShareSVG"
 import CartSVG from "@/svgs/CartSVG"
-import CheckSVG from "@/svgs/CheckSVG"
 import HeartFilledSVG from "@/svgs/HeartFilledSVG"
 import HeartSVG from "@/svgs/HeartSVG"
 import DecoSVG from "@/svgs/DecoSVG"
-import onFollow from "@/functions/onFollow"
+import ssrAxios from "@/lib/ssrAxios"
+import CheckSVG from "@/svgs/CheckSVG"
 
 const VideoShow = (props) => {
 	// let { referer } = router.query
@@ -26,24 +24,32 @@ const VideoShow = (props) => {
 
 	let { id } = router.query
 
-	const [video, setVideo] = useState({})
+	const [video, setVideo] = useState(props.video)
+	const [videoComments, setVideoComments] = useState(props.videoComments)
+	const [boughtVideos, setBoughtVideos] = useState(
+		props.getLocalStorage("boughtVideos")
+	)
+	const [inCart, setInCart] = useState(props.video.inCart)
+	const [hasLiked, setHasLiked] = useState(props.video.hasLiked)
+	const [hasFollowed, setHasFollowed] = useState(props.video.hasFollowed)
 	const [tabClass, setTabClass] = useState("comments")
 	const [bottomMenu, setBottomMenu] = useState("")
 	const [commentToEdit, setCommentToEdit] = useState()
 	const [commentDeleteLink, setCommentDeleteLink] = useState()
+	const [deletedIds, setDeletedIds] = useState([])
 
 	useEffect(() => {
-		// setVideo(props.data.video[0])
-		// props.setVideoComments(props.data.comments)
-
 		if (id) {
 			axios
 				.get(`/api/videos/${id}`)
 				.then((res) => setVideo(res.data[0]))
 				.catch(() => props.setErrors([`Failed to fetch video`]))
 
-			props.get(`video-comments/${id}`, props.setVideoComments)
+			props.get(`video-comments/${id}`, setVideoComments)
 		}
+
+		// Fetch Bought Videos
+		props.get("bought-videos", setBoughtVideos, "boughtVideos")
 
 		// Set states
 		setTimeout(() => {
@@ -57,43 +63,74 @@ const VideoShow = (props) => {
 			props.setShowPollPicker(false)
 			props.setUrlTo("video-comments")
 			props.setUrlToTwo(`video-comments/${id}`)
-			props.setStateToUpdate(() => props.setVideoComments)
-			props.setStateToUpdateTwo(() => props.setVideoComments)
+			props.setStateToUpdate(() => setVideoComments)
+			props.setStateToUpdateTwo(() => setVideoComments)
 			props.setEditing(false)
 		}, 1000)
 	}, [id])
 
-	// Function for liking video
+	/*
+	 * Function for liking video */
 	const onVideoLike = () => {
-		// Show like
-		video.hasLiked = !video.hasLiked
-
+		// Show Like
+		setHasLiked(!hasLiked)
 		// Add like to database
 		axios
-			.post(`/api/video-likes`, {
-				video: id,
-			})
+			.post(`/api/video-likes`, { video: id })
 			.then((res) => {
 				props.setMessages([res.data])
-				// Fetch Video
-				axios.get(`/api/videos/${id}`).then((res) => setVideo(res.data[0]))
+
+				// Fetch Audio
+				axios
+					.get(`api/videos/${id}`)
+					.then((res) => setVideo(res.data[0]))
+					.catch((err) => props.getErrors(err))
 			})
 			.catch((err) => props.getErrors(err))
 	}
 
-	// Function for liking comments
-	const onCommentLike = (comment) => {
-		// Show like
-		const newVideoComments = props.videoComments.filter((item) => {
-			// Get the exact video and change like status
-			if (item.id == comment) {
-				item.hasLiked = !item.hasLiked
-			}
-			return true
-		})
-		// Set new videos
-		props.setVideoComments(newVideoComments)
+	/*
+	 * Buy function */
+	const onBuyVideos = () => {
+		onCartVideos()
+		setTimeout(() => router.push("/cart"), 500)
+	}
 
+	/*
+	 * Function for adding video to cart */
+	const onCartVideos = () => {
+		// Show in cart
+		setInCart(!inCart)
+		// Add Video to Cart
+		axios
+			.post(`/api/cart-videos`, { video: props.video.id })
+			.then((res) => props.setMessages([res.data]))
+			.catch((err) => props.getErrors(err, true))
+	}
+
+	/*
+	 * Function for downloading audio */
+	const onDownload = () => {
+		window.open(`${props.url}/api/videos/download/${video.id}`)
+		props.setMessages([`Downloading ${video.name}`])
+	}
+
+	/*
+	 * Function for following Musicans */
+	const onFollow = () => {
+		// Show follow
+		setHasFollowed(!hasFollowed)
+
+		// Add follow
+		axios
+			.post(`/api/follows`, { musician: video.username })
+			.then((res) => props.setMessages([res.data]))
+			.catch((err) => props.getErrors(err, true))
+	}
+
+	/*
+	 * Function for liking comments */
+	const onCommentLike = (comment) => {
 		// Add like to database
 		axios
 			.post(`/api/video-comment-likes`, {
@@ -101,34 +138,21 @@ const VideoShow = (props) => {
 			})
 			.then((res) => {
 				props.setMessages([res.data])
-				// Update Video Comments
-				props.get(`video-comments/${id}`, props.setVideoComments)
+				props.get(`video-comments/${id}`, setVideoComments)
 			})
 			.catch((err) => props.getErrors(err))
 	}
 
-	// Function for deleting comments
+	/*
+	 * Function for deleting comments */
 	const onDeleteComment = (comment) => {
+		// Remove deleted comment
+		setDeletedIds([...deletedIds, comment])
+
 		axios
 			.delete(`/api/video-comments/${comment}`)
-			.then((res) => {
-				props.setMessages([res.data])
-				// Update Video Comments
-				props.get(`video-comments/${id}`, props.setVideoComments)
-			})
+			.then((res) => props.setMessages([res.data]))
 			.catch((err) => props.getErrors(err))
-	}
-
-	// Buy function
-	const onBuyVideos = (video) => {
-		onCartVideos(props, video)
-		setTimeout(() => router.push("/cart"), 500)
-	}
-
-	// Function for downloading audio
-	const onDownload = () => {
-		window.open(`${props.url}/api/videos/download/${video.id}`)
-		props.setMessages([`Downloading ${video.name}`])
 	}
 
 	// Web Share API for share button
@@ -201,7 +225,7 @@ const VideoShow = (props) => {
 					<div className="d-flex justify-content-between">
 						{/* Video likes */}
 						<div className="p-2 me-2">
-							{video.hasLiked ? (
+							{hasLiked ? (
 								<a
 									href="#"
 									className="fs-6"
@@ -209,6 +233,7 @@ const VideoShow = (props) => {
 									onClick={(e) => {
 										e.preventDefault()
 										onVideoLike()
+										setHasLiked(!hasLiked)
 									}}>
 									<HeartFilledSVG />
 									<small className="ms-1" style={{ color: "inherit" }}>
@@ -247,7 +272,7 @@ const VideoShow = (props) => {
 						</div>
 
 						{/* Download/Buy button */}
-						{video.hasBoughtVideo ? (
+						{video.hasBoughtVideo || props.auth?.username == "@blackmusic" ? (
 							// Ensure video is downloadable
 							!video.video.match(/https/) && (
 								<div className="p-2">
@@ -258,28 +283,28 @@ const VideoShow = (props) => {
 									/>
 								</div>
 							)
-						) : // Cart Btn
-						video.inCart ? (
-							<div className="p-2">
-								<button
-									className="mysonar-btn white-btn mb-1"
-									style={{ minWidth: "90px", height: "33px" }}
-									onClick={() => props.onCartVideos(id)}>
-									<CartSVG />
-								</button>
-							</div>
 						) : (
+							// Cart Btn
 							<div className="p-2">
-								<Btn
-									btnClass="mysonar-btn green-btn btn-2"
-									btnText="KES 20"
-									onClick={() => {
-										// If user is guest then redirect to Login
-										props.auth.username == "@guest"
-											? onGuestBuy()
-											: onBuyVideos(id)
-									}}
-								/>
+								{inCart ? (
+									<button
+										className="mysonar-btn white-btn mb-1"
+										style={{ minWidth: "90px", height: "33px" }}
+										onClick={onCartVideos}>
+										<CartSVG />
+									</button>
+								) : (
+									<Btn
+										btnClass="mysonar-btn green-btn btn-2"
+										btnText="KES 20"
+										onClick={() => {
+											// If user is guest then redirect to Login
+											props.auth.username == "@guest"
+												? onGuestBuy()
+												: onBuyVideos()
+										}}
+									/>
+								)}
 							</div>
 						)}
 					</div>
@@ -323,7 +348,7 @@ const VideoShow = (props) => {
 					{/* {{-- Collapse End --}} */}
 
 					{/* Artist Area */}
-					<div className="p-2 border-bottom border-dark">
+					<div className="border-bottom border-dark">
 						<div className="d-flex">
 							<div className="p-2">
 								<Link href={`/profile/${video.username}`}>
@@ -339,7 +364,7 @@ const VideoShow = (props) => {
 									</a>
 								</Link>
 							</div>
-							<div className="p-2" style={{ width: "50%" }}>
+							<div className="p-2 flex-grow-1" style={{ width: "50%" }}>
 								<Link href={`/profile/${video.username}`}>
 									<a>
 										<div
@@ -362,6 +387,41 @@ const VideoShow = (props) => {
 										</div>
 									</a>
 								</Link>
+							</div>
+							<div className="p-2">
+								{/* Check whether user has bought at least one song from user */}
+								{/* Check whether user has followed user and display appropriate button */}
+								{video.hasBought1 ||
+								props.auth?.username == "@blackmusic" ||
+								props.auth?.username != video.username ? (
+									hasFollowed ? (
+										<button
+											className={"btn float-right rounded-0 text-light"}
+											style={{ backgroundColor: "#232323" }}
+											onClick={onFollow}>
+											<div>
+												Followed
+												<CheckSVG />
+											</div>
+										</button>
+									) : (
+										<Btn
+											btnClass="mysonar-btn white-btn float-right"
+											onClick={onFollow}
+											btnText="follow"
+										/>
+									)
+								) : (
+									<Btn
+										btnClass="mysonar-btn white-btn float-right"
+										onClick={() =>
+											props.setErrors([
+												`You must have bought atleast one song by ${props.user.username}`,
+											])
+										}
+										btnText="follow"
+									/>
+								)}
 							</div>
 						</div>
 					</div>
@@ -411,19 +471,21 @@ const VideoShow = (props) => {
 						props.auth.username == "@blackmusic" ||
 						video.hasBoughtVideo ? (
 							// Check if video comments exist
-							props.videoComments.length > 0 ? (
-								props.videoComments.map((comment, key) => (
-									<CommentMedia
-										{...props}
-										key={key}
-										comment={comment}
-										setBottomMenu={setBottomMenu}
-										setCommentDeleteLink={setCommentDeleteLink}
-										setCommentToEdit={setCommentToEdit}
-										onCommentLike={onCommentLike}
-										onDeleteComment={onDeleteComment}
-									/>
-								))
+							videoComments.length > 0 ? (
+								videoComments
+									.filter((comment) => !deletedIds.includes(comment.id))
+									.map((comment, key) => (
+										<CommentMedia
+											{...props}
+											key={key}
+											comment={comment}
+											setBottomMenu={setBottomMenu}
+											setCommentDeleteLink={setCommentDeleteLink}
+											setCommentToEdit={setCommentToEdit}
+											onCommentLike={onCommentLike}
+											onDeleteComment={onDeleteComment}
+										/>
+									))
 							) : (
 								<center className="my-3">
 									<h6 style={{ color: "grey" }}>No comments to show</h6>
@@ -444,7 +506,7 @@ const VideoShow = (props) => {
 					<div className="p-2">
 						<h5>Up next</h5>
 					</div>
-					{!props.boughtVideos.some(
+					{!boughtVideos.some(
 						(boughtVideo) => boughtVideo.username == props.auth.username
 					) && (
 						<center>
@@ -452,16 +514,12 @@ const VideoShow = (props) => {
 						</center>
 					)}
 
-					{props.boughtVideos
-						.filter((boughtVideo) => {
-							return (
-								boughtVideo.username == props.auth.username &&
-								boughtVideo.video_id != id
-							)
-						})
+					{boughtVideos
+						.filter((boughtVideo) => boughtVideo.video_id != id)
 						.map((boughtVideo, key) => (
 							<VideoMedia
 								{...props}
+								key={key}
 								video={boughtVideo}
 								onBuyVideos={onBuyVideos}
 								onClick={() => props.setShow(0)}
@@ -484,8 +542,8 @@ const VideoShow = (props) => {
 						.slice(0, 10)
 						.map((video, key) => (
 							<VideoMedia
-								key={key}
 								{...props}
+								key={key}
 								video={video}
 								onBuyVideos={onBuyVideos}
 								onClick={() => props.setShow(0)}
@@ -510,24 +568,26 @@ const VideoShow = (props) => {
 }
 
 // This gets called on every request
-// export async function getServerSideProps(context) {
-// const { id } = context.query
+export async function getServerSideProps(context) {
+	const { id } = context.query
 
-// var data = {
-// video: null,
-// comments: null,
-// }
+	var data = {
+		video: {},
+		videoComments: {},
+		videos: {},
+	}
 
-// Fetch Video
-// await axios.get(`/api/videos/${id}`).then((res) => (data.video = res.data))
+	// Fetch Post Comments
+	await ssrAxios
+		.get(`/api/videos/${id}`)
+		.then((res) => (data.video = res.data[0]))
+	await ssrAxios
+		.get(`/api/video-comments/${id}`)
+		.then((res) => (data.videoComments = res.data))
+	await ssrAxios.get(`/api/videos`).then((res) => (data.videos = res.data))
 
-// Fetch Video Comments
-// await axios
-// .get(`/api/video-comments/${id}`)
-// .then((res) => (data.comments = res.data))
-
-// Pass data to the page via props
-// return { props: { data } }
-// }
+	// Pass data to the page via props
+	return { props: data }
+}
 
 export default VideoShow

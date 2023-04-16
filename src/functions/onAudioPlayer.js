@@ -1,6 +1,10 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from "react"
 
-const onAudioPlayer = (getLocalStorage, setErrors, auth, audios, boughtAudios, users) => {
+const onAudioPlayer = (getLocalStorage, get, setErrors, auth) => {
+	const [audios, setAudios] = useState(getLocalStorage("audios"))
+	const [boughtAudios, setBoughtAudios] = useState(
+		getLocalStorage("boughtAudios")
+	)
 
 	const [show, setShow] = useState(getLocalStorage("show"))
 	const [playBtn, setPlayBtn] = useState(true)
@@ -19,82 +23,75 @@ const onAudioPlayer = (getLocalStorage, setErrors, auth, audios, boughtAudios, u
 	const volumeProgress = useRef()
 	const volumeContainer = useRef()
 
-	var playingAudio = []
-	var playingArtist = []
-
 	// Get audio to play
-	var getAudio = audios.find((audio) => audio.id == show.id)
+	var audio = audios.find((audio) => audio.id == show.id)
 
-	if (getAudio) {
-		var playingAudio = getAudio
-
-		// Get artist of audio to play
-		const getArtist = users
-			.find((user) => user.username == playingAudio.username)
-
-		if (getArtist) {
-			var playingArtist = getArtist
-		}
-	}
+	useEffect(() => {
+		get("audios", setAudios, "audios")
+		get("bought-audios", setBoughtAudios, "boughtAudios")
+	}, [])
 
 	// Listen for show change and autoplay song
 	useEffect(() => {
 		// Check if show is 0
 		if (show.id != 0 && show.id != "") {
-			var playPromise = audioEl.current.play();
+			var playPromise = audioEl.current.play()
 
 			if (playPromise != undefined) {
-				playPromise.then(() => {
-					// Automatic playback started!
-					// Show playing UI.
-					setPlayBtn(true)
-					setAudioLoader(false)
-					audioEl.current.currentTime = show.time
-					// Song ends
-					audioEl.current.addEventListener('ended', nextSong);
-					console.log("play")
-				}).catch((e) => {
-					// Auto-play was prevented
-					// Show paused UI.
-					setPlayBtn(false)
-					setAudioLoader(true)
-				});
+				playPromise
+					.then(() => {
+						// Automatic playback started!
+						// Show playing UI.
+						setPlayBtn(true)
+						setAudioLoader(false)
+						audioEl.current.currentTime = show.time
+						// Song ends
+						audioEl.current.addEventListener("ended", nextSong)
+						console.log("play")
+					})
+					.catch((e) => {
+						// Auto-play was prevented
+						// Show paused UI.
+						setPlayBtn(false)
+						setAudioLoader(true)
+					})
 			}
 		}
-	}, [show.id, getAudio])
+	}, [show.id, audio])
 
 	// Song titles
-	var songs = [];
+	var songs = []
 
 	// Add bought song ids to songs array
-	boughtAudios
-		.map((boughtAudio) => (songs.push(boughtAudio.audioId)))
+	boughtAudios.map((boughtAudio) => songs.push(boughtAudio.audioId))
 
 	// Keep track of song
 	// let songIndex = songs.indexOf(show.toString())
 	let songIndex = songs.indexOf(show.id)
 
-	const fmtMSS = (s) => { return (s - (s %= 60)) / 60 + (10 < s ? ':' : ':0') + ~~(s) }
+	const fmtMSS = (s) => {
+		return (s - (s %= 60)) / 60 + (10 < s ? ":" : ":0") + ~~s
+	}
 
 	// Play song
 	const playSong = () => {
 		setPlayBtn(true)
-		audioEl.current.play();
+		audioEl.current.play()
 	}
 
 	// Pause song
 	const pauseSong = () => {
 		setPlayBtn(false)
-		audioEl.current.pause();
+		audioEl.current.pause()
 	}
 
 	// Previous song
 	const prevSong = () => {
-		songIndex--;
+		songIndex--
 
 		if (loop) {
 			if (songIndex < 0) {
-				songIndex = songs.length - 1;
+				songIndex = songs.length - 1
 			}
 		} else {
 			if (songIndex < 0) {
@@ -106,7 +103,7 @@ const onAudioPlayer = (getLocalStorage, setErrors, auth, audios, boughtAudios, u
 		if (shuffle) {
 			const max = songs.length - 1
 			const min = 0
-			songIndex = Math.floor(Math.random() * (max - min + 1)) + min;
+			songIndex = Math.floor(Math.random() * (max - min + 1)) + min
 		}
 
 		setShow(songs[songIndex])
@@ -114,7 +111,7 @@ const onAudioPlayer = (getLocalStorage, setErrors, auth, audios, boughtAudios, u
 
 	// Next song
 	const nextSong = () => {
-		songIndex++;
+		songIndex++
 
 		// Loop
 		if (loop) {
@@ -131,7 +128,7 @@ const onAudioPlayer = (getLocalStorage, setErrors, auth, audios, boughtAudios, u
 		if (shuffle) {
 			const max = songs.length - 1
 			const min = 0
-			songIndex = Math.floor(Math.random() * (max - min + 1)) + min;
+			songIndex = Math.floor(Math.random() * (max - min + 1)) + min
 		}
 
 		setShow(songs[songIndex])
@@ -139,12 +136,15 @@ const onAudioPlayer = (getLocalStorage, setErrors, auth, audios, boughtAudios, u
 
 	// Update audio progress bar
 	function updateProgress() {
-		const progress = (audioEl.current.currentTime / audioEl.current.duration) * 100;
+		const progress =
+			(audioEl.current.currentTime / audioEl.current.duration) * 100
 		progress >= 0 && setProgressPercent(progress)
 		// audioProgress.current.style.width = `${progressPercent}%`;
 
-		{/* Pause at 10s if user has not bought the audio */ }
-		if (!playingAudio.hasBoughtAudio && playingAudio.username != auth.username) {
+		{
+			/* Pause at 10s if user has not bought the audio */
+		}
+		if (!audio.hasBoughtAudio && audio.username != auth.username) {
 			if (audioEl.current.currentTime >= 10) {
 				pauseSong()
 				setErrors([`Buy song to continue!`])
@@ -154,7 +154,7 @@ const onAudioPlayer = (getLocalStorage, setErrors, auth, audios, boughtAudios, u
 
 	// Set audio progress bar
 	function setProgress(e) {
-		const width = audioContainer.current.clientWidth;
+		const width = audioContainer.current.clientWidth
 		const clickX = e.nativeEvent.offsetX
 		var seekTo = (clickX / width) * audioEl.current.duration
 		audioEl.current.currentTime = seekTo
@@ -162,22 +162,28 @@ const onAudioPlayer = (getLocalStorage, setErrors, auth, audios, boughtAudios, u
 
 	// Set volume progress bar
 	const onSetVolume = (e) => {
-		const width = volumeContainer.current.clientWidth;
+		const width = volumeContainer.current.clientWidth
 		const clickX = e.nativeEvent.offsetX
 		audioEl.current.volume = clickX / width
 		setVolume(clickX / width)
 	}
 
 	return {
-		playingAudio,
-		playingArtist,
-		show, setShow,
-		playBtn, setPlayBtn,
-		shuffle, setShuffle,
-		loop, setLoop,
-		dur, setDur,
-		volume, setVolume,
-		currentTime, setCurrentTime,
+		audio,
+		show,
+		setShow,
+		playBtn,
+		setPlayBtn,
+		shuffle,
+		setShuffle,
+		loop,
+		setLoop,
+		dur,
+		setDur,
+		volume,
+		setVolume,
+		currentTime,
+		setCurrentTime,
 		audioEl,
 		audioProgress,
 		audioContainer,

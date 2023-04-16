@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef, Suspense } from "react"
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
+import ssrAxios from "@/lib/ssrAxios"
 
 import Carousel from "@/components/Core/Carousel"
 import LoadingAvatarMedia from "@/components/User/LoadingAvatarMedia"
@@ -16,10 +17,11 @@ const VideoCharts = (props) => {
 	const [genre, setGenre] = useState("All")
 	const [artistSlice, setArtistSlice] = useState(8)
 	const [videoSlice, setVideoSlice] = useState(8)
-	const [newlyReleased, setNewlyReleased] = useState([])
-	const [trending, setTrending] = useState([])
-	const [topDownloaded, setTopDownloaded] = useState([])
-	const [topLiked, setTopLiked] = useState([])
+	// Charts
+	const [newlyReleased, setNewlyReleased] = useState(props.newlyReleased)
+	const [trending, setTrending] = useState(props.trending)
+	const [topDownloaded, setTopDownloaded] = useState(props.topDownloaded)
+	const [topLiked, setTopLiked] = useState(props.topLiked)
 
 	useEffect(() => {
 		// Set state for chart list
@@ -43,7 +45,8 @@ const VideoCharts = (props) => {
 		window.onscroll = function (ev) {
 			if (router.pathname.match(/video-charts/)) {
 				const bottom =
-					window.innerHeight + window.scrollY >= document.body.offsetHeight - document.body.offsetHeight / 16
+					window.innerHeight + window.scrollY >=
+					document.body.offsetHeight - document.body.offsetHeight / 16
 
 				if (bottom) {
 					setVideoSlice(videoSlice + 8)
@@ -88,7 +91,8 @@ const VideoCharts = (props) => {
 
 	// Function for loading more artists
 	const handleScroll = (e) => {
-		const bottom = e.target.scrollLeft >= e.target.scrollWidth - e.target.scrollWidth / 3
+		const bottom =
+			e.target.scrollLeft >= e.target.scrollWidth - e.target.scrollWidth / 3
 
 		if (bottom) {
 			setArtistSlice(artistSlice + 10)
@@ -138,7 +142,12 @@ const VideoCharts = (props) => {
 								e.preventDefault()
 								setChart(chartItem)
 							}}>
-							<h5 className={chart == chartItem ? "active-scrollmenu m-0" : "m-0"}>{chartItem}</h5>
+							<h5
+								className={
+									chart == chartItem ? "active-scrollmenu m-0" : "m-0"
+								}>
+								{chartItem}
+							</h5>
 						</a>
 					</span>
 				))}
@@ -154,7 +163,12 @@ const VideoCharts = (props) => {
 								e.preventDefault()
 								setGenre(genreItem)
 							}}>
-							<h6 className={genre == genreItem ? "active-scrollmenu m-0" : "m-0"}>{genreItem}</h6>
+							<h6
+								className={
+									genre == genreItem ? "active-scrollmenu m-0" : "m-0"
+								}>
+								{genreItem}
+							</h6>
 						</a>
 					</span>
 				))}
@@ -190,7 +204,9 @@ const VideoCharts = (props) => {
 					{/* <!-- ****** Songs Area ****** - */}
 					<h2>Songs</h2>
 					<br />
-					<div className="d-flex flex-wrap justify-content-center" onScroll={handleScroll}>
+					<div
+						className="d-flex flex-wrap justify-content-center"
+						onScroll={handleScroll}>
 						{/* Loading Video items */}
 						{dummyArray
 							.filter(() => chartList.length < 1)
@@ -218,6 +234,37 @@ const VideoCharts = (props) => {
 			</div>
 		</>
 	)
+}
+
+// This gets called on every request
+export async function getServerSideProps(context) {
+
+	var data = {
+		newlyReleased: [],
+		trending: [],
+		topDownloaded: [],
+		topLiked: [],
+	}
+
+	// Fetch Newly Released
+	await ssrAxios
+		.get(`/api/video-charts/newly-released`)
+		.then((res) => (data.newlyReleased = res.data))
+	// Fetch Trending
+	await ssrAxios
+		.get(`/api/video-charts/trending`)
+		.then((res) => (data.trending = res.data))
+	// Fetch Top Downloaded
+	await ssrAxios
+		.get(`/api/video-charts/top-downloaded`)
+		.then((res) => (data.topDownloaded = res.data))
+	// Fetch Top Downloaded
+	await ssrAxios
+		.get(`/api/video-charts/top-liked`)
+		.then((res) => (data.topLiked = res.data))
+
+	// Pass data to the page via props
+	return { props: data }
 }
 
 export default VideoCharts

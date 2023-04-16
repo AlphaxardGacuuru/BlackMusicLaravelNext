@@ -57,7 +57,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
-	// Authenticated User
+    // Authenticated User
     Route::get('auth', [UserController::class, 'auth']);
 });
 
@@ -102,12 +102,25 @@ Route::apiResources([
 ]);
 // });
 
+/*
+ * Post */
+Route::get('artist/posts/{username}', [PostController::class, 'artistPosts']);
+
+/*
+ * Video */
+
 // Video Charts
 Route::get('video-charts/newly-released', [VideoController::class, 'newlyReleased']);
 Route::get('video-charts/trending', [VideoController::class, 'trending']);
 Route::get('video-charts/top-downloaded', [VideoController::class, 'topDownloaded']);
 Route::get('video-charts/top-liked', [VideoController::class, 'topLiked']);
 Route::get('videos/download', [VideoController::class, 'download']);
+Route::get('artist/video-albums/{username}', [VideoAlbumController::class, 'artistVideoAlbums']);
+Route::get('artist/videos/{username}', [VideoController::class, 'artistVideos']);
+Route::get('artist/bought-videos/{username}', [BoughtVideoController::class, 'artistBoughtVideos']);
+
+/*
+ * Audio */
 
 // Audio Charts
 Route::get('audio-charts/newly-released', [AudioController::class, 'newlyReleased']);
@@ -115,11 +128,14 @@ Route::get('audio-charts/trending', [AudioController::class, 'trending']);
 Route::get('audio-charts/top-downloaded', [AudioController::class, 'topDownloaded']);
 Route::get('audio-charts/top-liked', [AudioController::class, 'topLiked']);
 Route::get('audios/download', [AudioController::class, 'download']);
+Route::get('artist/audio-albums/{username}', [AudioAlbumController::class, 'artistAudioAlbums']);
+Route::get('artist/audios/{username}', [AudioController::class, 'artistAudios']);
+Route::get('artist/bought-audios/{username}', [BoughtAudioController::class, 'artistBoughtAudios']);
 
 // Filepond Controller
 Route::prefix('filepond')->group(function () {
     Route::controller(FilePondController::class)->group(function () {
-		// User
+        // User
         Route::post('avatar/{id}', 'updateAvatar');
 
         // Video
@@ -137,16 +153,16 @@ Route::prefix('filepond')->group(function () {
         Route::post('audio/{id}', 'updateAudio');
         Route::delete('audio-thumbnail/{id}', 'destoryAudioThumbnail');
         Route::delete('audio/{id}', 'destoryAudio');
-		
-		// Post
+
+        // Post
         Route::post('posts', 'storePostMedia');
         Route::delete('posts/{id}', 'destroyPostMedia');
-		
-		// Karaoke
+
+        // Karaoke
         Route::post('karaokes', 'storeKaraoke');
         Route::delete('karaokes/{id}', 'destroyKaraoke');
-		
-		// Chat
+
+        // Chat
         Route::post('chats', 'storeChatMedia');
         Route::delete('chats/{id}', 'deleteChatMedia');
     });

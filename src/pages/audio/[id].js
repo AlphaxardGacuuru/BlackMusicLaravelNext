@@ -2,6 +2,7 @@ import { useState, useEffect, Suspense } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import axios from "@/lib/axios"
+import ssrAxios from "@/lib/ssrAxios"
 
 import Img from "@/components/Core/Img"
 import Btn from "@/components/Core/Btn"
@@ -32,11 +33,19 @@ const AudioShow = (props) => {
 	let { id } = router.query
 
 	// Set State
-	const [audio, setAudio] = useState({})
+	const [audio, setAudio] = useState(props.audio)
+	const [audioComments, setAudioComments] = useState(props.audioComments)
+	const [boughtAudios, setBoughtAudios] = useState(
+		props.getLocalStorage("boughtAudios")
+	)
+	const [inCart, setInCart] = useState(props.audio.inCart)
+	const [hasLiked, setHasLiked] = useState(props.audio.hasLiked)
+	const [hasFollowed, setHasFollowed] = useState(props.audio.hasFollowed)
 	const [tabClass, setTabClass] = useState("comments")
 	const [bottomMenu, setBottomMenu] = useState("")
 	const [commentToEdit, setCommentToEdit] = useState()
 	const [commentDeleteLink, setCommentDeleteLink] = useState()
+	const [deletedIds, setDeletedIds] = useState([])
 
 	// Fetch Audio Comments
 	useEffect(() => {
@@ -53,8 +62,11 @@ const AudioShow = (props) => {
 				.then((res) => setAudio(res.data[0]))
 				.catch(() => props.setErrors([`Failed to fetch audio`]))
 
-			props.get(`audio-comments/${id}`, props.setAudioComments)
+			props.get(`audio-comments/${id}`, setAudioComments)
 		}
+
+		// Fetch Bought Audios
+		props.get("bought-audios", setBoughtAudios, "boughtAudios")
 
 		// Set states
 		setTimeout(() => {
@@ -74,37 +86,67 @@ const AudioShow = (props) => {
 		}, 1000)
 	}, [id])
 
-	// Function for liking audio
+	/*
+	 * Function for liking audio */
 	const onAudioLike = () => {
-		// Show like
-		audio.hasLiked = !audio.hasLiked
-
+		// Show Like
+		setHasLiked(!hasLiked)
 		// Add like to database
 		axios
-			.post(`/api/audio-likes`, {
-				audio: id,
-			})
+			.post(`/api/audio-likes`, { audio: id })
 			.then((res) => {
 				props.setMessages([res.data])
 				// Fetch Audio
-				axios.get(`/api/audios/${id}`).then((res) => setAudio(res.data[0]))
+				axios
+					.get(`api/audios/${id}`)
+					.then((res) => setAudio(res.data[0]))
+					.catch((err) => props.getErrors(err))
 			})
 			.catch((err) => props.getErrors(err))
 	}
 
-	// Function for liking comments
-	const onCommentLike = (comment) => {
-		// Show like
-		const newAudioComments = props.audioComments.filter((item) => {
-			// Get the exact audio and change like status
-			if (item.id == comment) {
-				item.hasLiked = !item.hasLiked
-			}
-			return true
-		})
-		// Set new audios
-		props.setAudioComments(newAudioComments)
+	/*
+	 * Buy function */
+	const onBuyAudios = () => {
+		onCartAudios()
+		setTimeout(() => router.push("/cart"), 500)
+	}
 
+	/*
+	 * Function for adding audio to cart */
+	const onCartAudios = () => {
+		// Show in cart
+		setInCart(!inCart)
+		// Add Audio to Cart
+		axios
+			.post(`/api/cart-audios`, { audio: props.audio.id })
+			.then((res) => props.setMessages([res.data]))
+			.catch((err) => props.getErrors(err, true))
+	}
+
+	/*
+	 * Function for downloading audio */
+	const onDownload = () => {
+		window.open(`${props.url}/api/audios/download/${audio.id}`)
+		props.setMessages([`Downloading ${audio.name}`])
+	}
+
+	/*
+	 * Function for following Musicans */
+	const onFollow = () => {
+		// Show follow
+		setHasFollowed(!hasFollowed)
+
+		// Add follow
+		axios
+			.post(`/api/follows`, { musician: audio.username })
+			.then((res) => props.setMessages([res.data]))
+			.catch((err) => props.getErrors(err, true))
+	}
+
+	/*
+	 * Function for liking comments */
+	const onCommentLike = (comment) => {
 		// Add like to database
 		axios
 			.post(`/api/audio-comment-likes`, {
@@ -112,34 +154,21 @@ const AudioShow = (props) => {
 			})
 			.then((res) => {
 				props.setMessages([res.data])
-				// Update audio comments
-				props.get(`audio-comments/${id}`, props.setAudioComments)
+				props.get(`audio-comments/${id}`, setAudioComments)
 			})
 			.catch((err) => props.getErrors(err))
 	}
 
-	// Function for deleting comments
+	/*
+	 * Function for deleting comments */
 	const onDeleteComment = (comment) => {
+		// Remove deleted comment
+		setDeletedIds([...deletedIds, comment])
+
 		axios
 			.delete(`/api/audio-comments/${comment}`)
-			.then((res) => {
-				props.setMessages([res.data])
-				// Update audio comments
-				props.get(`audio-comments/${id}`, props.setAudioComments)
-			})
+			.then((res) => props.setMessages([res.data]))
 			.catch((err) => props.getErrors(err))
-	}
-
-	// Function for buying audio to cart
-	const onBuyAudios = (audio) => {
-		props.onCartAudios(audio)
-		setTimeout(() => history.push("/cart"), 1000)
-	}
-
-	// Function for downloading audio
-	const onDownload = () => {
-		window.open(`${props.url}/api/audios/${audio.id}`)
-		props.setMessages([`Downloading ${audio.name}`])
 	}
 
 	// Web Share API for share button
@@ -312,7 +341,7 @@ const AudioShow = (props) => {
 					<div className="d-flex justify-content-between">
 						{/* Audio likes */}
 						<div className="p-2 me-2">
-							{audio.hasLiked ? (
+							{hasLiked ? (
 								<a
 									href="#"
 									className="fs-6"
@@ -358,39 +387,37 @@ const AudioShow = (props) => {
 						</div>
 
 						{/* Download/Buy button */}
-						{audio.hasBoughtAudio ? (
+						{audio.hasBoughtAudio || props.auth?.username == "@blackmusic" ? (
 							// Ensure audio is downloadable
-							!audio.audio.match(/https/) && (
-								<div className="p-2">
-									<Btn
-										btnClass="mysonar-btn white-btn"
-										btnText="download"
-										onClick={onDownload}
-									/>
-								</div>
-							)
-						) : // Cart Btn
-						audio.inCart ? (
-							<div className="p-2">
-								<button
-									className="mysonar-btn white-btn mb-1"
-									style={{ minWidth: "90px", height: "33px" }}
-									onClick={() => props.onCartAudios(id)}>
-									<CartSVG />
-								</button>
-							</div>
-						) : (
 							<div className="p-2">
 								<Btn
-									btnClass="mysonar-btn green-btn btn-2"
-									btnText="KES 20"
-									onClick={() => {
-										// If user is guest then redirect to Login
-										props.auth.username == "@guest"
-											? onGuestBuy()
-											: onBuyAudios(id)
-									}}
+									btnClass="mysonar-btn white-btn"
+									btnText="download"
+									onClick={onDownload}
 								/>
+							</div>
+						) : (
+							// Cart Btn
+							<div className="p-2">
+								{inCart ? (
+									<button
+										className="mysonar-btn white-btn mb-1"
+										style={{ minWidth: "90px", height: "33px" }}
+										onClick={onCartAudios}>
+										<CartSVG />
+									</button>
+								) : (
+									<Btn
+										btnClass="mysonar-btn green-btn btn-2"
+										btnText="KES 20"
+										onClick={() => {
+											// If user is guest then redirect to Login
+											props.auth.username == "@guest"
+												? onGuestBuy()
+												: onBuyAudios()
+										}}
+									/>
+								)}
 							</div>
 						)}
 					</div>
@@ -434,7 +461,7 @@ const AudioShow = (props) => {
 					{/* {{-- Collapse End --}} */}
 
 					{/* Artist Area */}
-					<div className="p-2 border-bottom border-dark">
+					<div className="border-bottom border-dark">
 						<div className="d-flex">
 							<div className="p-2">
 								<Link href={`/profile/${audio.username}`}>
@@ -450,7 +477,7 @@ const AudioShow = (props) => {
 									</a>
 								</Link>
 							</div>
-							<div className="p-2" style={{ width: "50%" }}>
+							<div className="p-2 flex-grow-1" style={{ width: "50%" }}>
 								<Link href={`/profile/${audio.username}`}>
 									<a>
 										<div
@@ -473,6 +500,41 @@ const AudioShow = (props) => {
 										</div>
 									</a>
 								</Link>
+							</div>
+							<div className="p-2">
+								{/* Check whether user has bought at least one song from user */}
+								{/* Check whether user has followed user and display appropriate button */}
+								{audio.hasBought1 ||
+								props.auth?.username == "@blackmusic" ||
+								props.auth?.username != audio.username ? (
+									hasFollowed ? (
+										<button
+											className={"btn float-right rounded-0 text-light"}
+											style={{ backgroundColor: "#232323" }}
+											onClick={onFollow}>
+											<div>
+												Followed
+												<CheckSVG />
+											</div>
+										</button>
+									) : (
+										<Btn
+											btnClass="mysonar-btn white-btn float-right"
+											onClick={onFollow}
+											btnText="follow"
+										/>
+									)
+								) : (
+									<Btn
+										btnClass="mysonar-btn white-btn float-right"
+										onClick={() =>
+											props.setErrors([
+												`You must have bought atleast one song by ${props.user.username}`,
+											])
+										}
+										btnText="follow"
+									/>
+								)}
 							</div>
 						</div>
 					</div>
@@ -528,19 +590,21 @@ const AudioShow = (props) => {
 						props.auth.username == "@blackmusic" ||
 						audio.hasBoughtAudio ? (
 							// Check if audio comments exist
-							props.audioComments.length > 0 ? (
-								props.audioComments.map((comment, key) => (
-									<CommentMedia
-										{...props}
-										key={key}
-										comment={comment}
-										setBottomMenu={setBottomMenu}
-										setCommentDeleteLink={setCommentDeleteLink}
-										setCommentToEdit={setCommentToEdit}
-										onCommentLike={onCommentLike}
-										onDeleteComment={onDeleteComment}
-									/>
-								))
+							audioComments.length > 0 ? (
+								audioComments
+									.filter((comment) => !deletedIds.includes(comment.id))
+									.map((comment, key) => (
+										<CommentMedia
+											{...props}
+											key={key}
+											comment={comment}
+											setBottomMenu={setBottomMenu}
+											setCommentDeleteLink={setCommentDeleteLink}
+											setCommentToEdit={setCommentToEdit}
+											onCommentLike={onCommentLike}
+											onDeleteComment={onDeleteComment}
+										/>
+									))
 							) : (
 								<center className="my-3">
 									<h6 style={{ color: "grey" }}>No comments to show</h6>
@@ -561,7 +625,7 @@ const AudioShow = (props) => {
 					<div className="p-2 border-bottom border-dark">
 						<h5>Up next</h5>
 					</div>
-					{!props.boughtAudios.some(
+					{!boughtAudios.some(
 						(boughtAudio) => boughtAudio.username == props.auth.username
 					) && (
 						<center>
@@ -571,7 +635,7 @@ const AudioShow = (props) => {
 						</center>
 					)}
 
-					{props.boughtAudios
+					{boughtAudios
 						.filter((boughtAudio) => {
 							return (
 								boughtAudio.username == props.auth.username &&
@@ -631,24 +695,26 @@ const AudioShow = (props) => {
 }
 
 // This gets called on every request
-// export async function getServerSideProps(context) {
-	// const { id } = context.query
+export async function getServerSideProps(context) {
+	const { id } = context.query
 
-	// var data = {
-		// audio: null,
-		// comments: null,
-	// }
+	var data = {
+		audio: {},
+		audioComments: {},
+		audios: {},
+	}
 
-	// Fetch Audio
-	// await axios.get(`/api/audios/${id}`).then((res) => (data.audio = res.data))
-
-	// Fetch Audio Comments
-	// await axios
-		// .get(`/api/audio-comments/${id}`)
-		// .then((res) => (data.comments = res.data))
+	// Fetch Post Comments
+	await ssrAxios
+		.get(`/api/audios/${id}`)
+		.then((res) => (data.audio = res.data[0]))
+	await ssrAxios
+		.get(`/api/audio-comments/${id}`)
+		.then((res) => (data.audioComments = res.data))
+	await ssrAxios.get(`/api/audios`).then((res) => (data.audios = res.data))
 
 	// Pass data to the page via props
-	// return { props: { data } }
-// }
+	return { props: data }
+}
 
 export default AudioShow

@@ -25,7 +25,7 @@ class FollowService extends Service
             ->where("artist", $request->input("musician"))
             ->exists();
 
-        if ($hasBoughtVideo || $hasBoughtAudio) {
+        if ($hasBoughtVideo || $hasBoughtAudio || $this->username == "@blackmusic") {
             // Check if user has followed
             $hasFollowed = Follow::where('followed', $request->musician)
                 ->where('username', auth('sanctum')->user()->username)

@@ -1,10 +1,16 @@
-const Messages = ({ messages, errors }) => {
+const Messages = ({ messages, setMessages, errors, setErrors }) => {
+	
+	// Reset Messages and Errors to null after 3 seconds
+	if (errors.length > 0 || messages.length > 0) {
+		setTimeout(() => setErrors([]), 2900)
+		setTimeout(() => setMessages([]), 2900)
+	}
 
 	return (
 		<center>
 			<h6
 				id="snackbar"
-				className={errors.length > 0 || messages.length > 0 ? 'show' : ''}>
+				className={errors.length > 0 || messages.length > 0 ? "show" : ""}>
 				{/* Message Toast */}
 				{messages.map((message, key) => (
 					<div
@@ -21,7 +27,7 @@ const Messages = ({ messages, errors }) => {
 						className="p-2 mt-2"
 						style={{
 							backgroundColor: "#232323",
-							transition: "0.3s"
+							transition: "0.3s",
 						}}>
 						{error}
 					</div>

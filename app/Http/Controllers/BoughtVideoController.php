@@ -69,4 +69,11 @@ class BoughtVideoController extends Controller
     {
         //
     }
+
+	/*
+	* Artist's Bought Videos */
+	public function artistBoughtVideos($username, BoughtVideoService $service)
+	{
+		return $service->artistBoughtVideos($username);
+	} 
 }

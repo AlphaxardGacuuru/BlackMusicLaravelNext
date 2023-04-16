@@ -51,7 +51,6 @@ const AudioAlbumCreate = (props) => {
 		axios.post(`/api/audio-albums`, formData)
 			.then((res) => {
 				props.setMessages([res.data])
-				props.get("audio-albums", props.setAudioAlbums, "audioAlbums")
 				// Remove loader for button
 				setLoadingBtn(false)
 				setTimeout(() => router.push('/audio'), 500)

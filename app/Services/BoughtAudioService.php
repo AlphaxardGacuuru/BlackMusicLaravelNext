@@ -24,8 +24,7 @@ class BoughtAudioService extends Service
 
         foreach ($getBoughtAudios as $boughtAudio) {
             array_push($boughtAudios,
-                $this->structure($boughtAudio->audio,
-                    $this->username));
+                $this->structure($boughtAudio->audio));
         }
 
         return $boughtAudios;
@@ -94,35 +93,6 @@ class BoughtAudioService extends Service
         return [$boughtAudios, $decoArtists];
     }
 
-    private function structure($audio, $username)
-    {
-        return [
-            "id" => $audio->id,
-            "audio" => $audio->audio,
-            "name" => $audio->name,
-            "artistName" => $audio->user->name,
-            "username" => $audio->username,
-            "avatar" => $audio->user->avatar,
-            "artistDecos" => $audio->user->decos->count(),
-            "ft" => $audio->ft,
-            "audioAlbumId" => $audio->audio_album_id,
-            "album" => $audio->album->name,
-            "genre" => $audio->genre,
-            "thumbnail" => $audio->thumbnail,
-            "description" => $audio->description,
-            "released" => $audio->released,
-            "hasLiked" => $audio->hasLiked($username),
-            "likes" => $audio->likes->count(),
-            "comments" => $audio->comments->count(),
-            "inCart" => $audio->inCart($username),
-            "hasBoughtAudio" => $audio->hasBoughtAudio($username),
-            "hasBought1" => $audio->user->hasBought1($username),
-            "hasFollowed" => $audio->user->hasFollowed($username),
-            "downloads" => $audio->bought->count(),
-            "createdAt" => $audio->created_at,
-        ];
-    }
-
     // Store Bought Audio
     private function storeBoughtAudio($cartAudio)
     {
@@ -161,5 +131,49 @@ class BoughtAudioService extends Service
 
             return $cartAudio->audio->username;
         }
+    }
+
+	/*
+	* Artist's Bought Audios */
+	public function artistBoughtAudios($username)
+	{
+		$getArtistBoughtAudios = BoughtAudio::where("artist", $username)->get();
+
+		$artistBoughtAudios = [];
+
+		foreach ($getArtistBoughtAudios as $boughtAudio) {
+		array_push($artistBoughtAudios, $this->structure($boughtAudio->audio));
+		}
+
+		return $artistBoughtAudios;
+	} 
+
+    private function structure($audio)
+    {
+        return [
+            "id" => $audio->id,
+            "audio" => $audio->audio,
+            "name" => $audio->name,
+            "artistName" => $audio->user->name,
+            "username" => $audio->username,
+            "avatar" => $audio->user->avatar,
+            "artistDecos" => $audio->user->decos->count(),
+            "ft" => $audio->ft,
+            "audioAlbumId" => $audio->audio_album_id,
+            "album" => $audio->album->name,
+            "genre" => $audio->genre,
+            "thumbnail" => $audio->thumbnail,
+            "description" => $audio->description,
+            "released" => $audio->released,
+            "hasLiked" => $audio->hasLiked($this->username),
+            "likes" => $audio->likes->count(),
+            "comments" => $audio->comments->count(),
+            "inCart" => $audio->inCart($this->username),
+            "hasBoughtAudio" => $audio->hasBoughtAudio($this->username),
+            "hasBought1" => $audio->user->hasBought1($this->username),
+            "hasFollowed" => $audio->user->hasFollowed($this->username),
+            "downloads" => $audio->bought->count(),
+            "createdAt" => $audio->created_at,
+        ];
     }
 }

@@ -19,14 +19,7 @@ class AudioAlbumService extends Service
         $audioAlbums = [];
 
         foreach ($getAudioAlbums as $audioAlbum) {
-            array_push($audioAlbums, [
-                "id" => $audioAlbum->id,
-                "username" => $audioAlbum->username,
-                "name" => $audioAlbum->name,
-                "cover" => $audioAlbum->cover,
-                "released" => $audioAlbum->released,
-                "createdAt" => $audioAlbum->created_at,
-            ]);
+            array_push($audioAlbums, $this->structure($audioAlbum));
         }
 
         return $audioAlbums;
@@ -40,7 +33,9 @@ class AudioAlbumService extends Service
      */
     public function show($id)
     {
-        return AudioAlbum::find($id);
+        $audioAlbum = AudioAlbum::find($id);
+
+        return $this->structure($audioAlbum);
     }
 
     /**
@@ -109,5 +104,34 @@ class AudioAlbumService extends Service
         $aAlbum->save();
 
         return response('Audio Album Edited', 200);
+    }
+
+    /*
+     * Artist's Audio Albums */
+    public function artistAudioAlbums($username)
+    {
+        $getArtistAudioAlbums = AudioAlbum::where("username", $username)->get();
+
+        $artistAudioAlbums = [];
+
+        foreach ($getArtistAudioAlbums as $audioAlbum) {
+            array_push($artistAudioAlbums, $this->structure($audioAlbum));
+        }
+
+        return $artistAudioAlbums;
+    }
+
+    /*
+     * Album Structure*/
+    public function structure($audioAlbum)
+    {
+        return [
+            "id" => $audioAlbum->id,
+            "username" => $audioAlbum->username,
+            "name" => $audioAlbum->name,
+            "cover" => $audioAlbum->cover,
+            "released" => $audioAlbum->released,
+            "createdAt" => $audioAlbum->created_at,
+        ];
     }
 }

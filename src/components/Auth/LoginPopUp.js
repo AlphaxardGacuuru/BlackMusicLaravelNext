@@ -68,7 +68,7 @@ const LoginPopUp = (props) => {
 			props.setLogin(false)
 			props.setLocalStorage("sanctumToken", res.data)
 			// Update Logged in user
-			props.get(`auth`, props.setAuth, 'auth')
+			props.get(`auth`, props.setAuth, 'auth', false)
 			props.setMessages(["Logged in"])
 			// Reload page
 			setTimeout(() => location.reload(), 1000)

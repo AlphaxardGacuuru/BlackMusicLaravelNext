@@ -32,6 +32,13 @@ class AudioAlbum extends Model
         );
     }
 
+    protected function updatedAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => Carbon::parse($value)->format('d M Y'),
+        );
+    }
+
     protected function createdAt(): Attribute
     {
         return Attribute::make(

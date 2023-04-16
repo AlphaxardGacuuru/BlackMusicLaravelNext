@@ -1,4 +1,4 @@
-import { useState, Suspense } from "react"
+import { useState, Suspense, useEffect } from "react"
 import axios from "@/lib/axios"
 
 import VideoMedia from "@/components/Video/VideoMedia"
@@ -6,17 +6,25 @@ import AudioMedia from "@/components/Audio/AudioMedia"
 import Btn from "@/components/Core/Btn"
 
 const Cart = (props) => {
+	const [cartVideos, setCartVideos] = useState([])
+	const [cartAudios, setCartAudios] = useState([])
 	const [bottomMenu, setBottomMenu] = useState("")
 	const [receipt, setReceipt] = useState("")
 	const [receiptVideos, setReceiptVideos] = useState([])
 	const [receiptAudios, setReceiptAudios] = useState([])
 
 	// Calculate totals
-	const videoTotal = props.cartVideos.length
-	const videoTotalCash = props.cartVideos.length * 20
-	const audioTotal = props.cartAudios.length
-	const audioTotalCash = props.cartAudios.length * 10
+	const videoTotal = cartVideos.length
+	const videoTotalCash = cartVideos.length * 20
+	const audioTotal = cartAudios.length
+	const audioTotalCash = cartAudios.length * 10
 	const total = videoTotalCash + audioTotalCash
+
+	useEffect(() => {
+		props.get("cart-videos", setCartVideos)
+		props.get("cart-audios", setCartAudios)
+	}, []);
+	
 
 	// Send STKPush
 	const STKPush = (amount) => {
@@ -115,16 +123,16 @@ const Cart = (props) => {
 					<div className="mb-4">
 						<center>
 							{/* Cart Videos */}
-							{props.cartVideos.length > 0 && (
+							{cartVideos.length > 0 && (
 								<>
 									<h3 className="pt-4 pb-2 border-bottom border-dark">Videos</h3>
 									<hr />
 								</>
 							)}
-							{props.cartVideos.map((cartVideo, key) => (
+							{cartVideos.map((cartVideo, key) => (
 								<VideoMedia {...props} key={key} video={cartVideo} />
 							))}
-							{props.cartVideos.length > 0 && (
+							{cartVideos.length > 0 && (
 								<div className="d-flex justify-content-between border-top border-dark">
 									<div className="p-2">
 										<h4 className="text-success">Sub Total</h4>
@@ -141,7 +149,7 @@ const Cart = (props) => {
 				<div className="col-sm-4">
 					<div className="mb-4">
 						{/* Cart Audios */}
-						{props.cartAudios.length > 0 && (
+						{cartAudios.length > 0 && (
 							<>
 								<center>
 									<h3 className="pt-4 pb-2 border-bottom border-dark">Audios</h3>
@@ -149,10 +157,10 @@ const Cart = (props) => {
 								<hr />
 							</>
 						)}
-						{props.cartAudios.map((cartAudio, key) => (
+						{cartAudios.map((cartAudio, key) => (
 							<AudioMedia {...props} key={key} audio={cartAudio} />
 						))}
-						{props.cartAudios.length > 0 && (
+						{cartAudios.length > 0 && (
 							<div className="d-flex justify-content-between border-top border-dark">
 								<div className="p-2">
 									<h4 className="text-success">Sub Total</h4>

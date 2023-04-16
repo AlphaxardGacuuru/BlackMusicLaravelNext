@@ -39,9 +39,9 @@ class KaraokeCommentController extends Controller
      * @param  \App\Models\KaraokeComment  $karaokeComment
      * @return \Illuminate\Http\Response
      */
-    public function show(KaraokeComment $karaokeComment)
+    public function show($id, KaraokeCommentService $service)
     {
-        //
+        return $service->show($id);
     }
 
     /**

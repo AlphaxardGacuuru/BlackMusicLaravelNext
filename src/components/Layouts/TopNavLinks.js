@@ -18,14 +18,14 @@ const TopNavLinks = props => {
             {/* Admin */}
             {props.auth?.username == "@blackmusic" && (
                 <Link href="/admin">
-                    <a className="me-3">
+                    <a>
                         <PersonSVG />
                     </a>
                 </Link>
             )}
 
             {/* Cart */}
-            <div className="dropdown me-3 hidden">
+            <div className="dropdown mx-3 hidden">
                 <Link href="/cart">
                     <a
                         role="button"

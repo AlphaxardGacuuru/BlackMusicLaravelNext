@@ -39,9 +39,9 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)
+    public function show($id, PostService $service)
     {
-        //
+        return $service->show($id);
     }
 
     /**
@@ -65,5 +65,12 @@ class PostController extends Controller
     public function destroy($id, PostService $postService)
     {
         return $postService->destory($id);
+    }
+
+    /*
+     * Artist's Posts */
+    public function artistPosts($username, PostService $service)
+    {
+        return $service->artistPosts($username);
     }
 }

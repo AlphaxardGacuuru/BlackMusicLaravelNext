@@ -40,7 +40,7 @@ const Settings = (props) => {
 			.then((res) => {
 				props.setMessages([res.data])
 				// Update Kopokopo recipients
-				props.get("kopokopo-recipients", props.setKopokopoRecipients, "kopokopoRecipients")
+				props.get("kopokopo-recipients", setKopokopoRecipients, "kopokopoRecipients")
 				// Remove loading button
 				setLoadingBtn(false)
 			}).catch((err) => {
@@ -56,7 +56,7 @@ const Settings = (props) => {
 		}).then((res) => {
 			props.setMessages([res.data])
 			// Update song payouts
-			props.get("song-payouts", props.setSongPayouts, "songPayouts")
+			props.get("song-payouts", setSongPayouts, "songPayouts")
 			// Remove loading button
 			setLoadingBtn(false)
 		}).catch((err) => {
@@ -72,21 +72,21 @@ const Settings = (props) => {
 				<center>
 					<h1>Song Payouts</h1>
 					<table className="table table-responsive table-hover">
-						<thead className="border border-0">
-							<tr className="border border-0">
+						<thead className="border-0">
+							<tr className="border-0">
 								<th className="border-top border-dark">Amount</th>
 								<th className="border-top border-dark">Date Sent</th>
 							</tr>
 						</thead>
-						<tbody className="border border-0">
+						<tbody className="border-0">
 							{/* Show Video Payouts */}
 							{/* Level 1 */}
 							{songPayouts.songPayouts &&
 								songPayouts.songPayouts
 									.map((videoPayout, key) => (
-										<tr key={key} className="border border-0">
+										<tr key={key} className="border-0">
 											<td className="text-success">KES {videoPayout.amount}</td>
-											<td className="border border-0">{videoPayout.created_at}</td>
+											<td className="border-0">{videoPayout.created_at}</td>
 										</tr>))}
 							{/* Show Referrals End */}
 						</tbody>
@@ -124,7 +124,7 @@ const Settings = (props) => {
 							btnText="create wallet"
 							loading={loadingBtn} />}
 					<br />
-					<hr className="border border-dark w-50" />
+					<hr className="border-dark w-50" />
 					<br />
 					<br />
 					<br />
@@ -162,8 +162,8 @@ const Settings = (props) => {
 
 				<h1 style={{ textAlign: "center" }}>Your Invites</h1>
 				<table className="table table-responsive table-hover">
-					<thead className="border border-0">
-						<tr className="border border-0">
+					<thead className="border-0">
+						<tr className="border-0">
 							<th className="border-top border-dark">Level</th>
 							<th className="border-top border-dark">Username</th>
 							<th className="border-top border-dark">Videos</th>
@@ -171,18 +171,18 @@ const Settings = (props) => {
 							<th className="border-top border-dark">Revenue</th>
 						</tr>
 					</thead>
-					<tbody className="border border-0">
+					<tbody className="border-0">
 						{/* Show Referrals */}
 						{/* Level 1 */}
 						{referrals.referrals &&
 							referrals.referrals
 								.map((referral, key) => (
-									<tr key={key} className="border border-0">
-										<td className="border border-0">{referral.level}</td>
-										<td className="border border-0">{referral.referee}</td>
-										<td className="border border-0">{referral.boughtVideos}</td>
-										<td className="border border-0">{referral.boughtAudios}</td>
-										<td className="text-success border border-0">KES {referral.revenue}</td>
+									<tr key={key} className="border-0">
+										<td className="border-0">{referral.level}</td>
+										<td className="border-0">{referral.referee}</td>
+										<td className="border-0">{referral.boughtVideos}</td>
+										<td className="border-0">{referral.boughtAudios}</td>
+										<td className="text-success border-0">KES {referral.revenue}</td>
 									</tr>
 								))}
 						{/* Show Referrals End */}
@@ -194,7 +194,7 @@ const Settings = (props) => {
 				<h2 style={{ textAlign: "center" }}>Total Revenues</h2>
 				<table className="table table-responsive table-hover">
 					<thead>
-						<tr className="border border-0">
+						<tr className="border-0">
 							<th className="border-top border-dark">Level 1</th>
 							<th className="border-top border-dark">Level 2</th>
 							<th className="border-top border-dark">Level 3</th>
@@ -202,13 +202,13 @@ const Settings = (props) => {
 							<th className="border-top border-dark">Total</th>
 						</tr>
 					</thead>
-					<tbody className="border border-0">
+					<tbody className="border-0">
 						<tr className="text-success">
-							<td className="border border-0">KES {referrals.level1Revenue}</td>
-							<td className="border border-0">KES {referrals.level2Revenue}</td>
-							<td className="border border-0">KES {referrals.level3Revenue}</td>
-							<td className="border border-0">KES {referrals.level4Revenue}</td>
-							<td className="border border-0">KES {referrals.totalRevenue}</td>
+							<td className="border-0">KES {referrals.level1Revenue}</td>
+							<td className="border-0">KES {referrals.level2Revenue}</td>
+							<td className="border-0">KES {referrals.level3Revenue}</td>
+							<td className="border-0">KES {referrals.level4Revenue}</td>
+							<td className="border-0">KES {referrals.totalRevenue}</td>
 						</tr>
 					</tbody>
 				</table>

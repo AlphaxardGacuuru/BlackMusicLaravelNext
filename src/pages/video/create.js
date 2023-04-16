@@ -32,8 +32,11 @@ registerPlugin(
 );
 
 const VideoCreate = (props) => {
-
 	// Declare states
+	// Get Artist's Video Albums
+	const [artistVideoAlbums, setArtistVideoAlbums] = useState(
+		props.getLocalStorage("artistVideoAlbums")
+	)
 	const [formData, setFormData] = useState()
 	const [video, setVideo] = useState("")
 	const [name, setName] = useState("")
@@ -43,13 +46,20 @@ const VideoCreate = (props) => {
 	const [released, setReleased] = useState("")
 	const [description, setDescription] = useState("")
 	const [thumbnail, setThumbnail] = useState("")
-	const [files, setFiles] = useState([]);
+	const [files, setFiles] = useState([])
 	const [loadingBtn, setLoadingBtn] = useState()
 
 	// Get history for page location
 	const router = useRouter()
 
 	useEffect(() => {
+		// Get Artist Video Albums
+		props.get(
+			`artist/video-albums/${props.auth?.username}`,
+			setArtistVideoAlbums,
+			"artistVideoAlbums",
+			false
+		)
 		// Declare new FormData object for form data
 		setFormData(new FormData())
 	}, [])
@@ -61,28 +71,30 @@ const VideoCreate = (props) => {
 		setLoadingBtn(true)
 
 		// Add form data to FormData object
-		formData.append("video", video);
-		formData.append("thumbnail", thumbnail);
-		formData.append("name", name);
-		formData.append("username", props.auth?.username);
-		formData.append("ft", ft);
-		formData.append("video_album_id", videoAlbumId);
-		formData.append("genre", genre);
-		formData.append("released", released);
-		formData.append("description", description);
-		formData.append("files", files);
+		formData.append("video", video)
+		formData.append("thumbnail", thumbnail)
+		formData.append("name", name)
+		formData.append("username", props.auth?.username)
+		formData.append("ft", ft)
+		formData.append("video_album_id", videoAlbumId)
+		formData.append("genre", genre)
+		formData.append("released", released)
+		formData.append("description", description)
+		formData.append("files", files)
 
 		// Send data to PostsController
 		// Get csrf cookie from Laravel inorder to send a POST request
-		axios.post(`/api/videos`, formData)
+		axios
+			.post(`/api/videos`, formData)
 			.then((res) => {
 				props.setMessages([res.data])
 				// Update Videos
 				props.get("videos", props.setVideos, "videos")
 				// Remove loader for button
 				setLoadingBtn(false)
-				setTimeout(() => router.push('/video'), 500)
-			}).catch(err => {
+				setTimeout(() => router.push("/video"), 500)
+			})
+			.catch((err) => {
 				// Remove loader for button
 				setLoadingBtn(false)
 				props.getErrors(err)
@@ -113,7 +125,9 @@ const VideoCreate = (props) => {
 				<div className="container">
 					<div className="row">
 						<div className="col-12">
-							<div className="contact-form text-center call-to-action-content wow fadeInUp" data-wow-delay="0.5s">
+							<div
+								className="contact-form text-center call-to-action-content wow fadeInUp"
+								data-wow-delay="0.5s">
 								<h2>Upload your video</h2>
 								<h5>It's free</h5>
 								<br />
@@ -125,7 +139,8 @@ const VideoCreate = (props) => {
 											className="form-control"
 											placeholder="Video name"
 											required={true}
-											onChange={(e) => setName(e.target.value)} />
+											onChange={(e) => setName(e.target.value)}
+										/>
 										<br />
 										<br />
 
@@ -138,54 +153,93 @@ const VideoCreate = (props) => {
 											name="ft"
 											className="form-control"
 											placeholder="Featuring Artist e.g. @JohnDoe"
-											onChange={(e) => setFt(e.target.value)} />
+											onChange={(e) => setFt(e.target.value)}
+										/>
 										<br />
 										<br />
 
 										<select
-											name='album'
-											className='form-control'
+											name="album"
+											className="form-control"
 											required={true}
 											onChange={(e) => setVideoAlbumId(e.target.value)}>
-											<option defaultValue value="">Select Album</option>
-											{props.videoAlbums
-												.filter((videoAlbum) => videoAlbum.username == props.auth?.username)
-												.map((videoAlbum, key) => (
-													<option
-														key={key}
-														value={videoAlbum.id}
-														className="bg-dark text-light">
-														{videoAlbum.name}
-													</option>
-												))}
+											<option defaultValue value="">
+												Select Album
+											</option>
+											{artistVideoAlbums.map((videoAlbum, key) => (
+												<option
+													key={key}
+													value={videoAlbum.id}
+													className="bg-dark text-light">
+													{videoAlbum.name}
+												</option>
+											))}
 										</select>
 										<br />
 										<br />
 
 										<select
-											name='genre'
-											className='form-control'
-											placeholder='Select video genre'
+											name="genre"
+											className="form-control"
+											placeholder="Select video genre"
 											required={true}
 											onChange={(e) => setGenre(e.target.value)}>
-											<option defaultValue value="">Select Genre</option>
-											<option value="Afro" className="bg-dark text-light">Afro</option>
-											<option value="Benga" className="bg-dark text-light">Benga</option>
-											<option value="Blues" className="bg-dark text-light">Blues</option>
-											<option value="Boomba" className="bg-dark text-light">Boomba</option>
-											<option value="Country" className="bg-dark text-light">Country</option>
-											<option value="Cultural" className="bg-dark text-light">Cultural</option>
-											<option value="EDM" className="bg-dark text-light">EDM</option>
-											<option value="Genge" className="bg-dark text-light">Genge</option>
-											<option value="Gospel" className="bg-dark text-light">Gospel</option>
-											<option value="Hiphop" className="bg-dark text-light">Hiphop</option>
-											<option value="Jazz" className="bg-dark text-light">Jazz</option>
-											<option value="Music of Kenya" className="bg-dark text-light">Music of Kenya</option>
-											<option value="Pop" className="bg-dark text-light">Pop</option>
-											<option value="R&B" className="bg-dark text-light">R&B</option>
-											<option value="Rock" className="bg-dark text-light">Rock</option>
-											<option value="Sesube" className="bg-dark text-light">Sesube</option>
-											<option value="Taarab" className="bg-dark text-light">Taarab</option>
+											<option defaultValue value="">
+												Select Genre
+											</option>
+											<option value="Afro" className="bg-dark text-light">
+												Afro
+											</option>
+											<option value="Benga" className="bg-dark text-light">
+												Benga
+											</option>
+											<option value="Blues" className="bg-dark text-light">
+												Blues
+											</option>
+											<option value="Boomba" className="bg-dark text-light">
+												Boomba
+											</option>
+											<option value="Country" className="bg-dark text-light">
+												Country
+											</option>
+											<option value="Cultural" className="bg-dark text-light">
+												Cultural
+											</option>
+											<option value="EDM" className="bg-dark text-light">
+												EDM
+											</option>
+											<option value="Genge" className="bg-dark text-light">
+												Genge
+											</option>
+											<option value="Gospel" className="bg-dark text-light">
+												Gospel
+											</option>
+											<option value="Hiphop" className="bg-dark text-light">
+												Hiphop
+											</option>
+											<option value="Jazz" className="bg-dark text-light">
+												Jazz
+											</option>
+											<option
+												value="Music of Kenya"
+												className="bg-dark text-light">
+												Music of Kenya
+											</option>
+											<option value="Pop" className="bg-dark text-light">
+												Pop
+											</option>
+											<option value="R&B" className="bg-dark text-light">
+												R&B
+											</option>
+											<option value="Rock" className="bg-dark text-light">
+												Rock
+											</option>
+											<option value="Sesube" className="bg-dark text-light">
+												Sesube
+											</option>
+											<option value="Taarab" className="bg-dark text-light">
+												Taarab
+											</option>
 										</select>
 										<br />
 										<br />
@@ -198,7 +252,8 @@ const VideoCreate = (props) => {
 											className="form-control"
 											placeholder="Released"
 											required={true}
-											onChange={(e) => setReleased(e.target.value)} />
+											onChange={(e) => setReleased(e.target.value)}
+										/>
 										<br />
 										<br />
 
@@ -210,8 +265,9 @@ const VideoCreate = (props) => {
 											cols="30"
 											rows="10"
 											required={true}
-											onChange={(e) => setDescription(e.target.value)}>
-										</textarea>
+											onChange={(e) =>
+												setDescription(e.target.value)
+											}></textarea>
 
 										<label className="text-light">Upload Video Thumbnail</label>
 										<br />
@@ -221,32 +277,36 @@ const VideoCreate = (props) => {
 											name="filepond-thumbnail"
 											labelIdle='Drag & Drop your Image or <span class="filepond--label-action text-dark"> Browse </span>'
 											imageCropAspectRatio="16:9"
-											acceptedFileTypes={['image/*']}
+											acceptedFileTypes={["image/*"]}
 											stylePanelAspectRatio="16:9"
 											allowRevert={true}
 											server={{
 												url: `${props.baseUrl}/api/filepond`,
 												process: {
 													url: "/video-thumbnail",
-													onload: res => setThumbnail(res),
-													onerror: (err) => console.log(err.response.data)
+													onload: (res) => setThumbnail(res),
+													onerror: (err) => console.log(err.response.data),
 												},
 												revert: {
 													url: `/video-thumbnail/${thumbnail.substr(17)}`,
-													onload: res => props.setMessages([res]),
+													onload: (res) => props.setMessages([res]),
 												},
-											}} />
+											}}
+										/>
 										<br />
 										<br />
 
 										<label className="text-light">Upload Video</label>
-										<h6 className="text-primary">If the video is too large you can upload it to Youtube for compression, download it, delete it, then upload it here.</h6>
+										<h6 className="text-primary">
+											If the video is too large you can upload it to Youtube for
+											compression, download it, delete it, then upload it here.
+										</h6>
 										<br />
 
 										<FilePond
 											name="filepond-video"
 											labelIdle='Drag & Drop your Video or <span class="filepond--label-action text-dark"> Browse </span>'
-											acceptedFileTypes={['video/*']}
+											acceptedFileTypes={["video/*"]}
 											stylePanelAspectRatio="16:9"
 											maxFileSize="200000000"
 											allowRevert={true}
@@ -254,16 +314,17 @@ const VideoCreate = (props) => {
 												url: `${props.baseUrl}/api/filepond`,
 												process: {
 													url: "/video",
-													onload: res => setVideo(res),
-													onerror: (err) => console.log(err.response.data)
+													onload: (res) => setVideo(res),
+													onerror: (err) => console.log(err.response.data),
 												},
 												revert: {
 													url: `/video/${video.substr(7)}`,
-													onload: res => {
+													onload: (res) => {
 														props.setMessages([res])
 													},
 												},
-											}} />
+											}}
+										/>
 										<br />
 										<br />
 
@@ -281,11 +342,17 @@ const VideoCreate = (props) => {
 											<div className="">
 												<br />
 												<h3>Before you upload</h3>
-												<h6>By uploading you agree that you <b>own</b> this song.</h6>
-												<h6>Videos are sold at
-													<b style={{ color: "green" }}> KES 20</b>, Black Music takes
-													<b style={{ color: "green" }}> 50% (KES 10)</b> and the musician takes
-													<b style={{ color: "green" }}> 50% (KES 10)</b>.</h6>
+												<h6>
+													By uploading you agree that you <b>own</b> this song.
+												</h6>
+												<h6>
+													Videos are sold at
+													<b style={{ color: "green" }}> KES 20</b>, Black Music
+													takes
+													<b style={{ color: "green" }}> 50% (KES 10)</b> and
+													the musician takes
+													<b style={{ color: "green" }}> 50% (KES 10)</b>.
+												</h6>
 												<br />
 												<Btn btnText="upload video" loading={loadingBtn} />
 											</div>
@@ -295,14 +362,16 @@ const VideoCreate = (props) => {
 									<br />
 									<br />
 
-									<Link href="/video"><a className="btn sonar-btn btn-2">studio</a></Link>
+									<Link href="/video">
+										<a className="btn sonar-btn btn-2">studio</a>
+									</Link>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div >
+		</div>
 	)
 }
 

@@ -10,12 +10,12 @@ use Illuminate\Support\Facades\Storage;
 
 class AudioService extends Service
 {
+    /**
+     * Display a listing of the resource.
+     *
+     */
     public function index()
     {
-        /**
-         * Display a listing of the resource.
-         *
-         */
         $getAudios = Audio::orderBy('id', 'ASC')->get();
 
         $audios = [];
@@ -244,6 +244,21 @@ class AudioService extends Service
         }
 
         return ["artists" => $artists, "audios" => $audios];
+    }
+
+    /*
+     * Artist's Audios */
+    public function artistAudios($username)
+    {
+        $getArtistAudios = Audio::where("username", $username)->get();
+
+        $artistAudios = [];
+
+        foreach ($getArtistAudios as $audio) {
+            array_push($artistAudios, $this->structure($audio));
+        }
+
+        return $artistAudios;
     }
 
     private function structure($audio)

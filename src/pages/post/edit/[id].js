@@ -1,26 +1,19 @@
-import { useEffect } from 'react'
-import { useRouter } from 'next/router'
-import Link from 'next/link'
+import { useEffect } from "react"
+import { useRouter } from "next/router"
+import Link from "next/link"
 
-import SocialMediaInput from '@/components/Core/SocialMediaInput'
+import SocialMediaInput from "@/components/Core/SocialMediaInput"
+import ssrAxios from "@/lib/ssrAxios"
 
 const PostEdit = (props) => {
-
 	const router = useRouter()
 
 	let { id } = router.query
 
 	useEffect(() => {
-		// Fetch post
-		if (props.posts && id) {
-			var post = props.posts
-				.find((post) => post.id == id)
-
-			props.setText(post.text)
-		}
-
 		// Set states
 		setTimeout(() => {
+			props.setText(props.post.text)
 			props.setPlaceholder("What's on your mind")
 			props.setShowImage(false)
 			props.setShowPoll(false)
@@ -52,8 +45,7 @@ const PostEdit = (props) => {
 										fill="currentColor"
 										className="bi bi-x"
 										viewBox="0 0 16 16">
-										<path
-											d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+										<path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
 									</svg>
 								</a>
 							</Link>
@@ -72,6 +64,23 @@ const PostEdit = (props) => {
 			<div className="col-sm-4"></div>
 		</div>
 	)
+}
+
+// This gets called on every request
+export async function getServerSideProps(context) {
+	const { id } = context.query
+
+	var data = {
+		post: {},
+	}
+
+	// Fetch Post Comments
+	await ssrAxios
+		.get(`/api/posts/${id}`)
+		.then((res) => (data.post = res.data))
+
+	// Pass data to the page via props
+	return { props: data }
 }
 
 export default PostEdit

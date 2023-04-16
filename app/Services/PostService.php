@@ -15,61 +15,7 @@ class PostService extends Service
         $posts = [];
 
         foreach ($getPosts as $post) {
-
-            // Get votes of each parameter as a percentage
-            $percentage1 = $post->percentage($post, $post->parameter_1);
-            $percentage2 = $post->percentage($post, $post->parameter_2);
-            $percentage3 = $post->percentage($post, $post->parameter_3);
-            $percentage4 = $post->percentage($post, $post->parameter_4);
-            $percentage5 = $post->percentage($post, $post->parameter_5);
-
-            $pollsPercentages = [
-                $post->parameter_1 => $percentage1,
-                $post->parameter_2 => $percentage2,
-                $post->parameter_3 => $percentage3,
-                $post->parameter_4 => $percentage4,
-                $post->parameter_5 => $percentage5,
-            ];
-
-            // Get parameter with the most votes
-            $winner = array_keys($pollsPercentages, max($pollsPercentages));
-
-            $winner = count($winner) > 1 ? "" : $winner[0];
-
-            array_push($posts, [
-                "id" => $post->id,
-                "name" => $post->user->name,
-                "username" => $post->user->username,
-                "avatar" => $post->user->avatar,
-                "decos" => $post->user->decos->count(),
-                "text" => $post->text,
-                "media" => $post->media,
-                "parameter_1" => $post->parameter_1,
-                "parameter_2" => $post->parameter_2,
-                "parameter_3" => $post->parameter_3,
-                "parameter_4" => $post->parameter_4,
-                "parameter_5" => $post->parameter_5,
-                "hasVoted1" => $post->hasVoted($post, $this->username, $post->parameter_1),
-                "hasVoted2" => $post->hasVoted($post, $this->username, $post->parameter_2),
-                "hasVoted3" => $post->hasVoted($post, $this->username, $post->parameter_3),
-                "hasVoted4" => $post->hasVoted($post, $this->username, $post->parameter_4),
-                "hasVoted5" => $post->hasVoted($post, $this->username, $post->parameter_5),
-                "percentage1" => $percentage1,
-                "percentage2" => $percentage2,
-                "percentage3" => $percentage3,
-                "percentage4" => $percentage4,
-                "percentage5" => $percentage5,
-                "winner" => $winner,
-                "totalVotes" => $post->polls->count(),
-                "isWithin24Hrs" => $post->isWithin24Hrs($post),
-                "hasFollowed" => $post->hasFollowed($post, $this->username),
-                "hasLiked" => $post->hasLiked($post, $this->username),
-                "hasEdited" => $post->hasEdited($post),
-                "likes" => $post->likes->count(),
-                "comments" => $post->comments->count(),
-                "updatedAt" => $post->updated_at,
-                "createdAt" => $post->created_at,
-            ]);
+            array_push($posts, $this->structure($post));
         }
 
         return $posts;
@@ -83,7 +29,9 @@ class PostService extends Service
      */
     public function show($id)
     {
-        return Post::find($id);
+        $post = Post::find($id);
+
+        return $this->structure($post);
     }
 
     /* Create new post */
@@ -125,5 +73,80 @@ class PostService extends Service
         Post::find($id)->delete();
 
         return response("Post deleted", 200);
+    }
+
+    /*
+     * Artist's Posts */
+    public function artistPosts($username)
+    {
+        $getArtistPosts = Post::where("username", $username)->get();
+
+        $artistPosts = [];
+
+        foreach ($getArtistPosts as $post) {
+            array_push($artistPosts, $this->structure($post));
+        }
+
+        return $artistPosts;
+    }
+
+    /*
+     * Structure Posts */
+    public function structure($post)
+    {
+        // Get votes of each parameter as a percentage
+        $percentage1 = $post->percentage($post, $post->parameter_1);
+        $percentage2 = $post->percentage($post, $post->parameter_2);
+        $percentage3 = $post->percentage($post, $post->parameter_3);
+        $percentage4 = $post->percentage($post, $post->parameter_4);
+        $percentage5 = $post->percentage($post, $post->parameter_5);
+
+        $pollsPercentages = [
+            $post->parameter_1 => $percentage1,
+            $post->parameter_2 => $percentage2,
+            $post->parameter_3 => $percentage3,
+            $post->parameter_4 => $percentage4,
+            $post->parameter_5 => $percentage5,
+        ];
+
+        // Get parameter with the most votes
+        $winner = array_keys($pollsPercentages, max($pollsPercentages));
+
+        $winner = count($winner) > 1 ? "" : $winner[0];
+
+        return [
+            "id" => $post->id,
+            "name" => $post->user->name,
+            "username" => $post->user->username,
+            "avatar" => $post->user->avatar,
+            "decos" => $post->user->decos->count(),
+            "text" => $post->text,
+            "media" => $post->media,
+            "parameter_1" => $post->parameter_1,
+            "parameter_2" => $post->parameter_2,
+            "parameter_3" => $post->parameter_3,
+            "parameter_4" => $post->parameter_4,
+            "parameter_5" => $post->parameter_5,
+            "hasVoted1" => $post->hasVoted($post, $this->username, $post->parameter_1),
+            "hasVoted2" => $post->hasVoted($post, $this->username, $post->parameter_2),
+            "hasVoted3" => $post->hasVoted($post, $this->username, $post->parameter_3),
+            "hasVoted4" => $post->hasVoted($post, $this->username, $post->parameter_4),
+            "hasVoted5" => $post->hasVoted($post, $this->username, $post->parameter_5),
+            "percentage1" => $percentage1,
+            "percentage2" => $percentage2,
+            "percentage3" => $percentage3,
+            "percentage4" => $percentage4,
+            "percentage5" => $percentage5,
+            "winner" => $winner,
+            "totalVotes" => $post->polls->count(),
+            "isWithin24Hrs" => $post->isWithin24Hrs($post),
+            "hasFollowed" => $post->hasFollowed($post, $this->username),
+            "hasLiked" => $post->hasLiked($post, $this->username),
+            "hasEdited" => $post->hasEdited($post),
+            "likes" => $post->likes->count(),
+            "comments" => $post->comments->count(),
+            "updatedAt" => $post->updated_at,
+            "createdAt" => $post->created_at,
+        ];
     }
 }

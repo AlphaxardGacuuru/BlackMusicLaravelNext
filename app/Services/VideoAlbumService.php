@@ -15,14 +15,7 @@ class VideoAlbumService extends Service
         $videoAlbums = [];
 
         foreach ($getVideoAlbums as $videoAlbum) {
-            array_push($videoAlbums, [
-                "id" => $videoAlbum->id,
-                "username" => $videoAlbum->username,
-                "name" => $videoAlbum->name,
-                "cover" => $videoAlbum->cover,
-                "released" => $videoAlbum->released,
-                "createdAt" => $videoAlbum->created_at,
-            ]);
+            array_push($videoAlbums, $this->structure($videoAlbum));
         }
 
         return $videoAlbums;
@@ -31,7 +24,7 @@ class VideoAlbumService extends Service
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\AudioAlbum  $audioAlbum
+     * @param  \App\Models\VideoAlbum  $videoAlbum
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -92,4 +85,33 @@ class VideoAlbumService extends Service
 
         return response('Video Album Edited', 200);
     }
+
+    /*
+     * Artist's Video Albums */
+    public function artistVideoAlbums($username)
+    {
+        $getArtistVideoAlbums = VideoAlbum::where("username", $username)->get();
+
+        $artistVideoAlbums = [];
+
+        foreach ($getArtistVideoAlbums as $videoAlbum) {
+            array_push($artistVideoAlbums, $this->structure($videoAlbum));
+        }
+
+        return $artistVideoAlbums;
+    }
+
+    /*
+     * Album Structure*/
+    public function structure($videoAlbum)
+    {
+        return [
+            "id" => $videoAlbum->id,
+            "username" => $videoAlbum->username,
+            "name" => $videoAlbum->name,
+            "cover" => $videoAlbum->cover,
+            "released" => $videoAlbum->released,
+            "createdAt" => $videoAlbum->created_at,
+        ];
+    }	
 }

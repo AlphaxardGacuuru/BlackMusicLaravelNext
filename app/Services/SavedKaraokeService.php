@@ -41,7 +41,7 @@ class SavedKaraokeService extends Service
             ]);
         }
 
-        return $savedKaraokes;
+        return response($savedKaraokes, 200);
     }
 
     /**

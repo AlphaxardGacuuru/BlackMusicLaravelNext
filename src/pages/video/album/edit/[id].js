@@ -2,18 +2,15 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import axios from '@/lib/axios';
+import ssrAxios from '@/lib/ssrAxios';
 
 import Btn from '@/components/Core/Btn'
 import Img from '@/components/Core/Img'
 
 const VideoAlbumEdit = (props) => {
-
 	const router = useRouter()
 
-	let { id } = router.query;
-
-	// Get Audio Album info
-	const editAlbum = props.videoAlbums.find((videoAlbum) => videoAlbum.id == id)
+	let { id } = router.query
 
 	// Declare states
 	const [formData, setFormData] = useState()
@@ -32,13 +29,13 @@ const VideoAlbumEdit = (props) => {
 	}, [])
 
 	// Fire when image is choosen
-	var onImageChange = event => {
+	var onImageChange = (event) => {
 		if (event.target.files && event.target.files[0]) {
-			var img = event.target.files[0];
+			var img = event.target.files[0]
 			setCover(img)
 			setPreview(URL.createObjectURL(img))
 		}
-	};
+	}
 
 	const onSubmit = (e) => {
 		e.preventDefault()
@@ -47,21 +44,22 @@ const VideoAlbumEdit = (props) => {
 		setBtnLoading(true)
 
 		// Add form data to FormData object
-		formData.append("name", name);
-		formData.append("released", released);
-		cover && formData.append("cover", cover);
-		formData.append("_method", 'put');
+		formData.append("name", name)
+		formData.append("released", released)
+		cover && formData.append("cover", cover)
+		formData.append("_method", "put")
 
 		// Send data to PostsController
 		// Get csrf cookie from Laravel inorder to send a POST request
-		axios.post(`${props.url}/api/video-albums/${id}`, formData)
+		axios
+			.post(`/api/video-albums/${id}`, formData)
 			.then((res) => {
 				props.setMessages([res.data])
-				props.get("video-albums", props.setVideoAlbums, "videoAlbums")
 				setPreview()
 				// Remove loader for button
 				setBtnLoading(false)
-			}).catch((err) => {
+			})
+			.catch((err) => {
 				// Remove loader for button
 				setBtnLoading(false)
 				props.getErrors(err)
@@ -79,21 +77,24 @@ const VideoAlbumEdit = (props) => {
 				<div className="container">
 					<div className="row">
 						<div className="col-12">
-							<div className="contact-form text-center call-to-action-content wow fadeInUp" data-wow-delay="0.5s">
+							<div
+								className="contact-form text-center call-to-action-content wow fadeInUp"
+								data-wow-delay="0.5s">
 								<h2>Edit Video Album</h2>
-								{editAlbum &&
 									<div className="d-flex text-start">
 										<div className="p-2">
-											<Img src={editAlbum.cover}
+											<Img
+												src={props.album.cover}
 												width="10em"
 												height="10em"
-												alt="album cover" />
+												alt="album cover"
+											/>
 										</div>
 										<div className="p-2">
-											<h1 className="my-0">{editAlbum.name}</h1>
-											<h6 className="my-0">{editAlbum.released}</h6>
+											<h1 className="my-0">{props.album.name}</h1>
+											<h6 className="my-0">{props.album.released}</h6>
 										</div>
-									</div>}
+									</div>
 								<br />
 								<div className="form-group">
 									<form onSubmit={onSubmit}>
@@ -102,7 +103,8 @@ const VideoAlbumEdit = (props) => {
 											name="name"
 											className="form-control"
 											placeholder="Name"
-											onChange={(e) => setName(e.target.value)} />
+											onChange={(e) => setName(e.target.value)}
+										/>
 										<br />
 										<br />
 
@@ -112,34 +114,39 @@ const VideoAlbumEdit = (props) => {
 											name="released"
 											className="form-control"
 											placeholder="Released"
-											onChange={(e) => setReleased(e.target.value)} />
+											onChange={(e) => setReleased(e.target.value)}
+										/>
 										<br />
 										<br />
 
 										<label className="text-light">Upload Album Cover</label>
-										<div
-											className="mb-2"
-											style={{ overflow: "hidden" }}>
-
-											<img
-												src={preview}
-												width="100%"
-												height="auto" />
+										<div className="mb-2" style={{ overflow: "hidden" }}>
+											<img src={preview} width="100%" height="auto" />
 										</div>
 
 										{/* Hidden file input */}
 										<input
-											type='file'
-											style={{ display: 'none' }}
+											type="file"
+											style={{ display: "none" }}
 											ref={mediaInput}
-											onChange={onImageChange} />
+											onChange={onImageChange}
+										/>
 
 										<div
 											className="p-2"
-											style={{ backgroundColor: "#232323", color: "white", cursor: "pointer" }}
+											style={{
+												backgroundColor: "#232323",
+												color: "white",
+												cursor: "pointer",
+											}}
 											onClick={() => mediaInput.current.click()}>
-											<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-												className="bi bi-image" viewBox="0 0 16 16">
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												width="20"
+												height="20"
+												fill="currentColor"
+												className="bi bi-image"
+												viewBox="0 0 16 16">
 												<path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
 												<path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z" />
 											</svg>
@@ -150,11 +157,14 @@ const VideoAlbumEdit = (props) => {
 										<Btn
 											type="submit"
 											btnText="edit album"
-											loading={btnLoading} />
+											loading={btnLoading}
+										/>
 										<br />
 										<br />
 
-										<Link href="/video"><a className="btn sonar-btn btn-2">studio</a></Link>
+										<Link href="/video">
+											<a className="btn sonar-btn btn-2">studio</a>
+										</Link>
 									</form>
 								</div>
 							</div>
@@ -164,6 +174,21 @@ const VideoAlbumEdit = (props) => {
 			</div>
 		</div>
 	)
+}
+
+// This gets called on every request
+export async function getServerSideProps(context) {
+	const { id } = context.query
+
+	var album
+
+	// Fetch Post Comments
+	await ssrAxios
+		.get(`/api/video-albums/${id}`)
+		.then((res) => (album = res.data))
+
+	// Pass data to the page via props
+	return { props: {album} }
 }
 
 export default VideoAlbumEdit

@@ -1,19 +1,24 @@
-import { useState, useEffect, Suspense } from 'react'
-import axios from '@/lib/axios'
+import { useState, useEffect } from "react"
+import axios from "@/lib/axios"
 
-import CommentMedia from '@/components/Core/CommentMedia'
+import CommentMedia from "@/components/Core/CommentMedia"
 
-import CloseSVG from '@/svgs/CloseSVG'
-import PostOptions from '@/components/Post/PostOptions'
-import SocialMediaInput from '../Core/SocialMediaInput'
+import CloseSVG from "@/svgs/CloseSVG"
+import PostOptions from "@/components/Post/PostOptions"
+import SocialMediaInput from "../Core/SocialMediaInput"
 
 const KaraokeCommentSection = (props) => {
-
+	const [karaokeComments, setKaraokeComments] = useState([])
+	const [formData, setFormData] = useState()
 	const [bottomMenu, setBottomMenu] = useState()
 	const [commentToEdit, setCommentToEdit] = useState()
 	const [commentDeleteLink, setCommentDeleteLink] = useState()
+	const [deletedIds, setDeletedIds] = useState([])
 
 	useEffect(() => {
+		// Fetch Karaoke Comments
+		props.get(`karaoke-comments/${props.karaoke.id}`, setKaraokeComments)
+
 		// Set states
 		setTimeout(() => {
 			props.setPlaceholder("Add a comment")
@@ -28,21 +33,21 @@ const KaraokeCommentSection = (props) => {
 			props.setEditing(false)
 		}, 1000)
 
+		// Declare new FormData object for form data
+		setFormData(new FormData())
 	}, [])
-
-	// Declare new FormData object for form data
-	const formData = new FormData();
 
 	// Handle form submit for Social Input
 	const onSubmit = (e) => {
 		e.preventDefault()
 
 		// Add form data to FormData object
-		formData.append("text", props.text);
-		formData.append("id", props.karaoke.id);
+		formData.append("text", props.text)
+		formData.append("id", props.karaoke.id)
 
 		// Get csrf cookie from Laravel inorder to send a POST request
-		axios.post(`/api/karaoke-comments`, formData)
+		axios
+			.post(`/api/karaoke-comments`, formData)
 			.then((res) => {
 				props.setMessages([res.data])
 				// Updated Karaoke Comments One
@@ -53,41 +58,32 @@ const KaraokeCommentSection = (props) => {
 				props.setShowEmojiPicker(false)
 				props.setShowImagePicker(false)
 				props.setShowPollPicker(false)
-			}).catch((err) => props.getErrors(err))
+			})
+			.catch((err) => props.getErrors(err))
 	}
 
 	// Function for liking comments
 	const onCommentLike = (comment) => {
-		// Show like
-		const newKaraokeComments = props.karaokeComments
-			.filter((item) => {
-				// Get the exact karaoke and change like status
-				if (item.id == comment) {
-					item.hasLiked = !item.hasLiked
-				}
-				return true
-			})
-		// Set new karaokes
-		props.setKaraokeComments(newKaraokeComments)
-
 		// Add like to database
-		axios.post(`/api/karaoke-comment-likes`, {
-			comment: comment
-		}).then((res) => {
-			props.setMessages([res.data])
-			// Update karaoke comments
-			props.get("karaoke-comments", props.setKaraokeComments)
-		}).catch((err) => props.getErrors(err))
+		axios
+			.post(`/api/karaoke-comment-likes`, { comment: comment })
+			.then((res) => {
+				props.setMessages([res.data])
+				// Update karaoke comments
+				props.get("karaoke-comments", setKaraokeComments)
+			})
+			.catch((err) => props.getErrors(err))
 	}
 
 	// Function for deleting comments
 	const onDeleteComment = (id) => {
-		axios.delete(`/api/karaoke-comments/${id}`)
-			.then((res) => {
-				props.setMessages([res.data])
-				// Update karaoke comments
-				props.get("karaoke-comments", props.setKaraokeComments)
-			}).catch((err) => props.getErrors(err))
+		// Remove comment
+		setDeletedIds([...deletedIds, id])
+
+		axios
+			.delete(`/api/karaoke-comments/${id}`)
+			.then((res) => props.setMessages([res.data]))
+			.catch((err) => props.getErrors(err))
 	}
 
 	return (
@@ -115,14 +111,7 @@ const KaraokeCommentSection = (props) => {
 						onSubmit={onSubmit}
 						className="contact-form bg-white mb-2 border-bottom border-light"
 						autoComplete="off">
-						<Suspense
-							fallback={
-								<center>
-									<div id="sonar-load" className="mt-5 mb-5"></div>
-								</center>
-							}>
-							<SocialMediaInput {...props} />
-						</Suspense>
+						<SocialMediaInput {...props} />
 					</form>
 
 					{/* Karaoke Comments */}
@@ -131,11 +120,15 @@ const KaraokeCommentSection = (props) => {
 							{/* Get Notifications */}
 
 							{/* <!-- Comment Section --> */}
-							{props.karaokeComments
-								.filter((comment) => comment.karaoke_id == props.karaoke.id)
-								.length > 0 ?
-								props.karaokeComments
-									.filter((comment) => comment.karaoke_id == props.karaoke.id)
+							{karaokeComments.filter(
+								(comment) => comment.karaoke_id == props.karaoke.id
+							).length > 0 ? (
+								karaokeComments
+									.filter(
+										(comment) =>
+											comment.karaoke_id == props.karaoke.id &&
+											!deletedIds.includes(comment.id)
+									)
 									.map((comment, key) => (
 										<CommentMedia
 											{...props}
@@ -145,11 +138,14 @@ const KaraokeCommentSection = (props) => {
 											setBottomMenu={setBottomMenu}
 											setCommentToEdit={setCommentToEdit}
 											onDeleteComment={onDeleteComment}
-											setCommentDeleteLink={setCommentDeleteLink} />
-									)) :
+											setCommentDeleteLink={setCommentDeleteLink}
+										/>
+									))
+							) : (
 								<center className="my-3">
 									<h6 style={{ color: "grey" }}>No comments to show</h6>
-								</center>}
+								</center>
+							)}
 						</div>
 						{/* Karaoke Comments End */}
 					</div>
@@ -164,7 +160,8 @@ const KaraokeCommentSection = (props) => {
 				setBottomMenu={setBottomMenu}
 				commentToEdit={commentToEdit}
 				commentDeleteLink={commentDeleteLink}
-				onDeleteComment={onDeleteComment} />
+				onDeleteComment={onDeleteComment}
+			/>
 			{/* Sliding Bottom Nav end */}
 		</>
 	)

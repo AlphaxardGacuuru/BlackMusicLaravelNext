@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import axios from "@/lib/axios"
-import ssrAxios from "axios"
+import ssrAxios from "@/lib/ssrAxios"
 import EchoConfig from "@/lib/echo"
 
 import CommentMedia from "@/components/Core/CommentMedia"
@@ -17,8 +17,9 @@ const PostShow = (props) => {
 	// Get id from URL
 	const { id } = router.query
 
-	const [newPostComments, setNewPostComments] = useState()
+	const [post, setPost] = useState(props.post)
 	const [postComments, setPostComments] = useState(props.comments)
+	const [newPostComments, setNewPostComments] = useState()
 	const [bottomMenu, setBottomMenu] = useState("")
 	const [userToUnfollow, setUserToUnfollow] = useState()
 	const [postToEdit, setPostToEdit] = useState()
@@ -32,11 +33,12 @@ const PostShow = (props) => {
 		// Instantiate Echo
 		EchoConfig()
 
-		Echo.private(`post-comments.${id}`).listen("PostCommentedEvent", (e) => {
-			console.log(e.comment)
+		Echo.private(`post-comments`).listen("PostCommentedEvent", (e) => {
 			setNewPostComments(e.comment)
 		})
 
+		// Fetch Post
+		id && props.get(`posts/${id}`, setPost)
 		// Fetch Post Comments
 		id && props.get(`post-comments/${id}`, setPostComments)
 	}, [id])
@@ -146,23 +148,18 @@ const PostShow = (props) => {
 							<BackSVG />
 						</a>
 					</div>
-					{props.posts
-						.filter((post) => post.id == id)
-						.map((post, key) => (
-							<span key={key}>
-								<PostMedia
-									{...props}
-									key={key}
-									post={post}
-									setBottomMenu={setBottomMenu}
-									setUserToUnfollow={setUserToUnfollow}
-									setPostToEdit={setPostToEdit}
-									setEditLink={setEditLink}
-									setDeleteLink={setDeleteLink}
-									setUnfollowLink={setUnfollowLink}
-								/>
-							</span>
-						))}
+					<span>
+						<PostMedia
+							{...props}
+							post={post}
+							setBottomMenu={setBottomMenu}
+							setUserToUnfollow={setUserToUnfollow}
+							setPostToEdit={setPostToEdit}
+							setEditLink={setEditLink}
+							setDeleteLink={setDeleteLink}
+							setUnfollowLink={setUnfollowLink}
+						/>
+					</span>
 
 					<hr className="text-white" />
 
@@ -215,13 +212,16 @@ const PostShow = (props) => {
 export async function getServerSideProps(context) {
 	const { id } = context.query
 
-	var comments
+	var data = { post: {}, comments: {} }
 
 	// Fetch Post Comments
-	await ssrAxios.get(`http://localhost:8000/api/post-comments/${id}`).then((res) => (comments = res.data))
+	await ssrAxios.get(`/api/posts/${id}`).then((res) => (data.post = res.data))
+	await ssrAxios
+		.get(`/api/post-comments/${id}`)
+		.then((res) => (data.comments = res.data))
 
 	// Pass data to the page via props
-	return { props: { comments } }
+	return { props: data }
 }
 
 export default PostShow

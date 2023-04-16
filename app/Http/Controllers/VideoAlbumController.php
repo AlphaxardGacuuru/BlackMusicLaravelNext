@@ -70,4 +70,11 @@ class VideoAlbumController extends Controller
     {
         //
     }
+
+	/*
+	* Artist's Video Albums */
+	public function artistVideoAlbums($username, VideoAlbumService $service)
+	{
+		return $service->artistVideoAlbums($username);
+	} 
 }

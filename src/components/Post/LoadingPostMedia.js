@@ -1,9 +1,3 @@
-import React from 'react'
-
-import CommentSVG from '../../svgs/CommentSVG'
-import DecoSVG from '../../svgs/DecoSVG'
-import HeartSVG from '../../svgs/HeartSVG'
-
 const LoadingPostMedia = () => {
 	return (
 		<div className="d-flex mb-3">

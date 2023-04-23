@@ -15,8 +15,10 @@ import PostOptions from "@/components/Post/PostOptions"
 import PenSVG from "@/svgs/PenSVG"
 import ChatSVG from "@/svgs/ChatSVG"
 import DecoSVG from "@/svgs/DecoSVG"
+import EchoConfig from "@/lib/echo"
 
 export default function Home(props) {
+	const [newPosts, setNewPosts] = useState()
 	const [posts, setPosts] = useState(props.posts)
 	const [videos, setVideos] = useState(props.videos)
 	const [users, setUsers] = useState(props.users)
@@ -31,6 +33,13 @@ export default function Home(props) {
 	const [deletedIds, setDeletedIds] = useState([])
 
 	useEffect(() => {
+		// Instantiate Echo
+		EchoConfig()
+
+		Echo.private(`post-created`).listen("PostedEvent", (e) => {
+			setNewPosts(e.post)
+		})
+
 		props.auth?.account_type == "musician" && setShowPostBtn(true)
 
 		// Fetch data
@@ -38,6 +47,18 @@ export default function Home(props) {
 		props.get("videos", setVideos, "videos")
 		props.get("users", setUsers, "users")
 	}, [props.auth])
+
+	/*
+	 * Function for deleting posts */
+	const onNewPosts = () => {
+		props.get("posts", setPosts, "posts")
+		// Smooth scroll to top
+		window.scrollTo({
+			top: 0,
+			behavior: "smooth",
+		})
+		setNewPosts()
+	}
 
 	// Function for deleting posts
 	const onDeletePost = (id) => {
@@ -86,6 +107,15 @@ export default function Home(props) {
 
 			{/* <!-- Profile info area --> */}
 			<div className="row">
+				<center>
+					<h6
+						id="snackbar-up"
+						style={{ cursor: "pointer" }}
+						className={newPosts && "show"}
+						onClick={onNewPosts}>
+						<div>New Posts</div>
+					</h6>
+				</center>
 				<div className="col-sm-1 hidden"></div>
 				<div className="col-sm-3 hidden">
 					<div className="d-flex">

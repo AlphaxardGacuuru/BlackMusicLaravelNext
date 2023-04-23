@@ -18,6 +18,6 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-Broadcast::channel('post-comments', function ($user) {
-	return true;
-});
+Broadcast::channel('post.created', fn() => true);
+Broadcast::channel('post.commented', fn() => true);
+

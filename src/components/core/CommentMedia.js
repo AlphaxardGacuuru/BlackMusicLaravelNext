@@ -11,7 +11,6 @@ import { useState } from 'react'
 const CommentMedia = (props) => {
 
 	const [hasLiked, setHasLiked] = useState(props.comment.hasLiked);
-	
 
 	return (
 		<div className="d-flex">

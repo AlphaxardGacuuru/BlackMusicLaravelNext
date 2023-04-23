@@ -33,7 +33,7 @@ const PostShow = (props) => {
 		// Instantiate Echo
 		EchoConfig()
 
-		Echo.private(`post-comments`).listen("PostCommentedEvent", (e) => {
+		Echo.private(`post-commented`).listen("PostCommentedEvent", (e) => {
 			setNewPostComments(e.comment)
 		})
 
@@ -60,8 +60,13 @@ const PostShow = (props) => {
 
 	/*
 	 * Function for deleting posts */
-	const onAddComments = () => {
-		setPostComments([newPostComments, ...postComments])
+	const onNewComments = () => {
+		props.get(`post-comments/${id}`, setPostComments)
+		// Smooth scroll to top
+		window.scrollTo({
+			top: 0,
+			behavior: "smooth",
+		})
 		setNewPostComments()
 	}
 
@@ -70,54 +75,32 @@ const PostShow = (props) => {
 	const onDeletePost = (id) => {
 		axios
 			.delete(`/api/posts/${id}`)
-			.then((res) => {
-				props.setMessages([res.data])
-				// Update posts
-				props.get("posts", props.setPosts, "posts")
-			})
+			.then((res) => props.setMessages([res.data]))
 			.catch((err) => props.getErrors(err))
 	}
 
 	/*
 	 * Function for liking comments */
-	const onCommentLike = (id) => {
-		// Show like
-		const newPostComments = postComments.filter((item) => {
-			// Get the exact comment and change like status
-			if (item.id == id) {
-				item.hasLiked = !item.hasLiked
-			}
-			return true
-		})
-
-		// Set new comments
-		setPostComments(newPostComments)
+	const onCommentLike = (comment) => {
+		setHasLiked(!hasLiked)
 
 		// Add like to database
 		axios
-			.post(`/api/post-comment-likes`, {
-				comment: id,
-			})
+			.post(`/api/post-comment-likes`, { comment: comment })
 			.then((res) => {
 				props.setMessages([res.data])
 				// Update Post Comments
-				props.get("post-comments", setPostComments)
+				props.get(`post-comments/${id}`, setPostComments)
 			})
 			.catch((err) => props.getErrors(err))
 	}
 
 	/*
 	 * Function for deleting comments */
-	const onDeleteComment = (id) => {
+	const onDeleteComment = (comment) => {
 		axios
-			.delete(`/api/post-comments/${id}`)
-			.then((res) => {
-				props.setMessages([res.data])
-				// Update Post Comments
-				props.get("post-comments", setPostComments)
-				// Update Posts
-				props.get("posts", props.setPosts, "posts")
-			})
+			.delete(`/api/post-comments/${comment}`)
+			.then((res) => props.setMessages([res.data]))
 			.catch((err) => props.getErrors(err))
 	}
 
@@ -131,7 +114,7 @@ const PostShow = (props) => {
 						id="snackbar-up"
 						style={{ cursor: "pointer" }}
 						className={newPostComments && "show"}
-						onClick={onAddComments}>
+						onClick={onNewComments}>
 						<div>New Comments</div>
 					</h6>
 				</center>

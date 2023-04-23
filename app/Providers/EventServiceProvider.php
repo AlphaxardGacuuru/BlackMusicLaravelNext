@@ -11,6 +11,7 @@ use App\Events\ChatEvent;
 use App\Events\FollowedEvent;
 use App\Events\PostCommentedEvent;
 use App\Events\PostCommentLikedEvent;
+use App\Events\PostedEvent;
 use App\Events\PostLikedEvent;
 use App\Events\VideoBoughtEvent;
 use App\Events\VideoCommentedEvent;
@@ -26,6 +27,7 @@ use App\Listeners\ChatListener;
 use App\Listeners\FollowedListener;
 use App\Listeners\PostCommentedListener;
 use App\Listeners\PostCommentLikedListener;
+use App\Listeners\PostedListener;
 use App\Listeners\PostLikedListener;
 use App\Listeners\RegisteredListener;
 use App\Listeners\VideoBoughtListener;
@@ -62,6 +64,7 @@ class EventServiceProvider extends ServiceProvider
         VideoBoughtEvent::class => [VideoBoughtListener::class],
         AudioBoughtEvent::class => [AudioBoughtListener::class],
         PostLikedEvent::class => [PostLikedListener::class],
+        PostedEvent::class => [PostedListener::class],
         PostCommentedEvent::class => [PostCommentedListener::class],
         PostCommentLikedEvent::class => [PostCommentLikedListener::class],
         FollowedEvent::class => [FollowedListener::class],

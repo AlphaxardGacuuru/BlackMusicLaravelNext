@@ -973,8 +973,8 @@ a:focus {
 	/* Show the snackbar */
 	/* Add animation: Take 0.5 seconds to fade in and out the snackbar.
   However, delay the fade out process for 2.5 seconds */
-	-webkit-animation: fadeInUp 0.5s, fadeOutUp 0.5s 2.5s;
-	animation: fadeInUp 0.5s, fadeOutUp 0.5s 2.5s;
+	-webkit-animation: fadeInUp 0.5s;
+	animation: fadeInUp 0.5s;
 }
 
 /* Animations to fade the snackbar in and out */

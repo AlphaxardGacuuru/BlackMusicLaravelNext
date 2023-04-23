@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Models\Post;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,11 +10,10 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PostCommentedEvent implements ShouldBroadcast
+class PostedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-	public $comment;
 	public $post;
 
     /**
@@ -23,9 +21,8 @@ class PostCommentedEvent implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($comment, $post)
+    public function __construct($post)
     {
-        $this->comment = $comment;
         $this->post = $post;
     }
 
@@ -36,6 +33,6 @@ class PostCommentedEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('post-commented');
+        return new PrivateChannel('post-created');
     }
 }

@@ -25,7 +25,11 @@ const AudioMedia = (props) => {
 			.post(`/api/cart-audios`, {
 				audio: props.audio.id,
 			})
-			.then((res) => props.setMessages([res.data]))
+			.then((res) => {
+				props.setMessages([res.data])
+				// Check if Cart Videos should be fetched
+				props.get("cart-audios", props.setCartAudios)
+			})
 			.catch((err) => props.getErrors(err, true))
 	}
 

@@ -121,7 +121,12 @@ const Cart = (props) => {
 								</>
 							)}
 							{cartVideos.map((cartVideo, key) => (
-								<VideoMedia {...props} key={key} video={cartVideo} />
+								<VideoMedia
+									{...props}
+									key={key}
+									video={cartVideo}
+									setCartVideos={setCartVideos}
+								/>
 							))}
 							{cartVideos.length > 0 && (
 								<div className="d-flex justify-content-between border-top border-dark">
@@ -151,7 +156,12 @@ const Cart = (props) => {
 							</>
 						)}
 						{cartAudios.map((cartAudio, key) => (
-							<AudioMedia {...props} key={key} audio={cartAudio} />
+							<AudioMedia
+								{...props}
+								key={key}
+								audio={cartAudio}
+								setCartAudios={setCartAudios}
+							/>
 						))}
 						{cartAudios.length > 0 && (
 							<div className="d-flex justify-content-between border-top border-dark">

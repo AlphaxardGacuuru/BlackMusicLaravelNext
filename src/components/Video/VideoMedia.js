@@ -26,7 +26,11 @@ const VideoMedia = (props) => {
 			.post(`/api/cart-videos`, {
 				video: props.video.id,
 			})
-			.then((res) => props.setMessages([res.data]))
+			.then((res) => {
+				props.setMessages([res.data])
+				// Check if Cart Videos should be fetched
+				props.get("cart-videos", props.setCartVideos)
+			})
 			.catch((err) => props.getErrors(err, true))
 	}
 

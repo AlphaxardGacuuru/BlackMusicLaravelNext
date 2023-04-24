@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\BoughtAudio;
 use App\Models\CartAudio;
 
 class CartAudioService extends Service
@@ -63,8 +64,13 @@ class CartAudioService extends Service
             ->where('username', auth('sanctum')->user()->username)
             ->exists();
 
+			/* Check item in not already bought*/ 
+        $notBought = BoughtAudio::where('username', auth('sanctum')->user()->username)
+            ->where('audio_id', $request->input('audio'))
+            ->doesntExist();
+
         /* Insert or Remove from cart */
-        if ($inCart) {
+        if ($inCart && $notBought) {
             CartAudio::where('audio_id', $request->input('audio'))
                 ->where('username', auth('sanctum')->user()->username)
                 ->delete();

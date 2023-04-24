@@ -23,8 +23,12 @@ const TopNav = (props) => {
 
 	// const { logout } = useAuth({ setLogin: props.setLogin })
 
-	const [cartVideos, setCartVideos] = useState(props.getLocalStorage("cartVideos"))
-	const [cartAudios, setCartAudios] = useState(props.getLocalStorage("cartAudios"))
+	const [cartVideos, setCartVideos] = useState(
+		props.getLocalStorage("cartVideos")
+	)
+	const [cartAudios, setCartAudios] = useState(
+		props.getLocalStorage("cartAudios")
+	)
 	const [menu, setMenu] = useState("")
 	const [bottomMenu, setBottomMenu] = useState("")
 	const [nMenu, setNMenu] = useState("")
@@ -129,7 +133,9 @@ const TopNav = (props) => {
 										<div className="header-social-area d-flex align-items-center">
 											{props.auth?.username == "@guest" ? (
 												<Link href="#">
-													<a className="display-4" onClick={() => props.setLogin(true)}>
+													<a
+														className="display-4"
+														onClick={() => props.setLogin(true)}>
 														Login
 													</a>
 												</Link>
@@ -260,7 +266,8 @@ const TopNav = (props) => {
 												style={{
 													float: "left",
 													paddingRight: "20px",
-													color: router.pathname == "/library" ? "gold" : "white",
+													color:
+														router.pathname == "/library" ? "gold" : "white",
 												}}>
 												<PersonSVG />
 											</span>
@@ -282,7 +289,10 @@ const TopNav = (props) => {
 					<div className="d-flex align-items-center justify-content-between border-bottom border-dark">
 						<div></div>
 						{/* <!-- Close Icon --> */}
-						<div className="closeIcon float-end mr-3" style={{ fontSize: "0.8em" }} onClick={() => setBottomMenu("")}>
+						<div
+							className="closeIcon float-end mr-3"
+							style={{ fontSize: "0.8em" }}
+							onClick={() => setBottomMenu("")}>
 							<CloseSVG />
 						</div>
 					</div>
@@ -297,7 +307,13 @@ const TopNav = (props) => {
 								onClick={() => setBottomMenu("")}>
 								<div className="d-flex">
 									<div className="ms-3 me-3">
-										<Img src={props.auth?.avatar} imgClass="rounded-circle" width="25px" height="25px" alt="Avatar" />
+										<Img
+											src={props.auth?.avatar}
+											imgClass="rounded-circle"
+											width="25px"
+											height="25px"
+											alt="Avatar"
+										/>
 									</div>
 									<div>
 										<h5>
@@ -344,7 +360,10 @@ const TopNav = (props) => {
 							</a>
 						</Link>
 						<Link href="/privacy-policy">
-							<a className="p-3 text-start" onClick={() => setBottomMenu("")} title="Privacy Policy">
+							<a
+								className="p-3 text-start"
+								onClick={() => setBottomMenu("")}
+								title="Privacy Policy">
 								<h6>
 									<span className="ms-3 me-4">
 										<PrivacySVG />
@@ -378,14 +397,23 @@ const TopNav = (props) => {
 			<div className={nMenu}>
 				<div className="commentMenu">
 					<div className="d-flex align-items-center justify-content-between border-bottom border-dark">
-						<div className="text-white ms-2 fw-lighter" onClick={() => onDeleteNotifications(0)}>
+						<div
+							className="text-white ms-2 fw-lighter"
+							onClick={() => {
+								setNMenu("")
+								setNotifications([])
+								onDeleteNotifications(0)
+							}}>
 							Clear
 						</div>
 						<div className="dropdown-header text-white pt-2">
 							<h5>Notifications</h5>
 						</div>
 						{/* <!-- Close Icon --> */}
-						<div className="closeIcon float-end me-2" style={{ fontSize: "0.8em" }} onClick={() => setNMenu("")}>
+						<div
+							className="closeIcon float-end me-2"
+							style={{ fontSize: "0.8em" }}
+							onClick={() => setNMenu("")}>
 							<CloseSVG />
 						</div>
 					</div>

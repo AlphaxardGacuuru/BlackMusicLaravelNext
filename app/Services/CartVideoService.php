@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\BoughtVideo;
 use App\Models\CartVideo;
 
 class CartVideoService extends Service
@@ -63,8 +64,13 @@ class CartVideoService extends Service
             ->where('username', auth('sanctum')->user()->username)
             ->exists();
 
+        /* Check item in not already bought*/
+        $notBought = BoughtVideo::where('username', auth('sanctum')->user()->username)
+            ->where('video_id', $request->input('video'))
+            ->doesntExist();
+
         /* Insert or Remove from cart */
-        if ($inCart) {
+        if ($inCart && $notBought) {
             CartVideo::where('video_id', $request->input('video'))
                 ->where('username', auth('sanctum')->user()->username)
                 ->delete();

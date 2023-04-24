@@ -20,4 +20,5 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 
 Broadcast::channel('post.created', fn() => true);
 Broadcast::channel('post.commented', fn() => true);
+Broadcast::channel('kopokopo-received', fn() => true);
 

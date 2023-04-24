@@ -1,11 +1,13 @@
 import { useState, Suspense, useEffect } from "react"
 import axios from "@/lib/axios"
+import EchoConfig from "@/lib/echo"
 
 import VideoMedia from "@/components/Video/VideoMedia"
 import AudioMedia from "@/components/Audio/AudioMedia"
 import Btn from "@/components/Core/Btn"
 
 const Cart = (props) => {
+	const [messages, setMessages] = useState([])
 	const [cartVideos, setCartVideos] = useState([])
 	const [cartAudios, setCartAudios] = useState([])
 	const [bottomMenu, setBottomMenu] = useState("")
@@ -21,10 +23,18 @@ const Cart = (props) => {
 	const total = videoTotalCash + audioTotalCash
 
 	useEffect(() => {
+		// Instantiate Echo
+		EchoConfig()
+
+		Echo.private(`kopokopo-received`).listen("KopokopoCreatedEvent", (e) => {
+			setMessages(["Payment received"])
+			buyVideos()
+			buyAudios()
+		})
+
 		props.get("cart-videos", setCartVideos)
 		props.get("cart-audios", setCartAudios)
-	}, []);
-	
+	}, [])
 
 	// Send STKPush
 	const STKPush = (amount) => {
@@ -34,83 +44,62 @@ const Cart = (props) => {
 			.catch((err) => props.getErrors(err, true))
 	}
 
-	// Function for buying videos
-	const onPay = () => {
-		// Check payment after every 2s
-		var intervalId = window.setInterval(() => {
-			// Try and buy videos
+	// Buy Videos
+	const buyVideos = () => {
+		// Try and buy videos if any are in cart
+		cartVideos.length > 0 &&
 			axios
 				.post(`/api/bought-videos`)
 				.then((res) => {
 					// If videos are bought stop checking
-					if (res.data.length > 0) {
-						setReceiptVideos(res.data)
-						setBottomMenu()
-						setReceipt("menu-open")
-						clearInterval(intervalId)
-						// Show message
-						var message
-						// Proper grammar for message
-						if (res.data.length > 1) {
-							message = res.data.length + " Videos bought"
-						} else {
-							message = res.data.length + " Video bought"
-						}
-						props.setMessages([message])
-						// Update states
-						props.get("bought-videos", props.setBoughtVideos, "boughtVideos")
-						props.get("videos", props.setVideos, "videos")
-						props.get("cart-videos", props.setCartVideos, "cartVideos")
-						props.get("video-albums", props.setVideoAlbums, "videoAlbums")
-					}
-					// Stop loop after 30s
-					setTimeout(() => {
-						clearInterval(intervalId)
-						setBottomMenu()
-					}, 30000)
+					setReceiptVideos(res.data)
+					setBottomMenu()
+					setReceipt("menu-open")
+					// Show message
+					var message = `${res.data.length} Video${
+						res.data.length > 1 ? "s" : ""
+					} bought`
+					setMessages([...messages, message])
+					// Update state
+					props.get("cart-videos", setCartVideos)
 				})
 				.catch((err) => props.getErrors(err))
+	}
 
-			// Try and buy audios
+	// Buy Audios
+	const buyAudios = () => {
+		// Try and buy audios if any are in cart
+		cartAudios.length > 0 &&
 			axios
 				.post(`/api/bought-audios`)
 				.then((res) => {
-					// If videos are bought stop checking
-					if (res.data.length > 0) {
-						setReceiptAudios(res.data)
-						setBottomMenu()
-						setReceipt("menu-open")
-						clearInterval(intervalId)
-						// Show message after 10 seconds
-						setTimeout(() => {
-							var message
-							// Proper grammar for message
-							if (res.data.length > 1) {
-								message = res.data.length + " Audios bought"
-							} else {
-								message = res.data.length + " Audio bought"
-							}
-							props.setMessages([message])
-						}, 10000)
-						// Update states
-						props.get("bought-audios", props.setBoughtAudios, "boughtAudios")
-						props.get("audios", props.setAudios, "audios")
-						props.get("cart-audios", props.setCartAudios, "cartAudios")
-						props.get("audio-albums", props.setAudioAlbums, "audioAlbums")
-					}
-					// Stop loop after 30s
-					setTimeout(() => {
-						clearInterval(intervalId)
-						setBottomMenu()
-					}, 30000)
+					setReceiptAudios(res.data)
+					setBottomMenu()
+					setReceipt("menu-open")
+					var message = `${res.data.length} Audio${
+						res.data.length > 1 ? "s" : ""
+					} bought`
+					setMessages([...messages, message])
+					// Update states
+					props.get("cart-audios", setCartAudios, "cartAudios")
 				})
 				.catch((err) => props.getErrors(err))
-		}, 2000)
 	}
 
 	return (
 		<div>
 			<div className="row">
+				{messages.map((message, key) => (
+					<center key={key}>
+						<h6
+							id="snackbar-up"
+							style={{ cursor: "pointer" }}
+							className="show"
+							onClick={() => setMessages([])}>
+							<div>{message}</div>
+						</h6>
+					</center>
+				))}
 				<div className="col-sm-12">
 					<center>
 						<h1>Cart</h1>
@@ -125,7 +114,9 @@ const Cart = (props) => {
 							{/* Cart Videos */}
 							{cartVideos.length > 0 && (
 								<>
-									<h3 className="pt-4 pb-2 border-bottom border-dark">Videos</h3>
+									<h3 className="pt-4 pb-2 border-bottom border-dark">
+										Videos
+									</h3>
 									<hr />
 								</>
 							)}
@@ -152,7 +143,9 @@ const Cart = (props) => {
 						{cartAudios.length > 0 && (
 							<>
 								<center>
-									<h3 className="pt-4 pb-2 border-bottom border-dark">Audios</h3>
+									<h3 className="pt-4 pb-2 border-bottom border-dark">
+										Audios
+									</h3>
 								</center>
 								<hr />
 							</>
@@ -179,7 +172,9 @@ const Cart = (props) => {
 							<h3 className="pt-4 pb-2 border-bottom border-dark">Total</h3>
 							<hr />
 							<h3 className="text-success"> KES {total}</h3>
-							<h5 className="text-success">Your account balance: KES {props.auth.balance}</h5>
+							<h5 className="text-success">
+								Your account balance: KES {props.auth.balance}
+							</h5>
 							<br />
 
 							{/* {{-- Collapse --}} */}
@@ -198,7 +193,10 @@ const Cart = (props) => {
 									<div className="collapse" id="collapseExample">
 										<div className="">
 											<br />
-											<h5>Once you click the button below a pop up will appear on your phone asking you to pay</h5>
+											<h5>
+												Once you click the button below a pop up will appear on
+												your phone asking you to pay
+											</h5>
 											<h4 className="text-success">KES {total}</h4>
 											<h5>to</h5>
 											<h4 style={{ color: "dodgerblue" }}>Kopokopo</h4>
@@ -271,7 +269,8 @@ const Cart = (props) => {
 
 					<center>
 						<h5>
-							Request was sent to <span style={{ color: "dodgerblue" }}>{props.auth.phone}</span>
+							Request was sent to{" "}
+							<span style={{ color: "dodgerblue" }}>{props.auth.phone}</span>
 						</h5>
 						<br />
 
@@ -295,7 +294,9 @@ const Cart = (props) => {
 						</div>
 
 						{/* <!-- Close Icon --> */}
-						<div className="closeIcon p-2 float-right" onClick={() => setReceipt("")}>
+						<div
+							className="closeIcon p-2 float-right"
+							onClick={() => setReceipt("")}>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								width="40"

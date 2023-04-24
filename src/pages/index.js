@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import axios from "@/lib/axios"
 import ssrAxios from "axios"
+import EchoConfig from "@/lib/echo"
 
 import Img from "@/components/Core/Img"
 import LoadingMusicianMedia from "@/components/User/LoadingMusicianMedia"
@@ -15,7 +16,6 @@ import PostOptions from "@/components/Post/PostOptions"
 import PenSVG from "@/svgs/PenSVG"
 import ChatSVG from "@/svgs/ChatSVG"
 import DecoSVG from "@/svgs/DecoSVG"
-import EchoConfig from "@/lib/echo"
 
 export default function Home(props) {
 	const [newPosts, setNewPosts] = useState()

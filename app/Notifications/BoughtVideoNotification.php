@@ -5,10 +5,11 @@ namespace App\Notifications;
 use App\Mail\VideoReceiptMail;
 use App\Models\Video;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class BoughtVideoNotification extends Notification
+class BoughtVideoNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 

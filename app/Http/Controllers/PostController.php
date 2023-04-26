@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PostedEvent;
 use App\Models\Post;
 use App\Services\PostService;
 use Illuminate\Http\Request;
@@ -30,7 +31,12 @@ class PostController extends Controller
             'text' => 'required',
         ]);
 
-        return $postService->store($request);
+        $response = $postService->store($request);
+
+		// Dispatch event
+		PostedEvent::dispatchIf($response["saved"], $response["post"]);
+
+        return response('Post Created', 200);
     }
 
     /**

@@ -46,9 +46,10 @@ class PostService extends Service
         $post->parameter_3 = $request->input('para3') ? $request->input('para3') : "";
         $post->parameter_4 = $request->input('para4') ? $request->input('para4') : "";
         $post->parameter_5 = $request->input('para5') ? $request->input('para5') : "";
-        $post->save();
+        
+		$saved = $post->save();
 
-        return response('Post Created', 200);
+		return ["saved" => $saved, "post" => $post];
     }
 
     // Update Post

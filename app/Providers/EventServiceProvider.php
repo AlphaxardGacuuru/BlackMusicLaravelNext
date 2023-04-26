@@ -27,6 +27,7 @@ use App\Listeners\AudioUploadedListener;
 use App\Listeners\ChatListener;
 use App\Listeners\FollowedListener;
 use App\Listeners\KopokopoCreatedListener;
+use App\Listeners\NotificationListener;
 use App\Listeners\PostCommentedListener;
 use App\Listeners\PostCommentLikedListener;
 use App\Listeners\PostedListener;
@@ -40,6 +41,7 @@ use App\Listeners\VideoUploadedListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Notifications\Events\NotificationSent;
 use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
@@ -71,6 +73,7 @@ class EventServiceProvider extends ServiceProvider
         PostCommentLikedEvent::class => [PostCommentLikedListener::class],
         FollowedEvent::class => [FollowedListener::class],
         KopokopoCreatedEvent::class => [KopokopoCreatedListener::class],
+        NotificationSent::class => [NotificationListener::class],
     ];
 
     /**

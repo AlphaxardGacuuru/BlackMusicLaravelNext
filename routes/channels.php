@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Post;
 use Illuminate\Support\Facades\Broadcast;
 
 /*
@@ -12,7 +11,7 @@ use Illuminate\Support\Facades\Broadcast;
 | application supports. The given channel authorization callbacks are
 | used to check if an authenticated user can listen to the channel.
 |
-*/
+ */
 
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
@@ -21,4 +20,3 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 Broadcast::channel('post.created', fn() => true);
 Broadcast::channel('post.commented', fn() => true);
 Broadcast::channel('kopokopo-received', fn() => true);
-

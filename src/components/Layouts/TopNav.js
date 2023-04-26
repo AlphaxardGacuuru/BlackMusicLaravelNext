@@ -17,6 +17,7 @@ import MenuSVG from "@/svgs/MenuSVG"
 import PersonSVG from "@/svgs/PersonSVG"
 import DiscoverSVG from "@/svgs/DiscoverSVG"
 import HomeSVG from "@/svgs/HomeSVG"
+import EchoConfig from "@/lib/echo"
 
 const TopNav = (props) => {
 	const router = useRouter()
@@ -41,6 +42,15 @@ const TopNav = (props) => {
 	const cartItems = vidCartItems + audCartItems
 
 	useEffect(() => {
+		EchoConfig()
+
+		// Listen to Notifications
+		Echo.private(`App.Models.User.${props.auth.id}`).notification(
+			(notification) => {
+				console.log(notification.type)
+			}
+		)
+
 		// Fetch Notifications
 		props.get("notifications", setNotifications)
 		props.get("cart-videos", setCartVideos, "cartVideos")
@@ -67,6 +77,9 @@ const TopNav = (props) => {
 	}
 
 	const onDeleteNotifications = (id) => {
+		// Clear the notifications array
+		setNotifications([])
+
 		axios.delete(`/api/notifications/${id}`).then((res) => {
 			// Update Notifications
 			props.get("notifications", setNotifications)
@@ -401,7 +414,6 @@ const TopNav = (props) => {
 							className="text-white ms-2 fw-lighter"
 							onClick={() => {
 								setNMenu("")
-								setNotifications([])
 								onDeleteNotifications(0)
 							}}>
 							Clear

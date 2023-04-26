@@ -28,12 +28,8 @@ const EchoConfig = () => {
 							socket_id: socketId,
 							channel_name: channel.name,
 						})
-						.then((response) => {
-							callback(null, response.data)
-						})
-						.catch((error) => {
-							callback(error)
-						})
+						.then((response) => callback(null, response.data))
+						.catch((error) => callback(error))
 				},
 			}
 		},

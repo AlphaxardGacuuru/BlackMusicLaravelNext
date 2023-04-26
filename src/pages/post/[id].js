@@ -52,9 +52,9 @@ const PostShow = (props) => {
 		props.setShowImagePicker(false)
 		props.setShowPollPicker(false)
 		props.setUrlTo("post-comments")
-		props.setUrlToTwo("posts")
+		props.setUrlToTwo()
 		props.setStateToUpdate(() => setPostComments)
-		props.setStateToUpdateTwo(() => props.setPosts)
+		props.setStateToUpdateTwo()
 		props.setEditing(false)
 	}, 100)
 

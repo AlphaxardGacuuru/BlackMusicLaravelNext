@@ -7,7 +7,7 @@ use App\Notifications\FollowedNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class FollowedListener
+class FollowedListener implements ShouldQueue
 {
     /**
      * Create the event listener.

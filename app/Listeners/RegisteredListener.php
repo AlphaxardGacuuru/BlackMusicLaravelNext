@@ -7,7 +7,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class RegisteredListener
+class RegisteredListener implements ShouldQueue
 {
     /**
      * Create the event listener.

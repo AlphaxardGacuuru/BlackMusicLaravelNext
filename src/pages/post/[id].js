@@ -28,6 +28,7 @@ const PostShow = (props) => {
 	const [commentToEdit, setCommentToEdit] = useState()
 	const [commentDeleteLink, setCommentDeleteLink] = useState()
 	const [unfollowLink, setUnfollowLink] = useState()
+	const [deletedIds, setDeletedIds] = useState([])
 
 	useEffect(() => {
 		// Instantiate Echo
@@ -98,6 +99,9 @@ const PostShow = (props) => {
 	/*
 	 * Function for deleting comments */
 	const onDeleteComment = (comment) => {
+		// Remove comment
+		setDeletedIds([...deletedIds, comment])
+
 		axios
 			.delete(`/api/post-comments/${comment}`)
 			.then((res) => props.setMessages([res.data]))
@@ -154,18 +158,20 @@ const PostShow = (props) => {
 								<LoadingPostMedia key={key} />
 							))}
 
-						{postComments.map((comment, key) => (
-							<CommentMedia
-								{...props}
-								key={key}
-								comment={comment}
-								setBottomMenu={setBottomMenu}
-								setCommentDeleteLink={setCommentDeleteLink}
-								setCommentToEdit={setCommentToEdit}
-								onCommentLike={onCommentLike}
-								onDeleteComment={onDeleteComment}
-							/>
-						))}
+						{postComments
+							.filter((comment) => !deletedIds.includes(comment.id))
+							.map((comment, key) => (
+								<CommentMedia
+									{...props}
+									key={key}
+									comment={comment}
+									setBottomMenu={setBottomMenu}
+									setCommentDeleteLink={setCommentDeleteLink}
+									setCommentToEdit={setCommentToEdit}
+									onCommentLike={onCommentLike}
+									onDeleteComment={onDeleteComment}
+								/>
+							))}
 					</div>
 				</div>
 				<div className="col-sm-4"></div>

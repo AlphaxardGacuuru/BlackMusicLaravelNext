@@ -2,13 +2,12 @@
 
 namespace App\Notifications;
 
-use App\Models\Post;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class PostCommentedNotification extends Notification implements ShouldQueue
+class PostCommentedNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;
 
@@ -32,7 +31,7 @@ class PostCommentedNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', 'broadcast'];
     }
 
     /**
@@ -60,7 +59,7 @@ class PostCommentedNotification extends Notification implements ShouldQueue
         return [
             'url' => '/post/' . $this->post->id,
             'from' => auth('sanctum')->user()->username,
-            'message' => auth('sanctum')->user()->username . ' commented on ' . $this->post->test,
+            'message' => auth('sanctum')->user()->username . ' commented on ' . $this->post->text,
         ];
     }
 }

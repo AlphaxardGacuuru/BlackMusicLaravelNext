@@ -6,7 +6,7 @@ use App\Events\PostedEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class PostedListener
+class PostedListener implements ShouldQueue
 {
     /**
      * Create the event listener.

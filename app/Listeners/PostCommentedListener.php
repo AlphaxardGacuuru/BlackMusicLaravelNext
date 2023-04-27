@@ -4,8 +4,9 @@ namespace App\Listeners;
 
 use App\Events\PostCommentedEvent;
 use App\Notifications\PostCommentedNotification;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class PostCommentedListener
+class PostCommentedListener implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -25,7 +26,7 @@ class PostCommentedListener
      */
     public function handle(PostCommentedEvent $event)
     {
-		// Send Notification
+        // Send Notification
         if ($event->post->username != auth('sanctum')->user()->username) {
             $event->post->user->notify(new PostCommentedNotification($event->comment, $event->post));
         }

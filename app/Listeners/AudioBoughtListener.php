@@ -9,7 +9,7 @@ use App\Notifications\DecoNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class AudioBoughtListener
+class AudioBoughtListener implements ShouldQueue
 {
     /**
      * Create the event listener.

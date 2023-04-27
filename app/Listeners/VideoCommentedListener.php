@@ -7,7 +7,7 @@ use App\Notifications\VideoCommentedNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class VideoCommentedListener
+class VideoCommentedListener implements ShouldQueue
 {
     /**
      * Create the event listener.

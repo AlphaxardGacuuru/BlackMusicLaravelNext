@@ -7,7 +7,7 @@ use App\Jobs\ProcessVideoJob;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class VideoUploadedListener
+class VideoUploadedListener implements ShouldQueue
 {
     /**
      * Create the event listener.

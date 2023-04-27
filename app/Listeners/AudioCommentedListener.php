@@ -7,7 +7,7 @@ use App\Notifications\AudioCommentedNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class AudioCommentedListener
+class AudioCommentedListener implements ShouldQueue
 {
     /**
      * Create the event listener.

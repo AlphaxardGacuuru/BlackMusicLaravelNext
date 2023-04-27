@@ -4,8 +4,9 @@ namespace App\Listeners;
 
 use App\Events\PostCommentLikedEvent;
 use App\Notifications\PostCommentLikedNotification;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class PostCommentLikedListener
+class PostCommentLikedListener implements ShouldQueue
 {
     /**
      * Create the event listener.

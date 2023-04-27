@@ -7,7 +7,7 @@ use App\Notifications\PostLikedNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class PostLikedListener
+class PostLikedListener implements ShouldQueue
 {
     /**
      * Create the event listener.

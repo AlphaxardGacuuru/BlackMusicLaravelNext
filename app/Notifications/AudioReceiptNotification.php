@@ -4,11 +4,12 @@ namespace App\Notifications;
 
 use App\Mail\AudioReceiptMail;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AudioReceiptNotification extends Notification implements ShouldQueue
+class AudioReceiptNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;
 
@@ -32,7 +33,7 @@ class AudioReceiptNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['database', 'mail'];
+        return ['database', 'mail', 'broadcast'];
     }
 
     /**

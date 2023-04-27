@@ -5,11 +5,12 @@ namespace App\Notifications;
 use App\Mail\VideoReceiptMail;
 use App\Models\Video;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class BoughtVideoNotification extends Notification implements ShouldQueue
+class BoughtVideoNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;
 
@@ -33,7 +34,7 @@ class BoughtVideoNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', 'broadcast'];
     }
 
     /**

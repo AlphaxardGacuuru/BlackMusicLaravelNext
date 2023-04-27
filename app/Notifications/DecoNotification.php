@@ -4,11 +4,12 @@ namespace App\Notifications;
 
 use App\Mail\DecoMail;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class DecoNotification extends Notification implements ShouldQueue
+class DecoNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;
 
@@ -32,7 +33,7 @@ class DecoNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['database', 'mail'];
+        return ['database', 'mail', 'broadcast'];
     }
 
     /**

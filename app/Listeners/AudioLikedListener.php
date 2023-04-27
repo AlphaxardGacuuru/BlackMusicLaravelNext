@@ -7,7 +7,7 @@ use App\Notifications\AudioLikedNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class AudioLikedListener
+class AudioLikedListener implements ShouldQueue
 {
     /**
      * Create the event listener.

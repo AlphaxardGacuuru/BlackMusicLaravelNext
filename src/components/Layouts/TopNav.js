@@ -47,7 +47,7 @@ const TopNav = (props) => {
 		// Listen to Notifications
 		Echo.private(`App.Models.User.${props.auth.id}`).notification(
 			(notification) => {
-				console.log(notification.type)
+				props.get("notifications", setNotifications)
 			}
 		)
 

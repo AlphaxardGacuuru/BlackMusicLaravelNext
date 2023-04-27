@@ -266,7 +266,7 @@ export default function Home(props) {
 							.filter((post) => {
 								return post.hasFollowed || props.auth?.username == "@blackmusic"
 							})
-							.filter((comment) => !deletedIds.includes(comment.id))
+							.filter((post) => !deletedIds.includes(post.id))
 							.map((post, key) => (
 								<PostMedia
 									{...props}

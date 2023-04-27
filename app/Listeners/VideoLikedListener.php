@@ -5,7 +5,7 @@ namespace App\Listeners;
 use App\Events\VideoLikedEvent;
 use App\Notifications\VideoLikedNotification;
 
-class VideoLikedListener
+class VideoLikedListener implements ShouldQueue
 {
     /**
      * Create the event listener.

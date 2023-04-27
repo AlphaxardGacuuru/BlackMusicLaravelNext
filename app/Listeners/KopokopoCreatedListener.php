@@ -6,7 +6,7 @@ use App\Events\KopokopoCreatedEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class KopokopoCreatedListener
+class KopokopoCreatedListener implements ShouldQueue
 {
     /**
      * Create the event listener.

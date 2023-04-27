@@ -3,11 +3,12 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AudioCommentLikedNotification extends Notification implements ShouldQueue
+class AudioCommentLikedNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;
 
@@ -31,7 +32,7 @@ class AudioCommentLikedNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', 'broadcast'];
     }
 
     /**

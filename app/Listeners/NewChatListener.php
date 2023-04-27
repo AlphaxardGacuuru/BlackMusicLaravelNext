@@ -2,12 +2,12 @@
 
 namespace App\Listeners;
 
-use App\Events\ChatEvent;
-use App\Notifications\ChatNotification;
+use App\Events\NewChatEvent;
+use App\Notifications\NewChatNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class ChatListener implements ShouldQueue
+class NewChatListener
 {
     /**
      * Create the event listener.
@@ -22,11 +22,11 @@ class ChatListener implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  \App\Events\ChatEvent  $event
+     * @param  \App\Events\NewChatEvent  $event
      * @return void
      */
-    public function handle(ChatEvent $event)
+    public function handle(NewChatEvent $event)
     {
-        $event->user->notify(new ChatNotification);
+        $event->user->notify(new NewChatNotification($event->chat));
     }
 }

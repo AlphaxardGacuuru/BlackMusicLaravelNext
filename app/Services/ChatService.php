@@ -102,8 +102,9 @@ class ChatService extends Service
         $chat->to = $request->input('to');
         $chat->text = $request->input('text');
         $chat->media = $request->input('media');
+		$saved = $chat->save();
 
-        return $chat->save();
+        return ["saved" => $saved, "chat" => $chat];
     }
 
     /**

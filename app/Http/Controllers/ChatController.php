@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ChatEvent;
+use App\Events\NewChatEvent;
 use App\Models\Chat;
 use App\Models\User;
 use App\Services\ChatService;
@@ -32,11 +32,11 @@ class ChatController extends Controller
             'text' => 'required',
         ]);
 
-        $saved = $service->store($request);
+        $response = $service->store($request);
 
         $user = User::where("username", $request->input("to"))->get()->first();
 
-        ChatEvent::dispatchIf($saved, $user);
+        NewChatEvent::dispatchIf($response["saved"], $response["chat"], $user);
 
         return response("Message sent", 200);
     }

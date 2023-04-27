@@ -8,18 +8,20 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ChatNotification extends Notification implements ShouldBroadcast
+class NewChatNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;
+
+	public $chat;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($chat)
     {
-        //
+        $this->chat = $chat;
     }
 
     /**
@@ -58,7 +60,7 @@ class ChatNotification extends Notification implements ShouldBroadcast
         return [
             'url' => '/chat/' . auth("sanctum")->user()->username,
             'from' => auth("sanctum")->user()->username,
-            'message' => auth("sanctum")->user()->username . ' sent you a message.',
+            'message' => auth("sanctum")->user()->username . ' sent you a message: ' . $this->chat->text,
         ];
     }
 }

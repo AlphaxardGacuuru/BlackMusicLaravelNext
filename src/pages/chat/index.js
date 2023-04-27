@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import Img from "@/components/Core/Img"
 
@@ -6,13 +6,17 @@ import ChatSVG from "@/svgs/ChatSVG"
 import ImageSVG from "@/svgs/ImageSVG"
 
 const Chat = (props) => {
+	const [blackMusic, setBlackMusic] = useState({})
+	const [chatThreads, setChatThreads] = useState([])
 
 	// Fetch Help Threads
 	useEffect(() => {
-		props.get("chats", props.setChatThreads, "chatThreads")
+		props.get("users/@blackmusic", setBlackMusic)
+		props.get("chats", setChatThreads, "chatThreads")
 	}, [])
 
-	var raise = props.audioStates.show.id != 0 && props.audioStates.show.id != undefined
+	var raise =
+		props.audioStates.show.id != 0 && props.audioStates.show.id != undefined
 
 	return (
 		<div className="row">
@@ -26,19 +30,13 @@ const Chat = (props) => {
 				</Link>
 
 				{/* Default Thread */}
-				{props.chatThreads.length == 0 && (
+				{chatThreads.length == 0 && (
 					<div className="d-flex">
 						<div className="p-2">
 							<Link href="/chat/@blackmusic">
 								<a>
 									<Img
-										src={
-											props.users.find(
-												(user) => user.username == "@blackmusic"
-											) &&
-											props.users.find((user) => user.username == "@blackmusic")
-												.avatar
-										}
+										src={blackMusic.avatar}
 										imgClass="rounded-circle"
 										width="50px"
 										height="50px"
@@ -69,7 +67,7 @@ const Chat = (props) => {
 				{/* Start Thread End */}
 
 				{/* Threads Start */}
-				{props.chatThreads.map((chatThread, key) => (
+				{chatThreads.map((chatThread, key) => (
 					<div key={key} className="d-flex">
 						<div className="pt-2">
 							<Link href={`/chat/${chatThread.username}`}>

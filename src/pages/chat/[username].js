@@ -6,6 +6,7 @@ import Img from "@/components/Core/Img"
 import axios from "@/lib/axios"
 import TrashSVG from "@/svgs/TrashSVG"
 import BackSVG from "@/svgs/BackSVG"
+import EchoConfig from "@/lib/echo"
 
 const ChatThread = (props) => {
 	const router = useRouter()
@@ -13,9 +14,19 @@ const ChatThread = (props) => {
 	let { username } = router.query
 
 	const [chats, setChats] = useState([])
-	const [showDelete, setShowDelete] = useState()
+	const [newChat, setNewChat] = useState({})
+	const [toDeleteIds, setToDeleteIds] = useState([])
+	const [deletedIds, setDeletedIds] = useState([])
 
 	useEffect(() => {
+		// Instantiate Echo
+		EchoConfig()
+
+		Echo.private(`chat-created`).listen("NewChatEvent", (e) => {
+			console.log("received")
+			setNewChat(e.chat)
+		})
+
 		// Fetch Chat
 		props.get(`chats/${username}`, setChats)
 
@@ -31,21 +42,41 @@ const ChatThread = (props) => {
 			props.setShowPollPicker(false)
 			props.setUrlTo("chats")
 			props.setUrlToTwo()
-			props.setStateToUpdate(() => props.setChatThreads)
+			props.setStateToUpdate()
 			props.setStateToUpdateTwo()
 			props.setEditing(false)
 		}, 1000)
 	}, [username])
 
-	// Function for deleting chat
+	/*
+	 * Show new chats */
+	useEffect(() => {
+		// Remove duplicate
+		var cleanChats = chats.filter((chat) => chat.id != newChat.id)
+		// Set new chats
+		setChats([...cleanChats, newChat])
+	}, [newChat])
+
+	/*
+	 * Show Delete */
+	const showDelete = (id) => {
+		if (toDeleteIds.includes(id)) {
+			var newToDeleteIds = toDeleteIds.filter((toDeleteId) => toDeleteId != id)
+			setToDeleteIds(newToDeleteIds)
+		} else {
+			setToDeleteIds([...toDeleteIds, id])
+		}
+	}
+
+	/*
+	 * Function for deleting chat */
 	const onDeleteChat = (id) => {
+		// Remove item
+		setDeletedIds([...deletedIds, id])
+
 		axios
 			.delete(`/api/chats/${id}`)
-			.then((res) => {
-				props.setMessages([res.data])
-				// Update chats
-				props.get(`chats/${username}`, setChats)
-			})
+			.then((res) => props.setMessages([res.data]))
 			.catch((err) => props.getErrors(err))
 	}
 
@@ -108,14 +139,7 @@ const ChatThread = (props) => {
 														overflow: "hidden",
 														textOverflow: "clip",
 													}}>
-													<b className="text-white">
-														{props.users.find(
-															(user) => user.username == username
-														) &&
-															props.users.find(
-																(user) => user.username == username
-															).name}
-													</b>
+													<b className="text-white">{chats[0]?.name}</b>
 													<br />
 													<small className="text-white">{username}</small>
 												</h6>
@@ -128,14 +152,7 @@ const ChatThread = (props) => {
 											<Link href={`/profile/${username}`}>
 												<a>
 													<Img
-														src={
-															props.users.find(
-																(user) => user.username == username
-															) &&
-															props.users.find(
-																(user) => user.username == username
-															).avatar
-														}
+														src={chats[0]?.avatar}
 														imgClass="rounded-circle"
 														width="40px"
 														height="40px"
@@ -149,79 +166,98 @@ const ChatThread = (props) => {
 						</div>
 					</div>
 				</header>
+				{/* <!-- ***** Header Area End ***** --> */}
 				<br />
 				<br />
 				<br />
 				<br className="hidden" />
 
-				{/* <!-- ***** Call to Action Area Start ***** --> */}
+				{/* <!-- ***** Chats ***** --> */}
 				<div className="sonar-call-to-action-area section-padding-0-100">
 					<div className="backEnd-content">
 						<h2 className="p-2" style={{ color: "rgba(255,255,255,0.1)" }}>
 							Chat
 						</h2>
 					</div>
-					{chats.map((chatItem, key) => (
-						<div
-							key={key}
-							className={`d-flex
+					{chats
+						.filter((chat) => !deletedIds.includes(chat.id))
+						.map((chatItem, key) => (
+							<div
+								key={key}
+								className={`d-flex
 								${
 									chatItem.username == props.auth.username
 										? "flex-row-reverse"
 										: "text-light"
 								}`}>
-							{chatItem.username == props.auth.username && showDelete && (
-								<div
-									style={{
-										cursor: "pointer",
-										backgroundColor:
-											chatItem.username == props.auth.username && "gold",
-									}}
-									className="rounded-0 border border-secondary border-right-0 border-top-0 border-bottom-0 p-2 my-1 mx-0"
-									onClick={() => onDeleteChat(chatItem.id)}>
-									<span style={{ color: "#232323" }}>
-										<TrashSVG />
-									</span>
-								</div>
-							)}
-							<div
-								className="rounded-0 border-0 p-2 my-1 mx-0"
-								style={{
-									backgroundColor:
-										chatItem.username == props.auth.username
-											? "#FFD700"
-											: "#232323",
-									maxWidth: "90%",
-									wordWrap: "break-word",
-								}}
-								onClick={() =>
-									chatItem.username == props.auth.username &&
-									setShowDelete(!showDelete)
-								}>
-								{chatItem.text}
-
-								{/* Show media */}
-								<div className="mb-1" style={{ overflow: "hidden" }}>
-									{chatItem.media && (
-										<Img
-											src={chatItem.media}
-											width="100%"
-											height="auto"
-											alt={"chat-media"}
-										/>
+								{/* Trash */}
+								{chatItem.username == props.auth.username &&
+									toDeleteIds.includes(chatItem.id) && (
+										<div
+											style={{
+												cursor: "pointer",
+												backgroundColor:
+													chatItem.username == props.auth.username && "gold",
+											}}
+											className="rounded-0 border border-secondary border-right-0 border-top-0 border-bottom-0 p-2 my-1 mx-0"
+											onClick={() => onDeleteChat(chatItem.id)}>
+											<span style={{ color: "#232323" }}>
+												<TrashSVG />
+											</span>
+										</div>
 									)}
+								{/* Trash End */}
+
+								{/* Chat */}
+								<div
+									className="rounded-0 border-0 p-2 my-1 m-0 pb-0"
+									style={{
+										backgroundColor:
+											chatItem.username == props.auth.username
+												? "#FFD700"
+												: "#232323",
+										maxWidth: "90%",
+										wordWrap: "break-word",
+										cursor: "pointer",
+									}}
+									onClick={() => {
+										if (chatItem.username == props.auth.username) {
+											showDelete(chatItem.id)
+										}
+									}}>
+									{chatItem.text}
+
+									{/* Media */}
+									<div className="mb-1" style={{ overflow: "hidden" }}>
+										{chatItem.media && (
+											<Img
+												src={chatItem.media}
+												width="100%"
+												height="auto"
+												alt={"chat-media"}
+											/>
+										)}
+									</div>
+									{/* Media End */}
+
+									{/* Created At */}
+									<small
+										className={
+											chatItem.username == props.auth.username
+												? "text-dark m-0 p-1"
+												: "text-muted m-0 p-1"
+										}>
+										<i
+											style={{ fontSize: "0.8em" }}
+											className="float-end m-0 p-0">
+											{chatItem.createdAt}
+										</i>
+									</small>
+									{/* Created At End */}
 								</div>
-								<small
-									className={
-										chatItem.username == props.auth.username
-											? "text-dark m-0 p-1"
-											: "text-muted m-0 p-1"
-									}>
-									<i className="float-end m-0">{chatItem.createdAt}</i>
-								</small>
+								{/* Chat End */}
 							</div>
-						</div>
-					))}
+						))}
 				</div>
 				<br />
 				<br className="hidden" />

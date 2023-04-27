@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\AudioCommentLikedEvent;
 use App\Notifications\AudioCommentLikedNotification;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class AudioCommentLikedListener implements ShouldQueue
 {

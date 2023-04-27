@@ -11,13 +11,18 @@ import HeartSVG from "../../svgs/HeartSVG"
 import HeartFilledSVG from "../../svgs/HeartFilledSVG"
 import ShareSVG from "../../svgs/ShareSVG"
 import onFollow from "@/functions/onFollow"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const PostMedia = (props) => {
 	// Set a standart user key in props
 	const props2 = { ...props, user: { username: props.post.username } }
 
 	const [hasLiked, setHasLiked] = useState(props.post.hasLiked)
+
+	useEffect(() => {
+		// Set new cart with data with auth
+		setHasLiked(props.post.hasLiked)
+	}, [props.post])
 
 	// Function for voting in poll
 	const onPoll = (post, parameter) => {

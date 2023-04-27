@@ -6,6 +6,7 @@ use App\Events\VideoBoughtEvent;
 use App\Notifications\BoughtVideoNotification;
 use App\Notifications\DecoNotification;
 use App\Notifications\VideoReceiptNotification;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class VideoBoughtListener implements ShouldQueue
 {

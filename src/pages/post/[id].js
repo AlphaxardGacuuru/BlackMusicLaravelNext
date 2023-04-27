@@ -76,21 +76,23 @@ const PostShow = (props) => {
 	const onDeletePost = (id) => {
 		axios
 			.delete(`/api/posts/${id}`)
-			.then((res) => props.setMessages([res.data]))
+			.then((res) => {
+				props.setMessages([res.data])
+				// Redirect to home
+				router.push("/")
+			})
 			.catch((err) => props.getErrors(err))
 	}
 
 	/*
 	 * Function for liking comments */
 	const onCommentLike = (comment) => {
-		setHasLiked(!hasLiked)
-
 		// Add like to database
 		axios
 			.post(`/api/post-comment-likes`, { comment: comment })
 			.then((res) => {
 				props.setMessages([res.data])
-				// Update Post Comments
+				// Update Post Comments to update like counter
 				props.get(`post-comments/${id}`, setPostComments)
 			})
 			.catch((err) => props.getErrors(err))
@@ -145,6 +147,7 @@ const PostShow = (props) => {
 							setEditLink={setEditLink}
 							setDeleteLink={setDeleteLink}
 							setUnfollowLink={setUnfollowLink}
+							onDeletePost={onDeletePost}
 						/>
 					</span>
 

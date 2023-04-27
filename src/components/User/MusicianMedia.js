@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import Img from "@/components/Core/Img"
 import Btn from "../Core/Btn"
@@ -9,6 +9,11 @@ import CheckSVG from "../../svgs/CheckSVG"
 
 const MusiciansMedia = (props) => {
 	const [hasFollowed, setHasFollowed] = useState(props.user.hasFollowed)
+
+	useEffect(() => {
+		// Set new cart with data with auth
+		setHasFollowed(props.user.hasFollowed)
+	}, [props.user])
 
 	return (
 		<div className="d-flex">

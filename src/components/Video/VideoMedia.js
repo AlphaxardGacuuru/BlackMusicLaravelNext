@@ -6,12 +6,17 @@ import Img from "next/image"
 import Btn from "../Core/Btn"
 
 import CartSVG from "@/svgs/CartSVG"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const VideoMedia = (props) => {
 	const router = useRouter()
 
 	const [inCart, setInCart] = useState(props.video.inCart)
+
+	useEffect(() => {
+		// Set new cart with data with auth
+		setInCart(props.video.inCart)
+	}, [props.video])
 
 	// Buy function
 	const onBuyVideos = () => {

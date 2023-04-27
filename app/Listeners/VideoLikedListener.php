@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\VideoLikedEvent;
 use App\Notifications\VideoLikedNotification;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class VideoLikedListener implements ShouldQueue
 {

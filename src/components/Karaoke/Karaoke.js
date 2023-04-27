@@ -19,9 +19,15 @@ import PlayFilledSVG from "@/svgs/PlayFilledSVG"
 
 const Karaoke = (props) => {
 	const [play, setPlay] = useState()
-	const [hasLiked, setHasLiked] = useState()
-	const [hasSaved, setHasSaved] = useState()
+	const [hasLiked, setHasLiked] = useState(props.karaoke.hasLiked)
+	const [hasSaved, setHasSaved] = useState(props.karaoke.hasSaved)
 	const [bottomOptionsMenu, setBottomOptionsMenu] = useState()
+
+	useEffect(() => {
+		// Set new cart with data with auth
+		setHasLiked(props.karaoke.hasLiked)
+		setHasSaved(props.karaoke.hasSaved)
+	}, [props.karaoke])
 
 	// ID for video
 	const video = useRef()

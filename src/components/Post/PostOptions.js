@@ -5,6 +5,7 @@ import onFollow from "@/functions/onFollow"
 
 const PostOptions = (props) => {
 	const props2 = { ...props, user: { username: props.userToUnfollow } }
+	
 	return (
 		<div className={props.bottomMenu}>
 			<div className="bottomMenu">

@@ -5,12 +5,17 @@ import axios from "@/lib/axios"
 import Img from "next/image"
 import Btn from "../Core/Btn"
 import CartSVG from "../../svgs/CartSVG"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const AudioMedia = (props) => {
 	const router = useRouter()
 
 	const [inCart, setInCart] = useState(props.audio.inCart)
+
+	useEffect(() => {
+		// Set new cart with data with auth
+		setInCart(props.audio.inCart)
+	}, [props.audio])
 
 	// Buy function
 	const onBuyAudios = () => {

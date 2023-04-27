@@ -66,6 +66,8 @@ const App = ({ Component, pageProps }) => {
 	const [errors, setErrors] = useState([])
 	const [login, setLogin] = useState()
 	const [auth, setAuth] = useState(getLocalStorageAuth("auth"))
+	const [cartVideos, setCartVideos] = useState([])
+	const [cartAudios, setCartAudios] = useState([])
 	// Search State
 	const [search, setSearch] = useState("!@#$%^&")
 	const searchInput = useRef(null)
@@ -107,6 +109,8 @@ const App = ({ Component, pageProps }) => {
 		}
 
 		get("auth", setAuth, "auth", false)
+		get("cart-videos", setCartVideos, "cartVideos")
+		get("cart-audios", setCartAudios, "cartAudios")
 	}, [])
 
 	console.log("rendered")
@@ -174,7 +178,10 @@ const App = ({ Component, pageProps }) => {
 				// Updated State One
 				get(urlTo, stateToUpdate)
 				// Updated State Two
-				urlToTwo && axios.get(`/api/${urlToTwo}`).then((res) => stateToUpdateTwo(res.data))
+				urlToTwo &&
+					axios
+						.get(`/api/${urlToTwo}`)
+						.then((res) => stateToUpdateTwo(res.data))
 				// Clear text unless editing
 				!editing && setText("")
 				setShowMentionPicker(false)
@@ -206,6 +213,10 @@ const App = ({ Component, pageProps }) => {
 		searchInput,
 		search,
 		setSearch,
+		cartVideos,
+		setCartVideos,
+		cartAudios,
+		setCartAudios,
 		// Audio Player
 		audioStates,
 		// Social Input

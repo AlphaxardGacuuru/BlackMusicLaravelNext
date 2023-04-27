@@ -19,19 +19,6 @@ import SocialMediaInput from "../Core/SocialMediaInput"
 const Bottomnav = (props) => {
 	const router = useRouter()
 
-	const [cartVideos, setCartVideos] = useState(
-		props.getLocalStorage("cartVideos")
-	)
-	const [cartAudios, setCartAudios] = useState(
-		props.getLocalStorage("cartAudios")
-	)
-
-	useEffect(() => {
-		// Fetch data
-		props.get("cart-videos", setCartVideos, "cartVideos")
-		props.get("cart-audios", setCartAudios, "cartAudios")
-	}, [])
-
 	var display
 	var inputDisplay
 	var hidePlayer = true
@@ -68,8 +55,8 @@ const Bottomnav = (props) => {
 		router.pathname.match("/karaoke-create")
 
 	// Get number of items in video cart
-	const vidCartItems = cartVideos.length
-	const audCartItems = cartAudios.length
+	const vidCartItems = props.cartVideos.length
+	const audCartItems = props.cartAudios.length
 	const cartItems = vidCartItems + audCartItems
 
 	return (

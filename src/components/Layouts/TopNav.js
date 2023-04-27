@@ -23,13 +23,6 @@ const TopNav = (props) => {
 	const router = useRouter()
 
 	// const { logout } = useAuth({ setLogin: props.setLogin })
-
-	const [cartVideos, setCartVideos] = useState(
-		props.getLocalStorage("cartVideos")
-	)
-	const [cartAudios, setCartAudios] = useState(
-		props.getLocalStorage("cartAudios")
-	)
 	const [menu, setMenu] = useState("")
 	const [bottomMenu, setBottomMenu] = useState("")
 	const [nMenu, setNMenu] = useState("")
@@ -37,8 +30,8 @@ const TopNav = (props) => {
 	const [notifications, setNotifications] = useState([])
 
 	// Get number of items in video cart
-	const vidCartItems = cartVideos.length
-	const audCartItems = cartAudios.length
+	const vidCartItems = props.cartVideos.length
+	const audCartItems = props.cartAudios.length
 	const cartItems = vidCartItems + audCartItems
 
 	useEffect(() => {
@@ -53,8 +46,6 @@ const TopNav = (props) => {
 
 		// Fetch Notifications
 		props.get("notifications", setNotifications)
-		props.get("cart-videos", setCartVideos, "cartVideos")
-		props.get("cart-audios", setCartAudios, "cartAudios")
 	}, [])
 
 	const logout = (e) => {

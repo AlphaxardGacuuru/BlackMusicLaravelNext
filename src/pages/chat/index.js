@@ -4,6 +4,7 @@ import Img from "@/components/Core/Img"
 
 import ChatSVG from "@/svgs/ChatSVG"
 import ImageSVG from "@/svgs/ImageSVG"
+import EchoConfig from "@/lib/echo"
 
 const Chat = (props) => {
 	const [blackMusic, setBlackMusic] = useState({})
@@ -11,8 +12,26 @@ const Chat = (props) => {
 
 	// Fetch Help Threads
 	useEffect(() => {
+		// Instantiate Echo
+		EchoConfig()
+
+		// Listen to New Chats
+		Echo.private(`chat-created`).listen("NewChatEvent", (e) => {
+			props.get("chats", setChatThreads, "chatThreads")
+		})
+
+		// Listen to Deleted Chats
+		Echo.private(`chat-deleted`).listen("ChatDeletedEvent", (e) => {
+			props.get("chats", setChatThreads, "chatThreads")
+		})
+
 		props.get("users/@blackmusic", setBlackMusic)
 		props.get("chats", setChatThreads, "chatThreads")
+
+		return () => {
+			Echo.leaveChannel(`chat-created`)
+			Echo.leaveChannel(`chat-deleted`)
+		}
 	}, [])
 
 	var raise =
@@ -82,7 +101,7 @@ const Chat = (props) => {
 							</Link>
 						</div>
 						<div
-							className="p-2 flex-grow-1"
+							className="p-2"
 							style={{
 								maxWidth: "75%",
 								wordWrap: "break-word",
@@ -118,9 +137,13 @@ const Chat = (props) => {
 								</a>
 							</Link>
 						</div>
-						<div className="py-2">
+						<div className="py-2 flex-grow-1">
 							<small>
-								<i className="float-end mr-1">{chatThread.created_at}</i>
+								<i
+									style={{ whiteSpace: "nowrap", fontSize: "0.8em" }}
+									className="float-end mr-1 text-secondary">
+									{chatThread.createdAt}
+								</i>
 							</small>
 						</div>
 					</div>

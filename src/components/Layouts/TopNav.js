@@ -38,14 +38,18 @@ const TopNav = (props) => {
 		EchoConfig()
 
 		// Listen to Notifications
-		Echo.private(`App.Models.User.${props.auth.id}`).notification(
-			(notification) => {
-				props.get("notifications", setNotifications)
-			}
+		Echo.private(
+			`App.Models.User.${props.auth.id}`
+		).notification((notification) =>
+			props.get("notifications", setNotifications)
 		)
 
 		// Fetch Notifications
 		props.get("notifications", setNotifications)
+
+		return () => {
+			Echo.leaveChannel(`App.Models.User.${props.auth.id}`)
+		}
 	}, [])
 
 	const logout = (e) => {

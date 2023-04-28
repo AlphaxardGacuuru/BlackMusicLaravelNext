@@ -8,6 +8,7 @@ use App\Events\AudioCommentLikedEvent;
 use App\Events\AudioLikedEvent;
 use App\Events\AudioUploadedEvent;
 use App\Events\NewChatEvent;
+use App\Events\ChatDeletedEvent;
 use App\Events\FollowedEvent;
 use App\Events\KopokopoCreatedEvent;
 use App\Events\PostCommentedEvent;
@@ -25,6 +26,7 @@ use App\Listeners\AudioCommentLikedListener;
 use App\Listeners\AudioLikedListener;
 use App\Listeners\AudioUploadedListener;
 use App\Listeners\NewChatListener;
+use App\Listeners\ChatDeletedListener;
 use App\Listeners\FollowedListener;
 use App\Listeners\KopokopoCreatedListener;
 use App\Listeners\PostCommentedListener;
@@ -57,6 +59,7 @@ class EventServiceProvider extends ServiceProvider
         VideoUploadedEvent::class => [VideoUploadedListener::class],
         AudioUploadedEvent::class => [AudioUploadedListener::class],
         NewChatEvent::class => [NewChatListener::class],
+        ChatDeletedEvent::class => [ChatDeletedListener::class],
         VideoLikedEvent::class => [VideoLikedListener::class],
         VideoCommentedEvent::class => [VideoCommentedListener::class],
         VideoCommentLikedEvent::class => [VideoCommentLikedListener::class],

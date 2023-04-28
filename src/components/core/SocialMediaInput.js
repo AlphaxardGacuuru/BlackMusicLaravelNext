@@ -1,24 +1,25 @@
-import { useState, useEffect } from 'react'
-import dynamic from 'next/dynamic';
+import { useState, useEffect } from "react"
+import dynamic from "next/dynamic"
 
-import Button from '@/components/Core/Btn'
-import Img from '@/components/Core/Img'
+import Button from "@/components/Core/Btn"
+import Img from "@/components/Core/Img"
 
 // Import React FilePond
-import { FilePond, registerPlugin } from 'react-filepond';
+import { FilePond, registerPlugin } from "react-filepond"
 
 // Import FilePond styles
-import 'filepond/dist/filepond.min.css';
+import "filepond/dist/filepond.min.css"
 
 // Import the Image EXIF Orientation and Image Preview plugins
 // Note: These need to be installed separately
-import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
-import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
-import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
-import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation"
+import FilePondPluginImagePreview from "filepond-plugin-image-preview"
+import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type"
+import FilePondPluginImageCrop from "filepond-plugin-image-crop"
+import FilePondPluginImageTransform from "filepond-plugin-image-transform"
+import FilePondPluginFileValidateSize from "filepond-plugin-file-validate-size"
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
+import SendSVG from "@/svgs/SendSVG"
 
 // Register the plugins
 registerPlugin(
@@ -28,16 +29,15 @@ registerPlugin(
 	FilePondPluginImageCrop,
 	FilePondPluginImageTransform,
 	FilePondPluginFileValidateSize
-);
+)
 
 const SocialMediaInput = (props) => {
-
 	const Picker = dynamic(
 		() => {
-			return import('emoji-picker-react');
+			return import("emoji-picker-react")
 		},
 		{ ssr: false }
-	);
+	)
 
 	const [doNotShowMentionPicker, setDoNotShowMentionPicker] = useState(true)
 	const [display2, setDisplay2] = useState("none")
@@ -47,13 +47,12 @@ const SocialMediaInput = (props) => {
 
 	// Show error on space in username
 	useEffect(() => {
-		props.text.indexOf("@") > -1 &&
-			props.setShowMentionPicker(true)
+		props.text.indexOf("@") > -1 && props.setShowMentionPicker(true)
 	}, [props.text])
 
 	const onEmojiClick = (event, emojiObject) => {
 		props.setText(props.text + emojiObject.emoji)
-	};
+	}
 
 	// Add username to text
 	const addMention = (mention) => {
@@ -70,31 +69,31 @@ const SocialMediaInput = (props) => {
 				className="d-flex pt-2 border-bottom border-dark"
 				style={{ backgroundColor: "#232323" }}>
 				{/* Profile pic */}
-				<div className='p-2'>
+				<div className="p-2">
 					<Img
 						src={props.auth.avatar}
 						imgClass="rounded-circle"
 						width="25px"
 						height="25px"
-						alt="Avatar" />
+						alt="Avatar"
+					/>
 				</div>
 				{/* Input */}
 				<div className="flex-grow-1">
 					<textarea
-						name='post-text'
-						className='form-control m-0 p-2'
+						name="post-text"
+						className="form-control m-0 p-2"
 						style={{
 							border: "none",
 							outline: "none",
 							height: "50px",
-							resize: "none"
+							resize: "none",
 						}}
 						placeholder={props.placeholder}
 						value={props.text}
 						row="1"
 						onChange={(e) => props.setText(e.target.value)}
-						required={true}>
-					</textarea>
+						required={true}></textarea>
 				</div>
 				{/* Emoji icon */}
 				<div className="pt-2 px-1">
@@ -121,7 +120,7 @@ const SocialMediaInput = (props) => {
 					</div>
 				</div>
 				{/* Image icon */}
-				{props.showImage &&
+				{props.showImage && (
 					<div
 						className="pt-2 px-1 text-light"
 						onClick={() => {
@@ -143,9 +142,10 @@ const SocialMediaInput = (props) => {
 								<path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z" />
 							</svg>
 						</div>
-					</div>}
+					</div>
+				)}
 				{/* Poll icon */}
-				{props.showPoll &&
+				{props.showPoll && (
 					<div
 						className="pt-2 px-1 text-white"
 						onClick={() => {
@@ -163,86 +163,79 @@ const SocialMediaInput = (props) => {
 								fill="currentColor"
 								className="bi bi-bar-chart"
 								viewBox="0 0 16 16">
-								<path
-									d="M4 11H2v3h2v-3zm5-4H7v7h2V7zm5-5v12h-2V2h2zm-2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1h-2zM6 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm-5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3z" />
+								<path d="M4 11H2v3h2v-3zm5-4H7v7h2V7zm5-5v12h-2V2h2zm-2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1h-2zM6 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm-5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3z" />
 							</svg>
 						</div>
-					</div>}
+					</div>
+				)}
 				{/* Button */}
 				<div className="p-1">
 					<Button
 						type="submit"
-						btnClass="mysonar-btn-round"
-						btnStyle={{
-							borderRadius: "50%",
-							minWidth: "33px",
-							paddingRight: "2px"
-						}}
-						btnText={
-							<div className="p-1" style={{ color: "inherit" }}>
-								<svg
-									style={{ transform: "rotate(45deg)" }}
-									xmlns="http://www.w3.org/2000/svg"
-									width="16"
-									height="16"
-									fill="currentColor"
-									className="bi bi-send-fill"
-									viewBox="0 0 16 16">
-									<path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
-								</svg>
-							</div>} />
+						btnClass="mysonar-btn white-btn mb-1"
+						btnText="send"
+					/>
 				</div>
 			</div>
 
 			{/* Show Emoji Picker */}
-			{props.showEmojiPicker &&
+			{props.showEmojiPicker && (
 				<div>
 					<Picker
 						onEmojiClick={onEmojiClick}
 						preload="true"
-						pickerStyle={{ width: "95%", borderRadius: "0px", margin: "10px" }} />
+						pickerStyle={{ width: "95%", borderRadius: "0px", margin: "10px" }}
+					/>
 					<br />
-				</div>}
+				</div>
+			)}
 
 			{/* Show Filepond */}
-			{props.showImagePicker &&
+			{props.showImagePicker && (
 				<div>
 					<FilePond
 						name="filepond-media"
 						className="m-2"
 						labelIdle='Drag & Drop your Image or <span class="filepond--label-action text-dark"> Browse </span>'
-						acceptedFileTypes={['image/*']}
+						acceptedFileTypes={["image/*"]}
 						allowRevert={true}
 						server={{
 							url: `${props.url}/api/filepond/`,
 							process: {
 								url: props.urlTo,
-								onload: res => props.setMedia(res),
+								onload: (res) => props.setMedia(res),
 							},
 							revert: {
-								url: props.urlTo + '/' + props.media.substr(11),
-								onload: res => {
+								url: props.urlTo + "/" + props.media.substr(11),
+								onload: (res) => {
 									props.setMessages([res])
 									props.setMedia("")
 								},
 							},
-						}} />
+						}}
+					/>
 					<br />
-				</div>}
+				</div>
+			)}
 
 			{/* Show Mention Picker */}
-			{props.showMentionPicker && doNotShowMentionPicker ?
+			{props.showMentionPicker && doNotShowMentionPicker ? (
 				<div>
-					<div className="card rounded-0" style={{ maxHeight: "200px", overflowY: "scroll" }}>
+					<div
+						className="card rounded-0"
+						style={{ maxHeight: "200px", overflowY: "scroll" }}>
 						{props.users
 							.filter((user) => {
-								var regex = new RegExp(props.text.split("@")[1], 'gi')
+								var regex = new RegExp(props.text.split("@")[1], "gi")
 
-								return user.username != props.auth.username &&
+								return (
+									user.username != props.auth.username &&
 									user.username != "@blackmusic" &&
 									user.account_type == "musician" &&
 									user.username.match(regex)
-							}).map((user, key) => (
+								)
+							})
+							.map((user, key) => (
 								<div
 									key={key}
 									className="d-flex"
@@ -252,7 +245,8 @@ const SocialMediaInput = (props) => {
 											src={user.avatar}
 											imgClass="rounded-circle"
 											width="30px"
-											height="30px" />
+											height="30px"
+										/>
 									</div>
 									<div className="py-2 px-0">
 										<h6
@@ -261,7 +255,7 @@ const SocialMediaInput = (props) => {
 												width: "100%",
 												whiteSpace: "nowrap",
 												overflow: "hidden",
-												textOverflow: "clip"
+												textOverflow: "clip",
 											}}>
 											<b>{user.name}</b>
 											<small>{user.username}</small>
@@ -271,55 +265,64 @@ const SocialMediaInput = (props) => {
 							))}
 					</div>
 					<br />
-				</div> : ""}
+				</div>
+			) : (
+				""
+			)}
 
 			{/* Show Polls */}
-			{props.showPollPicker &&
+			{props.showPollPicker && (
 				<center>
 					<h5 className="mt-2">Add Poll</h5>
 					{/* Poll inputs */}
 					<input
-						type='text'
-						className='form-control border-dark'
+						type="text"
+						className="form-control border-dark"
 						placeholder="Parameter 1"
 						onChange={(e) => {
 							setDisplay2("inline")
 							props.setPara1(e.target.value)
-						}} />
+						}}
+					/>
 					<input
-						type='text'
+						type="text"
 						style={{ display: display2 }}
-						className='form-control border-dark'
-						placeholder='Parameter 2'
+						className="form-control border-dark"
+						placeholder="Parameter 2"
 						onChange={(e) => {
 							setDisplay3("inline")
 							props.setPara2(e.target.value)
-						}} />
+						}}
+					/>
 					<input
-						type='text'
+						type="text"
 						style={{ display: display3 }}
-						className='form-control border-dark'
-						placeholder='Parameter 3'
+						className="form-control border-dark"
+						placeholder="Parameter 3"
 						onChange={(e) => {
 							setDisplay4("inline")
 							props.setPara3(e.target.value)
-						}} />
+						}}
+					/>
 					<input
-						type='text'
+						type="text"
 						style={{ display: display4 }}
-						className='form-control border-dark'
-						placeholder='Parameter 4'
+						className="form-control border-dark"
+						placeholder="Parameter 4"
 						onChange={(e) => {
 							setDisplay5("inline")
 							props.setPara4(e.target.value)
-						}} />
+						}}
+					/>
 					<input
-						type='text'
+						type="text"
 						style={{ display: display5 }}
-						className='form-control border-dark'
-						placeholder='Parameter 5'
-						onChange={(e) => props.setPara5(e.target.value)} />
-				</center>}
+						className="form-control border-dark"
+						placeholder="Parameter 5"
+						onChange={(e) => props.setPara5(e.target.value)}
+					/>
+				</center>
+			)}
 		</center>
 	)
 }

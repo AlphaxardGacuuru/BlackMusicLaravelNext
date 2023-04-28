@@ -102,7 +102,7 @@ class ChatService extends Service
         $chat->to = $request->input('to');
         $chat->text = $request->input('text');
         $chat->media = $request->input('media');
-		$saved = $chat->save();
+        $saved = $chat->save();
 
         return ["saved" => $saved, "chat" => $chat];
     }
@@ -121,9 +121,9 @@ class ChatService extends Service
 
         Storage::delete('public/' . $media);
 
-        Chat::find($id)->delete();
+        $deleted = Chat::find($id)->delete();
 
-        return response("Chat deleted", 200);
+        return $deleted;
     }
 
     private function structure($chart)

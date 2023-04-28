@@ -113,8 +113,6 @@ const App = ({ Component, pageProps }) => {
 		get("cart-audios", setCartAudios, "cartAudios")
 	}, [])
 
-	console.log("rendered")
-
 	const audioStates = onAudioPlayer(getLocalStorage, get, setErrors, auth)
 
 	// Function to focus on search input

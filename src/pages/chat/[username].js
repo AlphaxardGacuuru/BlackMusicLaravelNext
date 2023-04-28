@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
+import axios from "@/lib/axios"
+import EchoConfig from "@/lib/echo"
 
 import Img from "@/components/Core/Img"
-import axios from "@/lib/axios"
+
 import TrashSVG from "@/svgs/TrashSVG"
 import BackSVG from "@/svgs/BackSVG"
-import EchoConfig from "@/lib/echo"
 
 const ChatThread = (props) => {
 	const router = useRouter()
@@ -14,21 +15,30 @@ const ChatThread = (props) => {
 	let { username } = router.query
 
 	const [chats, setChats] = useState([])
+	const [user, setUser] = useState({})
 	const [newChat, setNewChat] = useState({})
 	const [toDeleteIds, setToDeleteIds] = useState([])
 	const [deletedIds, setDeletedIds] = useState([])
+	const [deletedId, setDeletedId] = useState()
 
 	useEffect(() => {
 		// Instantiate Echo
 		EchoConfig()
 
+		// Listen to New Chats
 		Echo.private(`chat-created`).listen("NewChatEvent", (e) => {
-			console.log("received")
-			setNewChat(e.chat)
+			setNewChat({ ...e.chat, createdAt: e.chat.created_at })
+		})
+
+		// Listen to Deleted Chats
+		Echo.private(`chat-deleted`).listen("ChatDeletedEvent", (e) => {
+			props.get(`chats/${username}`, setChats)
 		})
 
 		// Fetch Chat
 		props.get(`chats/${username}`, setChats)
+		// Fetch User
+		username && props.get(`users/${username}`, setUser)
 
 		// Set states
 		setTimeout(() => {
@@ -46,6 +56,11 @@ const ChatThread = (props) => {
 			props.setStateToUpdateTwo()
 			props.setEditing(false)
 		}, 1000)
+
+		return () => {
+			Echo.leaveChannel(`chat-created`)
+			Echo.leaveChannel(`chat-deleted`)
+		}
 	}, [username])
 
 	/*
@@ -56,6 +71,13 @@ const ChatThread = (props) => {
 		// Set new chats
 		setChats([...cleanChats, newChat])
 	}, [newChat])
+
+	/*
+	 * Remove chats */
+	useEffect(() => {
+		// Remove chat
+		setDeletedIds([...deletedIds, deletedId])
+	}, [deletedId])
 
 	/*
 	 * Show Delete */
@@ -85,28 +107,6 @@ const ChatThread = (props) => {
 		// Scroll to the bottom of the page
 		window.scrollTo(0, document.body.scrollHeight)
 	}, [chats])
-
-	// // Long hold to show delete button
-	// var chatDiv = useRef(null)
-
-	// if (chatDiv.current) {
-	// 	chatDiv.current
-	// 		.addEventListener("mousedown", () => {
-	// 			const timeout = setTimeout(() => setShowDelete(!showDelete), 1000)
-
-	// 			chatDiv.current
-	// 				.addEventListener("mouseup", () => clearTimeout(timeout))
-	// 		})
-
-	// 	// For mobile
-	// 	chatDiv.current
-	// 		.addEventListener("touchstart", () => {
-	// 			const timeout = setTimeout(() => setShowDelete(!showDelete), 1000)
-
-	// 			chatDiv.current
-	// 				.addEventListener("touchend", () => clearTimeout(timeout))
-	// 		})
-	// }
 
 	return (
 		<div className="row">
@@ -139,7 +139,7 @@ const ChatThread = (props) => {
 														overflow: "hidden",
 														textOverflow: "clip",
 													}}>
-													<b className="text-white">{chats[0]?.name}</b>
+													<b className="text-white">{user.name}</b>
 													<br />
 													<small className="text-white">{username}</small>
 												</h6>
@@ -152,7 +152,7 @@ const ChatThread = (props) => {
 											<Link href={`/profile/${username}`}>
 												<a>
 													<Img
-														src={chats[0]?.avatar}
+														src={user.avatar}
 														imgClass="rounded-circle"
 														width="40px"
 														height="40px"
@@ -180,6 +180,7 @@ const ChatThread = (props) => {
 						</h2>
 					</div>
 					{chats
+						.filter((chat) => chat != {})
 						.filter((chat) => !deletedIds.includes(chat.id))
 						.map((chatItem, key) => (
 							<div

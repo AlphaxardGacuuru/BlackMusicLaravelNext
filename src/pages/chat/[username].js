@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import axios from "@/lib/axios"
@@ -19,7 +19,7 @@ const ChatThread = (props) => {
 	const [newChat, setNewChat] = useState({})
 	const [toDeleteIds, setToDeleteIds] = useState([])
 	const [deletedIds, setDeletedIds] = useState([])
-	const [deletedId, setDeletedId] = useState()
+	const [isOnline, setIsOnline] = useState(false)
 
 	useEffect(() => {
 		// Instantiate Echo
@@ -34,6 +34,26 @@ const ChatThread = (props) => {
 		Echo.private(`chat-deleted`).listen("ChatDeletedEvent", (e) => {
 			props.get(`chats/${username}`, setChats)
 		})
+
+		// Join Presence Channel
+		Echo.join(`chat`)
+			.here((users) => {
+				console.log(users)
+				var isHere = users.find((user) => user.username == username)
+				isHere && setIsOnline(true)
+			})
+			.joining((user) => {
+				console.log(user.username + " joined.")
+			})
+			.leaving((user) => {
+				console.log(user.username + " left.")
+			})
+			.listenForWhisper("typing", (e) => {
+				console.log(e.name + " is typing...")
+			})
+			.error((error) => {
+				console.error(error)
+			})
 
 		// Fetch Chat
 		props.get(`chats/${username}`, setChats)
@@ -58,8 +78,9 @@ const ChatThread = (props) => {
 		}, 1000)
 
 		return () => {
-			Echo.leaveChannel(`chat-created`)
-			Echo.leaveChannel(`chat-deleted`)
+			Echo.leave("chat-created")
+			Echo.leave("chat-deleted")
+			Echo.leave("chat")
 		}
 	}, [username])
 
@@ -71,13 +92,6 @@ const ChatThread = (props) => {
 		// Set new chats
 		setChats([...cleanChats, newChat])
 	}, [newChat])
-
-	/*
-	 * Remove chats */
-	useEffect(() => {
-		// Remove chat
-		setDeletedIds([...deletedIds, deletedId])
-	}, [deletedId])
 
 	/*
 	 * Show Delete */
@@ -100,6 +114,15 @@ const ChatThread = (props) => {
 			.delete(`/api/chats/${id}`)
 			.then((res) => props.setMessages([res.data]))
 			.catch((err) => props.getErrors(err))
+	}
+
+	/*
+	 * Send Typing Event */
+	const onType = () => {
+		console.log("typing...")
+		Echo.join(`chat`).whisper("typing", {
+			name: props.auth.username,
+		})
 	}
 
 	// Ensure latest chat is always visible
@@ -141,7 +164,13 @@ const ChatThread = (props) => {
 													}}>
 													<b className="text-white">{user.name}</b>
 													<br />
-													<small className="text-white">{username}</small>
+													<div className="pt-1">
+														{isOnline && (
+															<small className="text-white bg-success px-2 rounded-pill">
+																online
+															</small>
+														)}
+													</div>
 												</h6>
 											</center>
 										</div>

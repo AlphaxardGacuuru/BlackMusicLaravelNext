@@ -22,3 +22,12 @@ Broadcast::channel('post.commented', fn() => true);
 Broadcast::channel('kopokopo-received', fn() => true);
 Broadcast::channel('chat-created', fn() => true);
 Broadcast::channel('chat-deleted', fn() => true);
+Broadcast::channel('chat', function ($user) {
+    // if ($user->canJoinRoom($username)) {
+    return [
+        'id' => $user->id,
+        'name' => $user->name,
+        "username" => $user->username,
+    ];
+    // }
+});

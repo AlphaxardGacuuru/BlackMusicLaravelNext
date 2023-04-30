@@ -177,7 +177,7 @@ class UserTest extends TestCase
         );
 
         $response = $this->post("api/users/" . $user->id, [
-            "account_type" => "musician",
+            "accountType" => "musician",
             "_method" => "put",
         ]);
 
@@ -185,7 +185,7 @@ class UserTest extends TestCase
 
         $this->assertDatabaseHas("users", [
             "id" => $user->id,
-            "account_type" => "musician",
+            "accountType" => "musician",
         ]);
     }
 }

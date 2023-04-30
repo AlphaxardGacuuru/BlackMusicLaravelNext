@@ -65,9 +65,9 @@ class UserService extends Service
             $user->password = Hash::make($request->input('phone'));
         }
 
-        if ($request->filled('account_type') && $user->account_type == "normal") {
+        if ($request->filled('accountType') && $user->account_type == "normal") {
 
-            $user->account_type = $request->input('account_type');
+            $user->account_type = $request->input('accountType');
 
             DB::transaction(function () {
 
@@ -126,7 +126,7 @@ class UserService extends Service
             "phone" => $user->phone,
             "avatar" => $user->avatar,
             "backdrop" => $user->backdrop,
-            "account_type" => $user->account_type,
+            "accountType" => $user->account_type,
             "dob" => $user->dob,
             "bio" => $user->bio,
             "withdrawal" => $user->withdrawal,
@@ -137,7 +137,7 @@ class UserService extends Service
             "hasBought1" => $user->hasBought1($this->username),
             "decos" => $user->decos->count(),
             "balance" => $user->balance(),
-            "created_at" => $user->created_at,
+            "createdAt" => $user->created_at,
         ];
     }
 }

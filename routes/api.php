@@ -31,6 +31,7 @@ use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\SavedKaraokeController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SongPayoutController;
+use App\Http\Controllers\StoryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VideoAlbumController;
 use App\Http\Controllers\VideoCommentController;
@@ -93,6 +94,7 @@ Route::apiResources([
     'saved-karaokes' => SavedKaraokeController::class,
     'search' => SearchController::class,
     'song-payouts' => SongPayoutController::class,
+    'stories' => StoryController::class,
     'users' => UserController::class,
     'videos' => VideoController::class,
     'video-likes' => VideoLikeController::class,
@@ -165,6 +167,10 @@ Route::prefix('filepond')->group(function () {
         // Chat
         Route::post('chats', 'storeChatMedia');
         Route::delete('chats/{id}', 'deleteChatMedia');
+		
+		// Story
+        Route::post('stories', 'storeStory');
+        Route::delete('stories/{id}', 'deleteStory');
     });
 });
 

@@ -35,9 +35,10 @@ const NewChat = (props) => {
 										placeholder="Select user"
 										style={{ width: "100%" }}
 										onChange={(e) => {
-											var regex = new RegExp(e.target.value, 'gi');
+											var regex = new RegExp(e.target.value, "gi")
 											setSearch(regex)
-										}} />
+										}}
+									/>
 								</div>
 							</div>
 						</div>
@@ -59,7 +60,8 @@ const NewChat = (props) => {
 											src={user.avatar}
 											imgClass="rounded-circle"
 											width="50px"
-											height="50px" />
+											height="50px"
+										/>
 									</a>
 								</Link>
 							</div>
@@ -72,25 +74,28 @@ const NewChat = (props) => {
 												width: "100%",
 												whiteSpace: "nowrap",
 												overflow: "hidden",
-												textOverflow: "clip"
+												textOverflow: "clip",
 											}}>
 											<b>{user.name}</b>
 											<small>{user.username}</small>
 										</h6>
-										<p className="m-0"
+										<p
+											className="m-0"
 											style={{
 												width: "100%",
 												whiteSpace: "nowrap",
 												overflow: "hidden",
 												textOverflow: "clip",
 												margin: 0,
-											}}>{user.bio}</p>
+											}}>
+											{user.bio}
+										</p>
 									</a>
 								</Link>
 							</div>
 							<div className="p-1">
 								<small>
-									<i className="float-end me-1">{user.account_type}</i>
+									<i className="float-end me-1">{user.accountType}</i>
 								</small>
 							</div>
 						</div>

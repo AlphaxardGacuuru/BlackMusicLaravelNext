@@ -39,8 +39,8 @@ const ChatThread = (props) => {
 		Echo.join(`chat`)
 			.here((users) => {
 				console.log(users)
-				var isHere = users.find((user) => user.username == username)
-				isHere && setIsOnline(true)
+				// var isHere = users.find((user) => user.username == username)
+				// isHere && setIsOnline(true)
 			})
 			.joining((user) => {
 				console.log(user.username + " joined.")

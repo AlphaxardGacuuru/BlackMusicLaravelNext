@@ -65,23 +65,28 @@ class User extends Authenticatable
     protected function avatar(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => preg_match("/http/", $value) ? $value : "/storage/" . $value
+            get:fn($value) => preg_match("/http/", $value) ? $value : "/storage/" . $value
         );
     }
 
     protected function backdrop(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => "/storage/" . $value
+            get:fn($value) => "/storage/" . $value
         );
     }
 
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => Carbon::parse($value)->format('d M Y'),
+            get:fn($value) => Carbon::parse($value)->format('d M Y'),
         );
     }
+
+    /**
+     * Relationships.
+     *
+     */
 
     public function audios()
     {
@@ -221,6 +226,11 @@ class User extends Authenticatable
     public function songPayouts()
     {
         return $this->hasMany(SongPayout::class, 'username', 'username');
+    }
+
+    public function stories()
+    {
+        return $this->hasMany(Story::class, 'username', 'username');
     }
 
     public function videos()

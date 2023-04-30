@@ -34,7 +34,7 @@ const Search = (props) => {
 		return (
 			user.username != props.auth.username &&
 			user.username != "@blackmusic" &&
-			user.account_type == "musician" &&
+			user.accountType == "musician" &&
 			user.username.match(props.search)
 		)
 	})

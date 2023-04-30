@@ -19,7 +19,6 @@ import FilePondPluginImageCrop from "filepond-plugin-image-crop"
 import FilePondPluginImageTransform from "filepond-plugin-image-transform"
 import FilePondPluginFileValidateSize from "filepond-plugin-file-validate-size"
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
-import SendSVG from "@/svgs/SendSVG"
 
 // Register the plugins
 registerPlugin(
@@ -172,7 +171,7 @@ const SocialMediaInput = (props) => {
 				<div className="p-1">
 					<Button
 						type="submit"
-						btnClass="mysonar-btn white-btn mb-1"
+						btnClass="mysonar-btn white-btn"
 						btnText="send"
 					/>
 				</div>
@@ -231,7 +230,7 @@ const SocialMediaInput = (props) => {
 								return (
 									user.username != props.auth.username &&
 									user.username != "@blackmusic" &&
-									user.account_type == "musician" &&
+									user.accountType == "musician" &&
 									user.username.match(regex)
 								)
 							})

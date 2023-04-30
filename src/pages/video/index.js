@@ -31,7 +31,7 @@ const Videos = (props) => {
 		// Set account type to musician
 		axios
 			.post(`/api/users/${props.auth?.id}`, {
-				account_type: "musician",
+				accountType: "musician",
 				_method: "put",
 			})
 			.then((res) => {
@@ -55,7 +55,7 @@ const Videos = (props) => {
 
 	useEffect(() => {
 		// Check if user is musician
-		if (props.auth?.account_type == "musician") {
+		if (props.auth?.accountType == "musician") {
 			setMain("")
 			setButton("none")
 		} else {

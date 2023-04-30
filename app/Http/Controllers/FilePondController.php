@@ -284,7 +284,7 @@ class FilePondController extends Controller
      */
 
     /*
-     * Handle Karaoke */
+     * Handle Chat Media */
     public function storeChatMedia(Request $request)
     {
         $this->validate($request, [
@@ -297,10 +297,37 @@ class FilePondController extends Controller
     }
 
     /*
-     * Handle Karaoke Delete */
+     * Handle Chat Delete */
 	public function deleteChatMedia($id)
 	{
         Storage::delete('public/chat-media/' . $id);
         return response("Chat media deleted", 200);		
+	}
+
+    /*
+     *
+     * Handle Story Media
+     *
+     */
+
+    /*
+     * Handle Story */
+    public function storeStory(Request $request)
+    {
+        $this->validate($request, [
+            'filepond-media' => 'required',
+        ]);
+
+        $media = $request->file('filepond-media')->store('public/stories');
+        $media = substr($media, 7);
+        return $media;
+    }
+
+    /*
+     * Handle Story Delete */
+	public function deleteStory($id)
+	{
+        Storage::delete('public/stories/' . $id);
+        return response("Story deleted", 200);		
 	}
 }

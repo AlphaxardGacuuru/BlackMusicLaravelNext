@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             VideoSeeder::class,
             AudioSeeder::class,
             KaraokeSeeder::class,
+			StorySeeder::class
         ]);
     }
 }

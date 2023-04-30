@@ -46,7 +46,7 @@ const App = ({ Component, pageProps }) => {
 				name: "Guest",
 				username: "@guest",
 				avatar: "/storage/profile-pics/male_avatar.png",
-				account_type: "normal",
+				accountType: "normal",
 				decos: 0,
 				posts: 0,
 				fans: 0,

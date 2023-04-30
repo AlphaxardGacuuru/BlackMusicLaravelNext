@@ -13,23 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('chats', function (Blueprint $table) {
+        Schema::create('stories', function (Blueprint $table) {
             $table->id();
-            $table->string('username');
-            $table->string('to');
-            $table->string('text');
-            $table->string('media')->nullable();
-			$table->softDeletes();
-            $table->timestamp("seen_at")->nullable();
+            $table->string("username");
+            $table->string("text")->nullable();
+            $table->string("media");
             $table->timestamps();
 
             $table->foreign('username')
-                ->references('username')
-                ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
-            $table->foreign('to')
                 ->references('username')
                 ->on('users')
                 ->onUpdate('cascade')
@@ -44,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('chats');
+        Schema::dropIfExists('stories');
     }
 };

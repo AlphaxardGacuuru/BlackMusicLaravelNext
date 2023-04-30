@@ -16,13 +16,17 @@ import PostOptions from "@/components/Post/PostOptions"
 import PenSVG from "@/svgs/PenSVG"
 import ChatSVG from "@/svgs/ChatSVG"
 import DecoSVG from "@/svgs/DecoSVG"
+import CameraSVG from "@/svgs/CameraSVG"
+import StoryMedia from "@/components/Story/StoryMedia"
 
 export default function Home(props) {
 	const [newPosts, setNewPosts] = useState()
 	const [posts, setPosts] = useState(props.posts)
 	const [videos, setVideos] = useState(props.videos)
 	const [users, setUsers] = useState(props.users)
+	const [stories, setStories] = useState(props.stories)
 	const [videoSlice, setVideoSlice] = useState(10)
+	const [storySlice, setStorySlice] = useState(10)
 	const [bottomMenu, setBottomMenu] = useState("")
 	const [userToUnfollow, setUserToUnfollow] = useState()
 	const [postToEdit, setPostToEdit] = useState()
@@ -40,12 +44,13 @@ export default function Home(props) {
 			setNewPosts(e.post)
 		})
 
-		props.auth?.account_type == "musician" && setShowPostBtn(true)
+		props.auth?.accountType == "musician" && setShowPostBtn(true)
 
 		// Fetch data
 		props.get("posts", setPosts, "posts")
 		props.get("videos", setVideos, "videos")
 		props.get("users", setUsers, "users")
+		props.get("stories", setStories, "stories")
 	}, [props.auth])
 
 	/*
@@ -89,6 +94,15 @@ export default function Home(props) {
 
 	return (
 		<>
+			{/* Story button */}
+			{showPostBtn && (
+				<Link href="story/create">
+					<a id="statusFloatBtn" className={raise ? "mb-5" : undefined}>
+						<CameraSVG />
+					</a>
+				</Link>
+			)}
+
 			{/* Post button */}
 			{showPostBtn && (
 				<Link href="post/create">
@@ -195,9 +209,7 @@ export default function Home(props) {
 
 						{/* Loading Musician items */}
 						{dummyArray
-							.filter(
-								() => users.filter((user) => user.account_type).length < 1
-							)
+							.filter(() => users.filter((user) => user.accountType).length < 1)
 							.map((item, key) => (
 								<LoadingMusicianMedia key={key} />
 							))}
@@ -206,7 +218,7 @@ export default function Home(props) {
 						{users
 							.filter(
 								(user) =>
-									user.account_type == "musician" &&
+									user.accountType == "musician" &&
 									user.username != props.auth?.username &&
 									user.username != "@blackmusic"
 							)
@@ -227,27 +239,19 @@ export default function Home(props) {
 				{/* <!-- ****** Songs Area ****** --> */}
 				<div className="col-sm-4">
 					<div className="mb-2 border-bottom border-secondary">
-						<h5>Songs for you</h5>
+						<h5>Stories</h5>
 						<div className="hidden-scroll pb-2" onScroll={handleScroll}>
-							{/* Loading Video items */}
+							{/* Loading Story items */}
 							{dummyArray
-								.filter(() => videos.length < 1)
+								.filter(() => stories.length < 1)
 								.map((item, key) => (
 									<LoadingVideoMedia key={key} />
 								))}
 
-							{/* Real Video items */}
-							{videos
-								.filter((video) => !video.hasBoughtVideo)
-								.slice(0, videoSlice)
-								.map((video, key) => (
-									<VideoMedia
-										{...props}
-										key={key}
-										video={video}
-										onClick={() => props.setShow(0)}
-									/>
-								))}
+							{/* Real Story items */}
+							{stories.slice(0, storySlice).map((story, key) => (
+								<StoryMedia {...props} key={key} story={story} />
+							))}
 						</div>
 					</div>
 					{/* <!-- ****** Songs Area End ****** --> */}
@@ -337,9 +341,10 @@ export async function getServerSideProps(context) {
 		videos: [],
 		users: [],
 		posts: [],
+		stories: [],
 	}
 
-	// Fetch Post Comments
+	// Fetch Posts
 	await ssrAxios
 		.get(`http://localhost:8000/api/posts`)
 		.then((res) => (data.posts = res.data))
@@ -349,6 +354,9 @@ export async function getServerSideProps(context) {
 	await ssrAxios
 		.get(`http://localhost:8000/api/videos`)
 		.then((res) => (data.videos = res.data))
+	await ssrAxios
+		.get(`http://localhost:8000/api/stories`)
+		.then((res) => (data.stories = res.data))
 
 	// Pass data to the page via props
 	return { props: data }

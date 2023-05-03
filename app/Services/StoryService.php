@@ -49,7 +49,9 @@ class StoryService extends Service
      */
     public function show($id)
     {
-        //
+        $getStory = Story::find($id);
+
+		return $this->structure($getStory);
     }
 
     /**
@@ -61,7 +63,8 @@ class StoryService extends Service
      */
     public function update($request, $id)
     {
-        //
+        $story = new Story;
+		$story->seen_at = $request->input("seen_at");
     }
 
     /**

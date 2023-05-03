@@ -9,14 +9,19 @@ use Illuminate\Http\Request;
 
 class StoryController extends Controller
 {
+	public function __construct(protected StoryService $service)
+	{
+				// 
+	}
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(StoryService $service)
+    public function index()
     {
-        return $service->index();
+        return $this->service->index();
     }
 
     /**
@@ -25,14 +30,14 @@ class StoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, StoryService $service)
+    public function store(Request $request)
     {
         $this->validate($request, [
             "media" => "required|string",
             "text" => "string",
         ]);
 
-        $response = $service->store($request);
+        $response = $this->service->store($request);
 
         StoryCreatedEvent::dispatchIf($response["saved"], $response["story"]);
 
@@ -45,9 +50,9 @@ class StoryController extends Controller
      * @param  \App\Models\Story  $story
      * @return \Illuminate\Http\Response
      */
-    public function show(Story $story)
+    public function show($id)
     {
-        //
+        return $this->service->show($id);
     }
 
     /**
@@ -57,9 +62,9 @@ class StoryController extends Controller
      * @param  \App\Models\Story  $story
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Story $story)
+    public function update(Request $request, $id)
     {
-        //
+        return $this->service->update($request, $id);
     }
 
     /**

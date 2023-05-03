@@ -1,11 +1,12 @@
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import axios from "@/lib/axios"
-
 import Img from "next/image"
+
 import Btn from "../Core/Btn"
+
 import CartSVG from "../../svgs/CartSVG"
-import { useEffect, useState } from "react"
 
 const AudioMedia = (props) => {
 	const router = useRouter()

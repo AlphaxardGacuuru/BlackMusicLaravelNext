@@ -25,6 +25,8 @@ const Bottomnav = (props) => {
 	var isInKaraoke = false
 
 	// Hide BottomNav from various pages
+	router.pathname.match("/404") ||
+	router.pathname == "/story/[id]" ||
 	router.pathname.match("/story/create") ||
 	router.pathname == "/karaoke/[id]" ||
 	router.pathname.match("/karaoke/create") ||
@@ -41,8 +43,8 @@ const Bottomnav = (props) => {
 		: (display = "")
 
 	// Show Social Input in various pages
-	router.pathname == "/post/[id]" || 
-	router.pathname.match("/chat/") || 
+	router.pathname == "/post/[id]" ||
+	router.pathname.match("/chat/") ||
 	router.pathname.match("/story/create")
 		? (inputDisplay = "")
 		: (inputDisplay = "none")

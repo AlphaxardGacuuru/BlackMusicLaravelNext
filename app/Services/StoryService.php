@@ -84,6 +84,7 @@ class StoryService extends Service
     {
         return [
             "id" => $story->id,
+			"name" => $story->user->name,
             "username" => $story->username,
             "avatar" => $story->user->avatar,
             "media" => $story->media,

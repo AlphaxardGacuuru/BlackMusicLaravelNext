@@ -200,7 +200,7 @@ const TopNav = (props) => {
 					</span>
 				)}
 
-				{/* <!-- ***** Main Menu Area Start ***** --> */}
+				{/* <!-- ***** Side Menu Area Start ***** --> */}
 				<div className="mainMenu d-flex align-items-center justify-content-between">
 					{/* <!-- Close Icon --> */}
 					<div className="closeIcon" onClick={() => setMenu("")}>
@@ -290,7 +290,7 @@ const TopNav = (props) => {
 					</div>
 					<br />
 				</div>
-				{/* <!-- ***** Main Menu Area End ***** --> */}
+				{/* <!-- ***** Side Menu Area End ***** --> */}
 			</div>
 
 			{/* Sliding Bottom Nav */}

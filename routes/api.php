@@ -105,11 +105,13 @@ Route::apiResources([
 // });
 
 /*
- * Post */
+ * Post 
+ */
 Route::get('artist/posts/{username}', [PostController::class, 'artistPosts']);
 
 /*
- * Video */
+ * Video 
+ */
 
 // Video Charts
 Route::get('video-charts/newly-released', [VideoController::class, 'newlyReleased']);
@@ -122,7 +124,8 @@ Route::get('artist/videos/{username}', [VideoController::class, 'artistVideos'])
 Route::get('artist/bought-videos/{username}', [BoughtVideoController::class, 'artistBoughtVideos']);
 
 /*
- * Audio */
+ * Audio 
+ */
 
 // Audio Charts
 Route::get('audio-charts/newly-released', [AudioController::class, 'newlyReleased']);
@@ -133,6 +136,12 @@ Route::get('audios/download', [AudioController::class, 'download']);
 Route::get('artist/audio-albums/{username}', [AudioAlbumController::class, 'artistAudioAlbums']);
 Route::get('artist/audios/{username}', [AudioController::class, 'artistAudios']);
 Route::get('artist/bought-audios/{username}', [BoughtAudioController::class, 'artistBoughtAudios']);
+
+/*
+* Stories
+*/ 
+Route::post('stories/seen/{id}', [StoryController::class, 'seen']);
+Route::post('stories/mute/{username}', [StoryController::class, 'mute']);
 
 // Filepond Controller
 Route::prefix('filepond')->group(function () {

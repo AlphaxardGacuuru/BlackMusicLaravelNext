@@ -38,4 +38,20 @@ class Story extends Model
     {
         return $this->belongsTo(User::class, "username", "username");
     }
+
+    public function seen()
+    {
+        return $this->hasMany(SeenStory::class);
+    }
+
+    /*
+     * Custom functions
+     */
+
+    public function hasSeen($username)
+    {
+        return $this->seen
+            ->where("username", $username)
+            ->count() > 0 ? true : false;
+    }
 }

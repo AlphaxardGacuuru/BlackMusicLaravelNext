@@ -2,7 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\Follow;
+use App\Models\SeenStory;
 use App\Models\Story;
+use Carbon\Carbon;
 
 class StoryService extends Service
 {
@@ -51,7 +54,7 @@ class StoryService extends Service
     {
         $getStory = Story::find($id);
 
-		return $this->structure($getStory);
+        return $this->structure($getStory);
     }
 
     /**
@@ -63,8 +66,10 @@ class StoryService extends Service
      */
     public function update($request, $id)
     {
-        $story = new Story;
-		$story->seen_at = $request->input("seen_at");
+        $story = Story::find($id);
+        $story->save();
+
+        return response("Story updated", 200);
     }
 
     /**
@@ -79,17 +84,45 @@ class StoryService extends Service
     }
 
     /*
+     * Seen */
+    public function seen($id)
+    {
+        $seenStory = new SeenStory;
+        $seenStory->story_id = $id;
+        $seenStory->username = $this->username;
+        $seenStory->seen_at = Carbon::now();
+        $seenStory->save();
+
+        return response("Story seen", 200);
+    }
+
+    /*
+     * Mute */
+    public function mute($username)
+    {
+        // Get follow
+        $follow = Follow::where("followed", $username)
+            ->where("username", $this->username)
+            ->first();
+
+        $follow->muted = ["stories" => true];
+        $follow->save();
+
+        return response("Stories from " . $username . " muted");
+    }
+
+    /*
      * Structure */
     public function structure($story)
     {
         return [
             "id" => $story->id,
-			"name" => $story->user->name,
+            "name" => $story->user->name,
             "username" => $story->username,
             "avatar" => $story->user->avatar,
             "media" => $story->media,
             "text" => $story->text,
-			"seenAt" => $story->seen_at
+            "hasSeen" => $story->hasSeen($this->username),
         ];
     }
 }

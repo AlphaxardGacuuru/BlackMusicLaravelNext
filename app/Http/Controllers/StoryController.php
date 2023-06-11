@@ -77,4 +77,18 @@ class StoryController extends Controller
     {
         //
     }
+
+	/*
+	* Seen */
+	public function seen($id)
+	{
+		return $this->service->seen($id);
+	} 
+
+	/*
+	* Mute */
+	public function mute($username)
+	{
+		return $this->service->mute($username);
+	} 
 }

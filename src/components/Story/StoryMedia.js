@@ -7,7 +7,7 @@ const StoryMedia = (props) => {
 			className="mx-2 pt-0 px-0 pb-2 my-card"
 			style={{
 				display: "inline-block",
-				// border: `2px solid ${props.story.seenAt ? "#232323" : "#FFD700"}`,
+				border: `2px solid ${props.story.hasSeen ? "#232323" : "#FFD700"}`,
 			}}>
 			{/* <div style={{ border: "8px solid #000" }}> */}
 				<div className="story-thumbnail">

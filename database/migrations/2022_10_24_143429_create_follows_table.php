@@ -17,9 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('followed');
             $table->string('username');
-            $table->string('muted')
-                ->default('false')
-                ->nullable();
+            $table->json('muted')->nullable();
             $table->string('blocked')
                 ->default('false')
                 ->nullable();

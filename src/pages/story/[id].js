@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import ssrAxios from "@/lib/ssrAxios"
 
@@ -9,12 +9,15 @@ const StoryShow = (props) => {
 
 	let { id } = router.query
 
+	const [index, setIndex] = useState(id)
+
 	useEffect(() => {
 		// Scroll Karaoke to current one
-		var storyEl = document.getElementById(id)
+		var storyEl = document.getElementById(index)
 
 		storyEl && storyEl.scrollIntoView()
-	}, [])
+		console.log(storyEl.scrollIntoView())
+	}, [index])
 
 	return (
 		<div className="row p-0">
@@ -24,7 +27,13 @@ const StoryShow = (props) => {
 					className="hidden-scroll m-0 p-0"
 					style={{ scrollSnapType: "x mandatory" }}>
 					{props.stories.map((story, key) => (
-						<Story key={key} story={story} />
+						<Story
+							{...props}
+							key={key}
+							story={story}
+							stories={props.stories}
+							setIndex={setIndex}
+						/>
 					))}
 				</div>
 			</div>

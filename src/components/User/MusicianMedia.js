@@ -3,9 +3,8 @@ import Link from "next/link"
 import Img from "@/components/Core/Img"
 import Btn from "../Core/Btn"
 
-import onFollow from "@/functions/onFollow"
-
 import CheckSVG from "../../svgs/CheckSVG"
+import axios from "@/lib/axios"
 
 const MusiciansMedia = (props) => {
 	const [hasFollowed, setHasFollowed] = useState(props.user.hasFollowed)
@@ -14,6 +13,24 @@ const MusiciansMedia = (props) => {
 		// Set new cart with data with auth
 		setHasFollowed(props.user.hasFollowed)
 	}, [props.user])
+
+	/*
+	 * Function for Following user */
+	const onFollow = (props) => {
+		// Change state
+		setHasFollowed(!hasFollowed)
+
+		axios
+			.post(`/api/follows`, { musician: props.user.username })
+			.then((res) => {
+				props.setMessages([res.data])
+				// Update users
+				props.get("users", props.setUsers, "users")
+				// Update posts
+				props.get("posts", props.setPosts, "posts")
+			})
+			.catch((err) => props.getErrors(err, true))
+	}
 
 	return (
 		<div className="d-flex">

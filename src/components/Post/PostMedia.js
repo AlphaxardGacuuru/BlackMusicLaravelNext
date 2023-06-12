@@ -5,8 +5,6 @@ import axios from "@/lib/axios"
 import Img from "@/components/Core/Img"
 import Poll from "./Poll"
 
-import onFollow from "@/functions/onFollow"
-
 import DecoSVG from "../../svgs/DecoSVG"
 import OptionsSVG from "../../svgs/OptionsSVG"
 import CommentSVG from "../../svgs/CommentSVG"
@@ -16,10 +14,9 @@ import ShareSVG from "../../svgs/ShareSVG"
 import CloseSVG from "@/svgs/CloseSVG"
 
 const PostMedia = (props) => {
-	// Set a standart user key in props
-	const props2 = { ...props, user: { username: props.post.username } }
-
 	const [hasLiked, setHasLiked] = useState(props.post.hasLiked)
+	const [hasMuted, setHasMuted] = useState(props.post.hasMuted)
+	const [hasFollowed, setHasFollowed] = useState(props.post.hasFollowed)
 	const [bottomMenu, setBottomMenu] = useState("")
 
 	useEffect(() => {
@@ -63,18 +60,44 @@ const PostMedia = (props) => {
 		navigator.canShare(shareData) && navigator.share(shareData)
 	}
 
+	/*
+	 * Function for Muting */
 	const onMute = () => {
+		// Change state
+		setHasMuted(!hasMuted)
+
 		axios
 			.post(`/api/posts/mute/${props.post.username}`, { _method: "PUT" })
 			.then((res) => {
 				props.setMessages([res.data])
 				// Update posts
-				props.get("posts", props.setPosts, "posts")
+				props.setPosts && props.get("posts", props.setPosts, "posts")
 				props.setArtistPosts &&
 					props.get(
-						`/artist/posts/${props.post.username}`,
+						`artist/posts/${props.post.username}`,
 						props.setArtistPosts
 					)
+			})
+			.catch((err) => props.getErrors(err, true))
+	}
+
+	/*
+	 * Function for Following user */
+	const onFollow = () => {
+		// Change state
+		setHasFollowed(!hasFollowed)
+
+		axios
+			.post(`/api/follows`, { musician: props.post.username })
+			.then((res) => {
+				props.setMessages([res.data])
+				// Update posts
+				props.setPosts && props.get("posts", props.setPosts, "posts")
+				// Update artist posts
+				props.setArtistPosts &&
+					props.get(`artist/posts/${props.post.username}`, props.setArtistPosts)
+				// Update users
+				props.setUsers && props.get("users", props.setUsers, "users")
 			})
 			.catch((err) => props.getErrors(err, true))
 	}
@@ -321,7 +344,7 @@ const PostMedia = (props) => {
 												onMute()
 											}}>
 											<h6>
-												{props.post.hasMuted
+												{hasMuted
 													? `Unmute ${props.post.username}`
 													: `Mute ${props.post.username}`}
 											</h6>
@@ -331,10 +354,10 @@ const PostMedia = (props) => {
 											className="dropdown-item"
 											onClick={(e) => {
 												e.preventDefault()
-												onFollow(props2)
+												onFollow()
 											}}>
 											<h6>
-												{props.post.hasFollowed
+												{hasFollowed
 													? `Unfollow ${props.post.username}`
 													: `Follow ${props.post.username}`}
 											</h6>
@@ -403,8 +426,7 @@ const PostMedia = (props) => {
 											: `Mute ${props.post.username}`}
 									</h6>
 								</div>
-								<div
-									onClick={() => onFollow(props2)}>
+								<div onClick={onFollow}>
 									<h6 className="pb-2">
 										{props.post.hasFollowed
 											? `Unfollow ${props.post.username}`

@@ -30,6 +30,7 @@ const Profile = (props) => {
 	)
 	const [artistAudios, setAudios] = useState(props.artistAudios)
 
+	const [hasFollowed, setHasFollowed] = useState(props.user.hasFollowed)
 	const [tabClass, setTabClass] = useState("videos")
 
 	useEffect(() => {
@@ -123,7 +124,7 @@ const Profile = (props) => {
 					) : (
 						user.username != "@blackmusic" &&
 						(user.hasBought1 || props.auth?.username == "@blackmusic" ? (
-							user.hasFollowed ? (
+							hasFollowed ? (
 								<button
 									className="btn float-end rounded-0 text-light"
 									style={{ backgroundColor: "#232323" }}
@@ -177,7 +178,7 @@ const Profile = (props) => {
 				</div>
 				<div className="col-sm-1"></div>
 			</div>
-			{/* {{-- End of Profile Area --}} */}
+			{/* End of Profile Area */}
 
 			{/* Tabs for Videos, Posts and Audios */}
 			<div className="d-flex">

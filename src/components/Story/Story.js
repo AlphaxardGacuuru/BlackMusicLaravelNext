@@ -9,6 +9,7 @@ import CloseSVG from "@/svgs/CloseSVG"
 const Story = (props) => {
 	const [percent, setPercent] = useState("0%")
 	const [sendSeenAt, setSendSeenAt] = useState()
+	const [hasMuted, setHasMuted] = useState(props.story.hasMuted)
 
 	var timer
 
@@ -101,6 +102,9 @@ const Story = (props) => {
 	/*
 	 * Mute stories from user */
 	const onMute = () => {
+		// Change state
+		setHasMuted(!hasMuted)
+
 		axios
 			.post(`/api/stories/mute/${props.story.username}`, { _method: "PUT" })
 			.then((res) => props.setMessages([res.data]))
@@ -188,9 +192,10 @@ const Story = (props) => {
 									</a>
 								</Link>
 								<a
+									href="#"
 									className="dropdown-item border-bottom border-dark"
 									onClick={onMute}>
-									<h6>Mute</h6>
+									<h6>{hasMuted ? "Unmute" : "Mute"}</h6>
 								</a>
 							</div>
 						</div>

@@ -93,20 +93,19 @@ class PostService extends Service
             ->where("username", $this->username)
             ->first();
 
-			// return $follow->muted["posts"];
         // Check if Posts are muted
         if ($follow->muted["posts"]) {
             $muted = $follow->muted;
             $muted["posts"] = false;
             $follow->muted = $muted;
 
-			$message = "Posts from " . $username . " unmuted";
+            $message = "Posts from " . $username . " unmuted";
         } else {
             $muted = $follow->muted;
             $muted["posts"] = true;
             $follow->muted = $muted;
 
-			$message = "Posts from " . $username . " muted";
+            $message = "Posts from " . $username . " muted";
         }
 
         $follow->save();
@@ -118,14 +117,13 @@ class PostService extends Service
      * Artist's Posts */
     public function artistPosts($username)
     {
-        $getArtistPosts = Post::where("username", $username)->get();
-
         // Get Artist's Posts with muted info
         $getArtistPosts = Post::select("posts.*", "follows.muted->posts as muted", "follows.blocked")
             ->join("follows", function ($join) {
                 $join->on("follows.followed", "=", "posts.username")
                     ->where("follows.username", "=", $this->username);
             })
+            ->where("posts.username", $username)
             ->orderBy("posts.id", "DESC")
             ->get();
 

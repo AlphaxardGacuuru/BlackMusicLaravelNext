@@ -105,10 +105,24 @@ class StoryService extends Service
             ->where("username", $this->username)
             ->first();
 
-        $follow->muted = ["stories" => true];
+        // Check if Stories are muted
+        if ($follow->muted["stories"]) {
+            $muted = $follow->muted;
+            $muted["stories"] = false;
+            $follow->muted = $muted;
+
+            $message = "Stories from " . $username . " unmuted";
+        } else {
+            $muted = $follow->muted;
+            $muted["stories"] = true;
+            $follow->muted = $muted;
+
+            $message = "Stories from " . $username . " muted";
+        }
+
         $follow->save();
 
-        return response("Stories from " . $username . " muted");
+        return response($message, 200);
     }
 
     /*

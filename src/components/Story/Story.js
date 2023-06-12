@@ -102,9 +102,9 @@ const Story = (props) => {
 	 * Mute stories from user */
 	const onMute = () => {
 		axios
-			.post(`/api/stories/mute/${props.story.username}`)
+			.post(`/api/stories/mute/${props.story.username}`, { _method: "PUT" })
 			.then((res) => props.setMessages([res.data]))
-			.catch((err) => props.setErrors(["Failed to mute"]))
+			.catch((err) => props.getErrors(err, true))
 	}
 
 	return (

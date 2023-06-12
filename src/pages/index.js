@@ -11,7 +11,6 @@ import LoadingPostMedia from "@/components/Post/LoadingPostMedia"
 import VideoMedia from "@/components/Video/VideoMedia"
 import MusicianMedia from "@/components/User/MusicianMedia"
 import PostMedia from "@/components/Post/PostMedia"
-import PostOptions from "@/components/Post/PostOptions"
 
 import PenSVG from "@/svgs/PenSVG"
 import ChatSVG from "@/svgs/ChatSVG"
@@ -27,12 +26,6 @@ export default function Home(props) {
 	const [stories, setStories] = useState(props.stories)
 	const [videoSlice, setVideoSlice] = useState(10)
 	const [storySlice, setStorySlice] = useState(10)
-	const [bottomMenu, setBottomMenu] = useState("")
-	const [userToUnfollow, setUserToUnfollow] = useState()
-	const [postToEdit, setPostToEdit] = useState()
-	const [editLink, setEditLink] = useState()
-	const [deleteLink, setDeleteLink] = useState()
-	const [unfollowLink, setUnfollowLink] = useState()
 	const [showPostBtn, setShowPostBtn] = useState()
 	const [deletedIds, setDeletedIds] = useState([])
 
@@ -236,7 +229,7 @@ export default function Home(props) {
 				</div>
 				{/* <!-- Musician suggestion area end --> */}
 
-				{/* <!-- ****** Songs Area ****** --> */}
+				{/* <!-- ****** Srories Area ****** --> */}
 				<div className="col-sm-4">
 					<div className="mb-2 border-bottom border-secondary">
 						<h5>Stories</h5>
@@ -254,7 +247,7 @@ export default function Home(props) {
 							))}
 						</div>
 					</div>
-					{/* <!-- ****** Songs Area End ****** --> */}
+					{/* <!-- ****** Srories Area End ****** --> */}
 
 					{/* <!-- Posts area --> */}
 					<div className="m-0 p-0">
@@ -267,9 +260,6 @@ export default function Home(props) {
 
 						{/* Posts */}
 						{posts
-							.filter((post) => {
-								return post.hasFollowed || props.auth?.username == "@blackmusic"
-							})
 							.filter((post) => !deletedIds.includes(post.id))
 							.map((post, key) => (
 								<PostMedia
@@ -278,13 +268,7 @@ export default function Home(props) {
 									post={post}
 									setUsers={setUsers}
 									setPosts={setPosts}
-									setBottomMenu={setBottomMenu}
-									setUserToUnfollow={setUserToUnfollow}
-									setPostToEdit={setPostToEdit}
-									setEditLink={setEditLink}
-									setDeleteLink={setDeleteLink}
 									onDeletePost={onDeletePost}
-									setUnfollowLink={setUnfollowLink}
 								/>
 							))}
 					</div>
@@ -317,20 +301,6 @@ export default function Home(props) {
 
 				<div className="col-sm-1"></div>
 			</div>
-
-			{/* Sliding Bottom Nav */}
-			<PostOptions
-				{...props}
-				bottomMenu={bottomMenu}
-				setBottomMenu={setBottomMenu}
-				unfollowLink={unfollowLink}
-				userToUnfollow={userToUnfollow}
-				editLink={editLink}
-				postToEdit={postToEdit}
-				deleteLink={deleteLink}
-				onDeletePost={onDeletePost}
-			/>
-			{/* Sliding Bottom Nav end */}
 		</>
 	)
 }

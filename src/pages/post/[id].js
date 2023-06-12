@@ -20,14 +20,6 @@ const PostShow = (props) => {
 	const [post, setPost] = useState(props.post)
 	const [postComments, setPostComments] = useState(props.comments)
 	const [newPostComments, setNewPostComments] = useState()
-	const [bottomMenu, setBottomMenu] = useState("")
-	const [userToUnfollow, setUserToUnfollow] = useState()
-	const [postToEdit, setPostToEdit] = useState()
-	const [editLink, setEditLink] = useState()
-	const [deleteLink, setDeleteLink] = useState()
-	const [commentToEdit, setCommentToEdit] = useState()
-	const [commentDeleteLink, setCommentDeleteLink] = useState()
-	const [unfollowLink, setUnfollowLink] = useState()
 	const [deletedIds, setDeletedIds] = useState([])
 
 	useEffect(() => {
@@ -113,90 +105,61 @@ const PostShow = (props) => {
 	var dummyArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 	return (
-		<>
-			<div className="row">
-				<center>
-					<h6
-						id="snackbar-up"
-						style={{ cursor: "pointer" }}
-						className={newPostComments && "show"}
-						onClick={onNewComments}>
-						<div>New Comments</div>
-					</h6>
-				</center>
-				<div className="col-sm-4"></div>
-				<div className="col-sm-4">
-					<div className="d-flex my-2">
-						<Link href="/">
-							<a>
-								<BackSVG />
-							</a>
-						</Link>
-						<h1 className="mx-auto">Post</h1>
-						<a className="invisible">
+		<div className="row">
+			<center>
+				<h6
+					id="snackbar-up"
+					style={{ cursor: "pointer" }}
+					className={newPostComments && "show"}
+					onClick={onNewComments}>
+					<div>New Comments</div>
+				</h6>
+			</center>
+			<div className="col-sm-4"></div>
+			<div className="col-sm-4">
+				<div className="d-flex my-2">
+					<Link href="/">
+						<a>
 							<BackSVG />
 						</a>
-					</div>
-					<span>
-						<PostMedia
-							{...props}
-							post={post}
-							setBottomMenu={setBottomMenu}
-							setUserToUnfollow={setUserToUnfollow}
-							setPostToEdit={setPostToEdit}
-							setEditLink={setEditLink}
-							setDeleteLink={setDeleteLink}
-							setUnfollowLink={setUnfollowLink}
-							onDeletePost={onDeletePost}
-						/>
-					</span>
-
-					<hr className="text-white" />
-
-					<div className="m-0 p-0">
-						{/* Loading Comment items */}
-						{dummyArray
-							.filter(() => postComments.length < 1)
-							.map((item, key) => (
-								<LoadingPostMedia key={key} />
-							))}
-
-						{postComments
-							.filter((comment) => !deletedIds.includes(comment.id))
-							.map((comment, key) => (
-								<CommentMedia
-									{...props}
-									key={key}
-									comment={comment}
-									setBottomMenu={setBottomMenu}
-									setCommentDeleteLink={setCommentDeleteLink}
-									setCommentToEdit={setCommentToEdit}
-									onCommentLike={onCommentLike}
-									onDeleteComment={onDeleteComment}
-								/>
-							))}
-					</div>
+					</Link>
+					<h1 className="mx-auto">Post</h1>
+					<a className="invisible">
+						<BackSVG />
+					</a>
 				</div>
-				<div className="col-sm-4"></div>
-			</div>
+				<span>
+					<PostMedia {...props} post={post} onDeletePost={onDeletePost} />
+				</span>
 
-			{/* Sliding Bottom Nav */}
-			<PostOptions
-				{...props}
-				bottomMenu={bottomMenu}
-				setBottomMenu={setBottomMenu}
-				unfollowLink={unfollowLink}
-				userToUnfollow={userToUnfollow}
-				editLink={editLink}
-				postToEdit={postToEdit}
-				deleteLink={deleteLink}
-				onDeletePost={onDeletePost}
-				commentToEdit={commentToEdit}
-				commentDeleteLink={commentDeleteLink}
-				onDeleteComment={onDeleteComment}
-			/>
-			{/* Sliding Bottom Nav end */}
-		</>
+				<hr className="text-white" />
+
+				<div className="m-0 p-0">
+					{/* Loading Comment items */}
+					{dummyArray
+						.filter(() => postComments.length < 1)
+						.map((item, key) => (
+							<LoadingPostMedia key={key} />
+						))}
+
+					{postComments
+						.filter((comment) => !deletedIds.includes(comment.id))
+						.map((comment, key) => (
+							<CommentMedia
+								{...props}
+								key={key}
+								comment={comment}
+								setBottomMenu={setBottomMenu}
+								setCommentDeleteLink={setCommentDeleteLink}
+								setCommentToEdit={setCommentToEdit}
+								onCommentLike={onCommentLike}
+								onDeleteComment={onDeleteComment}
+							/>
+						))}
+				</div>
+			</div>
+			<div className="col-sm-4"></div>
+		</div>
 	)
 }
 

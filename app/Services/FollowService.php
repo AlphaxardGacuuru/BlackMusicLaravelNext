@@ -39,10 +39,11 @@ class FollowService extends Service
                 $message = 'You Unfollowed ' . $request->musician;
                 $added = false;
             } else {
-                $post = new Follow;
-                $post->followed = $request->input('musician');
-                $post->username = auth('sanctum')->user()->username;
-                $post->save();
+                $follow = new Follow;
+                $follow->followed = $request->input('musician');
+                $follow->username = auth('sanctum')->user()->username;
+				$follow->muted = ["posts" => false, "stories" => false];
+                $follow->save();
 
                 $message = 'You Followed ' . $request->musician;
                 $added = true;

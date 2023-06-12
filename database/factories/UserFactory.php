@@ -108,12 +108,14 @@ class UserFactory extends Factory
                     ->create([
                         'username' => $user->username,
                         'followed' => '@blackmusic',
+                        'muted' => ["posts" => false, "stories" => false],
                     ]);
             } elseif ($user->username == '@alphaxardG') {
                 Follow::factory()
                     ->create([
                         'username' => $user->username,
                         'followed' => '@alphaxardG',
+                        'muted' => ["posts" => false, "stories" => false],
                     ]);
             } else {
                 Follow::factory()
@@ -122,7 +124,10 @@ class UserFactory extends Factory
                         ['followed' => $user->username],
                         ['followed' => '@blackmusic']
                     ))
-                    ->create(['username' => $user->username]);
+                    ->create([
+                        'username' => $user->username,
+                        'muted' => ["posts" => false, "stories" => false],
+                    ]);
             }
         });
     }

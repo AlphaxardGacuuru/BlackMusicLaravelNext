@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Follow;
 use App\Models\Post;
 use Illuminate\Support\Facades\Storage;
 
@@ -9,8 +10,15 @@ class PostService extends Service
 {
     public function index()
     {
-        // Get Posts
-        $getPosts = Post::orderBy('id', 'DESC')->get();
+        // Get Posts if user has followed musician and is not muted
+        $getPosts = Post::select("posts.*", "follows.muted->posts as muted", "follows.blocked")
+            ->join("follows", function ($join) {
+                $join->on("follows.followed", "=", "posts.username")
+                    ->where("follows.username", "=", $this->username);
+            })
+            ->where("follows.muted->posts", false)
+            ->orderBy("posts.id", "DESC")
+            ->get();
 
         $posts = [];
 
@@ -46,10 +54,10 @@ class PostService extends Service
         $post->parameter_3 = $request->input('para3') ? $request->input('para3') : "";
         $post->parameter_4 = $request->input('para4') ? $request->input('para4') : "";
         $post->parameter_5 = $request->input('para5') ? $request->input('para5') : "";
-        
-		$saved = $post->save();
 
-		return ["saved" => $saved, "post" => $post];
+        $saved = $post->save();
+
+        return ["saved" => $saved, "post" => $post];
     }
 
     // Update Post
@@ -77,10 +85,49 @@ class PostService extends Service
     }
 
     /*
+     * Mute */
+    public function mute($username)
+    {
+        // Get follow
+        $follow = Follow::where("followed", $username)
+            ->where("username", $this->username)
+            ->first();
+
+			// return $follow->muted["posts"];
+        // Check if Posts are muted
+        if ($follow->muted["posts"]) {
+            $muted = $follow->muted;
+            $muted["posts"] = false;
+            $follow->muted = $muted;
+
+			$message = "Posts from " . $username . " unmuted";
+        } else {
+            $muted = $follow->muted;
+            $muted["posts"] = true;
+            $follow->muted = $muted;
+
+			$message = "Posts from " . $username . " muted";
+        }
+
+        $follow->save();
+
+        return response($message, 200);
+    }
+
+    /*
      * Artist's Posts */
     public function artistPosts($username)
     {
         $getArtistPosts = Post::where("username", $username)->get();
+
+        // Get Artist's Posts with muted info
+        $getArtistPosts = Post::select("posts.*", "follows.muted->posts as muted", "follows.blocked")
+            ->join("follows", function ($join) {
+                $join->on("follows.followed", "=", "posts.username")
+                    ->where("follows.username", "=", $this->username);
+            })
+            ->orderBy("posts.id", "DESC")
+            ->get();
 
         $artistPosts = [];
 
@@ -141,6 +188,7 @@ class PostService extends Service
             "winner" => $winner,
             "totalVotes" => $post->polls->count(),
             "isWithin24Hrs" => $post->isWithin24Hrs($post),
+            "hasMuted" => filter_var($post->muted, FILTER_VALIDATE_BOOLEAN),
             "hasFollowed" => $post->hasFollowed($post, $this->username),
             "hasLiked" => $post->hasLiked($post, $this->username),
             "hasEdited" => $post->hasEdited($post),

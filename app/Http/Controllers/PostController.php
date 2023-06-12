@@ -73,6 +73,13 @@ class PostController extends Controller
         return $postService->destory($id);
     }
 
+	/*
+	* Mute */
+	public function mute($username, PostService $postService)
+	{
+		return $postService->mute($username);
+	} 
+
     /*
      * Artist's Posts */
     public function artistPosts($username, PostService $service)

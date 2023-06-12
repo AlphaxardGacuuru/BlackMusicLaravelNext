@@ -8,7 +8,6 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -63,12 +62,14 @@ class RegisteredUserController extends Controller
             $follow = new Follow;
             $follow->followed = $request->username;
             $follow->username = $request->username;
+            $follow->muted = ["posts" => false, "stories" => false];
             $follow->save();
 
             /* User should follow @blackmusic */
             $follow = new Follow;
             $follow->followed = '@blackmusic';
             $follow->username = $request->username;
+            $follow->muted = ["posts" => false, "stories" => false];
             $follow->save();
 
             event(new Registered($user));

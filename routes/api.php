@@ -105,12 +105,15 @@ Route::apiResources([
 // });
 
 /*
- * Post 
+ * Post
  */
+
+// Posts
 Route::get('artist/posts/{username}', [PostController::class, 'artistPosts']);
+Route::put('posts/mute/{username}', [PostController::class, 'mute']);
 
 /*
- * Video 
+ * Video
  */
 
 // Video Charts
@@ -124,7 +127,7 @@ Route::get('artist/videos/{username}', [VideoController::class, 'artistVideos'])
 Route::get('artist/bought-videos/{username}', [BoughtVideoController::class, 'artistBoughtVideos']);
 
 /*
- * Audio 
+ * Audio
  */
 
 // Audio Charts
@@ -138,10 +141,12 @@ Route::get('artist/audios/{username}', [AudioController::class, 'artistAudios'])
 Route::get('artist/bought-audios/{username}', [BoughtAudioController::class, 'artistBoughtAudios']);
 
 /*
-* Stories
-*/ 
+ * Stories
+ */
+
+// Stories
 Route::post('stories/seen/{id}', [StoryController::class, 'seen']);
-Route::post('stories/mute/{username}', [StoryController::class, 'mute']);
+Route::put('stories/mute/{username}', [StoryController::class, 'mute']);
 
 // Filepond Controller
 Route::prefix('filepond')->group(function () {
@@ -176,8 +181,8 @@ Route::prefix('filepond')->group(function () {
         // Chat
         Route::post('chats', 'storeChatMedia');
         Route::delete('chats/{id}', 'deleteChatMedia');
-		
-		// Story
+
+        // Story
         Route::post('stories', 'storeStory');
         Route::delete('stories/{id}', 'deleteStory');
     });

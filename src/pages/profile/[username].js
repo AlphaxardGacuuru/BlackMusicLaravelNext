@@ -9,7 +9,6 @@ import Btn from "../../components/Core/Btn"
 import CheckSVG from "../../svgs/CheckSVG"
 import DecoSVG from "../../svgs/DecoSVG"
 import PostMedia from "../../components/Post/PostMedia"
-import PostOptions from "../../components/Post/PostOptions"
 import ssrAxios from "@/lib/ssrAxios"
 
 import VideoMedia from "@/components/Video/VideoMedia"
@@ -20,21 +19,21 @@ const Profile = (props) => {
 
 	let { username } = router.query
 
-	const [artistVideoAlbums, setArtistVideoAlbums] = useState(props.artistVideoAlbums)
+	const [user, setUser] = useState(props.user)
+	const [artistVideoAlbums, setArtistVideoAlbums] = useState(
+		props.artistVideoAlbums
+	)
 	const [artistVideos, setVideos] = useState(props.artistVideos)
 	const [artistPosts, setArtistPosts] = useState(props.artistPosts)
-	const [artistAudioAlbums, setArtistAudioAlbums] = useState(props.artistAudioAlbums)
+	const [artistAudioAlbums, setArtistAudioAlbums] = useState(
+		props.artistAudioAlbums
+	)
 	const [artistAudios, setAudios] = useState(props.artistAudios)
 
 	const [tabClass, setTabClass] = useState("videos")
-	const [bottomMenu, setBottomMenu] = useState("")
-	const [userToUnfollow, setUserToUnfollow] = useState()
-	const [postToEdit, setPostToEdit] = useState()
-	const [editLink, setEditLink] = useState()
-	const [deleteLink, setDeleteLink] = useState()
-	const [unfollowLink, setUnfollowLink] = useState()
 
 	useEffect(() => {
+		props.get(`users/${username}`, setUser)
 		props.get(`artist/video-albums/${username}`, setArtistVideoAlbums)
 		props.get(`artist/videos/${username}`, setVideos, "artistVideos", false)
 		props.get(`artist/posts/${username}`, setArtistPosts)
@@ -50,7 +49,7 @@ const Profile = (props) => {
 
 		// Add follow
 		axios
-			.post(`/api/follows`, { musician: props.user.username })
+			.post(`/api/follows`, { musician: user.username })
 			.then((res) => props.setMessages([res.data]))
 			.catch((err) => props.getErrors(err, true))
 	}
@@ -71,12 +70,13 @@ const Profile = (props) => {
 			<div
 				className="row p-0 m-0"
 				style={{
-					backgroundImage: `url('${props.user.backdrop}')`,
+					backgroundImage: `url('${user.backdrop}')`,
 					backgroundPosition: "center",
 					backgroundSize: "cover",
 					position: "relative",
 					height: "100%",
 				}}>
+				{/* Profile pic and background area */}
 				<div className="col-sm-12 p-0">
 					<br />
 					<br className="hidden" />
@@ -94,25 +94,24 @@ const Profile = (props) => {
 									zIndex: "99",
 								}}
 								className="avatar hover-img"
-								src={props.user.avatar}
+								src={user.avatar}
 								layout="fill"
 							/>
 						</div>
 					</div>
 				</div>
+				{/* Profile pic and background area End */}
 			</div>
-			{/* <!-- End of Profile pic area --> */}
 
-			{/* {{-- Profile Area --}} */}
+			{/* Profile Area */}
 			<div className="row border-bottom border-dark">
 				<div className="col-sm-1"></div>
 				<div className="col-sm-10">
 					<br />
 					<br />
 					<br className="anti-hidden" />
-					{/* Check whether user has bought at least one song from musician */}
-					{/* Check whether user has followed musician and display appropriate Btn */}
-					{props.user.username == props.auth?.username ? (
+					{/* Edit and Follow button */}
+					{user.username == props.auth?.username ? (
 						<Link href="/profile/edit">
 							<a>
 								<Btn
@@ -121,21 +120,24 @@ const Profile = (props) => {
 								/>
 							</a>
 						</Link>
-					) : props.user.username != "@blackmusic" ? (
-						props.user.hasFollowed ? (
-							<button
-								className="btn float-end rounded-0 text-light"
-								style={{ backgroundColor: "#232323" }}
-								onClick={onFollow}>
-								Followed
-								<CheckSVG />
-							</button>
-						) : props.user.hasBought1 ? (
-							<Btn
-								btnClass="mysonar-btn white-btn float-end"
-								onClick={onFollow}
-								btnText="follow"
-							/>
+					) : (
+						user.username != "@blackmusic" &&
+						(user.hasBought1 || props.auth?.username == "@blackmusic" ? (
+							user.hasFollowed ? (
+								<button
+									className="btn float-end rounded-0 text-light"
+									style={{ backgroundColor: "#232323" }}
+									onClick={onFollow}>
+									Followed
+									<CheckSVG />
+								</button>
+							) : (
+								<Btn
+									btnClass="mysonar-btn white-btn float-end"
+									onClick={onFollow}
+									btnText="follow"
+								/>
+							)
 						) : (
 							<Btn
 								btnClass="mysonar-btn white-btn float-end"
@@ -146,31 +148,30 @@ const Profile = (props) => {
 								}
 								btnText="follow"
 							/>
-						)
-					) : (
-						""
+						))
 					)}
+					{/* Edit and Follow button End */}
 					<div>
-						<h3>{props.user.name}</h3>
+						<h3>{user.name}</h3>
 						<h5>
-							{props.user.username}
+							{user.username}
 							<span style={{ color: "gold" }} className="ms-2">
 								<DecoSVG />
-								<small className="ms-1">{props.user.decos}</small>
+								<small className="ms-1">{user.decos}</small>
 							</span>
 						</h5>
-						<h6>{props.user.bio}</h6>
+						<h6>{user.bio}</h6>
 					</div>
 					<div className="d-flex flex-row">
 						<div className="p-2">
 							<span>Following</span>
 							<br />
-							<span>{props.user.following}</span>
+							<span>{user.following}</span>
 						</div>
 						<div className="p-2">
 							<span>Fans</span>
 							<br />
-							<span>{props.user.fans}</span>
+							<span>{user.fans}</span>
 						</div>
 					</div>
 				</div>
@@ -260,25 +261,15 @@ const Profile = (props) => {
 					)}
 
 					{/* <!-- Posts area --> */}
-					{artistPosts
-						.filter(
-							(post) =>
-								post.hasFollowed || props.auth?.username == "@blackmusic"
-						)
-						.map((post, key) => (
-							<PostMedia
-								{...props}
-								key={key}
-								post={post}
-								setBottomMenu={setBottomMenu}
-								setUserToUnfollow={setUserToUnfollow}
-								setPostToEdit={setPostToEdit}
-								setEditLink={setEditLink}
-								setDeleteLink={setDeleteLink}
-								onDeletePost={onDeletePost}
-								setUnfollowLink={setUnfollowLink}
-							/>
-						))}
+					{artistPosts.map((post, key) => (
+						<PostMedia
+							{...props}
+							key={key}
+							post={post}
+							setArtistPosts={setArtistPosts}
+							onDeletePost={onDeletePost}
+						/>
+					))}
 				</div>
 				{/* <!-- Posts area end --> */}
 				<div className={tabClass == "audios" ? "col-sm-3" : "col-sm-3 hidden"}>
@@ -322,20 +313,6 @@ const Profile = (props) => {
 				</div>
 				<div className="col-sm-1"></div>
 			</div>
-
-			{/* Sliding Bottom Nav */}
-			<PostOptions
-				{...props}
-				bottomMenu={bottomMenu}
-				setBottomMenu={setBottomMenu}
-				unfollowLink={unfollowLink}
-				userToUnfollow={userToUnfollow}
-				editLink={editLink}
-				postToEdit={postToEdit}
-				deleteLink={deleteLink}
-				onDeletePost={onDeletePost}
-			/>
-			{/* Sliding Bottom Nav end */}
 		</>
 	)
 }

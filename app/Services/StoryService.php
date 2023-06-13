@@ -16,7 +16,15 @@ class StoryService extends Service
      */
     public function index()
     {
-        $getStories = Story::all();
+        // Get Posts if user has followed musician and is not muted
+        $getStories = Story::select("stories.*", "follows.muted->stories as muted", "follows.blocked")
+            ->join("follows", function ($join) {
+                $join->on("follows.followed", "=", "stories.username")
+                    ->where("follows.username", "=", $this->username);
+            })
+            ->where("follows.muted->stories", false)
+            ->orderBy("stories.id", "DESC")
+            ->get();
 
         $stories = [];
 
@@ -136,6 +144,7 @@ class StoryService extends Service
             "avatar" => $story->user->avatar,
             "media" => $story->media,
             "text" => $story->text,
+            "hasMuted" => filter_var($story->muted, FILTER_VALIDATE_BOOLEAN),
             "hasSeen" => $story->hasSeen($this->username),
         ];
     }

@@ -7,6 +7,7 @@ import EchoConfig from "@/lib/echo"
 import Img from "@/components/Core/Img"
 import LoadingMusicianMedia from "@/components/User/LoadingMusicianMedia"
 import LoadingVideoMedia from "@/components/Video/LoadingVideoMedia"
+import LoadingStoryMedia from "@/components/Story/LoadingStoryMedia"
 import LoadingPostMedia from "@/components/Post/LoadingPostMedia"
 import VideoMedia from "@/components/Video/VideoMedia"
 import MusicianMedia from "@/components/User/MusicianMedia"
@@ -238,7 +239,7 @@ export default function Home(props) {
 							{dummyArray
 								.filter(() => stories.length < 1)
 								.map((item, key) => (
-									<LoadingVideoMedia key={key} />
+									<LoadingStoryMedia key={key} />
 								))}
 
 							{/* Real Story items */}

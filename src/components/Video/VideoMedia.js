@@ -103,6 +103,7 @@ const VideoMedia = (props) => {
 					</div>
 				)}
 			</div>
+			{/* User info */}
 			<div className="d-flex" style={{ maxWidth: "220em" }}>
 				<div className="py-2" style={{ minWidth: "40px" }}>
 					<Link href={`/profile/${props.video.username}`}>
@@ -137,6 +138,7 @@ const VideoMedia = (props) => {
 					</h6>
 				</div>
 			</div>
+			{/* User info End */}
 		</span>
 	)
 }

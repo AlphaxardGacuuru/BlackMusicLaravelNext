@@ -23,6 +23,9 @@ class PostSeeder extends Seeder
             ->hasLikes(1, fn(array $attributes) => ['username' => User::all()->random()->username])
             ->hasComments(rand(1, 5), fn(array $attributes) => ['username' => User::all()->random()->username]);
 
+        // Create one post for @blackmusic
+        $post->create(['username' => "@blackmusic"]);
+
         for ($i = 0; $i < 5; $i++) {
             $post->create(['username' => User::all()->random()->username]);
         }

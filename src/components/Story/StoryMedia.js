@@ -9,15 +9,51 @@ const StoryMedia = (props) => {
 				display: "inline-block",
 				border: `2px solid ${props.story.hasSeen ? "#232323" : "#FFD700"}`,
 			}}>
+			{/* Story Media */}
 			{/* <div style={{ border: "8px solid #000" }}> */}
-				<div className="story-thumbnail">
-					<Link href={`/story/${props.story.id}`} passHref>
+			<div className="story-thumbnail">
+				<Link href={`/story/${props.story.id}`} passHref>
+					<a>
+						<Img src={props.story.media} width="180em" height="320em" />
+					</a>
+				</Link>
+			</div>
+			{/* </div> */}
+			{/* Story Media End */}
+			{/* User info */}
+			<div className="d-flex" style={{ maxWidth: "220em" }}>
+				<div className="py-2" style={{ minWidth: "40px" }}>
+					<Link href={`/profile/${props.story.username}`}>
 						<a>
-							<Img src={props.story.media} width="180em" height="320em" />
+							<Img
+								src={props.story.avatar}
+								className="rounded-circle"
+								width="40px"
+								height="40px"
+								alt="user"
+								loading="lazy"
+							/>
 						</a>
 					</Link>
 				</div>
-			{/* </div> */}
+				<div className="px-2">
+					<h6
+						className="m-0 pt-2 px-1"
+						style={{
+							width: "15em",
+							whiteSpace: "nowrap",
+							overflow: "hidden",
+							textOverflow: "clip",
+							textAlign: "left",
+						}}>
+						{props.story.name}
+					</h6>
+					<h6 className="float-start">
+						<small>{props.story.username}</small>
+					</h6>
+				</div>
+			</div>
+			{/* User info End */}
 		</span>
 	)
 }

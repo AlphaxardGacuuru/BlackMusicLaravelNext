@@ -26,6 +26,9 @@ class StorySeeder extends Seeder
                 ["media" => "stories/3.jpg"],
                 ["media" => "stories/4.jpg"]));
 
+        // Create one post for @blackmusic
+        $story1->create(['username' => "@blackmusic"]);
+
         for ($i = 0; $i < 4; $i++) {
             $story1->create(["username" => User::all()->random()->username]);
             $story2->create(["username" => User::all()->random()->username]);

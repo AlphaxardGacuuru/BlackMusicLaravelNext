@@ -3,15 +3,15 @@ import Link from "next/link"
 
 const StoryMedia = (props) => {
 	return (
-		<span
-			className="mx-2 pt-0 px-0 pb-2 my-card"
-			style={{
-				display: "inline-block",
-				border: `2px solid ${props.story.hasSeen ? "#232323" : "#FFD700"}`,
-			}}>
+		<span className="mx-2 pt-0 px-0 pb-2 my-card">
 			{/* Story Media */}
 			{/* <div style={{ border: "8px solid #000" }}> */}
-			<div className="story-thumbnail">
+			<div
+				className="story-thumbnail"
+				style={{
+					display: "inline-block",
+					border: `2px solid ${props.story.hasSeen ? "#232323" : "#FFD700"}`,
+				}}>
 				<Link href={`/story/${props.story.id}`} passHref>
 					<a>
 						<Img src={props.story.media} width="180em" height="320em" />
@@ -40,7 +40,7 @@ const StoryMedia = (props) => {
 					<h6
 						className="m-0 pt-2 px-1"
 						style={{
-							width: "15em",
+							width: "5em",
 							whiteSpace: "nowrap",
 							overflow: "hidden",
 							textOverflow: "clip",

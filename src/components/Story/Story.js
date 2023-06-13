@@ -7,6 +7,7 @@ import Img from "next/image"
 import CloseSVG from "@/svgs/CloseSVG"
 
 const Story = (props) => {
+	const [t, setT] = useState()
 	const [percent, setPercent] = useState("0%")
 	const [sendSeenAt, setSendSeenAt] = useState()
 	const [hasMuted, setHasMuted] = useState(props.story.hasMuted)
@@ -38,16 +39,28 @@ const Story = (props) => {
 			} else {
 				// Get index of current story in array
 				var index = props.stories.indexOf(props.story)
-
-				index++
-
+				// Increment to get the next story if there are still some
+				if (index < props.stories.length - 1) {
+					index++
+				}
+				// Get ID of the story
 				var nextIndex = props.stories[index].id
-
-				props.setIndex(nextIndex)
+				// Get the Element of the story
+				var storyEl = document.getElementById(nextIndex)
+				// Get left offset of the element inorder to know how far to scroll
+				var left = storyEl.offsetLeft
+				// Scroll to next story element
+				props.storyScroller.current.scrollTo({
+					top: 0,
+					left: left,
+					behavior: "smooth",
+				})
 
 				clearTimeout(timer)
 			}
 		}, 100)
+
+		setT(timer)
 	}
 
 	/*
@@ -64,15 +77,17 @@ const Story = (props) => {
 	/*
 	 * Intersection Observer API Callback function */
 	let callback = (entries, observer) => {
-		entries.forEach((entry) => {
-			// Start or Clear progress bar
-			if (entry.isIntersecting) {
-				handleTimer()
-			} else {
-				clearTimeout(timer)
-				setPercent("0%")
-			}
-		})
+		if (entries != undefined) {
+			entries.forEach((entry) => {
+				// Start or Clear progress bar
+				if (entry.isIntersecting) {
+					handleTimer()
+				} else {
+					clearTimeout(timer)
+					setPercent("0%")
+				}
+			})
+		}
 	}
 
 	useEffect(() => {
@@ -109,6 +124,18 @@ const Story = (props) => {
 			.post(`/api/stories/mute/${props.story.username}`, { _method: "PUT" })
 			.then((res) => props.setMessages([res.data]))
 			.catch((err) => props.getErrors(err, true))
+	}
+
+	/*
+	 * Freeze and Unfreeze story */
+	const onFreeze = () => {
+		console.log(t)
+		if (t) {
+			clearTimeout(t)
+			setT(0)
+		} else {
+			handleTimer()
+		}
 	}
 
 	return (
@@ -166,8 +193,7 @@ const Story = (props) => {
 								aria-expanded="false"
 								onClick={(e) => {
 									e.preventDefault()
-									console.log("cleared")
-									clearTimeout(timer)
+									onFreeze()
 								}}>
 								<Img
 									src={props.story.avatar}

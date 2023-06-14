@@ -18,6 +18,7 @@ import ChatSVG from "@/svgs/ChatSVG"
 import DecoSVG from "@/svgs/DecoSVG"
 import CameraSVG from "@/svgs/CameraSVG"
 import StoryMedia from "@/components/Story/StoryMedia"
+import CreateStoryMedia from "@/components/Story/CreateStoryMedia"
 
 export default function Home(props) {
 	const [newPosts, setNewPosts] = useState()
@@ -115,6 +116,7 @@ export default function Home(props) {
 
 			{/* <!-- Profile info area --> */}
 			<div className="row">
+				{/* New Posts Snackbar */}
 				<center>
 					<h6
 						id="snackbar-up"
@@ -124,6 +126,8 @@ export default function Home(props) {
 						<div>New Posts</div>
 					</h6>
 				</center>
+				{/* New Posts Snackbar End */}
+
 				<div className="col-sm-1 hidden"></div>
 				<div className="col-sm-3 hidden">
 					<div className="d-flex">
@@ -235,6 +239,10 @@ export default function Home(props) {
 					<div className="mb-2 border-bottom border-secondary">
 						<h5>Stories</h5>
 						<div className="hidden-scroll pb-2" onScroll={handleScroll}>
+							{/* Create Story */}
+							<CreateStoryMedia {...props} />
+							{/* Create Story End */}
+
 							{/* Loading Story items */}
 							{dummyArray
 								.filter(() => stories.length < 1)

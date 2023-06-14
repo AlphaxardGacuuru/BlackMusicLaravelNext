@@ -41,7 +41,7 @@ class StoryController extends Controller
 
         StoryCreatedEvent::dispatchIf($response["saved"], $response["story"]);
 
-        return response("Story saved", 200);
+        return response("Story created", 200);
     }
 
     /**

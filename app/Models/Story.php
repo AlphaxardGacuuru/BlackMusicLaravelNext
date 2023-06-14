@@ -11,6 +11,10 @@ class Story extends Model
 {
     use HasFactory;
 
+	protected $casts = [
+		"media" => "array"
+	];
+
     /**
      * Accesors.
      *
@@ -19,7 +23,7 @@ class Story extends Model
     protected function media(): Attribute
     {
         return Attribute::make(
-            get:fn($value) => $value ? "/storage/" . $value : $value,
+            // get:fn($value) => $value ? "/storage/" . $value : $value,
         );
     }
 

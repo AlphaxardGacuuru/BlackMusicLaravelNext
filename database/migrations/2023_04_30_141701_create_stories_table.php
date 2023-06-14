@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string("username");
             $table->string("text")->nullable();
-            $table->string("media");
+            $table->jsonb("media");
             $table->timestamps();
 
             $table->foreign('username')

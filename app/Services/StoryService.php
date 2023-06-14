@@ -20,7 +20,7 @@ class StoryService extends Service
         $getStories = Story::select("stories.*", "follows.muted->stories as muted", "follows.blocked")
             ->join("follows", function ($join) {
                 $join->on("follows.followed", "=", "stories.username")
-                    ->where("follows.username", "=", $this->username);
+                    ->where("follows.username", "=", "@blackmusic");
             })
             ->where("follows.muted->stories", false)
             ->orderBy("stories.id", "DESC")

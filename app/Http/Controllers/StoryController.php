@@ -9,10 +9,10 @@ use Illuminate\Http\Request;
 
 class StoryController extends Controller
 {
-	public function __construct(protected StoryService $service)
-	{
-				// 
-	}
+    public function __construct(protected StoryService $service)
+    {
+        //
+    }
 
     /**
      * Display a listing of the resource.
@@ -78,17 +78,17 @@ class StoryController extends Controller
         //
     }
 
-	/*
-	* Seen */
-	public function seen($id)
-	{
-		return $this->service->seen($id);
-	} 
+    /*
+     * Seen */
+    public function seen($id)
+    {
+        return $this->service->seen($id);
+    }
 
-	/*
-	* Mute */
-	public function mute($username)
-	{
-		return $this->service->mute($username);
-	} 
+    /*
+     * Mute */
+    public function mute($username)
+    {
+        return $this->service->mute($username);
+    }
 }

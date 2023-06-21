@@ -14,7 +14,7 @@ const StoryMedia = (props) => {
 				}}>
 				<Link href={`/story/${props.story.id}`} passHref>
 					<a>
-						<Img src={props.story.media} width="180em" height="320em" />
+						<Img src={`/storage/${props.story.media[0]["image"]}`} width="180em" height="320em" />
 					</a>
 				</Link>
 			</div>

@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 
 import SocialMediaInput from "@/components/Core/SocialMediaInput"
@@ -31,11 +31,15 @@ registerPlugin(
 )
 
 const create = (props) => {
+	const [revertUrl, setRevertUrl] = useState()
+
 	// Set states
 	useEffect(() => {
 		setTimeout(() => {
+			setRevertUrl(props.urlTo + "/")
 			props.setPlaceholder("What's on your mind")
 			props.setText("")
+			// props.setMedia([])
 			props.setShowImage(false)
 			props.setShowPoll(false)
 			props.setShowEmojiPicker(false)
@@ -46,6 +50,26 @@ const create = (props) => {
 			props.setEditing(false)
 		}, 100)
 	}, [])
+
+	useEffect(() => generateRevertUrl(), [props.media])
+
+	const generateRevertUrl = () => {
+		if (props.media.length > 0) {
+			// Get media
+			var media = props.media
+			// Reverse array to always have to latest first
+			media = media.reverse()
+			// Parse string to JSON and get first element
+			const parsed = JSON.parse(media[0])
+			// const parsed = media[0]
+			// Get name of key
+			const key = Object.keys(parsed)
+			// Get value by key
+			setRevertUrl(parsed[key])
+		}
+	}
+	console.log(revertUrl)
+	console.log(props.media)
 
 	return (
 		<div className="row">
@@ -87,13 +111,13 @@ const create = (props) => {
 									url: `${props.url}/api/filepond/`,
 									process: {
 										url: props.urlTo,
-										onload: (res) => props.setMedia(res),
+										onload: (res) => props.setMedia([...props.media, res]),
 									},
 									revert: {
-										url: props.urlTo + "/" + props.media.substr(8),
+										url: revertUrl,
 										onload: (res) => {
 											props.setMessages([res])
-											props.setMedia("")
+											props.setMedia([props.media.shift()])
 										},
 									},
 								}}

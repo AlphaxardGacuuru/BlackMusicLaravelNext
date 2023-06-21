@@ -31,10 +31,10 @@ class PostController extends Controller
             'text' => 'required',
         ]);
 
-        $response = $postService->store($request);
+        [$saved, $post] = $postService->store($request);
 
 		// Dispatch event
-		PostedEvent::dispatchIf($response["saved"], $response["post"]);
+		PostedEvent::dispatchIf($saved, $post);
 
         return response('Post Created', 200);
     }

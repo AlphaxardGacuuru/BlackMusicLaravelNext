@@ -298,11 +298,11 @@ class FilePondController extends Controller
 
     /*
      * Handle Chat Delete */
-	public function deleteChatMedia($id)
-	{
+    public function deleteChatMedia($id)
+    {
         Storage::delete('public/chat-media/' . $id);
-        return response("Chat media deleted", 200);		
-	}
+        return response("Chat media deleted", 200);
+    }
 
     /*
      *
@@ -318,16 +318,22 @@ class FilePondController extends Controller
             'filepond-media' => 'required',
         ]);
 
-        $media = $request->file('filepond-media')->store('public/stories');
-        $media = substr($media, 7);
-        return $media;
+        $file = $request->file('filepond-media');
+        // Get Mime Type
+        $mime = substr($file->getMimeType(), 0, 5);
+        // Store File
+        $stored = $file->store('public/stories');
+        // Get Filename
+        $media = substr($stored, 7);
+
+        return [$mime => $media];
     }
 
     /*
      * Handle Story Delete */
-	public function deleteStory($id)
-	{
+    public function deleteStory($id)
+    {
         Storage::delete('public/stories/' . $id);
-        return response("Story deleted", 200);		
-	}
+        return response("Story deleted", 200);
+    }
 }

@@ -21,7 +21,7 @@ class StoryFactory extends Factory
         return [
             "username" => fake()->name(),
             "text" => fake()->realText($maxNbChars = 20, $indexSize = 2),
-            "media" => ["image" => "stories/1.jpg"],
+            "media" => [["image" => "stories/1.jpg"]],
         ];
     }
 

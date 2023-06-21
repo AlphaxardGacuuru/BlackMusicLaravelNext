@@ -23,7 +23,7 @@ class StoryService extends Service
                     ->where("follows.username", "=", "@blackmusic");
             })
             ->where("follows.muted->stories", false)
-            ->orderBy("stories.id", "DESC")
+            ->orderBy("stories.id", "ASC")
             ->get();
 
         $stories = [];
@@ -43,9 +43,19 @@ class StoryService extends Service
      */
     public function store($request)
     {
+        // Remove outer quotes
+        $stringifiedMedia = explode(",", $request->input("media"));
+
+        $arrayAndJsonMedia = [];
+
+        foreach ($stringifiedMedia as $item) {
+            $jsonMediaItem = json_decode($item);
+			array_push($arrayAndJsonMedia, $jsonMediaItem);
+        }
+
         $story = new Story;
         $story->username = $this->username;
-        $story->media = $request->input("media");
+        $story->media = $arrayAndJsonMedia;
         $story->text = $request->input("text");
         $saved = $story->save();
 

@@ -7,65 +7,20 @@ import Img from "next/image"
 import CloseSVG from "@/svgs/CloseSVG"
 
 const Story = (props) => {
-	const [t, setT] = useState()
+	const [timer, setTimer] = useState()
 	const [percent, setPercent] = useState("0%")
 	const [sendSeenAt, setSendSeenAt] = useState()
 	const [hasMuted, setHasMuted] = useState(props.story.hasMuted)
-
-	var timer
-
-	/*
-	 * Handle Timer */
-	const handleTimer = () => {
-		var time = 0
-
-		/*
-		 * Show timer */
-		timer = setInterval(() => {
-			// Stop incrementing after 5s (50 because its deciseconds)
-			if (time < 50) {
-				// Increment time by 1
-				time++
-				// Get percentage
-				var per = (time * 100) / 50
-				// Format percentage for style
-				per = per + "%"
-				// Set percent for showing on bar
-				setPercent(per)
-
-				if (time > 30) {
-					setSendSeenAt(true)
-				}
-			} else {
-				// Get index of current story in array
-				var index = props.stories.indexOf(props.story)
-				// Increment to get the next story if there are still some
-				if (index < props.stories.length - 1) {
-					index++
-				}
-				// Get ID of the story
-				var nextIndex = props.stories[index].id
-				// Get the Element of the story
-				var storyEl = document.getElementById(nextIndex)
-				// Get left offset of the element inorder to know how far to scroll
-				var left = storyEl.offsetLeft
-				// Scroll to next story element
-				props.storyScroller.current.scrollTo({
-					top: 0,
-					left: left,
-					behavior: "smooth",
-				})
-
-				clearTimeout(timer)
-			}
-		}, 100)
-
-		setT(timer)
-	}
+	const [segment, setSegment] = useState(0)
+	const [freeze, setFreeze] = useState(true)
 
 	/*
 	 * Intersection Observer API
 	 */
+
+	var t
+	var time = 0
+	var index = 0
 
 	// Set options
 	let options = {
@@ -74,45 +29,110 @@ const Story = (props) => {
 		threshold: 0.9,
 	}
 
+	useEffect(() => {
+		setTimeout(() => {
+			let observer = new IntersectionObserver(callback, options)
+
+			const storyEl = document.getElementById(props.story.id)
+
+			observer.observe(storyEl)
+		}, 500)
+
+		return () => clearInterval(t)
+	}, [])
+
 	/*
 	 * Intersection Observer API Callback function */
 	let callback = (entries, observer) => {
-		if (entries != undefined) {
+		if (entries != "undefined") {
 			entries.forEach((entry) => {
 				// Start or Clear progress bar
 				if (entry.isIntersecting) {
+					time = 0
+					setSegment(0)
 					handleTimer()
 				} else {
-					clearTimeout(timer)
+					// Use t instead of timer to prevent rerendering
+					clearInterval(t)
 					setPercent("0%")
 				}
 			})
 		}
 	}
 
-	useEffect(() => {
-		let observer = new IntersectionObserver(callback, options)
+	/*
+	 * Handle Timer */
+	const handleTimer = () => {
+		t = setInterval(() => {
+			// Stop incrementing after 5s (50 because its deciseconds)
+			if (time < 55) {
+				handleProgressBar()
+			} else {
+				// Go to next story segment
+				const length = props.story.media.length
+				const length2 = length - 1
 
-		const storyEl = document.getElementById(props.story.id)
+				if (segment < length2 && length > 1) {
+					setSegment(segment + 1)
+					time = 0
+				} else {
+					scrollToNextStory()
+				}
+			}
+		}, 100)
 
-		observer.observe(storyEl)
-
-		return () => clearTimeout(timer)
-	}, [])
+		setTimer(t)
+	}
 
 	/*
-	 * Set Seen At */
-	useEffect(() => {
-		if (sendSeenAt) {
-			onSeen()
+	 * Function for incrementing progress bar */
+	const handleProgressBar = () => {
+		// Increment time by 1
+		time++
+		// Get percentage
+		var per = (time * 100) / 50
+		// Format percentage for style
+		per = per + "%"
+		// Set percent for showing on bar
+		setPercent(per)
+
+		if (time > 30) {
+			setSendSeenAt(true)
 		}
-	}, [sendSeenAt])
+	}
+
+	/*
+	 * Function for scrolling to next story */
+	const scrollToNextStory = () => {
+		clearInterval(t)
+
+		// Get index of current story in array
+		index = props.stories.indexOf(props.story)
+		// Increment to get the next story if there are still some
+		if (index < props.stories.length - 1) {
+			index++
+		}
+		// Get ID of the story
+		var nextIndex = props.stories[index].id
+		// Get the Element of the story
+		var storyEl = document.getElementById(nextIndex)
+		// Get left offset of the element inorder to know how far to scroll
+		var left = storyEl.offsetLeft
+		// Scroll to next story element
+		props.storyScroller.current.scrollTo({
+			top: 0,
+			left: left,
+			behavior: "smooth",
+		})
+	}
 
 	/*
 	 * Mark story as seen */
-	const onSeen = () => {
-		axios.post(`/api/stories/seen/${props.story.id}`)
-	}
+	useEffect(() => {
+		if (sendSeenAt) {
+			axios.post(`/api/stories/seen/${props.story.id}`)
+		}
+	}, [sendSeenAt])
 
 	/*
 	 * Mute stories from user */
@@ -129,10 +149,11 @@ const Story = (props) => {
 	/*
 	 * Freeze and Unfreeze story */
 	const onFreeze = () => {
-		console.log(t)
-		if (t) {
-			clearTimeout(t)
-			setT(0)
+		setFreeze(!freeze)
+
+		if (freeze) {
+			setTimer(timer)
+			clearInterval(timer)
 		} else {
 			handleTimer()
 		}
@@ -140,24 +161,44 @@ const Story = (props) => {
 
 	return (
 		<span id={props.story.id} className="single-story">
-			<div style={{ height: "100vh", width: "auto" }}>
-				<Img src={props.story.media} layout="fill" />
+			<div style={{ height: "100vh", width: "auto" }} onClick={onFreeze}>
+				{Object.keys(props.story.media[segment]) == "image" ? (
+					<Img
+						src={`/storage/${props.story.media[segment]["image"]}`}
+						layout="fill"
+					/>
+				) : (
+					<video
+						width="495px"
+						height="880px"
+						controls={false}
+						controlsList="nodownload"
+						autoPlay>
+						<source
+							src={`/storage/${props.story.media[segment]["video"]}`}
+							type="video/mp4"
+						/>
+					</video>
+				)}
 			</div>
 
 			{/* Floating Video Info Top */}
 			<div style={{ position: "absolute", top: 0, left: 0, width: "100%" }}>
 				<div className="d-flex">
-					<div className="w-100 pt-2 mx-2">
-						{/* Track */}
-						<div className="progress rounded-0" style={{ height: "2px" }}>
-							<div
-								className="progress-bar bg-warning"
-								style={{ width: percent }}></div>
+					{/* Track */}
+					{props.story.media.map((story, key) => (
+						<div key={key} className="w-100 pt-2 mx-2">
+							<div className="progress rounded-0" style={{ height: "2px" }}>
+								<div
+									className="progress-bar bg-warning"
+									style={{ width: segment == key ? percent : 0 }}></div>
+							</div>
 						</div>
-						{/* Track End */}
-					</div>
+					))}
+					{/* Track End */}
 				</div>
 				<div className="d-flex justify-content-between">
+					{/* Close Icon */}
 					<div className="">
 						<Link href="/">
 							<a style={{ fontSize: "1.5em" }}>
@@ -228,6 +269,28 @@ const Story = (props) => {
 					</div>
 					{/* Avatar End */}
 				</div>
+				{/* Click fields */}
+				<div className="d-flex justify-content-between">
+					<div
+						className="p-3"
+						style={{ minHeight: "90vh" }}
+						onClick={() => {
+							// setSegment(segment - 1)
+							console.log("2 segment is " + segment)
+						}}>
+						<span className="invisible">left</span>
+					</div>
+					<div
+						className="p-3"
+						style={{ minHeight: "90vh" }}
+						onClick={() => {
+							// setSegment(segment + 1)
+							console.log("3 segment is " + segment)
+						}}>
+						<span className="invisible">right</span>
+					</div>
+				</div>
+				{/* Click fields End */}
 			</div>
 			{/* Floating Video Info Top End */}
 		</span>

@@ -41,8 +41,8 @@ const PostMedia = (props) => {
 			.post(`/api/post-likes`, { post: post })
 			.then((res) => {
 				props.setMessages([res.data])
-				// Update posts
-				props.setPosts && props.get("posts", props.setPosts, "posts")
+				// Update state
+				props.stateToUpdate()
 			})
 			.catch((err) => props.getErrors(err))
 	}
@@ -70,13 +70,8 @@ const PostMedia = (props) => {
 			.post(`/api/posts/mute/${props.post.username}`, { _method: "PUT" })
 			.then((res) => {
 				props.setMessages([res.data])
-				// Update posts
-				props.setPosts && props.get("posts", props.setPosts, "posts")
-				props.setArtistPosts &&
-					props.get(
-						`artist/posts/${props.post.username}`,
-						props.setArtistPosts
-					)
+				// Update state
+				props.stateToUpdate()
 			})
 			.catch((err) => props.getErrors(err, true))
 	}
@@ -93,11 +88,8 @@ const PostMedia = (props) => {
 				props.setMessages([res.data])
 				// Update posts
 				props.setPosts && props.get("posts", props.setPosts, "posts")
-				// Update artist posts
-				props.setArtistPosts &&
-					props.get(`artist/posts/${props.post.username}`, props.setArtistPosts)
-				// Update users
-				props.setUsers && props.get("users", props.setUsers, "users")
+				// Update state
+				props.stateToUpdate()
 			})
 			.catch((err) => props.getErrors(err, true))
 	}
@@ -125,9 +117,7 @@ const PostMedia = (props) => {
 						<small>{props.post.username}</small>
 						<span className="ms-1" style={{ color: "gold" }}>
 							<DecoSVG />
-							<small
-								className="ms-1 fw-lighter"
-								style={{ color: "inherit" }}>
+							<small className="ms-1 fw-lighter" style={{ color: "inherit" }}>
 								{props.post.decos}
 							</small>
 						</span>
@@ -276,7 +266,9 @@ const PostMedia = (props) => {
 							<span style={{ color: "inherit", fontSize: "1.2em" }}>
 								<HeartFilledSVG />
 							</span>
-							<small className="ms-1" style={{ color: "inherit" }}>
+							<small
+								className="ms-1"
+								style={{ color: "inherit", fontWeight: "100" }}>
 								{props.post.likes}
 							</small>
 						</a>
@@ -291,7 +283,9 @@ const PostMedia = (props) => {
 							<span style={{ color: "inherit", fontSize: "1.2em" }}>
 								<HeartSVG />
 							</span>
-							<small className="ms-1" style={{ color: "inherit" }}>
+							<small
+								className="ms-1"
+								style={{ color: "inherit", fontWeight: "100" }}>
 								{props.post.likes}
 							</small>
 						</a>
@@ -303,7 +297,9 @@ const PostMedia = (props) => {
 							<span className="ms-5" style={{ fontSize: "1.2em" }}>
 								<CommentSVG />
 							</span>
-							<small className="ms-1" style={{ color: "inherit" }}>
+							<small
+								className="ms-1"
+								style={{ color: "inherit", fontWeight: "100" }}>
 								{props.post.comments}
 							</small>
 						</a>

@@ -275,9 +275,11 @@ export default function Home(props) {
 									{...props}
 									key={key}
 									post={post}
-									setUsers={setUsers}
-									setPosts={setPosts}
 									onDeletePost={onDeletePost}
+									stateToUpdate={() => {
+										props.get("users", setUsers, "users")
+										props.get("posts", setPosts, "posts")
+									}}
 								/>
 							))}
 					</div>

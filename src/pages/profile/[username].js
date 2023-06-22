@@ -30,7 +30,6 @@ const Profile = (props) => {
 	)
 	const [artistAudios, setAudios] = useState(props.artistAudios)
 
-	const [hasFollowed, setHasFollowed] = useState(props.user.hasFollowed)
 	const [tabClass, setTabClass] = useState("videos")
 
 	useEffect(() => {
@@ -45,13 +44,15 @@ const Profile = (props) => {
 	/*
 	 * Function for following Musicans */
 	const onFollow = () => {
-		// Show follow
-		setHasFollowed(!hasFollowed)
-
 		// Add follow
 		axios
 			.post(`/api/follows`, { musician: user.username })
-			.then((res) => props.setMessages([res.data]))
+			.then((res) => {
+				props.setMessages([res.data])
+				// Update User info
+				props.get(`users/${username}`, setUser)
+				props.get(`artist/posts/${username}`, setArtistPosts)
+			})
 			.catch((err) => props.getErrors(err, true))
 	}
 
@@ -124,14 +125,20 @@ const Profile = (props) => {
 					) : (
 						user.username != "@blackmusic" &&
 						(user.hasBought1 || props.auth?.username == "@blackmusic" ? (
-							hasFollowed ? (
-								<button
-									className="btn float-end rounded-0 text-light"
-									style={{ backgroundColor: "#232323" }}
-									onClick={onFollow}>
-									Followed
-									<CheckSVG />
-								</button>
+							user.hasFollowed ? (
+								<Btn
+									btnClass="mysonar-btn btn-2 float-end"
+									btnStyle={{ lineHeight: "20px" }}
+									onClick={() => onFollow(props, props.user.username)}
+									btnText={
+										<span>
+											Followed
+											<span className="fs-6" style={{ lineHeight: "10px" }}>
+												<CheckSVG />
+											</span>
+										</span>
+									}
+								/>
 							) : (
 								<Btn
 									btnClass="mysonar-btn white-btn float-end"
@@ -210,7 +217,7 @@ const Profile = (props) => {
 				<div className="col-sm-1"></div>
 				<div className={tabClass == "videos" ? "col-sm-3" : "col-sm-3 hidden"}>
 					<center className="hidden">
-						<h4>Videos</h4>
+						<h2>Videos</h2>
 					</center>
 					{artistVideoAlbums.length == 0 && (
 						<center className="mt-3">
@@ -250,7 +257,7 @@ const Profile = (props) => {
 
 				<div className={tabClass == "posts" ? "col-sm-4" : "col-sm-4 hidden"}>
 					<center className="hidden">
-						<h4>Posts</h4>
+						<h2>Posts</h2>
 					</center>
 					{artistPosts.filter((post) => post.username == username).length ==
 						0 && (
@@ -267,15 +274,18 @@ const Profile = (props) => {
 							{...props}
 							key={key}
 							post={post}
-							setArtistPosts={setArtistPosts}
 							onDeletePost={onDeletePost}
+							stateToUpdate={() => {
+								props.get(`users/${username}`, setUser)
+								props.get(`artist/posts/${post.username}`, setArtistPosts)
+							}}
 						/>
 					))}
 				</div>
 				{/* <!-- Posts area end --> */}
 				<div className={tabClass == "audios" ? "col-sm-3" : "col-sm-3 hidden"}>
 					<center className="hidden">
-						<h4>Audios</h4>
+						<h2>Audios</h2>
 					</center>
 					{artistAudioAlbums.length == 0 && (
 						<center className="mt-3">

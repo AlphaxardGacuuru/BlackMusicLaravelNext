@@ -5,7 +5,6 @@ import axios from "@/lib/axios"
 
 import Btn from "@/components/Core/Btn"
 import Img from "@/components/Core/Img"
-import PostOptions from "@/components/Post/PostOptions"
 import CommentMedia from "@/components/Core/CommentMedia"
 import VideoMedia from "@/components/Video/VideoMedia"
 import SocialMediaInput from "@/components/Core/SocialMediaInput"
@@ -33,9 +32,6 @@ const VideoShow = (props) => {
 	const [hasLiked, setHasLiked] = useState(props.video.hasLiked)
 	const [hasFollowed, setHasFollowed] = useState(props.video.hasFollowed)
 	const [tabClass, setTabClass] = useState("comments")
-	const [bottomMenu, setBottomMenu] = useState("")
-	const [commentToEdit, setCommentToEdit] = useState()
-	const [commentDeleteLink, setCommentDeleteLink] = useState()
 	const [deletedIds, setDeletedIds] = useState([])
 
 	useEffect(() => {
@@ -50,23 +46,6 @@ const VideoShow = (props) => {
 
 		// Fetch Bought Videos
 		props.get("bought-videos", setBoughtVideos, "boughtVideos")
-
-		// Set states
-		setTimeout(() => {
-			props.setPlaceholder("Add a comment")
-			props.setText("")
-			props.setId(id)
-			props.setShowImage(false)
-			props.setShowPoll(false)
-			props.setShowEmojiPicker(false)
-			props.setShowImagePicker(false)
-			props.setShowPollPicker(false)
-			props.setUrlTo("video-comments")
-			props.setUrlToTwo(`video-comments/${id}`)
-			props.setStateToUpdate(() => setVideoComments)
-			props.setStateToUpdateTwo(() => setVideoComments)
-			props.setEditing(false)
-		}, 1000)
 	}, [id])
 
 	/*
@@ -175,395 +154,387 @@ const VideoShow = (props) => {
 	// }
 
 	return (
-		<>
-			<div className="row">
-				<div className="col-sm-1"></div>
-				<div className="col-sm-7">
-					{video.video ? (
-						video.video.match(/https/) ? (
-							<div className="resp-container">
-								<iframe
-									className="resp-iframe"
-									width="880px"
-									height="495px"
+		<div className="row">
+			<div className="col-sm-1"></div>
+			<div className="col-sm-7">
+				{video.video ? (
+					video.video.match(/https/) ? (
+						<div className="resp-container">
+							<iframe
+								className="resp-iframe"
+								width="880px"
+								height="495px"
+								src={
+									video.hasBoughtVideo
+										? `${video.video}/?autoplay=1`
+										: `${video.video}?autoplay=1&end=10&controls=0`
+								}
+								allow="accelerometer"
+								encrypted-media="true"
+								gyroscope="true"
+								picture-in-picture="true"
+								allowFullScreen></iframe>
+						</div>
+					) : (
+						<div className="resp-container">
+							<video
+								className="resp-iframe"
+								width="880px"
+								height="495px"
+								controls={video.hasBoughtVideo && true}
+								controlsList="nodownload"
+								autoPlay>
+								<source
 									src={
 										video.hasBoughtVideo
-											? `${video.video}/?autoplay=1`
-											: `${video.video}?autoplay=1&end=10&controls=0`
+											? `${video.video}`
+											: `${video.video}#t=1,10`
 									}
-									allow="accelerometer"
-									encrypted-media="true"
-									gyroscope="true"
-									picture-in-picture="true"
-									allowFullScreen></iframe>
-							</div>
+									type="video/mp4"
+								/>
+							</video>
+						</div>
+					)
+				) : (
+					""
+				)}
+
+				{/* Video Info Area */}
+				<div className="d-flex justify-content-between">
+					{/* Video likes */}
+					<div className="p-2 me-2">
+						{hasLiked ? (
+							<a
+								href="#"
+								className="fs-6"
+								style={{ color: "#cc3300" }}
+								onClick={(e) => {
+									e.preventDefault()
+									onVideoLike()
+									setHasLiked(!hasLiked)
+								}}>
+								<HeartFilledSVG />
+								<small
+									className="ms-1"
+									style={{ color: "inherit", fontWeight: "100" }}>
+									{video.likes}
+								</small>
+							</a>
 						) : (
-							<div className="resp-container">
-								<video
-									className="resp-iframe"
-									width="880px"
-									height="495px"
-									controls={video.hasBoughtVideo && true}
-									controlsList="nodownload"
-									autoPlay>
-									<source
-										src={
-											video.hasBoughtVideo
-												? `${video.video}`
-												: `${video.video}#t=1,10`
-										}
-										type="video/mp4"
-									/>
-								</video>
+							<a
+								href="#"
+								className="fs-6"
+								onClick={(e) => {
+									e.preventDefault()
+									onVideoLike()
+								}}>
+								<HeartSVG />
+								<small
+									className="ms-1"
+									style={{ color: "inherit", fontWeight: "100" }}>
+									{video.likes}
+								</small>
+							</a>
+						)}
+					</div>
+
+					{/* Share button */}
+					<div className="p-2">
+						<a
+							href="#"
+							onClick={(e) => {
+								e.preventDefault()
+								props.auth.username != "@guest" && onShare()
+							}}>
+							<span className="fs-5">
+								<ShareSVG />
+							</span>
+							<span className="ms-1">SHARE</span>
+						</a>
+					</div>
+
+					{/* Download/Buy button */}
+					{video.hasBoughtVideo || props.auth?.username == "@blackmusic" ? (
+						// Ensure video is downloadable
+						!video.video.match(/https/) && (
+							<div className="p-2">
+								<Btn
+									btnClass="mysonar-btn white-btn"
+									btnText="download"
+									onClick={onDownload}
+								/>
 							</div>
+						)
+					) : (
+						// Cart Btn
+						<div className="p-2">
+							{inCart ? (
+								<button
+									className="mysonar-btn white-btn mb-1"
+									style={{ minWidth: "90px", height: "33px" }}
+									onClick={onCartVideos}>
+									<CartSVG />
+								</button>
+							) : (
+								<Btn
+									btnClass="mysonar-btn green-btn btn-2"
+									btnText="KES 20"
+									onClick={() => {
+										// If user is guest then redirect to Login
+										props.auth.username == "@guest"
+											? onGuestBuy()
+											: onBuyVideos()
+									}}
+								/>
+							)}
+						</div>
+					)}
+				</div>
+
+				<div className="d-flex flex-row">
+					<div className="p-2 me-auto">
+						<h6
+							className="m-0 p-0"
+							style={{
+								width: "300px",
+								whiteSpace: "nowrap",
+								overflow: "hidden",
+								textOverflow: "clip",
+							}}>
+							{video.name}
+						</h6>
+						<h6>{video.album}</h6>
+						<h6>{video.genre}</h6>
+						<h6>{video.createdAt}</h6>
+					</div>
+				</div>
+				{/* Video Info Area End */}
+
+				{/* <!-- Read more section --> */}
+
+				{/* {{-- Collapse --}} */}
+				<div className="p-2 border-bottom border-dark">
+					<button
+						className="mysonar-btn white-btn"
+						type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#collapseExample"
+						aria-expanded="false"
+						aria-controls="collapseExample">
+						read more
+					</button>
+					<div className="collapse" id="collapseExample">
+						<div className="p-2 text-white">{video.description}</div>
+					</div>
+				</div>
+				{/* {{-- Collapse End --}} */}
+
+				{/* Artist Area */}
+				<div className="border-bottom border-dark">
+					<div className="d-flex">
+						<div className="p-2">
+							<Link href={`/profile/${video.username}`}>
+								<a>
+									<Img
+										src={video.avatar}
+										className="rounded-circle"
+										width="30px"
+										height="30px"
+										alt="user"
+										loading="lazy"
+									/>
+								</a>
+							</Link>
+						</div>
+						<div className="p-2 flex-grow-1" style={{ width: "50%" }}>
+							<Link href={`/profile/${video.username}`}>
+								<a>
+									<div
+										style={{
+											// width: "50%",
+											// whiteSpace: "nowrap",
+											overflow: "hidden",
+											textOverflow: "clip",
+										}}>
+										<b className="ml-2">{video.artistName}</b>
+										<small>
+											<i>{video.username}</i>
+										</small>
+										<span className="ms-1" style={{ color: "gold" }}>
+											<DecoSVG />
+											<small className="ms-1" style={{ color: "inherit" }}>
+												{video.artistDecos}
+											</small>
+										</span>
+									</div>
+								</a>
+							</Link>
+						</div>
+						<div className="p-2">
+							{/* Check whether user has bought at least one song from user */}
+							{/* Check whether user has followed user and display appropriate button */}
+							{video.hasBought1 ||
+							props.auth?.username == "@blackmusic" ||
+							props.auth?.username != video.username ? (
+								hasFollowed ? (
+									<button
+										className={"btn float-right rounded-0 text-light"}
+										style={{ backgroundColor: "#232323" }}
+										onClick={onFollow}>
+										<div>
+											Followed
+											<CheckSVG />
+										</div>
+									</button>
+								) : (
+									<Btn
+										btnClass="mysonar-btn white-btn float-right"
+										onClick={onFollow}
+										btnText="follow"
+									/>
+								)
+							) : (
+								<Btn
+									btnClass="mysonar-btn white-btn float-right"
+									onClick={() =>
+										props.setErrors([
+											`You must have bought atleast one song by ${props.user.username}`,
+										])
+									}
+									btnText="follow"
+								/>
+							)}
+						</div>
+					</div>
+				</div>
+				{/* Artist Area End */}
+
+				<br />
+
+				{/* Tab for Comment and Up Next */}
+				<div className="d-flex">
+					<div className="p-2 flex-fill anti-hidden">
+						<h6
+							className={tabClass == "comments" ? "active-scrollmenu" : "p-2"}
+							onClick={() => setTabClass("comments")}>
+							<center>Comments</center>
+						</h6>
+					</div>
+					<div className="p-2 flex-fill anti-hidden">
+						<h6
+							className={
+								tabClass == "recommended" ? "active-scrollmenu" : "p-1"
+							}
+							onClick={() => setTabClass("recommended")}>
+							<center>Recommended</center>
+						</h6>
+					</div>
+				</div>
+
+				{/* <!-- Comment Form ---> */}
+				<div className={tabClass == "comments" ? "" : "hidden"}>
+					{video.username == props.auth.username ||
+					props.auth.username == "@blackmusic" ||
+					video.hasBoughtVideo ? (
+						<SocialMediaInput
+							{...props}
+							id={id}
+							placeholder="Add a comment"
+							showImage={false}
+							showPoll={false}
+							urlTo="video-comments"
+							stateToUpdate={() => {
+								props.get(`video-comments/${id}`, setVideoComments)
+							}}
+							editing={false}
+						/>
+					) : (
+						""
+					)}
+					{/* <!-- End of Comment Form --> */}
+					<br />
+
+					{/* <!-- Comment Section --> */}
+					{video.username == props.auth.username ||
+					props.auth.username == "@blackmusic" ||
+					video.hasBoughtVideo ? (
+						// Check if video comments exist
+						videoComments.length > 0 ? (
+							videoComments
+								.filter((comment) => !deletedIds.includes(comment.id))
+								.map((comment, key) => (
+									<CommentMedia
+										{...props}
+										key={key}
+										comment={comment}
+										onCommentLike={onCommentLike}
+										onDeleteComment={onDeleteComment}
+									/>
+								))
+						) : (
+							<center className="my-3">
+								<h6 style={{ color: "grey" }}>No comments to show</h6>
+							</center>
 						)
 					) : (
 						""
 					)}
-
-					{/* Video Info Area */}
-					<div className="d-flex justify-content-between">
-						{/* Video likes */}
-						<div className="p-2 me-2">
-							{hasLiked ? (
-								<a
-									href="#"
-									className="fs-6"
-									style={{ color: "#cc3300" }}
-									onClick={(e) => {
-										e.preventDefault()
-										onVideoLike()
-										setHasLiked(!hasLiked)
-									}}>
-									<HeartFilledSVG />
-									<small className="ms-1" style={{ color: "inherit" }}>
-										{video.likes}
-									</small>
-								</a>
-							) : (
-								<a
-									href="#"
-									className="fs-6"
-									onClick={(e) => {
-										e.preventDefault()
-										onVideoLike()
-									}}>
-									<HeartSVG />
-									<small className="ms-1" style={{ color: "inherit" }}>
-										{video.likes}
-									</small>
-								</a>
-							)}
-						</div>
-
-						{/* Share button */}
-						<div className="p-2">
-							<a
-								href="#"
-								onClick={(e) => {
-									e.preventDefault()
-									props.auth.username != "@guest" && onShare()
-								}}>
-								<span className="fs-5">
-									<ShareSVG />
-								</span>
-								<span className="ms-1">SHARE</span>
-							</a>
-						</div>
-
-						{/* Download/Buy button */}
-						{video.hasBoughtVideo || props.auth?.username == "@blackmusic" ? (
-							// Ensure video is downloadable
-							!video.video.match(/https/) && (
-								<div className="p-2">
-									<Btn
-										btnClass="mysonar-btn white-btn"
-										btnText="download"
-										onClick={onDownload}
-									/>
-								</div>
-							)
-						) : (
-							// Cart Btn
-							<div className="p-2">
-								{inCart ? (
-									<button
-										className="mysonar-btn white-btn mb-1"
-										style={{ minWidth: "90px", height: "33px" }}
-										onClick={onCartVideos}>
-										<CartSVG />
-									</button>
-								) : (
-									<Btn
-										btnClass="mysonar-btn green-btn btn-2"
-										btnText="KES 20"
-										onClick={() => {
-											// If user is guest then redirect to Login
-											props.auth.username == "@guest"
-												? onGuestBuy()
-												: onBuyVideos()
-										}}
-									/>
-								)}
-							</div>
-						)}
-					</div>
-
-					<div className="d-flex flex-row">
-						<div className="p-2 me-auto">
-							<h6
-								className="m-0 p-0"
-								style={{
-									width: "300px",
-									whiteSpace: "nowrap",
-									overflow: "hidden",
-									textOverflow: "clip",
-								}}>
-								{video.name}
-							</h6>
-							<h6>{video.album}</h6>
-							<h6>{video.genre}</h6>
-							<h6>{video.createdAt}</h6>
-						</div>
-					</div>
-					{/* Video Info Area End */}
-
-					{/* <!-- Read more section --> */}
-
-					{/* {{-- Collapse --}} */}
-					<div className="p-2 border-bottom border-dark">
-						<button
-							className="mysonar-btn white-btn"
-							type="button"
-							data-bs-toggle="collapse"
-							data-bs-target="#collapseExample"
-							aria-expanded="false"
-							aria-controls="collapseExample">
-							read more
-						</button>
-						<div className="collapse" id="collapseExample">
-							<div className="p-2 text-white">{video.description}</div>
-						</div>
-					</div>
-					{/* {{-- Collapse End --}} */}
-
-					{/* Artist Area */}
-					<div className="border-bottom border-dark">
-						<div className="d-flex">
-							<div className="p-2">
-								<Link href={`/profile/${video.username}`}>
-									<a>
-										<Img
-											src={video.avatar}
-											className="rounded-circle"
-											width="30px"
-											height="30px"
-											alt="user"
-											loading="lazy"
-										/>
-									</a>
-								</Link>
-							</div>
-							<div className="p-2 flex-grow-1" style={{ width: "50%" }}>
-								<Link href={`/profile/${video.username}`}>
-									<a>
-										<div
-											style={{
-												// width: "50%",
-												// whiteSpace: "nowrap",
-												overflow: "hidden",
-												textOverflow: "clip",
-											}}>
-											<b className="ml-2">{video.artistName}</b>
-											<small>
-												<i>{video.username}</i>
-											</small>
-											<span className="ms-1" style={{ color: "gold" }}>
-												<DecoSVG />
-												<small className="ms-1" style={{ color: "inherit" }}>
-													{video.artistDecos}
-												</small>
-											</span>
-										</div>
-									</a>
-								</Link>
-							</div>
-							<div className="p-2">
-								{/* Check whether user has bought at least one song from user */}
-								{/* Check whether user has followed user and display appropriate button */}
-								{video.hasBought1 ||
-								props.auth?.username == "@blackmusic" ||
-								props.auth?.username != video.username ? (
-									hasFollowed ? (
-										<button
-											className={"btn float-right rounded-0 text-light"}
-											style={{ backgroundColor: "#232323" }}
-											onClick={onFollow}>
-											<div>
-												Followed
-												<CheckSVG />
-											</div>
-										</button>
-									) : (
-										<Btn
-											btnClass="mysonar-btn white-btn float-right"
-											onClick={onFollow}
-											btnText="follow"
-										/>
-									)
-								) : (
-									<Btn
-										btnClass="mysonar-btn white-btn float-right"
-										onClick={() =>
-											props.setErrors([
-												`You must have bought atleast one song by ${props.user.username}`,
-											])
-										}
-										btnText="follow"
-									/>
-								)}
-							</div>
-						</div>
-					</div>
-					{/* Artist Area End */}
-
-					<br />
-
-					{/* Tab for Comment and Up Next */}
-					<div className="d-flex">
-						<div className="p-2 flex-fill anti-hidden">
-							<h6
-								className={tabClass == "comments" ? "active-scrollmenu" : "p-2"}
-								onClick={() => setTabClass("comments")}>
-								<center>Comments</center>
-							</h6>
-						</div>
-						<div className="p-2 flex-fill anti-hidden">
-							<h6
-								className={
-									tabClass == "recommended" ? "active-scrollmenu" : "p-1"
-								}
-								onClick={() => setTabClass("recommended")}>
-								<center>Recommended</center>
-							</h6>
-						</div>
-					</div>
-
-					{/* <!-- Comment Form ---> */}
-					<div className={tabClass == "comments" ? "" : "hidden"}>
-						{video.username == props.auth.username ||
-						props.auth.username == "@blackmusic" ||
-						video.hasBoughtVideo ? (
-							<form
-								onSubmit={props.onSubmit}
-								className="contact-form bg-white mb-2"
-								autoComplete="off">
-								<SocialMediaInput {...props} />
-							</form>
-						) : (
-							""
-						)}
-						{/* <!-- End of Comment Form --> */}
-						<br />
-
-						{/* <!-- Comment Section --> */}
-						{video.username == props.auth.username ||
-						props.auth.username == "@blackmusic" ||
-						video.hasBoughtVideo ? (
-							// Check if video comments exist
-							videoComments.length > 0 ? (
-								videoComments
-									.filter((comment) => !deletedIds.includes(comment.id))
-									.map((comment, key) => (
-										<CommentMedia
-											{...props}
-											key={key}
-											comment={comment}
-											setBottomMenu={setBottomMenu}
-											setCommentDeleteLink={setCommentDeleteLink}
-											setCommentToEdit={setCommentToEdit}
-											onCommentLike={onCommentLike}
-											onDeleteComment={onDeleteComment}
-										/>
-									))
-							) : (
-								<center className="my-3">
-									<h6 style={{ color: "grey" }}>No comments to show</h6>
-								</center>
-							)
-						) : (
-							""
-						)}
-					</div>
 				</div>
-				{/* <!-- End of Comment Section --> */}
-
-				{/* -- Up next area -- */}
-				<div
-					className={
-						tabClass == "recommended" ? "col-sm-3" : "col-sm-3 hidden"
-					}>
-					<div className="p-2">
-						<h5>Up next</h5>
-					</div>
-					{!boughtVideos.some(
-						(boughtVideo) => boughtVideo.username == props.auth.username
-					) && (
-						<center>
-							<h6 style={{ color: "grey" }}>You haven't bought any videos</h6>
-						</center>
-					)}
-
-					{boughtVideos
-						.filter((boughtVideo) => boughtVideo.video_id != id)
-						.map((boughtVideo, key) => (
-							<VideoMedia
-								{...props}
-								key={key}
-								video={boughtVideo}
-								onBuyVideos={onBuyVideos}
-								onClick={() => props.setShow(0)}
-							/>
-						))}
-					{/* <!-- End of Up next Area --> */}
-
-					{/* Songs to watch Area */}
-					<div className="p-2 mt-5">
-						<h5>Songs to watch</h5>
-					</div>
-					{props.videos
-						.filter((video) => {
-							return (
-								!video.hasBoughtVideo &&
-								video.username != props.auth.username &&
-								video.id != id
-							)
-						})
-						.slice(0, 10)
-						.map((video, key) => (
-							<VideoMedia
-								{...props}
-								key={key}
-								video={video}
-								onBuyVideos={onBuyVideos}
-								onClick={() => props.setShow(0)}
-							/>
-						))}
-				</div>
-				<div className="col-sm-1"></div>
 			</div>
+			{/* <!-- End of Comment Section --> */}
 
-			{/* Sliding Bottom Nav */}
-			<PostOptions
-				{...props}
-				bottomMenu={bottomMenu}
-				setBottomMenu={setBottomMenu}
-				commentToEdit={commentToEdit}
-				commentDeleteLink={commentDeleteLink}
-				onDeleteComment={onDeleteComment}
-			/>
-			{/* Sliding Bottom Nav end */}
-		</>
+			{/* -- Up next area -- */}
+			<div
+				className={tabClass == "recommended" ? "col-sm-3" : "col-sm-3 hidden"}>
+				<div className="p-2">
+					<h5>Up next</h5>
+				</div>
+				{!boughtVideos.some(
+					(boughtVideo) => boughtVideo.username == props.auth.username
+				) && (
+					<center>
+						<h6 style={{ color: "grey" }}>You haven't bought any videos</h6>
+					</center>
+				)}
+
+				{boughtVideos
+					.filter((boughtVideo) => boughtVideo.video_id != id)
+					.map((boughtVideo, key) => (
+						<VideoMedia
+							{...props}
+							key={key}
+							video={boughtVideo}
+							onBuyVideos={onBuyVideos}
+							onClick={() => props.setShow(0)}
+						/>
+					))}
+				{/* <!-- End of Up next Area --> */}
+
+				{/* Songs to watch Area */}
+				<div className="p-2 mt-5">
+					<h5>Songs to watch</h5>
+				</div>
+				{props.videos
+					.filter((video) => {
+						return (
+							!video.hasBoughtVideo &&
+							video.username != props.auth.username &&
+							video.id != id
+						)
+					})
+					.slice(0, 10)
+					.map((video, key) => (
+						<VideoMedia
+							{...props}
+							key={key}
+							video={video}
+							onBuyVideos={onBuyVideos}
+							onClick={() => props.setShow(0)}
+						/>
+					))}
+			</div>
+			<div className="col-sm-1"></div>
+		</div>
 	)
 }
 

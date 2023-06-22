@@ -114,7 +114,14 @@ const PostShow = (props) => {
 					</a>
 				</div>
 				<span>
-					<PostMedia {...props} post={post} onDeletePost={onDeletePost} />
+					<PostMedia
+						{...props}
+						post={post}
+						onDeletePost={onDeletePost}
+						stateToUpdate={() => {
+							props.get(`posts/${id}`, setPost)
+						}}
+					/>
 				</span>
 
 				<hr className="text-white" />
@@ -148,9 +155,9 @@ const PostShow = (props) => {
 						placeholder="Add comment"
 						showImage={false}
 						showPoll={false}
-						urlTo={`post-comments/${id}`}
+						urlTo="post-comments"
 						stateToUpdate={() => {
-							props.get("post-comments", setPostComments)
+							props.get(`post-comments/${id}`, setPostComments)
 						}}
 						editing={false}
 					/>

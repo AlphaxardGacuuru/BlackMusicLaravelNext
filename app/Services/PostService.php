@@ -99,13 +99,13 @@ class PostService extends Service
             $muted["posts"] = false;
             $follow->muted = $muted;
 
-            $message = "Posts from " . $username . " unmuted";
+            $message = "You unmuted posts from " . $username;
         } else {
             $muted = $follow->muted;
             $muted["posts"] = true;
             $follow->muted = $muted;
 
-            $message = "Posts from " . $username . " muted";
+            $message = "You muted posts from " . $username;
         }
 
         $follow->save();

@@ -386,7 +386,7 @@ a:focus {
 .mainMenu .closeIcon {
 	position: absolute;
 	right: 50px;
-	top: 55px;
+	top: 50px;
 	z-index: 9;
 	color: #ffffff;
 	font-size: 20px;

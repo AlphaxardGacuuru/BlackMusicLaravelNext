@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import Link from "next/link"
 
 // const SocialMediaInput = React.lazy(() => import('@/components/core/SocialMediaInput'))
@@ -33,27 +32,15 @@ const PostCreate = (props) => {
 					</div>
 
 					{/* Social Input */}
-					<form
-						onSubmit={props.onSubmit}
-						className="contact-form bg-white"
-						autoComplete="off">
-						<SocialMediaInput
-							{...props}
-							placeholder="What's on your mind"
-							showImage={true}
-							showPoll={true}
-							showEmojiPicker={false}
-							showImagePicker={false}
-							showPollPicker={false}
-							urlTo="posts"
-							stateToUpdate={() => props.setPosts}
-							editing={false}
-						/>
-					</form>
-				</div>
-
-				<div className="bottomNav">
-					<SocialMediaInput {...props} />
+					<SocialMediaInput
+						{...props}
+						placeholder="What's on your mind"
+						showImage={true}
+						showPoll={true}
+						urlTo="posts"
+						redirect="/"
+						editing={false}
+					/>
 				</div>
 			</div>
 			<div className="col-sm-4"></div>

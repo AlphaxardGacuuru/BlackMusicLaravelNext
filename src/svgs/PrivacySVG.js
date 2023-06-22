@@ -4,10 +4,10 @@ const PrivacySVG = () => {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
-			width="16"
-			height="16"
+			width="1em"
+			height="1em"
 			fill="currentColor"
-			className="mb-2 bi bi-shield-shaded"
+			className="mb-1 bi bi-shield-shaded"
 			viewBox="0 0 16 16">
 			<path
 				fillRule="evenodd"

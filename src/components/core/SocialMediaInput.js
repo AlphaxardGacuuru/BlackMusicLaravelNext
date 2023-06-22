@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react"
+import { useRouter } from "next/router"
+import axios from "@/lib/axios"
 import dynamic from "next/dynamic"
 
 import Button from "@/components/Core/Btn"
 import Img from "@/components/Core/Img"
 
 import EmojiSVG from "@/svgs/EmojiSVG"
+import ImageSVG from "@/svgs/ImageSVG"
+import PollSVG from "@/svgs/PollSVG"
 
 // Import React FilePond
 import { FilePond, registerPlugin } from "react-filepond"
@@ -21,8 +25,6 @@ import FilePondPluginImageCrop from "filepond-plugin-image-crop"
 import FilePondPluginImageTransform from "filepond-plugin-image-transform"
 import FilePondPluginFileValidateSize from "filepond-plugin-file-validate-size"
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
-import ImageSVG from "@/svgs/ImageSVG"
-import PollSVG from "@/svgs/PollSVG"
 
 // Register the plugins
 registerPlugin(
@@ -35,9 +37,8 @@ registerPlugin(
 )
 
 const SocialMediaInput = (props) => {
-	const [id, setId] = useState()
-	const [to, setTo] = useState()
-	const [placeholder, setPlaceholder] = useState()
+	const router = useRouter()
+
 	const [text, setText] = useState("")
 	const [media, setMedia] = useState("")
 	const [para1, setPara1] = useState("")
@@ -45,18 +46,11 @@ const SocialMediaInput = (props) => {
 	const [para3, setPara3] = useState("")
 	const [para4, setPara4] = useState("")
 	const [para5, setPara5] = useState("")
-	const [urlTo, setUrlTo] = useState()
-	const [urlToTwo, setUrlToTwo] = useState()
-	const [stateToUpdate, setStateToUpdate] = useState()
-	const [stateToUpdateTwo, setStateToUpdateTwo] = useState()
-	const [showImage, setShowImage] = useState()
-	const [showPoll, setShowPoll] = useState()
 	const [showMentionPicker, setShowMentionPicker] = useState(false)
 	const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 	const [showImagePicker, setShowImagePicker] = useState(false)
 	const [showPollPicker, setShowPollPicker] = useState(false)
-	const [editing, setEditing] = useState(false)
-
+	const [loading, setLoading] = useState(false)
 	const [formData, setFormData] = useState()
 
 	useEffect(() => {
@@ -67,41 +61,47 @@ const SocialMediaInput = (props) => {
 	// Handle form submit for Social Input
 	const onSubmit = (e) => {
 		e.preventDefault()
+		// Show loader
+		setLoading(true)
 
 		// Add form data to FormData object
 		formData.append("text", text)
-		id && formData.append("id", id)
-		to && formData.append("to", to)
+		props.id && formData.append("id", props.id)
+		props.to && formData.append("to", props.to)
 		media && formData.append("media", media)
 		para1 && formData.append("para1", para1)
 		para2 && formData.append("para2", para2)
 		para3 && formData.append("para3", para3)
 		para4 && formData.append("para4", para4)
 		para5 && formData.append("para5", para5)
-		editing && formData.append("_method", "put")
+		props.editing && formData.append("_method", "PUT")
 
 		// Get csrf cookie from Laravel inorder to send a POST request
 		axios
-			.post(`/api/${urlTo}`, formData)
+			.post(`/api/${props.urlTo}`, formData)
 			.then((res) => {
-				setMessages([res.data])
+				// Hide loader
+				setLoading(false)
+				// Messages
+				props.setMessages([res.data])
 				// Clear Media
 				setMedia("")
-				// Updated State One
-				get(urlTo, stateToUpdate)
-				// Updated State Two
-				urlToTwo &&
-					axios
-						.get(`/api/${urlToTwo}`)
-						.then((res) => stateToUpdateTwo(res.data))
+				// Update State
+				props.stateToUpdate && props.stateToUpdate()
 				// Clear text unless editing
-				!editing && setText("")
+				!props.editing && setText("")
+				// Hide Pickers
 				setShowMentionPicker(false)
 				setShowEmojiPicker(false)
 				setShowImagePicker(false)
 				setShowPollPicker(false)
+				// Redirect
+				props.redirect && router.push(props.redirect)
 			})
-			.catch((err) => getErrors(err))
+			.catch((err) => {
+				setLoading(false)
+				props.getErrors(err)
+			})
 	}
 
 	const Picker = dynamic(
@@ -224,6 +224,7 @@ const SocialMediaInput = (props) => {
 							type="submit"
 							btnClass="mysonar-btn white-btn"
 							btnText="send"
+							loading={loading}
 						/>
 					</div>
 				</div>
@@ -380,6 +381,10 @@ const SocialMediaInput = (props) => {
 			</center>
 		</form>
 	)
+}
+
+SocialMediaInput.defaultProps = {
+	// editing: false,
 }
 
 export default SocialMediaInput

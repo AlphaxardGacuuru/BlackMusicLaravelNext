@@ -3,7 +3,7 @@ import React from "react"
 const ShareSVG = () => {
 	return (
 		<svg
-			className="mb-2 bi bi-reply"
+			className="bi bi-reply"
 			width="1em"
 			height="1em"
 			viewBox="0 0 16 16"

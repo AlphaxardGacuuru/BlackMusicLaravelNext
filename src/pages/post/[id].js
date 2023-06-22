@@ -9,6 +9,7 @@ import CommentMedia from "@/components/Core/CommentMedia"
 import PostMedia from "@/components/Post/PostMedia"
 import LoadingPostMedia from "@/components/Post/LoadingPostMedia"
 import BackSVG from "@/svgs/BackSVG"
+import SocialMediaInput from "@/components/Core/SocialMediaInput"
 
 const PostShow = (props) => {
 	const router = useRouter()
@@ -34,21 +35,6 @@ const PostShow = (props) => {
 		// Fetch Post Comments
 		id && props.get(`post-comments/${id}`, setPostComments)
 	}, [id])
-
-	// Set states
-	setTimeout(() => {
-		props.setId(id)
-		props.setPlaceholder("Add comment")
-		props.setShowImage(false)
-		props.setShowPoll(false)
-		props.setShowImagePicker(false)
-		props.setShowPollPicker(false)
-		props.setUrlTo("post-comments")
-		props.setUrlToTwo()
-		props.setStateToUpdate(() => setPostComments)
-		props.setStateToUpdateTwo()
-		props.setEditing(false)
-	}, 100)
 
 	/*
 	 * Function for deleting posts */
@@ -148,14 +134,28 @@ const PostShow = (props) => {
 								{...props}
 								key={key}
 								comment={comment}
-								setBottomMenu={setBottomMenu}
-								setCommentDeleteLink={setCommentDeleteLink}
-								setCommentToEdit={setCommentToEdit}
 								onCommentLike={onCommentLike}
 								onDeleteComment={onDeleteComment}
 							/>
 						))}
 				</div>
+
+				{/* Social Media Input */}
+				<div className="bottomNav">
+					<SocialMediaInput
+						{...props}
+						id={id}
+						placeholder="Add comment"
+						showImage={false}
+						showPoll={false}
+						urlTo={`post-comments/${id}`}
+						stateToUpdate={() => {
+							props.get("post-comments", setPostComments)
+						}}
+						editing={false}
+					/>
+				</div>
+				{/* Social Media Input End */}
 			</div>
 			<div className="col-sm-4"></div>
 		</div>

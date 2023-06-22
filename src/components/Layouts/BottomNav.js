@@ -43,7 +43,7 @@ const Bottomnav = (props) => {
 		: (display = "")
 
 	// Show Social Input in various pages
-	router.pathname == "/post/[id]" ||
+	// router.pathname == "/post/[id]" ||
 	router.pathname.match("/chat/") ||
 	router.pathname.match("/story/create")
 		? (inputDisplay = "")

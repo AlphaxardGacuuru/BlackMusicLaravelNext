@@ -6,22 +6,6 @@ import SocialMediaInput from "@/components/Core/SocialMediaInput"
 import CloseSVG from "@/svgs/CloseSVG"
 
 const PostCreate = (props) => {
-	// Set states
-	useEffect(() => {
-		setTimeout(() => {
-			props.setPlaceholder("What's on your mind")
-			props.setText("")
-			props.setShowImage(true)
-			props.setShowPoll(true)
-			props.setShowEmojiPicker(false)
-			props.setShowImagePicker(false)
-			props.setShowPollPicker(false)
-			props.setUrlTo("posts")
-			props.setStateToUpdate(() => props.setPosts)
-			props.setEditing(false)
-		}, 100)
-	}, [])
-
 	return (
 		<div className="row">
 			<div className="col-sm-4"></div>
@@ -49,9 +33,27 @@ const PostCreate = (props) => {
 					</div>
 
 					{/* Social Input */}
-					<form onSubmit={props.onSubmit} className="contact-form bg-white" autoComplete="off">
-						<SocialMediaInput {...props} />
+					<form
+						onSubmit={props.onSubmit}
+						className="contact-form bg-white"
+						autoComplete="off">
+						<SocialMediaInput
+							{...props}
+							placeholder="What's on your mind"
+							showImage={true}
+							showPoll={true}
+							showEmojiPicker={false}
+							showImagePicker={false}
+							showPollPicker={false}
+							urlTo="posts"
+							stateToUpdate={() => props.setPosts}
+							editing={false}
+						/>
 					</form>
+				</div>
+
+				<div className="bottomNav">
+					<SocialMediaInput {...props} />
 				</div>
 			</div>
 			<div className="col-sm-4"></div>

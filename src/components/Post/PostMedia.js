@@ -123,10 +123,10 @@ const PostMedia = (props) => {
 					<h6 className="m-0 clip-name">
 						<b>{props.post.name}</b>
 						<small>{props.post.username}</small>
-						<span className="ms-1 lh-1" style={{ color: "gold" }}>
+						<span className="ms-1" style={{ color: "gold" }}>
 							<DecoSVG />
 							<small
-								className="ms-1 fw-lighter align-bottom"
+								className="ms-1 fw-lighter"
 								style={{ color: "inherit" }}>
 								{props.post.decos}
 							</small>

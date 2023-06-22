@@ -4,6 +4,8 @@ import dynamic from "next/dynamic"
 import Button from "@/components/Core/Btn"
 import Img from "@/components/Core/Img"
 
+import EmojiSVG from "@/svgs/EmojiSVG"
+
 // Import React FilePond
 import { FilePond, registerPlugin } from "react-filepond"
 
@@ -19,6 +21,8 @@ import FilePondPluginImageCrop from "filepond-plugin-image-crop"
 import FilePondPluginImageTransform from "filepond-plugin-image-transform"
 import FilePondPluginFileValidateSize from "filepond-plugin-file-validate-size"
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
+import ImageSVG from "@/svgs/ImageSVG"
+import PollSVG from "@/svgs/PollSVG"
 
 // Register the plugins
 registerPlugin(
@@ -31,6 +35,75 @@ registerPlugin(
 )
 
 const SocialMediaInput = (props) => {
+	const [id, setId] = useState()
+	const [to, setTo] = useState()
+	const [placeholder, setPlaceholder] = useState()
+	const [text, setText] = useState("")
+	const [media, setMedia] = useState("")
+	const [para1, setPara1] = useState("")
+	const [para2, setPara2] = useState("")
+	const [para3, setPara3] = useState("")
+	const [para4, setPara4] = useState("")
+	const [para5, setPara5] = useState("")
+	const [urlTo, setUrlTo] = useState()
+	const [urlToTwo, setUrlToTwo] = useState()
+	const [stateToUpdate, setStateToUpdate] = useState()
+	const [stateToUpdateTwo, setStateToUpdateTwo] = useState()
+	const [showImage, setShowImage] = useState()
+	const [showPoll, setShowPoll] = useState()
+	const [showMentionPicker, setShowMentionPicker] = useState(false)
+	const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+	const [showImagePicker, setShowImagePicker] = useState(false)
+	const [showPollPicker, setShowPollPicker] = useState(false)
+	const [editing, setEditing] = useState(false)
+
+	const [formData, setFormData] = useState()
+
+	useEffect(() => {
+		// Declare new FormData object for form data
+		setFormData(new FormData())
+	}, [])
+
+	// Handle form submit for Social Input
+	const onSubmit = (e) => {
+		e.preventDefault()
+
+		// Add form data to FormData object
+		formData.append("text", text)
+		id && formData.append("id", id)
+		to && formData.append("to", to)
+		media && formData.append("media", media)
+		para1 && formData.append("para1", para1)
+		para2 && formData.append("para2", para2)
+		para3 && formData.append("para3", para3)
+		para4 && formData.append("para4", para4)
+		para5 && formData.append("para5", para5)
+		editing && formData.append("_method", "put")
+
+		// Get csrf cookie from Laravel inorder to send a POST request
+		axios
+			.post(`/api/${urlTo}`, formData)
+			.then((res) => {
+				setMessages([res.data])
+				// Clear Media
+				setMedia("")
+				// Updated State One
+				get(urlTo, stateToUpdate)
+				// Updated State Two
+				urlToTwo &&
+					axios
+						.get(`/api/${urlToTwo}`)
+						.then((res) => stateToUpdateTwo(res.data))
+				// Clear text unless editing
+				!editing && setText("")
+				setShowMentionPicker(false)
+				setShowEmojiPicker(false)
+				setShowImagePicker(false)
+				setShowPollPicker(false)
+			})
+			.catch((err) => getErrors(err))
+	}
+
 	const Picker = dynamic(
 		() => {
 			return import("emoji-picker-react")
@@ -46,283 +119,266 @@ const SocialMediaInput = (props) => {
 
 	// Show error on space in username
 	useEffect(() => {
-		props.text.indexOf("@") > -1 && props.setShowMentionPicker(true)
-	}, [props.text])
+		text.indexOf("@") > -1 && setShowMentionPicker(true)
+	}, [text])
 
 	const onEmojiClick = (event, emojiObject) => {
-		props.setText(props.text + emojiObject.emoji)
+		setText(text + emojiObject.emoji)
 	}
 
 	// Add username to text
 	const addMention = (mention) => {
-		var textUsername = "@" + props.text.split("@")[1]
-		var mentionToAdd = props.text.replace(textUsername, mention)
-		props.setText(mentionToAdd)
-		props.setShowMentionPicker(false)
+		var textUsername = "@" + text.split("@")[1]
+		var mentionToAdd = text.replace(textUsername, mention)
+		setText(mentionToAdd)
+		setShowMentionPicker(false)
 		setDoNotShowMentionPicker(false)
 	}
 
 	return (
-		<center style={{ backgroundColor: "#232323" }}>
-			<div
-				className="d-flex pt-2 border-bottom border-dark"
-				style={{ backgroundColor: "#232323" }}>
-				{/* Profile pic */}
-				<div className="p-2">
-					<Img
-						src={props.auth.avatar}
-						imgClass="rounded-circle"
-						width="25px"
-						height="25px"
-						alt="Avatar"
-					/>
-				</div>
-				{/* Input */}
-				<div className="flex-grow-1">
-					<textarea
-						name="post-text"
-						className="form-control m-0 p-2"
-						style={{
-							border: "none",
-							outline: "none",
-							height: "50px",
-							resize: "none",
-						}}
-						placeholder={props.placeholder}
-						value={props.text}
-						row="1"
-						onChange={(e) => props.setText(e.target.value)}
-						required={true}></textarea>
-				</div>
-				{/* Emoji icon */}
-				<div className="pt-2 px-1">
-					<div
-						className="text-light"
-						style={{ cursor: "pointer" }}
-						onClick={() => {
-							if (!props.media && !props.para1) {
-								props.setShowEmojiPicker(!props.showEmojiPicker)
-								props.setShowImagePicker(true && false)
-								props.setShowPollPicker(true && false)
-							}
-						}}>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="20"
-							height="20"
-							fill="currentColor"
-							className="bi bi-emoji-smile"
-							viewBox="0 0 16 16">
-							<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-							<path d="M4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z" />
-						</svg>
+		<form
+			onSubmit={onSubmit}
+			className="contact-form bg-white"
+			autoComplete="off">
+			<center style={{ backgroundColor: "#232323" }}>
+				<div
+					className="d-flex pt-2 border-bottom border-dark"
+					style={{ backgroundColor: "#232323" }}>
+					{/* Profile pic */}
+					<div className="p-2">
+						<Img
+							src={props.auth.avatar}
+							imgClass="rounded-circle"
+							width="25px"
+							height="25px"
+							alt="Avatar"
+						/>
 					</div>
-				</div>
-				{/* Image icon */}
-				{props.showImage && (
-					<div
-						className="pt-2 px-1 text-light"
-						onClick={() => {
-							if (!props.media && !props.para1) {
-								props.setShowEmojiPicker(true && false)
-								props.setShowImagePicker(!props.showImagePicker)
-								props.setShowPollPicker(true && false)
-							}
-						}}>
-						<div style={{ cursor: "pointer" }}>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								width="20"
-								height="20"
-								fill="currentColor"
-								className="bi bi-image"
-								viewBox="0 0 16 16">
-								<path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
-								<path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z" />
-							</svg>
+					{/* Input */}
+					<div className="flex-grow-1">
+						<textarea
+							name="post-text"
+							className="form-control m-0 p-2"
+							style={{
+								border: "none",
+								outline: "none",
+								height: "50px",
+								resize: "none",
+							}}
+							placeholder={props.placeholder}
+							value={text}
+							row="1"
+							onChange={(e) => setText(e.target.value)}
+							required={true}></textarea>
+					</div>
+					{/* Emoji icon */}
+					<div className="pt-2 px-1">
+						<div
+							className="text-light fs-5"
+							style={{ cursor: "pointer" }}
+							onClick={() => {
+								if (!media && !para1) {
+									setShowEmojiPicker(!showEmojiPicker)
+									setShowImagePicker(true && false)
+									setShowPollPicker(true && false)
+								}
+							}}>
+							<EmojiSVG />
 						</div>
 					</div>
-				)}
-				{/* Poll icon */}
-				{props.showPoll && (
-					<div
-						className="pt-2 px-1 text-white"
-						onClick={() => {
-							if (!props.media && !props.para1) {
-								props.setShowEmojiPicker(true && false)
-								props.setShowPollPicker(!props.showPollPicker)
-								props.setShowImagePicker(true && false)
-							}
-						}}>
-						<div style={{ cursor: "pointer" }}>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								width="20"
-								height="20"
-								fill="currentColor"
-								className="bi bi-bar-chart"
-								viewBox="0 0 16 16">
-								<path d="M4 11H2v3h2v-3zm5-4H7v7h2V7zm5-5v12h-2V2h2zm-2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1h-2zM6 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm-5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3z" />
-							</svg>
+					{/* Image icon */}
+					{props.showImage && (
+						<div
+							className="pt-2 px-1 text-light"
+							onClick={() => {
+								if (!media && !para1) {
+									setShowEmojiPicker(true && false)
+									setShowImagePicker(!showImagePicker)
+									setShowPollPicker(true && false)
+								}
+							}}>
+							<div className="fs-5" style={{ cursor: "pointer" }}>
+								<ImageSVG />
+							</div>
 						</div>
+					)}
+					{/* Poll icon */}
+					{props.showPoll && (
+						<div
+							className="pt-2 px-1 text-white"
+							onClick={() => {
+								if (!media && !para1) {
+									setShowEmojiPicker(true && false)
+									setShowPollPicker(!showPollPicker)
+									setShowImagePicker(true && false)
+								}
+							}}>
+							<div className="fs-5" style={{ cursor: "pointer" }}>
+								<PollSVG />
+							</div>
+						</div>
+					)}
+					{/* Button */}
+					<div className="p-1">
+						<Button
+							type="submit"
+							btnClass="mysonar-btn white-btn"
+							btnText="send"
+						/>
+					</div>
+				</div>
+
+				{/* Show Emoji Picker */}
+				{showEmojiPicker && (
+					<div>
+						<Picker
+							onEmojiClick={onEmojiClick}
+							preload="true"
+							pickerStyle={{
+								width: "95%",
+								borderRadius: "0px",
+								margin: "10px",
+							}}
+						/>
+						<br />
 					</div>
 				)}
-				{/* Button */}
-				<div className="p-1">
-					<Button
-						type="submit"
-						btnClass="mysonar-btn white-btn"
-						btnText="send"
-					/>
-				</div>
-			</div>
 
-			{/* Show Emoji Picker */}
-			{props.showEmojiPicker && (
-				<div>
-					<Picker
-						onEmojiClick={onEmojiClick}
-						preload="true"
-						pickerStyle={{ width: "95%", borderRadius: "0px", margin: "10px" }}
-					/>
-					<br />
-				</div>
-			)}
-
-			{/* Show Filepond */}
-			{props.showImagePicker && (
-				<div>
-					<FilePond
-						name="filepond-media"
-						className="m-2"
-						labelIdle='Drag & Drop your Image or <span class="filepond--label-action text-dark"> Browse </span>'
-						acceptedFileTypes={["image/*"]}
-						allowRevert={true}
-						server={{
-							url: `${props.url}/api/filepond/`,
-							process: {
-								url: props.urlTo,
-								onload: (res) => props.setMedia(res),
-							},
-							revert: {
-								url: props.urlTo + "/" + props.media.substr(11),
-								onload: (res) => {
-									props.setMessages([res])
-									props.setMedia("")
+				{/* Show Filepond */}
+				{showImagePicker && (
+					<div>
+						<FilePond
+							name="filepond-media"
+							className="m-2"
+							labelIdle='Drag & Drop your Image or <span class="filepond--label-action text-dark"> Browse </span>'
+							acceptedFileTypes={["image/*"]}
+							allowRevert={true}
+							server={{
+								url: `${props.url}/api/filepond/`,
+								process: {
+									url: props.urlTo,
+									onload: (res) => setMedia(res),
 								},
-							},
-						}}
-					/>
-					<br />
-				</div>
-			)}
-
-			{/* Show Mention Picker */}
-			{props.showMentionPicker && doNotShowMentionPicker ? (
-				<div>
-					<div
-						className="card rounded-0"
-						style={{ maxHeight: "200px", overflowY: "scroll" }}>
-						{props.users
-							.filter((user) => {
-								var regex = new RegExp(props.text.split("@")[1], "gi")
-
-								return (
-									user.username != props.auth.username &&
-									user.username != "@blackmusic" &&
-									user.accountType == "musician" &&
-									user.username.match(regex)
-								)
-							})
-							.map((user, key) => (
-								<div
-									key={key}
-									className="d-flex"
-									onClick={() => addMention(user.username)}>
-									<div className="p-2">
-										<Img
-											src={user.avatar}
-											imgClass="rounded-circle"
-											width="30px"
-											height="30px"
-										/>
-									</div>
-									<div className="py-2 px-0">
-										<h6
-											className="m-0"
-											style={{
-												width: "100%",
-												whiteSpace: "nowrap",
-												overflow: "hidden",
-												textOverflow: "clip",
-											}}>
-											<b>{user.name}</b>
-											<small>{user.username}</small>
-										</h6>
-									</div>
-								</div>
-							))}
+								revert: {
+									url: props.urlTo + "/" + media.substr(11),
+									onload: (res) => {
+										props.setMessages([res])
+										setMedia("")
+									},
+								},
+							}}
+						/>
+						<br />
 					</div>
-					<br />
-				</div>
-			) : (
-				""
-			)}
+				)}
 
-			{/* Show Polls */}
-			{props.showPollPicker && (
-				<center>
-					<h5 className="mt-2">Add Poll</h5>
-					{/* Poll inputs */}
-					<input
-						type="text"
-						className="form-control border-dark"
-						placeholder="Parameter 1"
-						onChange={(e) => {
-							setDisplay2("inline")
-							props.setPara1(e.target.value)
-						}}
-					/>
-					<input
-						type="text"
-						style={{ display: display2 }}
-						className="form-control border-dark"
-						placeholder="Parameter 2"
-						onChange={(e) => {
-							setDisplay3("inline")
-							props.setPara2(e.target.value)
-						}}
-					/>
-					<input
-						type="text"
-						style={{ display: display3 }}
-						className="form-control border-dark"
-						placeholder="Parameter 3"
-						onChange={(e) => {
-							setDisplay4("inline")
-							props.setPara3(e.target.value)
-						}}
-					/>
-					<input
-						type="text"
-						style={{ display: display4 }}
-						className="form-control border-dark"
-						placeholder="Parameter 4"
-						onChange={(e) => {
-							setDisplay5("inline")
-							props.setPara4(e.target.value)
-						}}
-					/>
-					<input
-						type="text"
-						style={{ display: display5 }}
-						className="form-control border-dark"
-						placeholder="Parameter 5"
-						onChange={(e) => props.setPara5(e.target.value)}
-					/>
-				</center>
-			)}
-		</center>
+				{/* Show Mention Picker */}
+				{showMentionPicker && doNotShowMentionPicker ? (
+					<div>
+						<div
+							className="card rounded-0"
+							style={{ maxHeight: "200px", overflowY: "scroll" }}>
+							{props.users
+								.filter((user) => {
+									var regex = new RegExp(text.split("@")[1], "gi")
+
+									return (
+										user.username != props.auth.username &&
+										user.username != "@blackmusic" &&
+										user.accountType == "musician" &&
+										user.username.match(regex)
+									)
+								})
+								.map((user, key) => (
+									<div
+										key={key}
+										className="d-flex"
+										onClick={() => addMention(user.username)}>
+										<div className="p-2">
+											<Img
+												src={user.avatar}
+												imgClass="rounded-circle"
+												width="30px"
+												height="30px"
+											/>
+										</div>
+										<div className="py-2 px-0">
+											<h6
+												className="m-0"
+												style={{
+													width: "100%",
+													whiteSpace: "nowrap",
+													overflow: "hidden",
+													textOverflow: "clip",
+												}}>
+												<b>{user.name}</b>
+												<small>{user.username}</small>
+											</h6>
+										</div>
+									</div>
+								))}
+						</div>
+						<br />
+					</div>
+				) : (
+					""
+				)}
+
+				{/* Show Polls */}
+				{showPollPicker && (
+					<center>
+						<h5 className="mt-2">Add Poll</h5>
+						{/* Poll inputs */}
+						<input
+							type="text"
+							className="form-control border-dark"
+							placeholder="Parameter 1"
+							onChange={(e) => {
+								setDisplay2("inline")
+								setPara1(e.target.value)
+							}}
+						/>
+						<input
+							type="text"
+							style={{ display: display2 }}
+							className="form-control border-dark"
+							placeholder="Parameter 2"
+							onChange={(e) => {
+								setDisplay3("inline")
+								setPara2(e.target.value)
+							}}
+						/>
+						<input
+							type="text"
+							style={{ display: display3 }}
+							className="form-control border-dark"
+							placeholder="Parameter 3"
+							onChange={(e) => {
+								setDisplay4("inline")
+								setPara3(e.target.value)
+							}}
+						/>
+						<input
+							type="text"
+							style={{ display: display4 }}
+							className="form-control border-dark"
+							placeholder="Parameter 4"
+							onChange={(e) => {
+								setDisplay5("inline")
+								setPara4(e.target.value)
+							}}
+						/>
+						<input
+							type="text"
+							style={{ display: display5 }}
+							className="form-control border-dark"
+							placeholder="Parameter 5"
+							onChange={(e) => setPara5(e.target.value)}
+						/>
+					</center>
+				)}
+			</center>
+		</form>
 	)
 }
 

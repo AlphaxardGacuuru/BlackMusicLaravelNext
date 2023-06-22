@@ -240,7 +240,7 @@ export default function Home(props) {
 						<h5>Stories</h5>
 						<div className="hidden-scroll pb-2" onScroll={handleScroll}>
 							{/* Create Story */}
-							<CreateStoryMedia {...props} />
+							{/* <CreateStoryMedia {...props} /> */}
 							{/* Create Story End */}
 
 							{/* Loading Story items */}

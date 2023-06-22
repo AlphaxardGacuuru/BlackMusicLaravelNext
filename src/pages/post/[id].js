@@ -7,7 +7,6 @@ import EchoConfig from "@/lib/echo"
 
 import CommentMedia from "@/components/Core/CommentMedia"
 import PostMedia from "@/components/Post/PostMedia"
-import PostOptions from "@/components/Post/PostOptions"
 import LoadingPostMedia from "@/components/Post/LoadingPostMedia"
 import BackSVG from "@/svgs/BackSVG"
 

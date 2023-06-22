@@ -6,7 +6,7 @@ const BackSVG = () => {
 			width="2em"
 			height="2em"
 			viewBox="0 0 16 16"
-			className="bi bi-arrow-left-short"
+			className="mb-2 bi bi-arrow-left-short"
 			fill="currentColor"
 			xmlns="http://www.w3.org/2000/svg">
 			<path

@@ -83,20 +83,20 @@ const AudioAlbumEdit = (props) => {
 								className="contact-form text-center call-to-action-content wow fadeInUp"
 								data-wow-delay="0.5s">
 								<h2>Edit Audio Album</h2>
-									<div className="d-flex text-start">
-										<div className="p-2">
-											<Img
-												src={props.album.cover}
-												width="10em"
-												height="10em"
-												alt="album cover"
-											/>
-										</div>
-										<div className="px-2">
-											<h1 className="my-0">{props.album.name}</h1>
-											<h6 className="my-0">{props.album.released}</h6>
-										</div>
+								<div className="d-flex text-start">
+									<div className="p-2">
+										<Img
+											src={props.album.cover}
+											width="10em"
+											height="10em"
+											alt="album cover"
+										/>
 									</div>
+									<div className="px-2">
+										<h1 className="my-0">{props.album.name}</h1>
+										<h6 className="my-0">{props.album.released}</h6>
+									</div>
+								</div>
 								<br />
 								<div className="form-group">
 									<form onSubmit={onSubmit}>
@@ -151,7 +151,7 @@ const AudioAlbumEdit = (props) => {
 												width="20"
 												height="20"
 												fill="currentColor"
-												className="bi bi-image"
+												className="mb-2 bi bi-image"
 												viewBox="0 0 16 16">
 												<path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
 												<path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z" />
@@ -194,7 +194,7 @@ export async function getServerSideProps(context) {
 		.then((res) => (album = res.data))
 
 	// Pass data to the page via props
-	return { props: {album} }
+	return { props: { album } }
 }
 
 export default AudioAlbumEdit

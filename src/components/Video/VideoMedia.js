@@ -61,35 +61,26 @@ const VideoMedia = (props) => {
 					<div className="d-flex justify-content-around video-media-overlay">
 						{inCart ? (
 							<div>
-								<button
-									className="btn text-light mb-1 rounded-0 pt-1"
-									style={{
-										minWidth: "90px",
-										height: "33px",
-										backgroundColor: "#232323",
-									}}
+								<Btn
+									btnClass="mysonar-btn btn-2 fs-6"
 									onClick={() => {
 										setInCart(!inCart)
 										onCartVideos()
-									}}>
-									<CartSVG />
-								</button>
+									}}
+									btnText={<CartSVG />}
+								/>
 							</div>
 						) : (
 							<>
 								<div>
-									<button
-										className="mysonar-btn white-btn mb-1 fs-6"
-										style={{
-											minWidth: "90px",
-											height: "33px",
-										}}
+									<Btn
+										btnClass="mysonar-btn white-btn mb-1 fs-6"
 										onClick={() => {
 											setInCart(!inCart)
 											onCartVideos()
-										}}>
-										<CartSVG />
-									</button>
+										}}
+										btnText={<CartSVG />}
+									/>
 								</div>
 								<div>
 									<Btn

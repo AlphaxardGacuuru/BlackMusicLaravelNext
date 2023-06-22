@@ -153,9 +153,9 @@ a:focus {
 	min-width: 90px;
 	height: 33px;
 	border: 1px solid;
-	border-color: #2f2f2f;
+	border-color: #232323;
 	text-transform: uppercase;
-	color: #2f2f2f;
+	color: #232323;
 	font-size: 12px;
 	letter-spacing: 1px;
 	line-height: 32px;
@@ -197,12 +197,12 @@ a:focus {
 
 .mysonar-btn.green-btn:focus {
 	background-color: #006F3E;
-	color: #ffffff;
+	color: rgba(220, 220, 220, 1);
 }
 
 .mysonar-btn.green-btn:hover {
 	background-color: #006F3E;
-	color: #ffffff;
+	color: rgba(220, 220, 220, 1);
 }
 
 .mysonar-btn.gold-btn {
@@ -214,7 +214,7 @@ a:focus {
 .mysonar-btn.gold-btn:focus,
 .mysonar-btn.gold-btn:hover {
 	background-color: gold;
-	color: #ffffff;
+	color: rgba(220, 220, 220, 1);
 }
 
 .poll-btn:focus,
@@ -247,16 +247,16 @@ a:focus {
 }
 
 .mysonar-btn.btn-2 {
-	background-color: #2f2f2f;
+	background-color: #232323;
 	font-size: 12px;
-	color: #ffffff;
+	color: rgba(220, 220, 220, 1);
 }
 
 .green-btn.btn-2 {
 	background-color: #006F3E;
 	border-color: #006F3E;
 	font-size: 12px;
-	color: #ffffff;
+	color: rgba(220, 220, 220, 1);
 }
 
 .poll-btn.btn-2 {
@@ -269,12 +269,12 @@ a:focus {
 .mysonar-btn-round.btn-2 {
 	background-color: #2f2f2f;
 	font-size: 12px;
-	color: #ffffff;
+	color: rgba(220, 220, 220, 1);
 }
 
 .mysonar-btn.btn-3 {
 	background-color: #232323;
-	color: #ffffff;
+	color: rgba(220, 220, 220, 1);
 }
 
 .mysonar-btn.btn-3::before {
@@ -742,7 +742,7 @@ a:focus {
 	height: 70px;
 	text-align: center;
 	width: 70px;
-	line-height: 66px;
+	line-height: 70px;
 }
 
 #floatBtn:hover {
@@ -755,7 +755,7 @@ a:focus {
 		right: 20px;
 		height: 50px;
 		width: 50px;
-		line-height: 46px;
+		line-height: 55px;
 	}
 }
 
@@ -765,7 +765,7 @@ a:focus {
 		right: 20px;
 		height: 50px;
 		width: 50px;
-		line-height: 46px;
+		line-height: 55px;
 	}
 }
 
@@ -786,7 +786,7 @@ a:focus {
 	height: 70px;
 	text-align: center;
 	width: 70px;
-	line-height: 66px;
+	line-height: 70px;
 }
 
 #chatFloatBtn:hover {
@@ -799,7 +799,7 @@ a:focus {
 		right: 20px;
 		height: 50px;
 		width: 50px;
-		line-height: 46px;
+		line-height: 55px;
 	}
 }
 
@@ -809,7 +809,7 @@ a:focus {
 		right: 20px;
 		height: 50px;
 		width: 50px;
-		line-height: 46px;
+		line-height: 55px;
 	}
 }
 
@@ -830,7 +830,7 @@ a:focus {
 	height: 70px;
 	text-align: center;
 	width: 70px;
-	line-height: 66px;
+	line-height: 70px;
 }
 
 #statusFloatBtn:hover {
@@ -843,7 +843,7 @@ a:focus {
 		right: 20px;
 		height: 50px;
 		width: 50px;
-		line-height: 46px;
+		line-height: 55px;
 	}
 }
 
@@ -853,7 +853,7 @@ a:focus {
 		right: 20px;
 		height: 50px;
 		width: 50px;
-		line-height: 46px;
+		line-height: 55px;
 	}
 }
 

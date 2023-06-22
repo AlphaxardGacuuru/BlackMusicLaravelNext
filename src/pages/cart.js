@@ -5,6 +5,7 @@ import EchoConfig from "@/lib/echo"
 import VideoMedia from "@/components/Video/VideoMedia"
 import AudioMedia from "@/components/Audio/AudioMedia"
 import Btn from "@/components/Core/Btn"
+import CloseSVG from "@/svgs/CloseSVG"
 
 const Cart = (props) => {
 	const [messages, setMessages] = useState([])
@@ -261,19 +262,9 @@ const Cart = (props) => {
 
 						{/* <!-- Close Icon --> */}
 						<div
-							className="closeIcon p-2 float-right"
-							onClick={() => {
-								setBottomMenu("")
-							}}>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								width="40"
-								height="40"
-								fill="currentColor"
-								className="bi bi-x"
-								viewBox="0 0 16 16">
-								<path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-							</svg>
+							className="closeIcon p-2 float-right fs-6"
+							onClick={() => setBottomMenu("")}>
+							<CloseSVG />
 						</div>
 					</div>
 
@@ -305,17 +296,9 @@ const Cart = (props) => {
 
 						{/* <!-- Close Icon --> */}
 						<div
-							className="closeIcon p-2 float-right"
+							className="closeIcon p-2 float-right fs-6"
 							onClick={() => setReceipt("")}>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								width="40"
-								height="40"
-								fill="currentColor"
-								className="bi bi-x"
-								viewBox="0 0 16 16">
-								<path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-							</svg>
+							<CloseSVG />
 						</div>
 					</div>
 

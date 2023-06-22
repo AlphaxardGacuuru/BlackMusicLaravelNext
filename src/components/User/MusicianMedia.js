@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import axios from "@/lib/axios"
+
 import Img from "@/components/Core/Img"
-import Btn from "../Core/Btn"
+import Btn from "@/components/Core/Btn"
 
 import CheckSVG from "../../svgs/CheckSVG"
-import axios from "@/lib/axios"
 
 const MusiciansMedia = (props) => {
 	const [hasFollowed, setHasFollowed] = useState(props.user.hasFollowed)
@@ -71,19 +72,25 @@ const MusiciansMedia = (props) => {
 				{/* Check whether user has followed user and display appropriate button */}
 				{props.user.hasBought1 || props.auth?.username == "@blackmusic" ? (
 					hasFollowed ? (
-						<button
-							className={"btn float-right rounded-0 text-light"}
-							style={{ backgroundColor: "#232323" }}
+						<Btn
+							btnClass="mysonar-btn btn-2"
+							btnStyle={{ lineHeight: "20px" }}
 							onClick={() => {
 								setHasFollowed(!hasFollowed)
 								onFollow(props, props.user.username)
-							}}>
-							Followed
-							<CheckSVG />
-						</button>
+							}}
+							btnText={
+								<span>
+									Followed
+									<span className="fs-6" style={{ lineHeight: "10px" }}>
+										<CheckSVG />
+									</span>
+								</span>
+							}
+						/>
 					) : (
 						<Btn
-							btnClass={"mysonar-btn white-btn float-right"}
+							btnClass="mysonar-btn white-btn float-right"
 							onClick={() => {
 								setHasFollowed(!hasFollowed)
 								onFollow(props, props.user.username)

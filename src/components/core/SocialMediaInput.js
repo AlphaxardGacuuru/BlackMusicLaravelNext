@@ -39,7 +39,7 @@ registerPlugin(
 const SocialMediaInput = (props) => {
 	const router = useRouter()
 
-	const [text, setText] = useState("")
+	const [text, setText] = useState(props.text ? props.text : "")
 	const [media, setMedia] = useState("")
 	const [para1, setPara1] = useState("")
 	const [para2, setPara2] = useState("")
@@ -52,6 +52,12 @@ const SocialMediaInput = (props) => {
 	const [showPollPicker, setShowPollPicker] = useState(false)
 	const [loading, setLoading] = useState(false)
 	const [formData, setFormData] = useState()
+
+	const [doNotShowMentionPicker, setDoNotShowMentionPicker] = useState(true)
+	const [display2, setDisplay2] = useState("none")
+	const [display3, setDisplay3] = useState("none")
+	const [display4, setDisplay4] = useState("none")
+	const [display5, setDisplay5] = useState("none")
 
 	useEffect(() => {
 		// Declare new FormData object for form data
@@ -110,12 +116,6 @@ const SocialMediaInput = (props) => {
 		},
 		{ ssr: false }
 	)
-
-	const [doNotShowMentionPicker, setDoNotShowMentionPicker] = useState(true)
-	const [display2, setDisplay2] = useState("none")
-	const [display3, setDisplay3] = useState("none")
-	const [display4, setDisplay4] = useState("none")
-	const [display5, setDisplay5] = useState("none")
 
 	// Show error on space in username
 	useEffect(() => {
@@ -381,10 +381,6 @@ const SocialMediaInput = (props) => {
 			</center>
 		</form>
 	)
-}
-
-SocialMediaInput.defaultProps = {
-	// editing: false,
 }
 
 export default SocialMediaInput

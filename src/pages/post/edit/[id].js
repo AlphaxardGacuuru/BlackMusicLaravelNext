@@ -11,47 +11,39 @@ const PostEdit = (props) => {
 
 	let { id } = router.query
 
-	useEffect(() => {
-		// Set states
-		setTimeout(() => {
-			props.setText(props.post.text)
-			props.setPlaceholder("What's on your mind")
-			props.setShowImage(false)
-			props.setShowPoll(false)
-			props.setShowEmojiPicker(false)
-			props.setShowImagePicker(false)
-			props.setShowPollPicker(false)
-			props.setUrlTo(`posts/${id}`)
-			props.setUrlToTwo(`posts`)
-			props.setStateToUpdate(() => props.setPosts)
-			props.setStateToUpdateTwo(() => props.setPosts)
-			props.setEditing(true)
-		}, 100)
-	}, [id])
-
 	return (
 		<div className="row">
 			<div className="col-sm-4"></div>
 			<div className="col-sm-4">
 				<div className="contact-form">
 					<div className="d-flex justify-content-between mb-1">
-						{/* <!-- Close Icon --> */}
+						{/* Close Icon */}
 						<div className="text-white">
 							<Link href="/">
-								<a>
+								<a className="fs-4">
 									<CloseSVG />
 								</a>
 							</Link>
 						</div>
+						{/* Close Icon End */}
+						{/* Title */}
+						<h1>Edit Post</h1>
+						{/* Title End */}
+						<a className="invisible">
+							<CloseSVG />
+						</a>
 					</div>
 
 					{/* Social Input */}
-					<form
-						onSubmit={props.onSubmit}
-						className="contact-form bg-white"
-						autoComplete="off">
-						<SocialMediaInput {...props} />
-					</form>
+					<SocialMediaInput
+						{...props}
+						placeholder="What's on your mind"
+						text={props.post.text}
+						showImage={false}
+						showPoll={false}
+						urlTo={`posts/${id}`}
+						editing={true}
+					/>
 				</div>
 			</div>
 			<div className="col-sm-4"></div>

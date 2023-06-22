@@ -75,32 +75,28 @@ const AudioMedia = (props) => {
 				""
 			) : inCart ? (
 				<div>
-					<button
-						className="btn text-light rounded-0 pt-1"
-						style={{
-							minWidth: "40px",
-							height: "33px",
-							backgroundColor: "#232323",
-						}}
+					<Btn
+						btnClass="mysonar-btn btn-2 fs-6"
+						btnStyle={{ minWidth: "40px" }}
 						onClick={() => {
 							setInCart(!inCart)
 							onCartAudios()
-						}}>
-						<CartSVG />
-					</button>
+						}}
+						btnText={<CartSVG />}
+					/>
 				</div>
 			) : (
 				<>
 					<div>
-						<button
-							className="mysonar-btn white-btn"
-							style={{ minWidth: "40px", height: "33px" }}
+						<Btn
+							btnClass="mysonar-btn white-btn fs-6"
+							btnStyle={{ minWidth: "40px" }}
 							onClick={() => {
 								setInCart(!inCart)
 								onCartAudios()
-							}}>
-							<CartSVG />
-						</button>
+							}}
+							btnText={<CartSVG />}
+						/>
 					</div>
 					<div className="ms-2">
 						<Btn

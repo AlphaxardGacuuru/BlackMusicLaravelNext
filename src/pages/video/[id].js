@@ -24,6 +24,7 @@ const VideoShow = (props) => {
 	let { id } = router.query
 
 	const [video, setVideo] = useState(props.video)
+	const [videos, setVideos] = useState(props.videos)
 	const [videoComments, setVideoComments] = useState(props.videoComments)
 	const [boughtVideos, setBoughtVideos] = useState(
 		props.getLocalStorage("boughtVideos")
@@ -44,6 +45,8 @@ const VideoShow = (props) => {
 			props.get(`video-comments/${id}`, setVideoComments)
 		}
 
+		// Fetch Videos
+		props.get("videos", setVideos, "videos")
 		// Fetch Bought Videos
 		props.get("bought-videos", setBoughtVideos, "boughtVideos")
 	}, [id])
@@ -514,7 +517,7 @@ const VideoShow = (props) => {
 				<div className="p-2 mt-5">
 					<h5>Songs to watch</h5>
 				</div>
-				{props.videos
+				{videos
 					.filter((video) => {
 						return (
 							!video.hasBoughtVideo &&

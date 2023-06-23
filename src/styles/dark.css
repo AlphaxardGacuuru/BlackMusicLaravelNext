@@ -2158,7 +2158,7 @@ div.hidden-scroll span {
 }
 
 /* :: Menu Open CSS */
-.menu-open .commentMenu {
+.menu-open-comment .commentMenu {
 	bottom: 0;
 }
 

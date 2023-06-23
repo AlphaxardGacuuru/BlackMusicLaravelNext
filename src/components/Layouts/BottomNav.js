@@ -14,13 +14,11 @@ import DiscoverSVG from "@/svgs/DiscoverSVG"
 import SearchSVG from "@/svgs/SearchSVG"
 import CartSVG from "@/svgs/CartSVG"
 import PersonSVG from "@/svgs/PersonSVG"
-import SocialMediaInput from "../Core/SocialMediaInput"
 
 const Bottomnav = (props) => {
 	const router = useRouter()
 
 	var display
-	var inputDisplay
 	var hidePlayer = true
 	var isInKaraoke = false
 
@@ -42,13 +40,6 @@ const Bottomnav = (props) => {
 		? (display = "none")
 		: (display = "")
 
-	// Show Social Input in various pages
-	// router.pathname == "/post/[id]" ||
-	router.pathname.match("/chat/") ||
-	router.pathname.match("/story/create")
-		? (inputDisplay = "")
-		: (inputDisplay = "none")
-
 	// Check if audio is in queue and location is in audio show
 	if (props.audioStates.show.id != 0 && props.audioStates.show != "") {
 		hidePlayer = router.pathname == "/audio/[id]"
@@ -66,9 +57,6 @@ const Bottomnav = (props) => {
 
 	return (
 		<>
-			{/* Add breaks if social input is visible */}
-			<br style={{ display: !props.showSocialInput && "none" }} />
-			<br style={{ display: !props.showSocialInput && "none" }} />
 			{/* Add breaks if audio player is visible */}
 			<br style={{ display: props.audioStates.hidePlayer && "none" }} />
 			<br style={{ display: props.audioStates.hidePlayer && "none" }} />
@@ -184,15 +172,6 @@ const Bottomnav = (props) => {
 					</div>
 				</div>
 				{/* Audio Player End */}
-
-				{/* Social Input */}
-				<form
-					onSubmit={props.onSubmit}
-					className="contact-form bg-white"
-					style={{ display: inputDisplay }}
-					autoComplete="off">
-					<SocialMediaInput {...props} />
-				</form>
 
 				{/* Bottom Nav */}
 				<div className="anti-hidden" style={{ display: display }}>

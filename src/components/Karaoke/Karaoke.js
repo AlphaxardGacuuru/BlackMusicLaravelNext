@@ -21,7 +21,7 @@ const Karaoke = (props) => {
 	const [play, setPlay] = useState()
 	const [hasLiked, setHasLiked] = useState(props.karaoke.hasLiked)
 	const [hasSaved, setHasSaved] = useState(props.karaoke.hasSaved)
-	const [bottomOptionsMenu, setBottomOptionsMenu] = useState()
+	const [showComments, setShowComments] = useState("")
 
 	useEffect(() => {
 		// Set new cart with data with auth
@@ -263,7 +263,7 @@ const Karaoke = (props) => {
 									<span
 										className="p-0"
 										style={{ fontSize: "2em" }}
-										onClick={() => setBottomOptionsMenu("menu-open")}>
+										onClick={() => setShowComments("menu-open-comment")}>
 										<CommentSVG />
 									</span>
 									<h6 className="mb-2" style={{ color: "inherit" }}>
@@ -336,8 +336,8 @@ const Karaoke = (props) => {
 
 			<KaraokeCommentSection
 				{...props}
-				bottomOptionsMenu={bottomOptionsMenu}
-				setBottomOptionsMenu={setBottomOptionsMenu}
+				showComments={showComments}
+				setShowComments={setShowComments}
 			/>
 		</div>
 	)

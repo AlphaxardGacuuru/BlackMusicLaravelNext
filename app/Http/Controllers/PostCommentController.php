@@ -3,19 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Events\PostCommentedEvent;
-use App\Models\Post;\PostCommentService;
+use App\Models\Post;
+use App\Http\Services\PostCommentService;
 use Illuminate\Http\Request;
 
 class PostCommentController extends Controller
 {
+    public function __construct(protected PostCommentService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(PostCommentService $service)
+    public function index()
     {
-        return $service->index();
+        return $this->service->index();
     }
 
     /**
@@ -24,13 +30,13 @@ class PostCommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, PostCommentService $service)
+    public function store(Request $request)
     {
         $this->validate($request, [
             'text' => 'required',
         ]);
 
-        $response = $service->store($request);
+        $response = $this->service->store($request);
 
         // Dispatch Event
         // Get post
@@ -47,9 +53,9 @@ class PostCommentController extends Controller
      * @param  \App\Models\PostComment  $postComment
      * @return \Illuminate\Http\Response
      */
-    public function show($id, PostCommentService $service)
+    public function show($id)
     {
-        return $service->show($id);
+        return $this->service->show($id);
     }
 
     /**
@@ -70,8 +76,8 @@ class PostCommentController extends Controller
      * @param  \App\Models\PostComment  $postComment
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, PostCommentService $service)
+    public function destroy($id)
     {
-        return $service->destroy($id);
+        return $this->service->destroy($id);
     }
 }

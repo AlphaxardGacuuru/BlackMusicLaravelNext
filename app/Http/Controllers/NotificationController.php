@@ -2,19 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services;\NotificationService;
+use App\Http\Services\NotificationService;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
+    public function __construct(protected NotificationService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(NotificationService $service)
+    public function index()
     {
-        return $service->index();
+        return $this->service->index();
     }
 
     /**
@@ -46,9 +51,9 @@ class NotificationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, NotificationService $service)
+    public function update(Request $request, $id)
     {
-        return $service->update($request, $id);
+        return $this->service->update($request, $id);
     }
 
     /**
@@ -57,8 +62,8 @@ class NotificationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, NotificationService $service)
+    public function destroy($id)
     {
-        return $service->destroy($id);
+        return $this->service->destroy($id);
     }
 }

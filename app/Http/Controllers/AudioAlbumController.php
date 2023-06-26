@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AudioAlbum;\AudioAlbumService;
+use App\Models\AudioAlbum;
+use App\Http\Services\AudioAlbumService;
 use Illuminate\Http\Request;
 
 class AudioAlbumController extends Controller
 {
+    public function __construct(protected AudioAlbumService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(AudioAlbumService $service)
+    public function index()
     {
-        return $service->index();
+        return $this->service->index();
     }
 
     /**
@@ -23,7 +29,7 @@ class AudioAlbumController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, AudioAlbumService $service)
+    public function store(Request $request)
     {
         $this->validate($request, [
             'name' => 'required|string',
@@ -31,7 +37,7 @@ class AudioAlbumController extends Controller
             'cover' => 'required|image|max:1999',
         ]);
 
-        return $service->store($request);
+        return $this->service->store($request);
     }
 
     /**
@@ -40,9 +46,9 @@ class AudioAlbumController extends Controller
      * @param  \App\Models\AudioAlbum  $audioAlbum
      * @return \Illuminate\Http\Response
      */
-    public function show($id, AudioAlbumService $service)
+    public function show($id)
     {
-        return $service->show($id);
+        return $this->service->show($id);
     }
 
     /**
@@ -52,13 +58,13 @@ class AudioAlbumController extends Controller
      * @param  \App\Models\AudioAlbum  $audioAlbum
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, AudioAlbumService $service)
+    public function update(Request $request, $id)
     {
         $this->validate($request, [
             'cover' => 'nullable|image|max:1999',
         ]);
 
-        return $service->update($request, $id);
+        return $this->service->update($request, $id);
     }
 
     /**
@@ -72,10 +78,10 @@ class AudioAlbumController extends Controller
         //
     }
 
-    /*
-     * Artist's Audio Albums */
-    public function artistAudioAlbums($username, AudioAlbumService $service)
-    {
-        return $service->artistAudioAlbums($username);
-    }
+	/*
+	* Artist's Audio Albums */
+	public function artistAudioAlbums($username)
+	{
+		return $this->service->artistAudioAlbums($username);
+	} 
 }

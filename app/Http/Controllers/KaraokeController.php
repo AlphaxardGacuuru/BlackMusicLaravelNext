@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Karaoke;\KaraokeService;
+use App\Models\Karaoke;
+use App\Http\Services\KaraokeService;
 use Illuminate\Http\Request;
 
 class KaraokeController extends Controller
 {
+    public function __construct(protected KaraokeService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(KaraokeService $service)
+    public function index()
     {
-        return $service->index();
+        return $this->service->index();
     }
 
     /**
@@ -23,7 +29,7 @@ class KaraokeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, KaraokeService $service)
+    public function store(Request $request)
     {
         // Handle form for audio
         $this->validate($request, [
@@ -32,7 +38,7 @@ class KaraokeController extends Controller
             "description" => "required|string",
         ]);
 
-        return $service->store($request);
+        return $this->service->store($request);
     }
 
     /**
@@ -41,9 +47,9 @@ class KaraokeController extends Controller
      * @param  \App\Models\Karaoke  $karaoke
      * @return \Illuminate\Http\Response
      */
-    public function show($id, KaraokeService $service)
+    public function show($id)
     {
-        return $service->show($id);
+        return $this->service->show($id);
     }
 
     /**

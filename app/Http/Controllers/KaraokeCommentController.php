@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\KaraokeComment;\KaraokeCommentService;
+use App\Models\KaraokeComment;
+use App\Http\Services\KaraokeCommentService;
 use Illuminate\Http\Request;
 
 class KaraokeCommentController extends Controller
 {
+    public function __construct(protected KaraokeCommentService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(KaraokeCommentService $service)
+    public function index()
     {
-        return $service->index();
+        return $this->service->index();
     }
 
     /**
@@ -23,13 +29,13 @@ class KaraokeCommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, KaraokeCommentService $service)
+    public function store(Request $request)
     {
         $this->validate($request, [
             'text' => 'required',
         ]);
 
-        return $service->store($request);
+        return $this->service->store($request);
     }
 
     /**
@@ -38,9 +44,9 @@ class KaraokeCommentController extends Controller
      * @param  \App\Models\KaraokeComment  $karaokeComment
      * @return \Illuminate\Http\Response
      */
-    public function show($id, KaraokeCommentService $service)
+    public function show($id)
     {
-        return $service->show($id);
+        return $this->service->show($id);
     }
 
     /**
@@ -61,8 +67,8 @@ class KaraokeCommentController extends Controller
      * @param  \App\Models\KaraokeComment  $karaokeComment
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, KaraokeCommentService $service)
+    public function destroy($id)
     {
-        return $service->destroy($id);
+        return $this->service->destroy($id);
     }
 }

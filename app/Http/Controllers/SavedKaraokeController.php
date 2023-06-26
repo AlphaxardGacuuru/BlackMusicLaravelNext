@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SavedKaraoke;\SavedKaraokeService;
+use App\Models\SavedKaraoke;
+use App\Http\Services\SavedKaraokeService;
 use Illuminate\Http\Request;
 
 class SavedKaraokeController extends Controller
 {
+    public function __construct(protected SavedKaraokeService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(SavedKaraokeService $savedKaraokeService)
+    public function index()
     {
-        return $savedKaraokeService->index();
+        return $this->service->index();
     }
 
     /**
@@ -23,14 +29,14 @@ class SavedKaraokeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, SavedKaraokeService $savedKaraokeService)
+    public function store(Request $request)
     {
         // Handle form for karaoke
         $this->validate($request, [
             'id' => 'required|integer',
         ]);
 
-        return $savedKaraokeService->store($request);
+        return $this->service->store($request);
     }
 
     /**

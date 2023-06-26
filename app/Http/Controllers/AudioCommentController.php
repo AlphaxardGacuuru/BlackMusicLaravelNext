@@ -4,19 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Events\AudioCommentedEvent;
 use App\Models\Audio;
-use App\Models\AudioComment;\AudioCommentService;
+use App\Models\AudioComment;
+use App\Http\Services\AudioCommentService;
 use Illuminate\Http\Request;
 
 class AudioCommentController extends Controller
 {
+    public function __construct(protected AudioCommentService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(AudioCommentService $service)
+    public function index()
     {
-        return $service->index();
+        return $this->service->index();
     }
 
     /**
@@ -25,13 +31,13 @@ class AudioCommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, AudioCommentService $service)
+    public function store(Request $request)
     {
         $this->validate($request, [
             'text' => 'required',
         ]);
 
-        $saved = $service->store($request);
+        $saved = $this->service->store($request);
 
         $audio = Audio::find($request->input("id"));
 
@@ -46,9 +52,9 @@ class AudioCommentController extends Controller
      * @param  \App\Models\AudioComment  $audioComment
      * @return \Illuminate\Http\Response
      */
-    public function show($id, AudioCommentService $service)
+    public function show($id)
     {
-        return $service->show($id);
+        return $this->service->show($id);
     }
 
     /**
@@ -69,8 +75,8 @@ class AudioCommentController extends Controller
      * @param  \App\Models\AudioComment  $audioComment
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, AudioCommentService $service)
+    public function destroy($id)
     {
-        return $service->destroy($id);
+        return $this->service->destroy($id);
     }
 }

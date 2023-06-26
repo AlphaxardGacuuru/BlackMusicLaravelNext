@@ -2,19 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Video;\VideoService;
+use App\Models\Video;
+use App\Http\Services\VideoService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class VideoController extends Controller
 {
+    public function __construct(protected VideoService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(VideoService $videoService)
+    public function index()
     {
-        return $videoService->index();
+        return $this->service->index();
     }
 
     /**
@@ -23,7 +30,7 @@ class VideoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, VideoService $videoService)
+    public function store(Request $request)
     {
         // Handle form for video
         $this->validate($request, [
@@ -33,7 +40,7 @@ class VideoController extends Controller
             'ft' => 'nullable|exists:users,username',
         ]);
 
-        $response = $videoService->store($request);
+        $response = $this->service->store($request);
 
         // VideoUploadedEvent::dispatchIf($response["saved"], $response["video"]);
 
@@ -46,9 +53,9 @@ class VideoController extends Controller
      * @param  \App\Models\Video  $video
      * @return \Illuminate\Http\Response
      */
-    public function show($id, VideoService $videoService)
+    public function show($id)
     {
-        return $videoService->show($id);
+        return $this->service->show($id);
     }
 
     /**
@@ -58,14 +65,14 @@ class VideoController extends Controller
      * @param  \App\Models\Video  $video
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, VideoService $videoService)
+    public function update(Request $request, $id)
     {
         $this->validate($request, [
             'name' => 'nullable|string',
             'ft' => 'nullable|exists:users,username',
         ]);
 
-        return $videoService->update($request, $id);
+        return $this->service->update($request, $id);
     }
 
     /**
@@ -95,18 +102,18 @@ class VideoController extends Controller
 
     public function topDownloaded(VideoService $service)
     {
-        return $service->topDownloaded();
+		return $service->topDownloaded();
     }
 
     public function topLiked(VideoService $service)
     {
-        return $service->topLiked();
+		return $service->topLiked();
     }
 
-    /*
-     * Artist's Videos */
-    public function artistVideos($username, VideoService $service)
-    {
-        return $service->artistVideos($username);
-    }
+	/*
+	* Artist's Videos */
+	public function artistVideos($username, VideoService $service)
+	{
+		return $service->artistVideos($username);
+	} 
 }

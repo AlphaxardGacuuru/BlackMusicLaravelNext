@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kopokopo;\KopokopoService;
+use App\Models\Kopokopo;
+use App\Http\Services\KopokopoService;
 use Illuminate\Http\Request;
 
 class KopokopoController extends Controller
 {
+    public function __construct(protected KopokopoService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(KopokopoService $service)
+    public function index()
     {
-        return $service->index();
+        return $this->service->index();
     }
 
     /**
@@ -23,9 +29,9 @@ class KopokopoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, KopokopoService $service)
+    public function store(Request $request)
     {
-        return $service->store($request);
+        return $this->service->store($request);
     }
 
     /**
@@ -69,8 +75,8 @@ class KopokopoController extends Controller
      * @param  \App\Kopokopo  $kopokopo
      * @return \Illuminate\Http\Response
      */
-    public function stkPush(Request $request, KopokopoService $service)
+    public function stkPush(Request $request)
     {
-        return $service->stkPush($request);
+        return $this->service->stkPush($request);
     }
 }

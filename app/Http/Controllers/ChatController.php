@@ -5,19 +5,25 @@ namespace App\Http\Controllers;
 use App\Events\ChatDeletedEvent;
 use App\Events\NewChatEvent;
 use App\Models\Chat;
-use App\Models\User;\ChatService;
+use App\Models\User;
+use App\Http\Services\ChatService;
 use Illuminate\Http\Request;
 
 class ChatController extends Controller
 {
+    public function __construct(protected ChatService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(ChatService $chartService)
+    public function index()
     {
-        return $chartService->index();
+        return $this->service->index();
     }
 
     /**
@@ -26,13 +32,13 @@ class ChatController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, ChatService $service)
+    public function store(Request $request)
     {
         $this->validate($request, [
             'text' => 'required',
         ]);
 
-        $response = $service->store($request);
+        $response = $this->service->store($request);
 
         $user = User::where("username", $request->input("to"))->get()->first();
 
@@ -47,9 +53,9 @@ class ChatController extends Controller
      * @param  \App\Models\Chat  $chat
      * @return \Illuminate\Http\Response
      */
-    public function show($username, ChatService $service)
+    public function show($username)
     {
-        return $service->show($username);
+        return $this->service->show($username);
     }
 
     /**
@@ -70,11 +76,11 @@ class ChatController extends Controller
      * @param  \App\Models\Chat  $chat
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, ChatService $service)
+    public function destroy($id)
     {
-        $response = $service->destroy($id);
+        $response = $this->service->destroy($id);
 
-        ChatDeletedEvent::dispatchIf($response, $id);
+		ChatDeletedEvent::dispatchIf($response, $id);
 
         return response("Chat deleted", 200);
     }

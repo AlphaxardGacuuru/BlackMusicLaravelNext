@@ -3,19 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Events\VideoBoughtEvent;
-use App\Models\BoughtVideo;\BoughtVideoService;
+use App\Models\BoughtVideo;
+use App\Http\Services\BoughtVideoService;
 use Illuminate\Http\Request;
 
 class BoughtVideoController extends Controller
 {
+    public function __construct(protected BoughtVideoService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(BoughtVideoService $service)
+    public function index()
     {
-        return $service->index();
+        return $this->service->index();
     }
 
     /**
@@ -24,9 +30,9 @@ class BoughtVideoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, BoughtVideoService $service)
+    public function store(Request $request)
     {
-        $response = $service->store($request);
+        $response = $this->service->store($request);
 
         $hasBought = count($response[0]) > 0;
 
@@ -69,10 +75,10 @@ class BoughtVideoController extends Controller
         //
     }
 
-    /*
-     * Artist's Bought Videos */
-    public function artistBoughtVideos($username, BoughtVideoService $service)
-    {
-        return $service->artistBoughtVideos($username);
-    }
+	/*
+	* Artist's Bought Videos */
+	public function artistBoughtVideos($username)
+	{
+		return $this->service->artistBoughtVideos($username);
+	} 
 }

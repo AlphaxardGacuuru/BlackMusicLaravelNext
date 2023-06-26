@@ -3,19 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Events\PostedEvent;
-use App\Models\Post;\PostService;
+use App\Models\Post;
+use App\Http\Services\PostService;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    public function __construct(protected PostService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(PostService $postService)
+    public function index()
     {
-        return $postService->index();
+        return $this->service->index();
     }
 
     /**
@@ -24,16 +30,16 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, PostService $postService)
+    public function store(Request $request)
     {
         $this->validate($request, [
             'text' => 'required',
         ]);
 
-        [$saved, $post] = $postService->store($request);
+        [$saved, $post] = $this->service->store($request);
 
-        // Dispatch event
-        PostedEvent::dispatchIf($saved, $post);
+		// Dispatch event
+		PostedEvent::dispatchIf($saved, $post);
 
         return response('Post Created', 200);
     }
@@ -44,9 +50,9 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function show($id, PostService $service)
+    public function show($id)
     {
-        return $service->show($id);
+        return $this->service->show($id);
     }
 
     /**
@@ -56,9 +62,9 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, PostService $postService)
+    public function update(Request $request, $id)
     {
-        return $postService->update($request, $id);
+        return $this->service->update($request, $id);
     }
 
     /**
@@ -67,22 +73,22 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, PostService $postService)
+    public function destroy($id)
     {
-        return $postService->destory($id);
+        return $this->service->destory($id);
     }
 
-    /*
-     * Mute */
-    public function mute($username, PostService $postService)
-    {
-        return $postService->mute($username);
-    }
+	/*
+	* Mute */
+	public function mute($username)
+	{
+		return $this->service->mute($username);
+	} 
 
     /*
      * Artist's Posts */
-    public function artistPosts($username, PostService $service)
+    public function artistPosts($username)
     {
-        return $service->artistPosts($username);
+        return $this->service->artistPosts($username);
     }
 }

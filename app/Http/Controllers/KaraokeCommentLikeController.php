@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\KaraokeCommentLike;\KaraokeCommentLikeService;
+use App\Models\KaraokeCommentLike;
+use App\Http\Services\KaraokeCommentLikeService;
 use Illuminate\Http\Request;
 
 class KaraokeCommentLikeController extends Controller
 {
+    public function __construct(protected KaraokeCommentLikeService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -23,9 +29,9 @@ class KaraokeCommentLikeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, KaraokeCommentLikeService $service)
+    public function store(Request $request)
     {
-        return $service->store($request);
+        return $this->service->store($request);
     }
 
     /**

@@ -4,19 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Events\VideoCommentedEvent;
 use App\Models\Video;
-use App\Models\VideoComment;\VideoCommentService;
+use App\Models\VideoComment;
+use App\Http\Services\VideoCommentService;
 use Illuminate\Http\Request;
 
 class VideoCommentController extends Controller
 {
+    public function __construct(protected VideoCommentService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(VideoCommentService $videoCommentService)
+    public function index()
     {
-        return $videoCommentService->index();
+        return $this->service->index();
     }
 
     /**
@@ -25,13 +31,13 @@ class VideoCommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, VideoCommentService $videoCommentService)
+    public function store(Request $request)
     {
         $this->validate($request, [
             'text' => 'required',
         ]);
 
-        $saved = $videoCommentService->store($request);
+        $saved = $this->service->store($request);
 
         $video = Video::find($request->input("id"));
 
@@ -46,9 +52,9 @@ class VideoCommentController extends Controller
      * @param  \App\Models\VideoComment  $videoComment
      * @return \Illuminate\Http\Response
      */
-    public function show($id, VideoCommentService $videoCommentService)
+    public function show($id)
     {
-        return $videoCommentService->show($id);
+        return $this->service->show($id);
     }
 
     /**
@@ -69,8 +75,8 @@ class VideoCommentController extends Controller
      * @param  \App\Models\VideoComment  $videoComment
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, VideoCommentService $videoCommentService)
+    public function destroy($id)
     {
-        return $videoCommentService->destroy($id);
+        return $this->service->destroy($id);
     }
 }

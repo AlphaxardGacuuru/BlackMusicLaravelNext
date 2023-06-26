@@ -4,11 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Events\PostLikedEvent;
 use App\Models\Post;
-use App\Models\PostLike;\PostLikeService;
+use App\Models\PostLike;
+use App\Http\Services\PostLikeService;
 use Illuminate\Http\Request;
 
 class PostLikeController extends Controller
 {
+    public function __construct(protected PostLikeService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,9 +31,9 @@ class PostLikeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, PostLikeService $service)
+    public function store(Request $request)
     {
-        $result = $service->store($request);
+        $result = $this->service->store($request);
 
         // Dispatch Event
         // Get post

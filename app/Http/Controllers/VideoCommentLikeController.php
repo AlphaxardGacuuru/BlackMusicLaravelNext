@@ -4,11 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Events\VideoCommentLikedEvent;
 use App\Models\VideoComment;
-use App\Models\VideoCommentLike;\VideoCommentLikeService;
+use App\Models\VideoCommentLike;
+use App\Http\Services\VideoCommentLikeService;
 use Illuminate\Http\Request;
 
 class VideoCommentLikeController extends Controller
 {
+    public function __construct(protected VideoCommentLikeService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,9 +31,9 @@ class VideoCommentLikeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, VideoCommentLikeService $videoCommentLikeService)
+    public function store(Request $request)
     {
-        $result = $videoCommentLikeService->store($request);
+        $result = $this->service->store($request);
 
         $comment = VideoComment::find($request->input("comment"));
 

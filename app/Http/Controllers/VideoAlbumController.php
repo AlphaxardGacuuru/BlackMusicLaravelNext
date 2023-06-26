@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\VideoAlbum;\VideoAlbumService;
+use App\Models\VideoAlbum;
+use App\Http\Services\VideoAlbumService;
 use Illuminate\Http\Request;
 
 class VideoAlbumController extends Controller
 {
+    public function __construct(protected VideoAlbumService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(VideoAlbumService $videoAlbumService)
+    public function index()
     {
-        return $videoAlbumService->index();
+        return $this->service->index();
     }
 
     /**
@@ -23,13 +29,13 @@ class VideoAlbumController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, VideoAlbumService $videoAlbumService)
+    public function store(Request $request)
     {
         $this->validate($request, [
             'cover' => 'required|image|max:1999',
         ]);
 
-        return $videoAlbumService->store($request);
+        return $this->service->store($request);
     }
 
     /**
@@ -38,9 +44,9 @@ class VideoAlbumController extends Controller
      * @param  \App\Models\VideoAlbum  $videoAlbum
      * @return \Illuminate\Http\Response
      */
-    public function show($id, VideoAlbumService $videoAlbumService)
+    public function show($id)
     {
-        return $videoAlbumService->show($id);
+        return $this->service->show($id);
     }
 
     /**
@@ -50,13 +56,13 @@ class VideoAlbumController extends Controller
      * @param  \App\Models\VideoAlbum  $videoAlbum
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, VideoAlbumService $videoAlbumService)
+    public function update(Request $request, $id)
     {
         $this->validate($request, [
             'cover' => 'nullable|image|max:1999',
         ]);
 
-        return $videoAlbumService->update($request, $id);
+        return $this->service->update($request, $id);
     }
 
     /**
@@ -70,10 +76,10 @@ class VideoAlbumController extends Controller
         //
     }
 
-    /*
-     * Artist's Video Albums */
-    public function artistVideoAlbums($username, VideoAlbumService $service)
-    {
-        return $service->artistVideoAlbums($username);
-    }
+	/*
+	* Artist's Video Albums */
+	public function artistVideoAlbums($username, VideoAlbumService $service)
+	{
+		return $service->artistVideoAlbums($username);
+	} 
 }

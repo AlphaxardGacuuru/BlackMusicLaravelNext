@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CartAudio;\CartAudioService;
+use App\Models\CartAudio;
+use App\Http\Services\CartAudioService;
 use Illuminate\Http\Request;
 
 class CartAudioController extends Controller
 {
+    public function __construct(protected CartAudioService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(CartAudioService $service)
+    public function index()
     {
-        return $service->index();
+        return $this->service->index();
     }
 
     /**
@@ -23,9 +29,9 @@ class CartAudioController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, CartAudioService $service)
+    public function store(Request $request)
     {
-        return $service->store($request);
+        return $this->service->store($request);
     }
 
     /**

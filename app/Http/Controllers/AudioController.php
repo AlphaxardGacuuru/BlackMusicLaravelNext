@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Audio;\AudioService;
+use App\Models\Audio;
+use App\Http\Services\AudioService;
 use Illuminate\Http\Request;
 
 class AudioController extends Controller
 {
+    public function __construct(protected AudioService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(AudioService $service)
+    public function index()
     {
-        return $service->index();
+        return $this->service->index();
     }
 
     /**
@@ -23,7 +29,7 @@ class AudioController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, AudioService $service)
+    public function store(Request $request)
     {
         // Handle form for audio
         $this->validate($request, [
@@ -33,7 +39,7 @@ class AudioController extends Controller
             'ft' => 'nullable|exists:users,username',
         ]);
 
-        return $service->store($request);
+        return $this->service->store($request);
     }
 
     /**
@@ -42,9 +48,9 @@ class AudioController extends Controller
      * @param  \App\Models\Audio  $audio
      * @return \Illuminate\Http\Response
      */
-    public function show($id, AudioService $service)
+    public function show($id)
     {
-        return $service->show($id);
+        return $this->service->show($id);
     }
 
     /**
@@ -54,14 +60,14 @@ class AudioController extends Controller
      * @param  \App\Models\Audio  $audio
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, AudioService $service)
+    public function update(Request $request, $id)
     {
         $this->validate($request, [
             'name' => 'nullable|string',
             'ft' => 'nullable|exists:users,username',
         ]);
 
-        return $service->update($request, $id);
+        return $this->service->update($request, $id);
     }
 
     /**
@@ -79,30 +85,30 @@ class AudioController extends Controller
      * Display a listing of the charts.
      *
      */
-    public function newlyReleased(AudioService $service)
+    public function newlyReleased()
     {
-        return $service->newlyReleased();
+        return $this->service->newlyReleased();
     }
 
-    public function trending(AudioService $service)
+    public function trending()
     {
-        return $service->trending();
+        return $this->service->trending();
     }
 
-    public function topDownloaded(AudioService $service)
+    public function topDownloaded()
     {
-        return $service->topDownloaded();
+		return $this->service->topDownloaded();
     }
 
-    public function topLiked(AudioService $service)
+    public function topLiked()
     {
-        return $service->topLiked();
+		return $this->service->topLiked();
     }
 
-    /*
-     * Artist's Audios */
-    public function artistAudios($username, AudioService $service)
-    {
-        return $service->artistAudios($username);
-    }
+	/*
+	* Artist's Audios */
+	public function artistAudios($username)
+	{
+		return $this->service->artistAudios($username);
+	} 
 }

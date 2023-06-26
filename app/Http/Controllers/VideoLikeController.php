@@ -4,11 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Events\VideoLikedEvent;
 use App\Models\Video;
-use App\Models\VideoLike;\VideoLikeService;
+use App\Models\VideoLike;
+use App\Http\Services\VideoLikeService;
 use Illuminate\Http\Request;
 
 class VideoLikeController extends Controller
 {
+    public function __construct(protected VideoLikeService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,9 +31,9 @@ class VideoLikeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, VideoLikeService $videoLikeService)
+    public function store(Request $request)
     {
-        $result = $videoLikeService->store($request);
+        $result = $this->service->store($request);
 
         $video = Video::find($request->input("video"));
 

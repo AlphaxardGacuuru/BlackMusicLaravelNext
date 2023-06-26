@@ -4,11 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Events\AudioLikedEvent;
 use App\Models\Audio;
-use App\Models\AudioLike;\AudioLikeService;
+use App\Models\AudioLike;
+use App\Http\Services\AudioLikeService;
 use Illuminate\Http\Request;
 
 class AudioLikeController extends Controller
 {
+    public function __construct(protected AudioLikeService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,9 +31,9 @@ class AudioLikeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, AudioLikeService $service)
+    public function store(Request $request)
     {
-        $result = $service->store($request);
+        $result = $this->service->store($request);
 
         $audio = Audio::find($request->input("audio"));
 

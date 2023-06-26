@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Search;\SearchService;
+use App\Models\Search;
+use App\Http\Services\SearchService;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
+    public function __construct(protected SearchService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(SearchService $searchService)
+    public function index()
     {
-        return $searchService->index();
+        return $this->service->index();
     }
 
     /**
@@ -23,9 +29,9 @@ class SearchController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, SearchService $searchService)
+    public function store(Request $request)
     {
-        return $searchService->store($request);
+        return $this->service->store($request);
     }
 
     /**
@@ -57,8 +63,8 @@ class SearchController extends Controller
      * @param  \App\Models\Search  $search
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, SearchService $searchService)
+    public function destroy($id)
     {
-        return $searchService->destroy($id);
+        return $this->service->destroy($id);
     }
 }

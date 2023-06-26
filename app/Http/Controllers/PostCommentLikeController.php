@@ -5,11 +5,17 @@ namespace App\Http\Controllers;
 use App\Events\PostCommentLikedEvent;
 use App\Models\Post;
 use App\Models\PostComment;
-use App\Models\PostCommentLike;\PostCommentLikeService;
+use App\Models\PostCommentLike;
+use App\Http\Services\PostCommentLikeService;
 use Illuminate\Http\Request;
 
 class PostCommentLikeController extends Controller
 {
+    public function __construct(protected PostCommentLikeService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -26,9 +32,9 @@ class PostCommentLikeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, PostCommentLikeService $service)
+    public function store(Request $request)
     {
-        $result = $service->store($request);
+        $result = $this->service->store($request);
 
         // Dispatch
         $comment = PostComment::findOrFail($request->input("comment"));

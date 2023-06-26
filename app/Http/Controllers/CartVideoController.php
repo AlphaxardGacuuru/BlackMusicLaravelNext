@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CartVideo;\CartVideoService;
+use App\Models\CartVideo;
+use App\Http\Services\CartVideoService;
 use Illuminate\Http\Request;
 
 class CartVideoController extends Controller
 {
+    public function __construct(protected CartVideoService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(CartVideoService $service)
+    public function index()
     {
-        return $service->index();
+        return $this->service->index();
     }
 
     /**
@@ -23,9 +29,9 @@ class CartVideoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, CartVideoService $service)
+    public function store(Request $request)
     {
-        return $service->store($request);
+        return $this->service->store($request);
     }
 
     /**

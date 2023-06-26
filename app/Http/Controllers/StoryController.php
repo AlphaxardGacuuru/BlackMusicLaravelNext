@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Events\StoryCreatedEvent;
-use App\Models\Story;\StoryService;
+use App\Models\Story;
+use App\Http\Services\StoryService;
 use Illuminate\Http\Request;
 
 class StoryController extends Controller

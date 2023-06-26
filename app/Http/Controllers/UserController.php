@@ -2,20 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services;\UserService;
+use App\Http\Services\UserService;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    public function __construct(protected UserService $service)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(UserService $userService)
+    public function index()
     {
-        return $userService->index();
+        return $this->service->index();
     }
 
     /**
@@ -35,9 +40,9 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show($username, UserService $userService)
+    public function show($username)
     {
-        return $userService->show($username);
+        return $this->service->show($username);
     }
 
     /**
@@ -47,7 +52,7 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, UserService $userService)
+    public function update(Request $request, $id)
     {
         $this->validate($request, [
             'name' => 'string|nullable|max:20',
@@ -57,7 +62,7 @@ class UserController extends Controller
             'withdrawal' => 'string|nullable',
         ]);
 
-        return $userService->update($request, $id);
+        return $this->service->update($request, $id);
     }
 
     /**
@@ -77,8 +82,8 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function auth(UserService $userService)
+    public function auth()
     {
-        return $userService->auth();
+        return $this->service->auth();
     }
 }

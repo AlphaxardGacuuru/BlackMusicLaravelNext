@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Audio;
-use App\Services\AudioService;
+use App\Models\Audio;\AudioService;
 use Illuminate\Http\Request;
 
 class AudioController extends Controller
@@ -92,18 +91,18 @@ class AudioController extends Controller
 
     public function topDownloaded(AudioService $service)
     {
-		return $service->topDownloaded();
+        return $service->topDownloaded();
     }
 
     public function topLiked(AudioService $service)
     {
-		return $service->topLiked();
+        return $service->topLiked();
     }
 
-	/*
-	* Artist's Audios */
-	public function artistAudios($username, AudioService $service)
-	{
-		return $service->artistAudios($username);
-	} 
+    /*
+     * Artist's Audios */
+    public function artistAudios($username, AudioService $service)
+    {
+        return $service->artistAudios($username);
+    }
 }

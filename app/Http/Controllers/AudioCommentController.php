@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\AudioCommentedEvent;
 use App\Models\Audio;
-use App\Models\AudioComment;
-use App\Services\AudioCommentService;
+use App\Models\AudioComment;\AudioCommentService;
 use Illuminate\Http\Request;
 
 class AudioCommentController extends Controller

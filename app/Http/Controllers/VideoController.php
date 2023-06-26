@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Video;
-use App\Services\VideoService;
+use App\Models\Video;\VideoService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class VideoController extends Controller
 {
@@ -97,18 +95,18 @@ class VideoController extends Controller
 
     public function topDownloaded(VideoService $service)
     {
-		return $service->topDownloaded();
+        return $service->topDownloaded();
     }
 
     public function topLiked(VideoService $service)
     {
-		return $service->topLiked();
+        return $service->topLiked();
     }
 
-	/*
-	* Artist's Videos */
-	public function artistVideos($username, VideoService $service)
-	{
-		return $service->artistVideos($username);
-	} 
+    /*
+     * Artist's Videos */
+    public function artistVideos($username, VideoService $service)
+    {
+        return $service->artistVideos($username);
+    }
 }

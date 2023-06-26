@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\VideoLikedEvent;
 use App\Models\Video;
-use App\Models\VideoLike;
-use App\Services\VideoLikeService;
+use App\Models\VideoLike;\VideoLikeService;
 use Illuminate\Http\Request;
 
 class VideoLikeController extends Controller

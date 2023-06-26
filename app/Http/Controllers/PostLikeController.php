@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\PostLikedEvent;
 use App\Models\Post;
-use App\Models\PostLike;
-use App\Services\PostLikeService;
+use App\Models\PostLike;\PostLikeService;
 use Illuminate\Http\Request;
 
 class PostLikeController extends Controller

@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\AudioLikedEvent;
 use App\Models\Audio;
-use App\Models\AudioLike;
-use App\Services\AudioLikeService;
+use App\Models\AudioLike;\AudioLikeService;
 use Illuminate\Http\Request;
 
 class AudioLikeController extends Controller

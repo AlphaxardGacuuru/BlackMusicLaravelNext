@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\AudioBoughtEvent;
-use App\Models\BoughtAudio;
-use App\Services\BoughtAudioService;
+use App\Models\BoughtAudio;\BoughtAudioService;
 use Illuminate\Http\Request;
 
 class BoughtAudioController extends Controller
@@ -70,10 +69,10 @@ class BoughtAudioController extends Controller
         //
     }
 
-	/*
-	* Artist's Bought Audios */
-	public function artistBoughtAudios($username, BoughtAudioService $service)
-	{
-		return $service->artistBoughtAudios($username);
-	} 
+    /*
+     * Artist's Bought Audios */
+    public function artistBoughtAudios($username, BoughtAudioService $service)
+    {
+        return $service->artistBoughtAudios($username);
+    }
 }

@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\PostCommentedEvent;
-use App\Models\Post;
-use App\Services\PostCommentService;
+use App\Models\Post;\PostCommentService;
 use Illuminate\Http\Request;
 
 class PostCommentController extends Controller

@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\FollowedEvent;
 use App\Models\Follow;
-use App\Models\User;
-use App\Services\FollowService;
+use App\Models\User;\FollowService;
 use Illuminate\Http\Request;
 
 class FollowController extends Controller

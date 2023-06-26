@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CartVideo;
-use App\Services\CartVideoService;
+use App\Models\CartVideo;\CartVideoService;
 use Illuminate\Http\Request;
 
 class CartVideoController extends Controller

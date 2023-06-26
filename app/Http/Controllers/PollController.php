@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Poll;
-use App\Services\PollService;
+use App\Models\Poll;\PollService;
 use Illuminate\Http\Request;
 
 class PollController extends Controller

@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kopokopo;
-use App\Services\KopokopoService;
+use App\Models\Kopokopo;\KopokopoService;
 use Illuminate\Http\Request;
 
 class KopokopoController extends Controller

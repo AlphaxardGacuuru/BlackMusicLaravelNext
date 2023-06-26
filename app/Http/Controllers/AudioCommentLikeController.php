@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\AudioCommentLikedEvent;
 use App\Models\Audio;
 use App\Models\AudioComment;
-use App\Models\AudioCommentLike;
-use App\Services\AudioCommentLikeService;
+use App\Models\AudioCommentLike;\AudioCommentLikeService;
 use Illuminate\Http\Request;
 
 class AudioCommentLikeController extends Controller

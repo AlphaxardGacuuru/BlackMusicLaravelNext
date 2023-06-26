@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AudioAlbum;
-use App\Services\AudioAlbumService;
+use App\Models\AudioAlbum;\AudioAlbumService;
 use Illuminate\Http\Request;
 
 class AudioAlbumController extends Controller
@@ -73,10 +72,10 @@ class AudioAlbumController extends Controller
         //
     }
 
-	/*
-	* Artist's Audio Albums */
-	public function artistAudioAlbums($username, AudioAlbumService $service)
-	{
-		return $service->artistAudioAlbums($username);
-	} 
+    /*
+     * Artist's Audio Albums */
+    public function artistAudioAlbums($username, AudioAlbumService $service)
+    {
+        return $service->artistAudioAlbums($username);
+    }
 }

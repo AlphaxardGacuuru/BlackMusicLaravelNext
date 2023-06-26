@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\VideoAlbum;
-use App\Services\VideoAlbumService;
+use App\Models\VideoAlbum;\VideoAlbumService;
 use Illuminate\Http\Request;
 
 class VideoAlbumController extends Controller
@@ -71,10 +70,10 @@ class VideoAlbumController extends Controller
         //
     }
 
-	/*
-	* Artist's Video Albums */
-	public function artistVideoAlbums($username, VideoAlbumService $service)
-	{
-		return $service->artistVideoAlbums($username);
-	} 
+    /*
+     * Artist's Video Albums */
+    public function artistVideoAlbums($username, VideoAlbumService $service)
+    {
+        return $service->artistVideoAlbums($username);
+    }
 }

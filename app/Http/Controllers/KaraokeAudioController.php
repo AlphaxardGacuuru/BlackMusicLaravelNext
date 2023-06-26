@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\KaraokeAudio;
-use App\Services\KaraokeAudioService;
+use App\Models\KaraokeAudio;\KaraokeAudioService;
 use Illuminate\Http\Request;
 
 class KaraokeAudioController extends Controller

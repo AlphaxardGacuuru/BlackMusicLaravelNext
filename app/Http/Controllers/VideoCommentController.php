@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\VideoCommentedEvent;
 use App\Models\Video;
-use App\Models\VideoComment;
-use App\Services\VideoCommentService;
+use App\Models\VideoComment;\VideoCommentService;
 use Illuminate\Http\Request;
 
 class VideoCommentController extends Controller

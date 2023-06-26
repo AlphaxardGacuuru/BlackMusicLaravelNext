@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\VideoBoughtEvent;
-use App\Models\BoughtVideo;
-use App\Services\BoughtVideoService;
+use App\Models\BoughtVideo;\BoughtVideoService;
 use Illuminate\Http\Request;
 
 class BoughtVideoController extends Controller
@@ -70,10 +69,10 @@ class BoughtVideoController extends Controller
         //
     }
 
-	/*
-	* Artist's Bought Videos */
-	public function artistBoughtVideos($username, BoughtVideoService $service)
-	{
-		return $service->artistBoughtVideos($username);
-	} 
+    /*
+     * Artist's Bought Videos */
+    public function artistBoughtVideos($username, BoughtVideoService $service)
+    {
+        return $service->artistBoughtVideos($username);
+    }
 }

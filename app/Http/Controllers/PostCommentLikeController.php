@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\PostCommentLikedEvent;
 use App\Models\Post;
 use App\Models\PostComment;
-use App\Models\PostCommentLike;
-use App\Services\PostCommentLikeService;
+use App\Models\PostCommentLike;\PostCommentLikeService;
 use Illuminate\Http\Request;
 
 class PostCommentLikeController extends Controller

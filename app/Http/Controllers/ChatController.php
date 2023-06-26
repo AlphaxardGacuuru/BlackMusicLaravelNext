@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\ChatDeletedEvent;
 use App\Events\NewChatEvent;
 use App\Models\Chat;
-use App\Models\User;
-use App\Services\ChatService;
+use App\Models\User;\ChatService;
 use Illuminate\Http\Request;
 
 class ChatController extends Controller
@@ -75,7 +74,7 @@ class ChatController extends Controller
     {
         $response = $service->destroy($id);
 
-		ChatDeletedEvent::dispatchIf($response, $id);
+        ChatDeletedEvent::dispatchIf($response, $id);
 
         return response("Chat deleted", 200);
     }

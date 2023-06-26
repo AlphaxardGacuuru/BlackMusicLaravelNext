@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\PostedEvent;
-use App\Models\Post;
-use App\Services\PostService;
+use App\Models\Post;\PostService;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -33,8 +32,8 @@ class PostController extends Controller
 
         [$saved, $post] = $postService->store($request);
 
-		// Dispatch event
-		PostedEvent::dispatchIf($saved, $post);
+        // Dispatch event
+        PostedEvent::dispatchIf($saved, $post);
 
         return response('Post Created', 200);
     }
@@ -73,12 +72,12 @@ class PostController extends Controller
         return $postService->destory($id);
     }
 
-	/*
-	* Mute */
-	public function mute($username, PostService $postService)
-	{
-		return $postService->mute($username);
-	} 
+    /*
+     * Mute */
+    public function mute($username, PostService $postService)
+    {
+        return $postService->mute($username);
+    }
 
     /*
      * Artist's Posts */

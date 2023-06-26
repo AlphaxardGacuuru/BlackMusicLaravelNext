@@ -19,21 +19,21 @@ class Post extends Model
     protected function media(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value ? "/storage/" . $value : $value,
+            get:fn($value) => $value ? "/storage/" . $value : $value,
         );
     }
 
     protected function updatedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => Carbon::parse($value)->format('d M Y'),
+            get:fn($value) => Carbon::parse($value)->format('d M Y'),
         );
     }
 
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => Carbon::parse($value)->format('d M Y'),
+            get:fn($value) => Carbon::parse($value)->format('d M Y'),
         );
     }
 
@@ -66,7 +66,8 @@ class Post extends Model
      *    Custom Functions
      */
 
-    // Check if user has voted for various parameters
+    /*
+     * Check if user has voted for various parameters */
     public function hasVoted($post, $username, $parameter)
     {
         return $post->polls
@@ -75,7 +76,8 @@ class Post extends Model
             ->count() > 0 ? true : false;
     }
 
-    // Get votes of each parameter as a percentage
+    /*
+     * Get votes of each parameter as a percentage */
     public function percentage($post, $parameter)
     {
         $countParameter = $post->polls
@@ -89,13 +91,15 @@ class Post extends Model
         return round($percentage, 1);
     }
 
-    // Check if poll is within 24Hrs
+    /*
+     * Check if poll is within 24Hrs */
     public function isWithin24Hrs()
     {
         return $this->created_at > Carbon::now()->subDays(1)->format("d M Y");
     }
 
-    // Check if user has liked post
+    /*
+     * Check if user has liked post */
     public function hasLiked($post, $username)
     {
         return $post->likes
@@ -103,7 +107,8 @@ class Post extends Model
             ->count() > 0 ? true : false;
     }
 
-    // Check if user has followed Musician
+    /*
+     * Check if user has followed Musician */
     public function hasFollowed($post, $username)
     {
         return Follow::where('followed', $post->username)
@@ -111,9 +116,13 @@ class Post extends Model
             ->exists();
     }
 
-    // Check whether the post is edited
-    public function hasEdited($post)
+    /*
+     * Check if user has muted posts from Musician */
+    public function hasMuted($post, $username)
     {
-        return $post->created_at != $post->updated_at ? true : false;
+        return Follow::where('followed', $post->username)
+            ->where('username', $username)
+            ->first()
+            ?->muted["posts"];
     }
 }

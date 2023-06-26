@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import axios from "@/lib/axios"
@@ -8,6 +8,7 @@ import Img from "@/components/Core/Img"
 
 import TrashSVG from "@/svgs/TrashSVG"
 import BackSVG from "@/svgs/BackSVG"
+import SocialMediaInput from "@/components/Core/SocialMediaInput"
 
 const ChatThread = (props) => {
 	const router = useRouter()
@@ -59,23 +60,6 @@ const ChatThread = (props) => {
 		props.get(`chats/${username}`, setChats)
 		// Fetch User
 		username && props.get(`users/${username}`, setUser)
-
-		// Set states
-		setTimeout(() => {
-			props.setTo(username)
-			props.setPlaceholder("Message")
-			props.setText("")
-			props.setShowImage(true)
-			props.setShowPoll(false)
-			props.setShowEmojiPicker(false)
-			props.setShowImagePicker(false)
-			props.setShowPollPicker(false)
-			props.setUrlTo("chats")
-			props.setUrlToTwo()
-			props.setStateToUpdate()
-			props.setStateToUpdateTwo()
-			props.setEditing(false)
-		}, 1000)
 
 		return () => {
 			Echo.leave("chat-created")
@@ -292,6 +276,19 @@ const ChatThread = (props) => {
 				<br />
 				<br className="hidden" />
 				<br className="hidden" />
+				{/* Social Media Input */}
+				<div className="bottomNav">
+					<SocialMediaInput
+						{...props}
+						to={username}
+						placeholder="Message"
+						showImage={true}
+						showPoll={false}
+						urlTo="chats"
+						editing={false}
+					/>
+				</div>
+				{/* Social Media Input End */}
 			</div>
 			<div className="col-sm-4"></div>
 		</div>

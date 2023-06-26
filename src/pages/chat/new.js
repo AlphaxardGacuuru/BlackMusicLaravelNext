@@ -1,8 +1,9 @@
 import Img from '@/components/Core/Img'
+import ssrAxios from '@/lib/ssrAxios'
 import Link from 'next/link'
 import { useState, useRef } from 'react'
 
-const NewChat = (props) => {
+export default function NewChat(props) {
 
 	const [search, setSearch] = useState("!@#$%^&")
 
@@ -109,4 +110,16 @@ const NewChat = (props) => {
 	)
 }
 
-export default NewChat
+// This gets called on every request
+export async function getServerSideProps(context) {
+	var data = {
+		users: [],
+	}
+
+	await ssrAxios
+		.get(`http://localhost:8000/api/users`)
+		.then((res) => (data.users = res.data))
+
+	// Pass data to the page via props
+	return { props: data }
+}

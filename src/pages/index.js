@@ -42,10 +42,10 @@ export default function Home(props) {
 		props.auth?.accountType == "musician" && setShowPostBtn(true)
 
 		// Fetch data
-		props.get("posts", setPosts, "posts")
-		props.get("videos", setVideos, "videos")
-		props.get("users", setUsers, "users")
-		props.get("stories", setStories, "stories")
+		// props.get("posts", setPosts, "posts")
+		// props.get("videos", setVideos, "videos")
+		// props.get("users", setUsers, "users")
+		// props.get("stories", setStories, "stories")
 	}, [props.auth])
 
 	/*
@@ -328,7 +328,7 @@ export async function getServerSideProps(context) {
 	// Fetch Posts
 	await ssrAxios
 		.get(`http://localhost:8000/api/posts`)
-		.then((res) => (data.posts = res.data))
+		.then((res) => (data.posts = res.data.data))
 	await ssrAxios
 		.get(`http://localhost:8000/api/users`)
 		.then((res) => (data.users = res.data))

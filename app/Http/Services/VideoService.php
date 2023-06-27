@@ -55,7 +55,9 @@ class VideoService extends Service
         $video->released = $request->input('released');
         $saved = $video->save();
 
-        return ["saved" => $saved, "video" => $video];
+		$message = "Video " . $video->name . " created";
+
+		return [$saved, $message, $video];
     }
 
     /**
@@ -106,9 +108,11 @@ class VideoService extends Service
             Storage::delete('public/' . $oldVideo);
         }
 
-        $video->save();
+        $saved = $video->save();
 
-        return response('Video Edited', 200);
+		$message = $video->name . " edited";
+
+		return [$saved, $message, $video];
     }
 
     /**

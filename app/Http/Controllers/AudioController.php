@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Audio;
 use App\Http\Services\AudioService;
+use App\Models\Audio;
 use Illuminate\Http\Request;
 
 class AudioController extends Controller
@@ -39,7 +39,12 @@ class AudioController extends Controller
             'ft' => 'nullable|exists:users,username',
         ]);
 
-        return $this->service->store($request);
+        [$saved, $message, $audio] = $this->service->store($request);
+
+        return response([
+            "message" => $message,
+            "data" => $audio,
+        ], 200);
     }
 
     /**
@@ -67,7 +72,12 @@ class AudioController extends Controller
             'ft' => 'nullable|exists:users,username',
         ]);
 
-        return $this->service->update($request, $id);
+        [$saved, $message, $audio] = $this->service->update($request, $id);
+
+        return response([
+            "message" => $message,
+            "data" => $audio,
+        ], 200);
     }
 
     /**
@@ -97,18 +107,18 @@ class AudioController extends Controller
 
     public function topDownloaded()
     {
-		return $this->service->topDownloaded();
+        return $this->service->topDownloaded();
     }
 
     public function topLiked()
     {
-		return $this->service->topLiked();
+        return $this->service->topLiked();
     }
 
-	/*
-	* Artist's Audios */
-	public function artistAudios($username)
-	{
-		return $this->service->artistAudios($username);
-	} 
+    /*
+     * Artist's Audios */
+    public function artistAudios($username)
+    {
+        return $this->service->artistAudios($username);
+    }
 }

@@ -37,13 +37,16 @@ class VideoCommentController extends Controller
             'text' => 'required',
         ]);
 
-        $saved = $this->service->store($request);
+        [$saved, $message, $videoComment] = $this->service->store($request);
 
         $video = Video::find($request->input("id"));
 
         VideoCommentedEvent::dispatchIf($saved, $video);
 
-        return response("Comment saved", 200);
+        return response([
+            "message" => $message,
+            "data" => $videoComment,
+        ], 200);
     }
 
     /**

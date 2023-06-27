@@ -36,7 +36,12 @@ class SavedKaraokeController extends Controller
             'id' => 'required|integer',
         ]);
 
-        return $this->service->store($request);
+        [$saved, $message, $savedKaraoke] = $this->service->store($request);
+
+        return response([
+            "message" => $message,
+            "data" => $savedKaraoke,
+        ], 200);
     }
 
     /**

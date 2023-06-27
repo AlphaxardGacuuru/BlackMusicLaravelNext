@@ -38,13 +38,16 @@ class ChatController extends Controller
             'text' => 'required',
         ]);
 
-        $response = $this->service->store($request);
+        [$saved, $message, $chat] =$this->service->store($request);
 
         $user = User::where("username", $request->input("to"))->get()->first();
 
-        NewChatEvent::dispatchIf($response["saved"], $response["chat"], $user);
+        NewChatEvent::dispatchIf($saved, $chat, $user);
 
-        return response("Message sent", 200);
+        return response([
+            "message" => $message,
+            "data" => $chat,
+        ], 200);
     }
 
     /**

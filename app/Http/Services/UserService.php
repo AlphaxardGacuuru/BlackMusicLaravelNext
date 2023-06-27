@@ -91,9 +91,9 @@ class UserService extends Service
             $user->withdrawal = $request->input('withdrawal');
         }
 
-        $user->save();
+        $saved = $user->save();
 
-        return response("Account updated", 200);
+		return [$saved, "Account updated", $user];
     }
 
     /**

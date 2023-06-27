@@ -15,8 +15,8 @@ class AudioCommentService extends Service
     public function index()
     {
         $getAudioComments = AudioComment::orderBy('id', 'DESC')->get();
-		
-		return AudioCommentResource::collection($getAudioComments);
+
+        return AudioCommentResource::collection($getAudioComments);
     }
 
     /**
@@ -30,8 +30,8 @@ class AudioCommentService extends Service
         $getAudioComments = AudioComment::where("audio_id", $id)
             ->orderBy('id', 'DESC')
             ->get();
-			
-			return new AudioCommentResource($getAudioComments);
+
+        return AudioCommentResource::collection($getAudioComments);
     }
 
     /**
@@ -48,7 +48,9 @@ class AudioCommentService extends Service
         $audioComment->username = auth('sanctum')->user()->username;
         $audioComment->text = $request->input('text');
 
-        return $audioComment->save();
+        $saved = $audioComment->save();
+
+        return [$saved, "Comment posted", $audioComment];
     }
 
     /**
@@ -61,6 +63,6 @@ class AudioCommentService extends Service
     {
         AudioComment::find($id)->delete();
 
-        return response('Comment deleted', 200);
+        return response(["message" => "Comment deleted"], 200);
     }
 }

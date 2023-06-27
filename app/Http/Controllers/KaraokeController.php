@@ -38,7 +38,12 @@ class KaraokeController extends Controller
             "description" => "required|string",
         ]);
 
-        return $this->service->store($request);
+        [$saved, $message, $karaoke] = $this->service->store($request);
+
+        return response([
+            "message" => $message,
+            "data" => $karaoke,
+        ], 200);
     }
 
     /**

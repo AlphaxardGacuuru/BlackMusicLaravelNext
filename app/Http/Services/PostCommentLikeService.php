@@ -26,15 +26,15 @@ class PostCommentLikeService extends Service
             $message = 'Like removed';
             $added = false;
         } else {
-            $postCommentLikes = new PostCommentLike;
-            $postCommentLikes->post_comment_id = $request->input('comment');
-            $postCommentLikes->username = auth('sanctum')->user()->username;
-            $postCommentLikes->save();
+            $postCommentLike = new PostCommentLike;
+            $postCommentLike->post_comment_id = $request->input('comment');
+            $postCommentLike->username = auth('sanctum')->user()->username;
+            $postCommentLike->save();
 
             $message = 'Comment liked';
             $added = true;
         }
 
-        return [$added, $message];
+        return [$added, $message, $postCommentLike];
     }
 }

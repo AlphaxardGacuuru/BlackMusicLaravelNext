@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CartAudio;
 use App\Http\Services\CartAudioService;
+use App\Models\CartAudio;
 use Illuminate\Http\Request;
 
 class CartAudioController extends Controller
@@ -31,7 +31,12 @@ class CartAudioController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->service->store($request);
+        [$saved, $message, $cartAudio] = $this->service->store($request);
+
+        return response([
+            "message" => $message,
+            "data" => $cartAudio,
+        ], 200);
     }
 
     /**

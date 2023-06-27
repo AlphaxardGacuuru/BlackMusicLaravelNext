@@ -39,5 +39,7 @@ class SearchService extends Service
     public function destroy($id)
     {
         Search::find($id)->delete();
+
+		return response(["message" => "Search deleted"], 200);
     }
 }

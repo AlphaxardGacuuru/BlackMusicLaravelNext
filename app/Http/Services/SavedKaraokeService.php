@@ -40,6 +40,7 @@ class SavedKaraokeService extends Service
                 ->delete();
 
             $message = "Karaoke removed";
+			$added = false;
         } else {
             /* Create new karaoke song */
             $savedKaraoke = new SavedKaraoke;
@@ -48,8 +49,9 @@ class SavedKaraokeService extends Service
             $savedKaraoke->save();
 
             $message = "Karaoke saved";
+			$added = true;
         }
 
-        return response($message, 200);
+		return [$added, $message, $savedKaraoke];
     }
 }

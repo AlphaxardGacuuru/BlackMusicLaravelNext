@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\KaraokeCommentLike;
 use App\Http\Services\KaraokeCommentLikeService;
+use App\Models\KaraokeCommentLike;
 use Illuminate\Http\Request;
 
 class KaraokeCommentLikeController extends Controller
@@ -31,7 +31,11 @@ class KaraokeCommentLikeController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->service->store($request);
+        [$saved, $message] = $this->service->store($request);
+
+        return response([
+            "message" => $message,
+        ], 200);
     }
 
     /**

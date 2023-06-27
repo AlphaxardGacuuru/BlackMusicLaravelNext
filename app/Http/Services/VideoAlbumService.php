@@ -43,9 +43,11 @@ class VideoAlbumService extends Service
         $vAlbum->username = auth('sanctum')->user()->username;
         $vAlbum->cover = $vCover;
         $vAlbum->released = $request->input('released');
-        $vAlbum->save();
+        $saved = $vAlbum->save();
 
-        return response('Video Album Created', 200);
+		$message = "Video Album " . $vAlbum->name . " created";
+
+		return [$saved, $message, $vAlbum];
     }
 
     public function update($request, $id)
@@ -78,9 +80,11 @@ class VideoAlbumService extends Service
             $vAlbum->released = $request->input('released');
         }
 
-        $vAlbum->save();
+        $saved = $vAlbum->save();
 
-        return response('Video Album Edited', 200);
+		$message = $vAlbum->name . " edited";
+
+		return [$saved, $message, $vAlbum];
     }
 
     /*

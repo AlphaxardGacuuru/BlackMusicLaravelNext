@@ -21,14 +21,16 @@ class PollService extends Service
             $poll->save();
 
             $message = "Voted";
+			$added = true;
         } else {
-            Poll::where('username', auth('sanctum')->user()->username)
-                ->where('post_id', $request->input('post'))
-                ->delete();
-
+			Poll::where('username', auth('sanctum')->user()->username)
+			->where('post_id', $request->input('post'))
+			->delete();
+			
             $message = "Vote removed";
+			$added = false;
         }
 
-        return response($message, 200);
+		return [$added, $message, $poll];
     }
 }

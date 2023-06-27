@@ -52,9 +52,9 @@ class AudioService extends Service
         $audio->thumbnail = $request->input('thumbnail');
         $audio->description = $request->input('description');
         $audio->released = $request->input('released');
-        $audio->save();
+        $saved = $audio->save();
 
-        return response('Audio Uploaded', 200);
+		return [$saved, "Audio Uploaded", $audio];
     }
 
     /**
@@ -105,9 +105,11 @@ class AudioService extends Service
             Storage::delete('public/' . $oldAudio);
         }
 
-        $audio->save();
+        $saved = $audio->save();
 
-        return response('Audio Edited', 200);
+		$message = $audio->name . " edited";
+
+		return [$saved, $message, $audio];
     }
 
     /**

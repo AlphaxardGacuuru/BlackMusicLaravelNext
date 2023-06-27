@@ -35,7 +35,12 @@ class VideoAlbumController extends Controller
             'cover' => 'required|image|max:1999',
         ]);
 
-        return $this->service->store($request);
+        [$saved, $message, $videoAlbum] = $this->service->store($request);
+
+        return response([
+            "message" => $message,
+            "data" => $videoAlbum,
+        ], 200);
     }
 
     /**
@@ -62,7 +67,12 @@ class VideoAlbumController extends Controller
             'cover' => 'nullable|image|max:1999',
         ]);
 
-        return $this->service->update($request, $id);
+        [$saved, $message, $videoAlbum] = $this->service->update($request, $id);
+
+        return response([
+            "message" => $message,
+            "data" => $videoAlbum,
+        ], 200);
     }
 
     /**

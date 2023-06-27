@@ -37,11 +37,14 @@ class StoryController extends Controller
             "text" => "string",
         ]);
 
-        $response = $this->service->store($request);
+        [$saved, $message, $story] = $this->service->store($request);
 
-        StoryCreatedEvent::dispatchIf($response["saved"], $response["story"]);
+        StoryCreatedEvent::dispatchIf($saved, $story);
 
-        return response("Story created", 200);
+        return response([
+            "message" => $message,
+            "data" => $story,
+        ], 200);
     }
 
     /**
@@ -64,7 +67,12 @@ class StoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return $this->service->update($request, $id);
+        [$saved, $message, $story] = $this->service->update($request, $id);
+
+        return response([
+            "message" => $message,
+            "data" => $story,
+        ], 200);
     }
 
     /**
@@ -82,13 +90,23 @@ class StoryController extends Controller
      * Seen */
     public function seen($id)
     {
-        return $this->service->seen($id);
+        [$saved, $message, $story] = $this->service->seen($id);
+
+        return response([
+            "message" => $message,
+            "data" => $story,
+        ], 200);
     }
 
     /*
      * Mute */
     public function mute($username)
     {
-        return $this->service->mute($username);
+        [$saved, $message, $story] = $this->service->mute($username);
+
+        return response([
+            "message" => $message,
+            "data" => $story,
+        ], 200);
     }
 }

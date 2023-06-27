@@ -40,11 +40,14 @@ class VideoController extends Controller
             'ft' => 'nullable|exists:users,username',
         ]);
 
-        $response = $this->service->store($request);
+        [$saved, $message, $video] = $this->service->store($request);
 
         // VideoUploadedEvent::dispatchIf($response["saved"], $response["video"]);
 
-        return response('Video Uploaded', 200);
+        return response([
+            "message" => $message,
+            "data" => $video,
+        ], 200);
     }
 
     /**
@@ -72,7 +75,12 @@ class VideoController extends Controller
             'ft' => 'nullable|exists:users,username',
         ]);
 
-        return $this->service->update($request, $id);
+        [$saved, $message, $video] = $this->service->update($request, $id);
+
+        return response([
+            "message" => $message,
+            "data" => $video,
+        ], 200);
     }
 
     /**

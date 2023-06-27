@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Http\Resources\BoughtAudioResource;
 use App\Models\BoughtAudio;
 use App\Models\BoughtVideo;
 use App\Models\CartAudio;
@@ -20,7 +21,7 @@ class BoughtAudioService extends Service
     {
         $getBoughtAudios = BoughtAudio::where("username", $this->username)->get();
 		
-		return BoughtAudio::collection($getBoughtAudios);
+		return BoughtAudioResource::collection($getBoughtAudios);
     }
 
     /**
@@ -132,6 +133,6 @@ class BoughtAudioService extends Service
     {
         $getArtistBoughtAudios = BoughtAudio::where("artist", $username)->get();
 		
-		return BoughtAudio::collection($getArtistBoughtAudios);
+		return BoughtAudioResource::collection($getArtistBoughtAudios);
     }
 }

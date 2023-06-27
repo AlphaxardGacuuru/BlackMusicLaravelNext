@@ -18,31 +18,31 @@ class BoughtAudioResource extends JsonResource
         $username = auth('sanctum')->user()
         ? auth('sanctum')->user()->username
         : '@guest';
-
-        return [
-            "id" => $this->id,
-            "audio" => $this->audio,
-            "name" => $this->name,
-            "artistName" => $this->user->name,
-            "username" => $this->username,
-            "avatar" => $this->user->avatar,
-            "artistDecos" => $this->user->decos->count(),
-            "ft" => $this->ft,
-            "audioAlbumId" => $this->audio_album_id,
-            "album" => $this->album->name,
-            "genre" => $this->genre,
-            "thumbnail" => $this->thumbnail,
-            "description" => $this->description,
-            "released" => $this->released,
-            "hasLiked" => $this->hasLiked($username),
-            "likes" => $this->likes->count(),
-            "comments" => $this->comments->count(),
-            "inCart" => $this->inCart($username),
-            "hasBoughtAudio" => $this->hasBoughtAudio($username),
-            "hasBought1" => $this->user->hasBought1($username),
-            "hasFollowed" => $this->user->hasFollowed($username),
-            "downloads" => $this->bought->count(),
-            "createdAt" => $this->created_at,
-        ];
+		
+		return [
+            "id" => $this->audio->id,
+            "audio" => $this->audio->audio,
+            "name" => $this->audio->name,
+            "artistName" => $this->audio->user->name,
+            "username" => $this->audio->username,
+            "avatar" => $this->audio->user->avatar,
+            "artistDecos" => $this->audio->user->decos->count(),
+            "ft" => $this->audio->ft,
+            "audioAlbumId" => $this->audio->audio_album_id,
+            "album" => $this->audio->album->name,
+            "genre" => $this->audio->genre,
+            "thumbnail" => $this->audio->thumbnail,
+            "description" => $this->audio->description,
+            "released" => $this->audio->released,
+            "hasLiked" => $this->audio->hasLiked($username),
+            "likes" => $this->audio->likes->count(),
+            "comments" => $this->audio->comments->count(),
+            "inCart" => $this->audio->inCart($username),
+            "hasBoughtAudio" => $this->audio->hasBoughtAudio($username),
+            "hasBought1" => $this->audio->user->hasBought1($username),
+            "hasFollowed" => $this->audio->user->hasFollowed($username),
+            "downloads" => $this->audio->bought->count(),
+            "createdAt" => $this->audio->created_at,
+		];
     }
 }

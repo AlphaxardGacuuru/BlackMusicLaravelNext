@@ -78,8 +78,8 @@ class ChatService extends Service
             ->orWhere("username", $username)
             ->where("to", $this->username)
             ->orderBy('id', 'ASC')->get();
-			
-			return ChatResource::collection($getChat);
+
+        return ChatResource::collection($getChat);
     }
 
     /**
@@ -98,7 +98,9 @@ class ChatService extends Service
         $chat->media = $request->input('media');
         $saved = $chat->save();
 
-        return ["saved" => $saved, "chat" => $chat];
+        $message = "Chat sent";
+
+        return [$saved, $message, $chat];
     }
 
     /**

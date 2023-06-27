@@ -2,6 +2,8 @@
 
 namespace App\Http\Services;
 
+use App\Http\Resources\BoughtVideoResource;
+use App\Http\Resources\VideoResource;
 use App\Models\BoughtAudio;
 use App\Models\BoughtVideo;
 use App\Models\CartVideo;
@@ -19,8 +21,8 @@ class BoughtVideoService extends Service
     public function index()
     {
         $getBoughtVideos = BoughtVideo::where("username", $this->username)->get();
-		
-		return BoughtVideo::collection($getBoughtVideos);
+
+        return BoughtVideoResource::collection($getBoughtVideos);
     }
 
     /**
@@ -32,7 +34,6 @@ class BoughtVideoService extends Service
     public function store($request)
     {
         $canBuy = "";
-        $boughtVideosWithStructure = [];
         $boughtVideos = [];
         $decoArtists = [];
 
@@ -79,11 +80,11 @@ class BoughtVideoService extends Service
                     });
 
                     // Update array
-                    array_push($boughtVideosWithStructure,
-                        $this->structure($cartVideo->video,
-                            auth('sanctum')->user()->username));
-
-                    array_push($boughtVideos, $cartVideo->video);
+                    array_push($boughtVideos,
+                        $this->structure(
+                            $cartVideo->video,
+                            auth('sanctum')->user()->username
+                        ));
 
                     // Update Deco arry
                     $artist && array_push($decoArtists, $artist);
@@ -91,7 +92,7 @@ class BoughtVideoService extends Service
             }
         }
 
-        return [$boughtVideosWithStructure, $boughtVideos, $decoArtists];
+        return [$boughtVideos, $decoArtists];
     }
 
     // Store Bought Video
@@ -139,7 +140,38 @@ class BoughtVideoService extends Service
     public function artistBoughtVideos($username)
     {
         $getArtistBoughtVideos = BoughtVideo::where("artist", $username)->get();
-		
-		return BoughtVideo::collection($getArtistBoughtVideos);
+
+        return BoughtVideoResource::collection($getArtistBoughtVideos);
+    }
+
+    /*
+     * Structure for video */
+    public function structure($video, $username)
+    {
+        return [
+            "id" => $video->id,
+            "video" => $video->video,
+            "name" => $video->name,
+            "artistName" => $video->user->name,
+            "username" => $video->username,
+            "avatar" => $video->user->avatar,
+            "artistDecos" => $video->user->decos->count(),
+            "ft" => $video->ft,
+            "videoAlbumId" => $video->video_album_id,
+            "album" => $video->album->name,
+            "genre" => $video->genre,
+            "thumbnail" => $video->thumbnail,
+            "description" => $video->description,
+            "released" => $video->released,
+            "hasLiked" => $video->hasLiked($username),
+            "likes" => $video->likes->count(),
+            "comments" => $video->comments->count(),
+            "inCart" => $video->inCart($username),
+            "hasBoughtVideo" => $video->hasBoughtVideo($username),
+            "hasBought1" => $video->user->hasBought1($username),
+            "hasFollowed" => $video->user->hasFollowed($username),
+            "downloads" => $video->bought->count(),
+            "createdAt" => $video->created_at,
+        ];
     }
 }

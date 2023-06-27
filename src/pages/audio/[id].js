@@ -56,7 +56,7 @@ const AudioShow = (props) => {
 		if (id) {
 			axios
 				.get(`/api/audios/${id}`)
-				.then((res) => setAudio(res.data))
+				.then((res) => setAudio(res.data.data))
 				.catch(() => props.setErrors([`Failed to fetch audio`]))
 
 			props.get(`audio-comments/${id}`, setAudioComments)

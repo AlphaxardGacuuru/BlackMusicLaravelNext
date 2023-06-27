@@ -33,13 +33,16 @@ class VideoLikeController extends Controller
      */
     public function store(Request $request)
     {
-        $result = $this->service->store($request);
+        [$saved, $message, $video] = $this->service->store($request);
 
         $video = Video::find($request->input("video"));
 
-        VideoLikedEvent::dispatchIf($result[0], $video);
+        VideoLikedEvent::dispatchIf($saved, $video);
 
-        return response($result[1], 200);
+        return response([
+            "message" => $message,
+            "data" => $video,
+        ], 200);
     }
 
     /**

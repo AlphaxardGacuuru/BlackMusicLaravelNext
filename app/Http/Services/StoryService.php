@@ -26,8 +26,8 @@ class StoryService extends Service
             ->where("follows.muted->stories", false)
             ->orderBy("stories.id", "ASC")
             ->get();
-			
-			return StoryResource::collection($getStories);
+
+        return StoryResource::collection($getStories);
     }
 
     /**
@@ -54,7 +54,7 @@ class StoryService extends Service
         $story->text = $request->input("text");
         $saved = $story->save();
 
-        return ["saved" => $saved, "story" => $story];
+        return [$saved, "Story sent", $story];
     }
 
     /**
@@ -66,23 +66,8 @@ class StoryService extends Service
     public function show($id)
     {
         $getStory = Story::find($id);
-		
-		return new StoryResource($getStory);
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Story  $story
-     * @return \Illuminate\Http\Response
-     */
-    public function update($request, $id)
-    {
-        $story = Story::find($id);
-        $story->save();
-
-        return response("Story updated", 200);
+        return new StoryResource($getStory);
     }
 
     /**
@@ -104,9 +89,9 @@ class StoryService extends Service
         $seenStory->story_id = $id;
         $seenStory->username = $this->username;
         $seenStory->seen_at = Carbon::now();
-        $seenStory->save();
+        $saved = $seenStory->save();
 
-        return response("Story seen", 200);
+        return [$saved, "Story seen", $seenStory];
     }
 
     /*
@@ -133,8 +118,8 @@ class StoryService extends Service
             $message = "Stories from " . $username . " muted";
         }
 
-        $follow->save();
+        $saved = $follow->save();
 
-        return response($message, 200);
+        return [$saved, $message];
     }
 }

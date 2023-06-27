@@ -32,13 +32,13 @@ class BoughtAudioController extends Controller
      */
     public function store(Request $request)
     {
-        $response = $this->service->store($request);
+        [$boughtAudios, $decoArtists] = $this->service->store($request);
 
-        $hasBought = count($response[0]) > 0;
+        $hasBought = count($boughtAudios) > 0;
 
-        AudioBoughtEvent::dispatchIf($hasBought, $response[0], $response[1]);
+        AudioBoughtEvent::dispatchIf($hasBought, $boughtAudios, $decoArtists);
 
-        return response($response[0], 200);
+        return response(["data" => $boughtAudios], 200);
     }
 
     /**

@@ -36,15 +36,18 @@ class PostCommentController extends Controller
             'text' => 'required',
         ]);
 
-        $response = $this->service->store($request);
+        [$saved, $message, $postComment] = $this->service->store($request);
 
         // Dispatch Event
         // Get post
         $post = Post::findOrFail($request->input("id"));
 
-        PostCommentedEvent::dispatchif($response["saved"], $response["comment"], $post);
+        PostCommentedEvent::dispatchif($saved, $postComment, $post);
 
-        return response("Comment sent", 200);
+        return response([
+            "message" => $message,
+            "data" => $postComment,
+        ], 200);
     }
 
     /**

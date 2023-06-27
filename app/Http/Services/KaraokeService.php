@@ -47,8 +47,8 @@ class KaraokeService extends Service
         $karaoke->username = auth("sanctum")->user()->username;
         $karaoke->audio_id = $request->input("audio_id");
         $karaoke->description = $request->input("description");
-        $karaoke->save();
+        $saved = $karaoke->save();
 
-        return response("Karaoke Created", 200);
+		return [$saved, "Karaoke posted", $karaoke];
     }
 }

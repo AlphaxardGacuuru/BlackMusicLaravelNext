@@ -37,9 +37,12 @@ class AudioAlbumController extends Controller
             'cover' => 'required|image|max:1999',
         ]);
 
-        [$saved, $message] = $this->service->store($request);
+        [$saved, $message, $audioAlbum] = $this->service->store($request);
 
-        return response(["message" => $message], 200);
+        return response([
+            "message" => $message,
+            "data" => $audioAlbum,
+        ], 200);
     }
 
     /**
@@ -66,9 +69,12 @@ class AudioAlbumController extends Controller
             'cover' => 'nullable|image|max:1999',
         ]);
 
-        [$saved, $message] = $this->service->update($request, $id);
+        [$saved, $message, $audioAlbum] = $this->service->update($request, $id);
 
-        return response(["message" => $message], 200);
+        return response([
+            "message" => $message,
+            "data" => $audioAlbum,
+        ], 200);
     }
 
     /**

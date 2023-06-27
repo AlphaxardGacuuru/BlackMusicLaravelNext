@@ -46,6 +46,7 @@ class CartAudioService extends Service
                 ->delete();
 
             $message = 'Audio removed from Cart';
+            $added = false;
         } else {
             $cartAudio = new CartAudio;
             $cartAudio->audio_id = $request->input('audio');
@@ -53,8 +54,9 @@ class CartAudioService extends Service
             $cartAudio->save();
 
             $message = 'Audio added to Cart';
+            $added = true;
         }
 
-        return response($message, 200);
+        return [$added, $message, $cartAudio];
     }
 }

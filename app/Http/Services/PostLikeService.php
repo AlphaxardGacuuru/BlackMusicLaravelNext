@@ -35,6 +35,6 @@ class PostLikeService extends Service
             $added = true;
         }
 
-        return [$added, $message];
+        return [$added, $message, $postLike];
     }
 }

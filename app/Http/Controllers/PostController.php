@@ -36,12 +36,15 @@ class PostController extends Controller
             'text' => 'required',
         ]);
 
-        [$saved, $post] = $this->service->store($request);
+        [$saved, $message, $post] = $this->service->store($request);
 
 		// Dispatch event
 		PostedEvent::dispatchIf($saved, $post);
 
-        return response('Post Created', 200);
+        return response([
+            "message" => $message,
+            "data" => $post,
+        ], 200);
     }
 
     /**
@@ -64,7 +67,12 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return $this->service->update($request, $id);
+        [$saved, $message, $post] = $this->service->update($request, $id);
+
+        return response([
+            "message" => $message,
+            "data" => $post,
+        ], 200);
     }
 
     /**
@@ -82,7 +90,11 @@ class PostController extends Controller
 	* Mute */
 	public function mute($username)
 	{
-		return $this->service->mute($username);
+		[$saved, $message] = $this->service->mute($username);
+
+        return response([
+            "message" => $message,
+        ], 200);
 	} 
 
     /*

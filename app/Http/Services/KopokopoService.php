@@ -82,9 +82,9 @@ class KopokopoService extends Service
             $data = $result['data'];
             // echo "The resource location is: " . json_encode($response['location']);
             // => 'https://sandbox.kopokopo.com/api/v1/incoming_payments/247b1bd8-f5a0-4b71-a898-f62f67b8ae1c'
-            return response('Request sent to your phone', 200);
+            return response(["message" => "Request sent to your phone"], 200);
         } else {
-            return response($response, 400);
+            return response(["message" => $response], 400);
         }
     }
 

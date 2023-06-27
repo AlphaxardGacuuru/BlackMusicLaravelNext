@@ -62,7 +62,12 @@ class UserController extends Controller
             'withdrawal' => 'string|nullable',
         ]);
 
-        return $this->service->update($request, $id);
+        [$saved, $message, $user] = $this->service->update($request, $id);
+
+        return response([
+            "message" => $message,
+            "data" => $user,
+        ], 200);
     }
 
     /**

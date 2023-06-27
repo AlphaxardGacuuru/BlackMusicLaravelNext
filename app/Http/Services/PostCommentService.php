@@ -16,8 +16,8 @@ class PostCommentService extends Service
     {
         $getComments = PostComment::orderby('id', 'DESC')->get();
 
-		return PostCommentResource::collection($getComments);
-	}
+        return PostCommentResource::collection($getComments);
+    }
 
     /**
      * Display a specific resource.
@@ -27,8 +27,8 @@ class PostCommentService extends Service
     public function show($id)
     {
         $getComments = PostComment::where("post_id", $id)->orderby('id', 'DESC')->get();
-		
-		return PostComment::collection($getComments);
+
+        return PostComment::collection($getComments);
     }
 
     /**
@@ -48,7 +48,7 @@ class PostCommentService extends Service
 
         $saved = $postComment->save();
 
-        return ["saved" => $saved, "comment" => $postComment];
+        return [$saved, "Comment posted", $postComment];
     }
 
     /**
@@ -61,6 +61,6 @@ class PostCommentService extends Service
     {
         PostComment::find($id)->delete();
 
-        return response("Comment deleted", 200);
+		return response(["message" => "Comment deleted"], 200);
     }
 }

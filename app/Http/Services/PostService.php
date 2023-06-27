@@ -58,7 +58,7 @@ class PostService extends Service
 
         $saved = $post->save();
 
-        return [$saved, $post];
+        return [$saved, "Post sent", $post];
     }
 
     // Update Post
@@ -66,9 +66,9 @@ class PostService extends Service
     {
         $post = Post::find($id);
         $post->text = $request->input('text');
-        $post->save();
+        $saved = $post->save();
 
-        return response("Post Edited", 200);
+        return [$saved, "Post edited", $post];
     }
 
     // Delete Post
@@ -82,7 +82,7 @@ class PostService extends Service
 
         Post::find($id)->delete();
 
-        return response("Post deleted", 200);
+        return response(["message" => "Post deleted"], 200);
     }
 
     /*
@@ -109,9 +109,9 @@ class PostService extends Service
             $message = "You muted posts from " . $username;
         }
 
-        $follow->save();
+        $saved = $follow->save();
 
-        return response($message, 200);
+        return [$saved, $message];
     }
 
     /*

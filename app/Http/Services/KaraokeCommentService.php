@@ -46,14 +46,14 @@ class KaraokeCommentService extends Service
         $karaokeComment->karaoke_id = $request->input('id');
         $karaokeComment->username = auth('sanctum')->user()->username;
         $karaokeComment->text = $request->input('text');
-        $karaokeComment->save();
+        $saved = $karaokeComment->save();
 
         // Show notification
         // $karaoke = Karaokes::where('id', $request->input('id'))->first();
         // $karaoke->users->username != auth()->user()->username &&
         // $karaoke->users->notify(new KaraokeCommentNotifications($karaoke->name));
 
-        return response('Comment Posted', 200);
+		return [$saved, "Comment posted", $karaokeComment];
     }
 
     /**
@@ -66,6 +66,6 @@ class KaraokeCommentService extends Service
     {
         KaraokeComment::find($id)->delete();
 
-        return response('Comment deleted', 200);
+		return response(["message" => "Comment deleted"], 200);
     }
 }

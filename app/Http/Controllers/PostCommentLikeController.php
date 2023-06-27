@@ -34,16 +34,18 @@ class PostCommentLikeController extends Controller
      */
     public function store(Request $request)
     {
-        $result = $this->service->store($request);
+        [$saved, $message] = $this->service->store($request);
 
         // Dispatch
         $comment = PostComment::findOrFail($request->input("comment"));
 
         $post = Post::find($comment->post_id);
 
-        PostCommentLikedEvent::dispatchif($result[0], $comment, $post);
+        PostCommentLikedEvent::dispatchif($saved, $comment, $post);
 
-        return response($result[1], 200);
+        return response([
+            "message" => $message,
+        ], 200);
     }
 
     /**

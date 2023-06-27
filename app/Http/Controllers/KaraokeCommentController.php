@@ -35,7 +35,12 @@ class KaraokeCommentController extends Controller
             'text' => 'required',
         ]);
 
-        return $this->service->store($request);
+        [$saved, $message, $karaokeComment] = $this->service->store($request);
+
+        return response([
+            "message" => $message,
+            "data" => $karaokeComment,
+        ], 200);
     }
 
     /**

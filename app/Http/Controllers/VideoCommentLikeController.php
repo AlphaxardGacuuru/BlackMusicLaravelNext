@@ -33,13 +33,15 @@ class VideoCommentLikeController extends Controller
      */
     public function store(Request $request)
     {
-        $result = $this->service->store($request);
+        [$saved, $message] = $this->service->store($request);
 
         $comment = VideoComment::find($request->input("comment"));
 
-        VideoCommentLikedEvent::dispatchIf($result[0], $comment);
+        VideoCommentLikedEvent::dispatchIf($saved, $comment);
 
-        return response($result[1], 200);
+        return response([
+            "message" => $message,
+        ], 200);
     }
 
     /**

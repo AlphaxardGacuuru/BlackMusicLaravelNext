@@ -24,15 +24,17 @@ class KaraokeLikeService extends Service
                 ->delete();
 
             $message = "Like removed";
+			$added = false;
         } else {
-            $karaokeLike = new KaraokeLike;
+			$karaokeLike = new KaraokeLike;
             $karaokeLike->karaoke_id = $request->input('karaoke');
             $karaokeLike->username = auth('sanctum')->user()->username;
             $karaokeLike->save();
-
+			
             $message = "Karaoke liked";
+			$added = true;
         }
 
-        return response($message, 200);
+		return [$added, $message, $karaokeLike];
     }
 }

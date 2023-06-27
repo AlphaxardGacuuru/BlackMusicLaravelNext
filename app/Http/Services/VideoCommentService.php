@@ -48,7 +48,9 @@ class VideoCommentService extends Service
         $videoComment->username = auth('sanctum')->user()->username;
         $videoComment->text = $request->input('text');
 
-        return $videoComment->save();
+        $saved = $videoComment->save();
+
+		return [$saved, "Comment posted", $videoComment];
     }
 
     /**
@@ -61,6 +63,6 @@ class VideoCommentService extends Service
     {
         VideoComment::find($id)->delete();
 
-        return response('Comment deleted', 200);
+		return response(["message" => "Comment deleted"], 200);
     }
 }

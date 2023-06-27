@@ -31,7 +31,12 @@ class CartVideoController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->service->store($request);
+        [$saved, $message, $cartVideo] = $this->service->store($request);
+
+        return response([
+            "message" => $message,
+            "data" => $cartVideo,
+        ], 200);
     }
 
     /**

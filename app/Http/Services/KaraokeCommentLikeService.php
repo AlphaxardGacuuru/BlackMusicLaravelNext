@@ -24,13 +24,15 @@ class KaraokeCommentLikeService extends Service
                 ->delete();
 
             $message = "Like removed";
+			$added = false;
         } else {
-            $karaokeCommentLike = new KaraokeCommentLike;
+			$karaokeCommentLike = new KaraokeCommentLike;
             $karaokeCommentLike->karaoke_comment_id = $request->input('comment');
             $karaokeCommentLike->username = auth('sanctum')->user()->username;
             $karaokeCommentLike->save();
 
             $message = "Comment liked";
+			$added = true;
 
             // Show notification
             // $karaokeComment = KaraokeComments::where('id', $request->input('comment'))->first();
@@ -39,6 +41,6 @@ class KaraokeCommentLikeService extends Service
             // $karaoke->users->notify(new KaraokeCommentLikeNotifications($karaoke->name));
         }
 
-        return response($message, 200);
+		return [$added, $message, $karaokeCommentLike];
     }
 }

@@ -46,15 +46,17 @@ class CartVideoService extends Service
                 ->delete();
 
             $message = 'Video removed from Cart';
+			$added = false;
         } else {
-            $cartVideo = new CartVideo;
+			$cartVideo = new CartVideo;
             $cartVideo->video_id = $request->input('video');
             $cartVideo->username = auth('sanctum')->user()->username;
             $cartVideo->save();
-
+			
             $message = 'Video added to Cart';
+			$added = true;
         }
 
-        return response($message, 200);
+		return [$added, $message, $cartVideo];
     }
 }

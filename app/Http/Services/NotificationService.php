@@ -39,7 +39,7 @@ class NotificationService extends Service
             ]);
         }
 
-        return $notifications;
+        return ["data" => $notifications];
     }
 
     /**

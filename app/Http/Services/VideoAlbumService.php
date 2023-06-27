@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Http\Resources\VideoAlbumResource;
 use App\Models\VideoAlbum;
 use Illuminate\Support\Facades\Storage;
 
@@ -11,14 +12,8 @@ class VideoAlbumService extends Service
     public function index()
     {
         $getVideoAlbums = VideoAlbum::all();
-
-        $videoAlbums = [];
-
-        foreach ($getVideoAlbums as $videoAlbum) {
-            array_push($videoAlbums, $this->structure($videoAlbum));
-        }
-
-        return $videoAlbums;
+		
+		return VideoAlbumResource::collection($getVideoAlbums);
     }
 
     /**
@@ -29,7 +24,9 @@ class VideoAlbumService extends Service
      */
     public function show($id)
     {
-        return VideoAlbum::find($id);
+        $getVideoAlbum = VideoAlbum::find($id);
+
+		return new VideoAlbumResource($getVideoAlbum);
     }
 
     public function store($request)
@@ -91,27 +88,7 @@ class VideoAlbumService extends Service
     public function artistVideoAlbums($username)
     {
         $getArtistVideoAlbums = VideoAlbum::where("username", $username)->get();
-
-        $artistVideoAlbums = [];
-
-        foreach ($getArtistVideoAlbums as $videoAlbum) {
-            array_push($artistVideoAlbums, $this->structure($videoAlbum));
-        }
-
-        return $artistVideoAlbums;
-    }
-
-    /*
-     * Album Structure*/
-    public function structure($videoAlbum)
-    {
-        return [
-            "id" => $videoAlbum->id,
-            "username" => $videoAlbum->username,
-            "name" => $videoAlbum->name,
-            "cover" => $videoAlbum->cover,
-            "released" => $videoAlbum->released,
-            "createdAt" => $videoAlbum->created_at,
-        ];
+		
+		return VideoAlbumResource::collection($getArtistVideoAlbums);
     }
 }

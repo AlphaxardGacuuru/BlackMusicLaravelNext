@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Http\Resources\SavedKaraokeResource;
 use App\Models\SavedKaraoke;
 
 class SavedKaraokeService extends Service
@@ -17,31 +18,8 @@ class SavedKaraokeService extends Service
         $getSavedKarokes = SavedKaraoke::where('username', $this->username)
             ->orderBy('id', 'ASC')
             ->get();
-
-        $savedKaraokes = [];
-
-        foreach ($getSavedKarokes as $savedKaraoke) {
-
-            array_push($savedKaraokes, [
-                "id" => $savedKaraoke->karaoke->id,
-                "karaoke" => $savedKaraoke->karaoke->karaoke,
-                "audioId" => $savedKaraoke->karaoke->audio_id,
-                "audioName" => $savedKaraoke->karaoke->audio->name,
-                "audioThumbnail" => $savedKaraoke->karaoke->audio->thumbnail,
-                "name" => $savedKaraoke->karaoke->user->name,
-                "username" => $savedKaraoke->karaoke->user->username,
-                "avatar" => $savedKaraoke->karaoke->user->avatar,
-                "decos" => $savedKaraoke->karaoke->user->decos->count(),
-                "description" => $savedKaraoke->karaoke->description,
-                "hasLiked" => $savedKaraoke->karaoke->hasLiked($this->username),
-                "hasSaved" => $savedKaraoke->karaoke->hasSaved($this->username),
-                "likes" => $savedKaraoke->karaoke->likes->count(),
-                "comments" => $savedKaraoke->karaoke->comments->count(),
-                "createdAt" => $savedKaraoke->karaoke->created_at,
-            ]);
-        }
-
-        return response($savedKaraokes, 200);
+			
+			return SavedKaraokeResource::collection($getSavedKarokes);
     }
 
     /**

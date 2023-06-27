@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Http\Resources\VideoCommentResource;
 use App\Models\VideoComment;
 
 class VideoCommentService extends Service
@@ -14,25 +15,8 @@ class VideoCommentService extends Service
     public function index()
     {
         $getVideoComments = VideoComment::orderBy('id', 'DESC')->get();
-
-        $videoComments = [];
-
-        foreach ($getVideoComments as $key => $videoComment) {
-
-            array_push($videoComments, [
-                "id" => $videoComment->id,
-                "videoId" => $videoComment->video_id,
-                "text" => $videoComment->text,
-                "username" => $videoComment->username,
-                "name" => $videoComment->user->name,
-                "avatar" => $videoComment->user->avatar,
-                "hasLiked" => $videoComment->hasLiked($this->username),
-                "likes" => $videoComment->likes->count(),
-                "createdAt" => $videoComment->created_at,
-            ]);
-        }
-
-        return $videoComments;
+		
+		return VideoCommentResource::collection($getVideoComments);
     }
 
     /**
@@ -46,26 +30,8 @@ class VideoCommentService extends Service
         $getVideoComments = VideoComment::where("video_id", $id)
             ->orderBy('id', 'DESC')
             ->get();
-
-        $videoComments = [];
-
-        foreach ($getVideoComments as $key => $videoComment) {
-
-            array_push($videoComments, [
-                "id" => $videoComment->id,
-                "videoId" => $videoComment->video_id,
-                "text" => $videoComment->text,
-                "username" => $videoComment->username,
-                "name" => $videoComment->user->name,
-                "avatar" => $videoComment->user->avatar,
-                "decos" => $videoComment->user->decos->count(),
-                "hasLiked" => $videoComment->hasLiked($this->username),
-                "likes" => $videoComment->likes->count(),
-                "createdAt" => $videoComment->created_at,
-            ]);
-        }
-
-        return $videoComments;
+			
+			return VideoCommentResource::collection($getVideoComments);
     }
 
     /**

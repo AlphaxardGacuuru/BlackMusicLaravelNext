@@ -19,15 +19,8 @@ class BoughtVideoService extends Service
     public function index()
     {
         $getBoughtVideos = BoughtVideo::where("username", $this->username)->get();
-
-        $boughtVideos = [];
-
-        foreach ($getBoughtVideos as $boughtVideo) {
-            array_push($boughtVideos,
-                $this->structure($boughtVideo->video));
-        }
-
-        return $boughtVideos;
+		
+		return BoughtVideo::collection($getBoughtVideos);
     }
 
     /**
@@ -146,42 +139,7 @@ class BoughtVideoService extends Service
     public function artistBoughtVideos($username)
     {
         $getArtistBoughtVideos = BoughtVideo::where("artist", $username)->get();
-
-        $artistBoughtVideos = [];
-
-        foreach ($getArtistBoughtVideos as $boughtVideo) {
-            array_push($artistBoughtVideos, $this->structure($boughtVideo->video));
-        }
-
-        return $artistBoughtVideos;
-    }
-
-    private function structure($video)
-    {
-        return [
-            "id" => $video->id,
-            "video" => $video->video,
-            "name" => $video->name,
-            "artistName" => $video->user->name,
-            "username" => $video->username,
-            "avatar" => $video->user->avatar,
-            "artistDecos" => $video->user->decos->count(),
-            "ft" => $video->ft,
-            "videoAlbumId" => $video->video_album_id,
-            "album" => $video->album->name,
-            "genre" => $video->genre,
-            "thumbnail" => $video->thumbnail,
-            "description" => $video->description,
-            "released" => $video->released,
-            "hasLiked" => $video->hasLiked($this->username),
-            "likes" => $video->likes->count(),
-            "comments" => $video->comments->count(),
-            "inCart" => $video->inCart($this->username),
-            "hasBoughtVideo" => $video->hasBoughtVideo($this->username),
-            "hasBought1" => $video->user->hasBought1($this->username),
-            "hasFollowed" => $video->user->hasFollowed($this->username),
-            "downloads" => $video->bought->count(),
-            "createdAt" => $video->created_at,
-        ];
+		
+		return BoughtVideo::collection($getArtistBoughtVideos);
     }
 }

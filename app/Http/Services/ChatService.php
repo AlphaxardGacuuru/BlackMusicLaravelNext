@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Http\Resources\ChatResource;
 use App\Models\Chat;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
@@ -61,7 +62,7 @@ class ChatService extends Service
             ]);
         }
 
-        return $chatThreads;
+        return ["data" => $chatThreads];
     }
 
     /**
@@ -77,15 +78,8 @@ class ChatService extends Service
             ->orWhere("username", $username)
             ->where("to", $this->username)
             ->orderBy('id', 'ASC')->get();
-
-        $chat = [];
-
-        // Populate array
-        foreach ($getChat as $chatItem) {
-            array_push($chat, $this->structure($chatItem, $this->username));
-        }
-
-        return $chat;
+			
+			return ChatResource::collection($getChat);
     }
 
     /**
@@ -124,20 +118,5 @@ class ChatService extends Service
         $deleted = Chat::find($id)->delete();
 
         return $deleted;
-    }
-
-    private function structure($chart)
-    {
-        return [
-            "id" => $chart->id,
-            "name" => $chart->user->name,
-            "username" => $chart->user->username,
-            "to" => $chart->to,
-            "avatar" => $chart->user->avatar,
-            "decos" => $chart->user->decos->count(),
-            "text" => $chart->text,
-            "media" => $chart->media,
-            "createdAt" => $chart->created_at,
-        ];
     }
 }

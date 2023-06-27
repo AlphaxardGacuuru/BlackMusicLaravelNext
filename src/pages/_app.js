@@ -77,7 +77,7 @@ const App = ({ Component, pageProps }) => {
 		axios
 			.get(`/api/${endpoint}`)
 			.then((res) => {
-				var data = res.data ? res.data : []
+				var data = res.data ? res.data.data : []
 				setState(data)
 				storage && setLocalStorage(storage, data)
 			})

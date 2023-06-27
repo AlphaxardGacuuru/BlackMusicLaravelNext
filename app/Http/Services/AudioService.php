@@ -2,6 +2,8 @@
 
 namespace App\Http\Services;
 
+use App\Http\Resources\AudioResource;
+use App\Http\Resources\UserResource;
 use App\Models\Audio;
 use App\Models\User;
 use Carbon\Carbon;
@@ -18,14 +20,7 @@ class AudioService extends Service
     {
         $getAudios = Audio::orderBy('id', 'ASC')->get();
 
-        $audios = [];
-
-        foreach ($getAudios as $audio) {
-
-            array_push($audios, $this->structure($audio));
-        }
-
-        return $audios;
+        return AudioResource::collection($getAudios);
     }
 
     /**
@@ -35,13 +30,9 @@ class AudioService extends Service
     public function show($id)
     {
         // Get Audio
-        $getAudio = Audio::whereId($id)->get()[0];
+        $getAudio = Audio::find($id);
 
-        $audio = [];
-
-        array_push($audio, $this->structure($getAudio));
-
-        return $audio;
+        return new AudioResource($getAudio);
     }
 
     /**
@@ -200,26 +191,26 @@ class AudioService extends Service
      */
     public function chart($list, $loop = false)
     {
-        $audioModel = $list;
+        $audios = $list;
 
         // Check if items should be fetched
         if ($loop) {
-            $audioModel = [];
+            $audios = [];
 
             foreach ($list as $item) {
                 $audio = Audio::find($item->audio_id);
 
-                array_push($audioModel, $audio);
+                array_push($audios, $audio);
             }
         }
 
-        $audios = [];
+        // Transform data using resource
+        $audios = AudioResource::collection($audios);
 
         $chartArtists = [];
 
         // Populate Audios and Artists array
-        foreach ($audioModel as $audio) {
-            array_push($audios, $this->structure($audio, $this->username));
+        foreach ($audios as $audio) {
             array_push($chartArtists, $audio->username);
         }
 
@@ -238,12 +229,15 @@ class AudioService extends Service
         foreach ($chartArtists as $artist) {
             $getArtist = User::where("username", $artist)->first();
 
-            $userService = new UserService;
+            $getArtist = new UserResource($getArtist);
 
-            array_push($artists, $userService->structure($getArtist, $this->username));
+            array_push($artists, $getArtist);
         }
 
-        return ["artists" => $artists, "audios" => $audios];
+        return ["data" => [
+            "artists" => $artists,
+            "audios" => $audios,
+        ]];
     }
 
     /*
@@ -252,41 +246,6 @@ class AudioService extends Service
     {
         $getArtistAudios = Audio::where("username", $username)->get();
 
-        $artistAudios = [];
-
-        foreach ($getArtistAudios as $audio) {
-            array_push($artistAudios, $this->structure($audio));
-        }
-
-        return $artistAudios;
-    }
-
-    private function structure($audio)
-    {
-        return [
-            "id" => $audio->id,
-            "audio" => $audio->audio,
-            "name" => $audio->name,
-            "artistName" => $audio->user->name,
-            "username" => $audio->username,
-            "avatar" => $audio->user->avatar,
-            "artistDecos" => $audio->user->decos->count(),
-            "ft" => $audio->ft,
-            "audioAlbumId" => $audio->audio_album_id,
-            "album" => $audio->album->name,
-            "genre" => $audio->genre,
-            "thumbnail" => $audio->thumbnail,
-            "description" => $audio->description,
-            "released" => $audio->released,
-            "hasLiked" => $audio->hasLiked($this->username),
-            "likes" => $audio->likes->count(),
-            "comments" => $audio->comments->count(),
-            "inCart" => $audio->inCart($this->username),
-            "hasBoughtAudio" => $audio->hasBoughtAudio($this->username),
-            "hasBought1" => $audio->user->hasBought1($this->username),
-            "hasFollowed" => $audio->user->hasFollowed($this->username),
-            "downloads" => $audio->bought->count(),
-            "createdAt" => $audio->created_at,
-        ];
+        return AudioResource::collection($getArtistAudios);
     }
 }

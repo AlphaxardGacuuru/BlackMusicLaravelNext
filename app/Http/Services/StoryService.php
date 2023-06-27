@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Http\Resources\StoryResource;
 use App\Models\Follow;
 use App\Models\SeenStory;
 use App\Models\Story;
@@ -25,14 +26,8 @@ class StoryService extends Service
             ->where("follows.muted->stories", false)
             ->orderBy("stories.id", "ASC")
             ->get();
-
-        $stories = [];
-
-        foreach ($getStories as $story) {
-            array_push($stories, $this->structure($story));
-        }
-
-        return $stories;
+			
+			return StoryResource::collection($getStories);
     }
 
     /**
@@ -71,8 +66,8 @@ class StoryService extends Service
     public function show($id)
     {
         $getStory = Story::find($id);
-
-        return $this->structure($getStory);
+		
+		return new StoryResource($getStory);
     }
 
     /**
@@ -141,21 +136,5 @@ class StoryService extends Service
         $follow->save();
 
         return response($message, 200);
-    }
-
-    /*
-     * Structure */
-    public function structure($story)
-    {
-        return [
-            "id" => $story->id,
-            "name" => $story->user->name,
-            "username" => $story->username,
-            "avatar" => $story->user->avatar,
-            "media" => $story->media,
-            "text" => $story->text,
-            "hasMuted" => filter_var($story->muted, FILTER_VALIDATE_BOOLEAN),
-            "hasSeen" => $story->hasSeen($this->username),
-        ];
     }
 }

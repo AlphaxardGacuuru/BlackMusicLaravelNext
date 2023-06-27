@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Http\Resources\KaraokeResource;
 use App\Models\Karaoke;
 
 class KaraokeService extends Service
@@ -17,30 +18,7 @@ class KaraokeService extends Service
         // Get Karaokes
         $getKaraokes = Karaoke::orderBy('id', 'ASC')->get();
 
-        $karaokes = [];
-
-        foreach ($getKaraokes as $key => $karaoke) {
-
-            array_push($karaokes, [
-                "id" => $karaoke->id,
-                "karaoke" => $karaoke->karaoke,
-                "audioId" => $karaoke->audio_id,
-                "audioName" => $karaoke->audio->name,
-                "audioThumbnail" => $karaoke->audio->thumbnail,
-                "name" => $karaoke->user->name,
-                "username" => $karaoke->user->username,
-                "avatar" => $karaoke->user->avatar,
-                "decos" => $karaoke->user->decos->count(),
-                "description" => $karaoke->description,
-                "hasLiked" => $karaoke->hasLiked($this->username),
-                "hasSaved" => $karaoke->hasSaved($this->username),
-                "likes" => $karaoke->likes->count(),
-                "comments" => $karaoke->comments->count(),
-                "created_at" => $karaoke->created_at,
-            ]);
-        }
-
-        return $karaokes;
+		return KaraokeResource::collection($getKaraokes);
     }
 
     /**
@@ -51,7 +29,9 @@ class KaraokeService extends Service
      */
     public function show($id)
     {
-        return Karaoke::find($id);
+        $getKaraoke = Karaoke::find($id);
+
+		return new KaraokeResource($getKaraoke);
     }
 
     /**

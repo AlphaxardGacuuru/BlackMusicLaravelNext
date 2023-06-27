@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Http\Resources\AudioAlbumResource;
 use App\Models\AudioAlbum;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,14 +16,8 @@ class AudioAlbumService extends Service
     public function index()
     {
         $getAudioAlbums = AudioAlbum::all();
-
-        $audioAlbums = [];
-
-        foreach ($getAudioAlbums as $audioAlbum) {
-            array_push($audioAlbums, $this->structure($audioAlbum));
-        }
-
-        return $audioAlbums;
+		
+		return AudioAlbumResource::collection($getAudioAlbums);
     }
 
     /**
@@ -35,7 +30,7 @@ class AudioAlbumService extends Service
     {
         $audioAlbum = AudioAlbum::find($id);
 
-        return $this->structure($audioAlbum);
+        return new AudioAlbumResource($audioAlbum);
     }
 
     /**
@@ -119,19 +114,5 @@ class AudioAlbumService extends Service
         }
 
         return $artistAudioAlbums;
-    }
-
-    /*
-     * Album Structure*/
-    public function structure($audioAlbum)
-    {
-        return [
-            "id" => $audioAlbum->id,
-            "username" => $audioAlbum->username,
-            "name" => $audioAlbum->name,
-            "cover" => $audioAlbum->cover,
-            "released" => $audioAlbum->released,
-            "createdAt" => $audioAlbum->created_at,
-        ];
     }
 }

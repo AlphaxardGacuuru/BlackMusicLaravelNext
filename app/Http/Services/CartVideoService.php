@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Http\Resources\CartVideoResource;
 use App\Models\BoughtVideo;
 use App\Models\CartVideo;
 
@@ -16,39 +17,8 @@ class CartVideoService extends Service
     {
         $getCartVideos = CartVideo::where('username', $this->username)
             ->get();
-
-        $cartVideos = [];
-
-        foreach ($getCartVideos as $cartVideo) {
-            array_push($cartVideos, [
-                "cartId" => $cartVideo->id,
-                "id" => $cartVideo->video_id,
-                "video" => $cartVideo->video->video,
-                "name" => $cartVideo->video->name,
-                "artistName" => $cartVideo->video->user->name,
-                "username" => $cartVideo->video->username,
-                "avatar" => $cartVideo->video->user->avatar,
-                "artistDecos" => $cartVideo->video->user->decos->count(),
-                "ft" => $cartVideo->video->ft,
-                "videoAlbumId" => $cartVideo->video->video_album_id,
-                "album" => $cartVideo->video->album->name,
-                "genre" => $cartVideo->video->genre,
-                "thumbnail" => $cartVideo->video->thumbnail,
-                "description" => $cartVideo->video->description,
-                "released" => $cartVideo->video->released,
-                "hasLiked" => $cartVideo->video->hasLiked($this->username),
-                "likes" => $cartVideo->video->likes->count(),
-                "comments" => $cartVideo->video->comments->count(),
-                "inCart" => $cartVideo->video->inCart($this->username),
-                "hasBoughtVideo" => $cartVideo->video->hasBoughtVideo($this->username),
-                "hasBought1" => $cartVideo->video->user->hasBought1($this->username),
-                "hasFollowed" => $cartVideo->video->user->hasFollowed($this->username),
-                "downloads" => $cartVideo->video->bought->count(),
-                "createdAt" => $cartVideo->video->created_at,
-            ]);
-        }
-
-        return $cartVideos;
+			
+			return CartVideoResource::collection($getCartVideos);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Http\Resources\UserResource;
 use App\Models\AudioAlbum;
 use App\Models\User;
 use App\Models\VideoAlbum;
@@ -19,16 +20,8 @@ class UserService extends Service
     public function index()
     {
         $getUsers = User::all();
-
-        $users = [];
-
-        // Get Users
-        foreach ($getUsers as $user) {
-
-            array_push($users, $this->structure($user));
-        }
-
-        return $users;
+		
+		return UserResource::collection($getUsers);
     }
 
     /**
@@ -41,7 +34,7 @@ class UserService extends Service
     {
         $getUser = User::where("username", $username)->first();
 
-        return response($this->structure($getUser), 200);
+		return new UserResource($getUser);
     }
 
     /**
@@ -113,31 +106,6 @@ class UserService extends Service
     {
         $auth = auth('sanctum')->user();
 
-        return $this->structure($auth);
-    }
-
-    public function structure($user)
-    {
-        return [
-            "id" => $user->id,
-            "name" => $user->name,
-            "username" => $user->username,
-            "email" => $user->email,
-            "phone" => $user->phone,
-            "avatar" => $user->avatar,
-            "backdrop" => $user->backdrop,
-            "accountType" => $user->account_type,
-            "dob" => $user->dob,
-            "bio" => $user->bio,
-            "withdrawal" => $user->withdrawal,
-            "posts" => $user->posts->count(),
-            "following" => $user->follows->count() - 1,
-            "fans" => $user->fans(),
-            "hasFollowed" => $user->hasFollowed($this->username),
-            "hasBought1" => $user->hasBought1($this->username),
-            "decos" => $user->decos->count(),
-            "balance" => $user->balance(),
-            "createdAt" => $user->created_at,
-        ];
+		return new UserResource($auth);
     }
 }

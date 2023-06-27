@@ -2,6 +2,8 @@
 
 namespace App\Http\Services;
 
+use App\Http\Resources\UserResource;
+use App\Http\Resources\VideoResource;
 use App\Models\User;
 use App\Models\Video;
 use Carbon\Carbon;
@@ -19,13 +21,7 @@ class VideoService extends Service
         // Get Videos
         $getVideos = Video::orderBy('id', 'ASC')->get();
 
-        $videos = [];
-
-        foreach ($getVideos as $video) {
-            array_push($videos, $this->structure($video));
-        }
-
-        return $videos;
+        return VideoResource::collection($getVideos);
     }
 
     /**
@@ -35,13 +31,9 @@ class VideoService extends Service
     public function show($id)
     {
         // Get Video
-        $getVideo = Video::whereId($id)->get()[0];
+        $getVideo = Video::find($id);
 
-        $video = [];
-
-        array_push($video, $this->structure($getVideo));
-
-        return $video;
+        return new VideoResource($getVideo);
     }
 
     /**
@@ -200,26 +192,26 @@ class VideoService extends Service
      */
     public function chart($list, $loop = false)
     {
-        $videoModel = $list;
+        $videos = $list;
 
         // Check if items should be fetched
         if ($loop) {
-            $videoModel = [];
+            $videos = [];
 
             foreach ($list as $item) {
                 $video = Video::find($item->video_id);
 
-                array_push($videoModel, $video);
+                array_push($videos, $video);
             }
         }
 
-        $videos = [];
+        // Transform data using resource
+        $videos = VideoResource::collection($videos);
 
         $chartArtists = [];
 
         // Populate Videos and Artists array
-        foreach ($videoModel as $video) {
-            array_push($videos, $this->structure($video));
+        foreach ($videos as $video) {
             array_push($chartArtists, $video->username);
         }
 
@@ -238,12 +230,15 @@ class VideoService extends Service
         foreach ($chartArtists as $artist) {
             $getArtist = User::where("username", $artist)->first();
 
-            $userService = new UserService;
+            $getArtist = new UserResource($getArtist);
 
-            array_push($artists, $userService->structure($getArtist));
+            array_push($artists, $getArtist);
         }
 
-        return ["artists" => $artists, "videos" => $videos];
+        return ["data" => [
+            "artists" => $artists,
+            "videos" => $videos,
+        ]];
     }
 
     /*
@@ -251,46 +246,7 @@ class VideoService extends Service
     public function artistVideos($username)
     {
         $getArtistVideos = Video::where("username", $username)->get();
-
-        $artistVideos = [];
-
-        foreach ($getArtistVideos as $video) {
-            array_push($artistVideos, $this->structure($video));
-        }
-
-        return $artistVideos;
-    }
-
-    /**
-     * Structure Video
-     *
-     */
-    private function structure($video)
-    {
-        return [
-            "id" => $video->id,
-            "video" => $video->video,
-            "name" => $video->name,
-            "artistName" => $video->user->name,
-            "username" => $video->username,
-            "avatar" => $video->user->avatar,
-            "artistDecos" => $video->user->decos->count(),
-            "ft" => $video->ft,
-            "videoAlbumId" => $video->video_album_id,
-            "album" => $video->album->name,
-            "genre" => $video->genre,
-            "thumbnail" => $video->thumbnail,
-            "description" => $video->description,
-            "released" => $video->released,
-            "hasLiked" => $video->hasLiked($this->username),
-            "likes" => $video->likes->count(),
-            "comments" => $video->comments->count(),
-            "inCart" => $video->inCart($this->username),
-            "hasBoughtVideo" => $video->hasBoughtVideo($this->username),
-            "hasBought1" => $video->user->hasBought1($this->username),
-            "hasFollowed" => $video->user->hasFollowed($this->username),
-            "downloads" => $video->bought->count(),
-            "createdAt" => $video->created_at,
-        ];
+		
+		return VideoResource::collection($getArtistVideos);
     }
 }

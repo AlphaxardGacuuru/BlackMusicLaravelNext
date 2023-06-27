@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Http\Resources\KaraokeCommentResource;
 use App\Models\KaraokeComment;
 
 class KaraokeCommentService extends Service
@@ -15,14 +16,8 @@ class KaraokeCommentService extends Service
     public function index()
     {
         $getKaraokeComments = KaraokeComment::orderBy('id', 'DESC')->get();
-
-        $karaokeComments = [];
-
-        foreach ($getKaraokeComments as $karaokeComment) {
-            array_push($karaokeComments, $this->structure($karaokeComment));
-        }
-
-        return response($karaokeComments, 200);
+		
+		return KaraokeCommentResource::collection($getKaraokeComments);
     }
 
     /**
@@ -34,14 +29,8 @@ class KaraokeCommentService extends Service
     public function show($id)
     {
         $getKaraokeComments = KaraokeComment::where("karaoke_id", $id)->orderBy("id", "DESC")->get();
-
-        $karaokeComments = [];
-
-        foreach ($getKaraokeComments as $karaokeComment) {
-            array_push($karaokeComments, $this->structure($karaokeComment));
-        }
-
-        return response($karaokeComments, 200);
+		
+		return KaraokeCommentResource::collection($getKaraokeComments);
     }
 
     /**
@@ -78,22 +67,5 @@ class KaraokeCommentService extends Service
         KaraokeComment::find($id)->delete();
 
         return response('Comment deleted', 200);
-    }
-
-    /*
-     * Structure */
-    public function structure($karaokeComment)
-    {
-        return [
-            "id" => $karaokeComment->id,
-            "karaoke_id" => $karaokeComment->karaoke_id,
-            "text" => $karaokeComment->text,
-            "username" => $karaokeComment->username,
-            "name" => $karaokeComment->user->name,
-            "avatar" => $karaokeComment->user->avatar,
-            "hasLiked" => $karaokeComment->hasLiked($this->username),
-            "likes" => $karaokeComment->likes->count(),
-            "created_at" => $karaokeComment->created_at,
-        ];
     }
 }

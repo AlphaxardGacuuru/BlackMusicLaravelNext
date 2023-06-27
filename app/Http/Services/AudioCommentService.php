@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Http\Resources\AudioCommentResource;
 use App\Models\AudioComment;
 
 class AudioCommentService extends Service
@@ -14,26 +15,8 @@ class AudioCommentService extends Service
     public function index()
     {
         $getAudioComments = AudioComment::orderBy('id', 'DESC')->get();
-
-        $audioComments = [];
-
-        foreach ($getAudioComments as $key => $audioComment) {
-
-            array_push($audioComments, [
-                "id" => $audioComment->id,
-                "audioId" => $audioComment->audio_id,
-                "text" => $audioComment->text,
-                "username" => $audioComment->username,
-                "name" => $audioComment->user->name,
-                "avatar" => $audioComment->user->avatar,
-                "decos" => $audioComment->user->decos->count(),
-                "hasLiked" => $audioComment->hasLiked($this->username),
-                "likes" => $audioComment->likes->count(),
-                "createdAt" => $audioComment->created_at,
-            ]);
-        }
-
-        return $audioComments;
+		
+		return AudioCommentResource::collection($getAudioComments);
     }
 
     /**
@@ -47,26 +30,8 @@ class AudioCommentService extends Service
         $getAudioComments = AudioComment::where("audio_id", $id)
             ->orderBy('id', 'DESC')
             ->get();
-
-        $audioComments = [];
-
-        foreach ($getAudioComments as $audioComment) {
-
-            array_push($audioComments, [
-                "id" => $audioComment->id,
-                "audioId" => $audioComment->audio_id,
-                "text" => $audioComment->text,
-                "username" => $audioComment->username,
-                "name" => $audioComment->user->name,
-                "avatar" => $audioComment->user->avatar,
-                "decos" => $audioComment->user->decos->count(),
-                "hasLiked" => $audioComment->hasLiked($this->username),
-                "likes" => $audioComment->likes->count(),
-                "createdAt" => $audioComment->created_at,
-            ]);
-        }
-
-        return $audioComments;
+			
+			return new AudioCommentResource($getAudioComments);
     }
 
     /**

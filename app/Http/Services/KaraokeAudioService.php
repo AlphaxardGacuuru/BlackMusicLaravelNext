@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Http\Resources\KaraokeAudioResource;
 use App\Models\KaraokeAudio;
 
 class KaraokeAudioService extends Service
@@ -27,17 +28,6 @@ class KaraokeAudioService extends Service
     {
         $getKaraokeAudio = KaraokeAudio::find($id);
 
-        $karaokeAudio = [];
-
-        array_push($karaokeAudio, [
-            "id" => $getKaraokeAudio->id,
-            "audioId" => $getKaraokeAudio->audio_id,
-            "username" => $getKaraokeAudio->username,
-            "name" => $getKaraokeAudio->audio->name,
-            "thumbnail" => $getKaraokeAudio->audio->thumbnail,
-            "createdAt" => $getKaraokeAudio->created_at,
-        ]);
-
-        return $karaokeAudio;
+		return KaraokeAudioResource::collection($getKaraokeAudio);
     }
 }

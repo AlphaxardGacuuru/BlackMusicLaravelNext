@@ -64,8 +64,8 @@ class KaraokeCommentService extends Service
      */
     public function destroy($id)
     {
-        KaraokeComment::find($id)->delete();
-
-		return response(["message" => "Comment deleted"], 200);
+        $deleted = KaraokeComment::find($id)->delete();
+		
+		return [$deleted, "Comment deleted"];
     }
 }

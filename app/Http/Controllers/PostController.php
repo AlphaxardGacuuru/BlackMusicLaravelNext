@@ -83,7 +83,9 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        return $this->service->destory($id);
+        [$deleted, $message] = $this->service->destory($id);
+
+        return response(["message" => $message], 200);
     }
 
 	/*

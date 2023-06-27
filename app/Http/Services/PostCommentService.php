@@ -59,8 +59,8 @@ class PostCommentService extends Service
      */
     public function destroy($id)
     {
-        PostComment::find($id)->delete();
-
-		return response(["message" => "Comment deleted"], 200);
+        $deleted = PostComment::find($id)->delete();
+		
+		return [$deleted, "Comment deleted"];
     }
 }

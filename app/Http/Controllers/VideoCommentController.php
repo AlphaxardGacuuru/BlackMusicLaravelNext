@@ -80,6 +80,8 @@ class VideoCommentController extends Controller
      */
     public function destroy($id)
     {
-        return $this->service->destroy($id);
+        [$deleted, $message] = $this->service->destroy($id);
+
+        return response(["message" => $message], 200);
     }
 }

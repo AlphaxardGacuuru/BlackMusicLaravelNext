@@ -81,10 +81,10 @@ class ChatController extends Controller
      */
     public function destroy($id)
     {
-        $response = $this->service->destroy($id);
+        [$deleted, $message] = $this->service->destroy($id);
 
-		ChatDeletedEvent::dispatchIf($response, $id);
+		ChatDeletedEvent::dispatchIf($deleted, $id);
 
-        return response("Chat deleted", 200);
+        return response(["message" => $message], 200);
     }
 }

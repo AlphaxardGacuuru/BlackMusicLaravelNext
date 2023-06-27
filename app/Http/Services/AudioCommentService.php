@@ -61,8 +61,8 @@ class AudioCommentService extends Service
      */
     public function destroy($id)
     {
-        AudioComment::find($id)->delete();
+        $deleted = AudioComment::find($id)->delete();
 
-        return response(["message" => "Comment deleted"], 200);
+		return [$deleted, "Comment deleted"];
     }
 }

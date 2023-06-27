@@ -61,8 +61,8 @@ class VideoCommentService extends Service
      */
     public function destroy($id)
     {
-        VideoComment::find($id)->delete();
-
-		return response(["message" => "Comment deleted"], 200);
+        $deleted = VideoComment::find($id)->delete();
+		
+		return [$deleted, "Comment deleted"];
     }
 }

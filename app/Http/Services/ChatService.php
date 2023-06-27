@@ -119,6 +119,6 @@ class ChatService extends Service
 
         $deleted = Chat::find($id)->delete();
 
-        return $deleted;
+        return [$deleted, "Chat deleted"];
     }
 }

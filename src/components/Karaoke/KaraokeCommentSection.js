@@ -21,7 +21,7 @@ const KaraokeCommentSection = (props) => {
 		axios
 			.post(`/api/karaoke-comment-likes`, { comment: comment })
 			.then((res) => {
-				props.setMessages([res.data])
+				props.setMessages([res.data.message])
 				// Update karaoke comments
 				props.get("karaoke-comments", setKaraokeComments)
 			})
@@ -35,7 +35,7 @@ const KaraokeCommentSection = (props) => {
 
 		axios
 			.delete(`/api/karaoke-comments/${id}`)
-			.then((res) => props.setMessages([res.data]))
+			.then((res) => props.setMessages([res.data.message]))
 			.catch((err) => props.getErrors(err))
 	}
 

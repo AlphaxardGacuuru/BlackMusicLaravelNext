@@ -32,7 +32,7 @@ const AudioMedia = (props) => {
 				audio: props.audio.id,
 			})
 			.then((res) => {
-				props.setMessages([res.data])
+				props.setMessages([res.data.message])
 				// Check if Cart Videos should be fetched
 				props.get("cart-audios", props.setCartAudios)
 			})

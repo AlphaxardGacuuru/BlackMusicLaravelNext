@@ -49,11 +49,11 @@ class FollowService extends Service
                 $added = true;
             }
 
-            return ["added" => $added, "message" => $message];
+            return [$added, $message];
         }
 
         $message = "You must have bought atleast one song by " . $request->musician;
 
-        return ["added" => false, "message" => $message];
+        return [false, $message];
     }
 }

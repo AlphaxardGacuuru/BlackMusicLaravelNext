@@ -1,25 +1,25 @@
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import axios from '@/lib/axios';
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { useRouter } from "next/router"
+import axios from "@/lib/axios"
 
-import Btn from '@/components/Core/Btn'
+import Btn from "@/components/Core/Btn"
 
 // Import React FilePond
-import { FilePond, registerPlugin } from 'react-filepond';
+import { FilePond, registerPlugin } from "react-filepond"
 
 // Import FilePond styles
-import 'filepond/dist/filepond.min.css';
+import "filepond/dist/filepond.min.css"
 
 // Import the Image EXIF Orientation and Image Preview plugins
 // Note: These need to be installed separately
-import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
-import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
-import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
-import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation"
+import FilePondPluginImagePreview from "filepond-plugin-image-preview"
+import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type"
+import FilePondPluginImageCrop from "filepond-plugin-image-crop"
+import FilePondPluginImageTransform from "filepond-plugin-image-transform"
+import FilePondPluginFileValidateSize from "filepond-plugin-file-validate-size"
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
 
 // Register the plugins
 registerPlugin(
@@ -29,7 +29,7 @@ registerPlugin(
 	FilePondPluginImageCrop,
 	FilePondPluginImageTransform,
 	FilePondPluginFileValidateSize
-);
+)
 
 const VideoCreate = (props) => {
 	// Declare states
@@ -87,7 +87,7 @@ const VideoCreate = (props) => {
 		axios
 			.post(`/api/videos`, formData)
 			.then((res) => {
-				props.setMessages([res.data])
+				props.setMessages([res.data.message])
 				// Update Videos
 				props.get("videos", props.setVideos, "videos")
 				// Remove loader for button

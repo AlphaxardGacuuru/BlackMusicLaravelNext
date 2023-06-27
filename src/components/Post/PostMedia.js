@@ -28,7 +28,7 @@ const PostMedia = (props) => {
 	const onPoll = (post, parameter) => {
 		axios
 			.post(`/api/polls`, { post: post, parameter: parameter })
-			.then((res) => props.setMessages([res.data]))
+			.then((res) => props.setMessages([res.data.message]))
 			.catch((err) => props.getErrors(err, true))
 	}
 
@@ -40,7 +40,7 @@ const PostMedia = (props) => {
 		axios
 			.post(`/api/post-likes`, { post: post })
 			.then((res) => {
-				props.setMessages([res.data])
+				props.setMessages([res.data.message])
 				// Update state
 				props.stateToUpdate()
 			})
@@ -69,7 +69,7 @@ const PostMedia = (props) => {
 		axios
 			.post(`/api/posts/mute/${props.post.username}`, { _method: "PUT" })
 			.then((res) => {
-				props.setMessages([res.data])
+				props.setMessages([res.data.message])
 				// Update state
 				props.stateToUpdate()
 			})
@@ -85,7 +85,7 @@ const PostMedia = (props) => {
 		axios
 			.post(`/api/follows`, { musician: props.post.username })
 			.then((res) => {
-				props.setMessages([res.data])
+				props.setMessages([res.data.message])
 				// Update posts
 				props.setPosts && props.get("posts", props.setPosts, "posts")
 				// Update state

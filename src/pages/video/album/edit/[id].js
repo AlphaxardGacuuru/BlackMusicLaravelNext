@@ -55,7 +55,7 @@ const VideoAlbumEdit = (props) => {
 		axios
 			.post(`/api/video-albums/${id}`, formData)
 			.then((res) => {
-				props.setMessages([res.data])
+				props.setMessages([res.data.message])
 				setPreview()
 				// Remove loader for button
 				setBtnLoading(false)
@@ -177,7 +177,7 @@ export async function getServerSideProps(context) {
 	// Fetch Post Comments
 	await ssrAxios
 		.get(`/api/video-albums/${id}`)
-		.then((res) => (album = res.data))
+		.then((res) => (album = res.data.data))
 
 	// Pass data to the page via props
 	return { props: { album } }

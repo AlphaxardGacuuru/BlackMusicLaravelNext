@@ -33,14 +33,14 @@ class FollowController extends Controller
      */
     public function store(Request $request)
     {
-        $response = $this->service->store($request);
+        [$added, $message] = $this->service->store($request);
 
         // Dispatch Event
         $musician = User::where('username', $request->input('musician'))->first();
 
-        FollowedEvent::dispatchIf($response["added"], $musician);
+        FollowedEvent::dispatchIf($added, $musician);
 
-        return response($response["message"], 200);
+        return response(["message" => $message], 200);
     }
 
     /**

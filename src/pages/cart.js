@@ -41,7 +41,7 @@ const Cart = (props) => {
 	const STKPush = (amount) => {
 		axios
 			.post(`/api/stk-push`, { amount: amount })
-			.then((res) => props.setMessages([res.data]))
+			.then((res) => props.setMessages([res.data.message]))
 			.catch((err) => props.getErrors(err, true))
 	}
 
@@ -53,12 +53,12 @@ const Cart = (props) => {
 				.post(`/api/bought-videos`)
 				.then((res) => {
 					// If videos are bought stop checking
-					setReceiptVideos(res.data)
+					setReceiptVideos(res.data.data)
 					setBottomMenu()
 					setReceipt("menu-open")
 					// Show message
-					var message = `${res.data.length} Video${
-						res.data.length > 1 ? "s" : ""
+					var message = `${res.data.data.length} Video${
+						res.data.data.length > 1 ? "s" : ""
 					} bought`
 					setMessages([...messages, message])
 					// Update state
@@ -74,11 +74,11 @@ const Cart = (props) => {
 			axios
 				.post(`/api/bought-audios`)
 				.then((res) => {
-					setReceiptAudios(res.data)
+					setReceiptAudios(res.data.data)
 					setBottomMenu()
 					setReceipt("menu-open")
-					var message = `${res.data.length} Audio${
-						res.data.length > 1 ? "s" : ""
+					var message = `${res.data.data.length} Audio${
+						res.data.data.length > 1 ? "s" : ""
 					} bought`
 					setMessages([...messages, message])
 					// Update states

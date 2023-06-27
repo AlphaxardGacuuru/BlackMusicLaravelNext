@@ -44,7 +44,7 @@ const Videos = (props) => {
 				axios.get(`/api/users`).then((res) => {
 					setMain("")
 					setButton("none")
-					props.setUsers(res.data)
+					props.setUsers(res.data.data)
 				})
 			})
 			.catch((err) => {

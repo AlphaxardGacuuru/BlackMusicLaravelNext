@@ -60,7 +60,7 @@ export async function getServerSideProps(context) {
 	}
 
 	// Fetch Post Comments
-	await ssrAxios.get(`/api/posts/${id}`).then((res) => (data.post = res.data))
+	await ssrAxios.get(`/api/posts/${id}`).then((res) => (data.post = res.data.data))
 
 	// Pass data to the page via props
 	return { props: data }

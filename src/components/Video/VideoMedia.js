@@ -32,7 +32,7 @@ const VideoMedia = (props) => {
 				video: props.video.id,
 			})
 			.then((res) => {
-				props.setMessages([res.data])
+				props.setMessages([res.data.message])
 				// Check if Cart Videos should be fetched
 				props.get("cart-videos", props.setCartVideos)
 			})

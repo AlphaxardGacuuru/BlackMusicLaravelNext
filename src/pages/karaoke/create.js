@@ -1,40 +1,40 @@
-import React, { useState, useEffect, useRef } from 'react'
-import Link from 'next/link'
-import Ticker from 'react-ticker'
-import axios from '@/lib/axios'
+import React, { useState, useEffect, useRef } from "react"
+import Link from "next/link"
+import Ticker from "react-ticker"
+import axios from "@/lib/axios"
 
-import Img from '@/components/Core/Img'
-import Button from '@/components/Core/Btn'
+import Img from "@/components/Core/Img"
+import Button from "@/components/Core/Btn"
 
-import CloseSVG from '@/svgs/CloseSVG'
-import FlashSVG from '@/svgs/FlashSVG'
-import FlashFilledSVG from '@/svgs/FlashFilledSVG'
-import LoopSVG from '@/svgs/LoopSVG'
-import TimerSVG from '@/svgs/TimerSVG'
-import RecordSVG from '@/svgs/RecordSVG'
-import RecordFilledSVG from '@/svgs/RecordFilledSVG'
-import StopFilledSVG from '@/svgs/StopFilledSVG'
-import PlayFilledSVG from '@/svgs/PlayFilledSVG'
-import PauseFilledSVG from '@/svgs/PauseFilledSVG'
-import UploadBoxSVG from '@/svgs/UploadBoxSVG'
-import MusicNoteSVG from '@/svgs/MusicNoteSVG'
-import ImageSVG from '@/svgs/ImageSVG'
+import CloseSVG from "@/svgs/CloseSVG"
+import FlashSVG from "@/svgs/FlashSVG"
+import FlashFilledSVG from "@/svgs/FlashFilledSVG"
+import LoopSVG from "@/svgs/LoopSVG"
+import TimerSVG from "@/svgs/TimerSVG"
+import RecordSVG from "@/svgs/RecordSVG"
+import RecordFilledSVG from "@/svgs/RecordFilledSVG"
+import StopFilledSVG from "@/svgs/StopFilledSVG"
+import PlayFilledSVG from "@/svgs/PlayFilledSVG"
+import PauseFilledSVG from "@/svgs/PauseFilledSVG"
+import UploadBoxSVG from "@/svgs/UploadBoxSVG"
+import MusicNoteSVG from "@/svgs/MusicNoteSVG"
+import ImageSVG from "@/svgs/ImageSVG"
 
 // Import React FilePond
-import { FilePond, registerPlugin } from 'react-filepond';
+import { FilePond, registerPlugin } from "react-filepond"
 
 // Import FilePond styles
-import 'filepond/dist/filepond.min.css';
+import "filepond/dist/filepond.min.css"
 
 // Import the Image EXIF Orientation and Image Preview plugins
 // Note: These need to be installed separately
-import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
-import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
-import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
-import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation"
+import FilePondPluginImagePreview from "filepond-plugin-image-preview"
+import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type"
+import FilePondPluginImageCrop from "filepond-plugin-image-crop"
+import FilePondPluginImageTransform from "filepond-plugin-image-transform"
+import FilePondPluginFileValidateSize from "filepond-plugin-file-validate-size"
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
 
 // Register the plugins
 registerPlugin(
@@ -44,11 +44,10 @@ registerPlugin(
 	FilePondPluginImageCrop,
 	FilePondPluginImageTransform,
 	FilePondPluginFileValidateSize
-);
+)
 
 const KaraokeCreate = (props) => {
-
-	// Declare states	
+	// Declare states
 	const [innerWidth, setInnerWidth] = useState(100)
 	const [innerHeight, setInnerHeight] = useState(100)
 	const [flash, setFlash] = useState()
@@ -109,23 +108,25 @@ const KaraokeCreate = (props) => {
 		setLoadingBtn(true)
 
 		// Add form data to FormData object
-		formData.append("audio", props.karaokeAudio.id);
-		formData.append("karaoke", karaoke);
-		formData.append("description", description);
+		formData.append("audio", props.karaokeAudio.id)
+		formData.append("karaoke", karaoke)
+		formData.append("description", description)
 
 		// Send data to PostsController
 		// Get csrf cookie from Laravel inorder to send a POST request
-		axios.get('sanctum/csrf-cookie').then(() => {
-			axios.post(`${props.url}/api/karaokes`, formData)
+		axios.get("sanctum/csrf-cookie").then(() => {
+			axios
+				.post(`${props.url}/api/karaokes`, formData)
 				.then((res) => {
-					props.setMessages([res.data])
+					props.setMessages([res.data.message])
 					// Update Karaokes
 					props.get("karaokes", setKaraoke)
 					// Remove loader for button
 					setLoadingBtn(false)
 					// Redirect to Karaoke Charts
-					setTimeout(() => location.href = "/karaoke/charts", 500)
-				}).catch(err => {
+					setTimeout(() => (location.href = "/karaoke/charts"), 500)
+				})
+				.catch((err) => {
 					// Remove loader for button
 					setLoadingBtn(false)
 					props.getErrors(err)
@@ -150,7 +151,7 @@ const KaraokeCreate = (props) => {
 		Video Source */
 		// Older browsers might not implement mediaDevices at all, so we set an empty object first
 		if (navigator.mediaDevices === undefined) {
-			navigator.mediaDevices = {};
+			navigator.mediaDevices = {}
 		}
 
 		// Some browsers partially implement mediaDevices. We can't just assign an object
@@ -158,58 +159,61 @@ const KaraokeCreate = (props) => {
 		// Here, we will just add the getUserMedia property if it's missing.
 		if (navigator.mediaDevices.getUserMedia === undefined) {
 			navigator.mediaDevices.getUserMedia = (constraints) => {
-
 				// First get ahold of the legacy getUserMedia, if present
-				const getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+				const getUserMedia =
+					navigator.webkitGetUserMedia || navigator.mozGetUserMedia
 
 				// Some browsers just don't implement it - return a rejected promise with an error
 				// to keep a consistent interface
 				if (!getUserMedia) {
-					return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+					return Promise.reject(
+						new Error("getUserMedia is not implemented in this browser")
+					)
 				}
 
 				// Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
 				return new Promise(function (resolve, reject) {
-					getUserMedia.call(navigator, constraints, resolve, reject);
-				});
+					getUserMedia.call(navigator, constraints, resolve, reject)
+				})
 			}
 		}
 
 		const constraints = {
 			audio: false,
 			video: {
-				facingMode: { exact: camera }
-			}
+				facingMode: { exact: camera },
+			},
 		}
 
-		let chunks = [];
+		let chunks = []
 
 		// Get Video stream
-		navigator.mediaDevices.getUserMedia(constraints)
+		navigator.mediaDevices
+			.getUserMedia(constraints)
 			.then((stream) => {
 				// Get Video Stream
 				// Older browsers may not have srcObject
 				if ("srcObject" in video.current) {
 					/* use the stream */
-					video.current.srcObject = stream;
+					video.current.srcObject = stream
 				} else {
 					// Avoid using this in new browsers, as it is going away.
-					video.current.src = window.URL.createObjectURL(stream);
+					video.current.src = window.URL.createObjectURL(stream)
 				}
 
 				video.current.onloadedmetadata = (e) => {
-					video.current.play();
-				};
+					video.current.play()
+				}
 				// Get Video Stream End
 
-				const track = stream.getVideoTracks()[0];
+				const track = stream.getVideoTracks()[0]
 
 				// For Camera Flip
 				// Add Click to Start add Stop stream for Changes
 				flipCameraEl.current.addEventListener("click", () => {
 					track.stop()
 					// track.start()
-				});
+				})
 				// For Camera Flip End
 
 				// For Flash
@@ -217,21 +221,21 @@ const KaraokeCreate = (props) => {
 
 				imageCapture.getPhotoCapabilities().then(() => {
 					track.applyConstraints({
-						advanced: [{ torch: flash }]
-					});
+						advanced: [{ torch: flash }],
+					})
 				})
 				// For Flash End
 
 				// For Recording
-				const mediaRecorder = new MediaRecorder(stream);
+				const mediaRecorder = new MediaRecorder(stream)
 
 				// visualize(stream);
 
 				// Start Recording
-				startRecordEl.current.addEventListener('click', () => {
-					mediaRecorder.start();
-					console.log(mediaRecorder.state);
-					console.log("recorder started");
+				startRecordEl.current.addEventListener("click", () => {
+					mediaRecorder.start()
+					console.log(mediaRecorder.state)
+					console.log("recorder started")
 					// Start Spining Record
 					spiningRecord.current.classList.add("rotate-record")
 					startRecordEl.current.style.display = "none"
@@ -241,10 +245,10 @@ const KaraokeCreate = (props) => {
 				})
 
 				// Pause Recording
-				pauseRecordEl.current.addEventListener('click', () => {
-					mediaRecorder.pause();
-					console.log(mediaRecorder.state);
-					console.log("recorder paused");
+				pauseRecordEl.current.addEventListener("click", () => {
+					mediaRecorder.pause()
+					console.log(mediaRecorder.state)
+					console.log("recorder paused")
 					// Stop Spining Record
 					spiningRecord.current.classList.remove("rotate-record")
 					pauseRecordEl.current.style.display = "none"
@@ -252,10 +256,10 @@ const KaraokeCreate = (props) => {
 				})
 
 				// Resume Recording
-				resumeRecordEl.current.addEventListener('click', () => {
-					mediaRecorder.resume();
-					console.log(mediaRecorder.state);
-					console.log("recorder resumed");
+				resumeRecordEl.current.addEventListener("click", () => {
+					mediaRecorder.resume()
+					console.log(mediaRecorder.state)
+					console.log("recorder resumed")
 					// Start Spining Record
 					spiningRecord.current.classList.add("rotate-record")
 					resumeRecordEl.current.style.display = "none"
@@ -263,10 +267,10 @@ const KaraokeCreate = (props) => {
 				})
 
 				// Stop recording
-				stopRecordEl.current.addEventListener('click', () => {
-					mediaRecorder.stop();
-					console.log(mediaRecorder.state);
-					console.log("recorder stopped");
+				stopRecordEl.current.addEventListener("click", () => {
+					mediaRecorder.stop()
+					console.log(mediaRecorder.state)
+					console.log("recorder stopped")
 					// Stop Spining Record
 					spiningRecord.current.classList.remove("rotate-record")
 					stopRecordEl.current.style.display = "none"
@@ -277,23 +281,27 @@ const KaraokeCreate = (props) => {
 				})
 
 				mediaRecorder.onstop = (e) => {
-					console.log("recorder stopped");
+					console.log("recorder stopped")
 				}
 
 				mediaRecorder.ondataavailable = (e) => {
-					chunks.push(e.data);
+					chunks.push(e.data)
 					console.log(chunks)
 
-					downloadButton.current.href = URL.createObjectURL(chunks[0]);
-					downloadButton.current.download = `RecordedVideo.webm`;
+					downloadButton.current.href = URL.createObjectURL(chunks[0])
+					downloadButton.current.download = `RecordedVideo.webm`
 					// downloadButton.current.click()
 
-					console.log(`Successfully recorded ${chunks[0].size / 1000} Kbs of ${chunks[0].type} media.`);
+					console.log(
+						`Successfully recorded ${chunks[0].size / 1000} Kbs of ${
+							chunks[0].type
+						} media.`
+					)
 				}
 				// For Recording End
-
-			}).catch((err) => {
-				console.log(err.name + ": " + err.message);
+			})
+			.catch((err) => {
+				console.log(err.name + ": " + err.message)
 			})
 	}, [])
 
@@ -307,20 +315,23 @@ const KaraokeCreate = (props) => {
 		"invert",
 		"opacity",
 		"saturate",
-		"sepia"
+		"sepia",
 	]
 
 	return (
 		<>
 			<div className="row p-0">
 				<div className="col-sm-4"></div>
-				<div className="col-sm-4"
+				<div
+					className="col-sm-4"
 					style={{
 						width: innerWidth,
 						height: innerHeight,
-						overflow: "hidden"
+						overflow: "hidden",
 					}}>
-					<video ref={video} className={`karaoke-video-upload ${filter}`}></video>
+					<video
+						ref={video}
+						className={`karaoke-video-upload ${filter}`}></video>
 					{/* Floating Video Info Top */}
 					<div className="w-100" style={{ position: "absolute", top: 0 }}>
 						<div className="d-flex justify-content-between">
@@ -359,7 +370,7 @@ const KaraokeCreate = (props) => {
 										</center>
 									</div>
 									{/* Flash Light */}
-									{camera == "environment" &&
+									{camera == "environment" && (
 										<div className="ms-auto me-3">
 											<center>
 												<span
@@ -370,7 +381,8 @@ const KaraokeCreate = (props) => {
 													<h6>Flash</h6>
 												</span>
 											</center>
-										</div>}
+										</div>
+									)}
 									{/* Download */}
 									<div className="ms-auto me-3">
 										<center>
@@ -414,7 +426,9 @@ const KaraokeCreate = (props) => {
 							</div>
 							<div className="p-2">
 								<center>
-									<span ref={stopRecordEl} style={{ fontSize: "4em", color: "#fb3958" }}>
+									<span
+										ref={stopRecordEl}
+										style={{ fontSize: "4em", color: "#fb3958" }}>
 										<StopFilledSVG />
 										<h6 style={{ color: "#fb3958" }}>Recording</h6>
 									</span>
@@ -455,23 +469,23 @@ const KaraokeCreate = (props) => {
 									)}
 								</Ticker>
 							</div>
-							<div
-								ref={spiningRecord}
-								className="mx-2">
+							<div ref={spiningRecord} className="mx-2">
 								<Link href={`/audio-show/${props.karaokeAudio.audioId}`}>
-									<a onClick={() => {
-										props.setShow(props.karaokeAudio.audioId)
-										props.setLocalStorage("show", {
-											"id": props.karaokeAudio.audioId,
-											"time": 0
-										})
-									}}>
+									<a
+										onClick={() => {
+											props.setShow(props.karaokeAudio.audioId)
+											props.setLocalStorage("show", {
+												id: props.karaokeAudio.audioId,
+												time: 0,
+											})
+										}}>
 										<Img
 											src={props.karaokeAudio.thumbnail}
 											width="50px"
 											height="50px"
 											imgClass="rounded-circle"
-											alt="current audio" />
+											alt="current audio"
+										/>
 									</a>
 								</Link>
 							</div>
@@ -484,9 +498,11 @@ const KaraokeCreate = (props) => {
 			</div>
 
 			{/* Sliding Bottom Nav */}
-			<div className={bottomMenu} >
+			<div className={bottomMenu}>
 				<div className="bottomMenu">
-					<div className="d-flex align-items-center justify-content-between" style={{ height: "3em" }}>
+					<div
+						className="d-flex align-items-center justify-content-between"
+						style={{ height: "3em" }}>
 						<div className="dropdown-header text-white">
 							<h5 style={{ margin: "0px" }}>Upload</h5>
 						</div>
@@ -500,12 +516,12 @@ const KaraokeCreate = (props) => {
 					</div>
 
 					{/* Upload Input */}
-					{!showForm && upload &&
+					{!showForm && upload && (
 						<div>
 							<FilePond
 								name="filepond-karaoke"
 								labelIdle='Drag & Drop your Video or <span class="filepond--label-action text-dark"> Browse </span>'
-								acceptedFileTypes={['video/*']}
+								acceptedFileTypes={["video/*"]}
 								stylePanelAspectRatio="16:9"
 								maxFileSize="200000000"
 								allowRevert={true}
@@ -513,28 +529,34 @@ const KaraokeCreate = (props) => {
 									url: `${props.url}/api`,
 									process: {
 										url: "/karaokes",
-										onload: res => setKaraoke(res),
-										onerror: (err) => console.log(err.response.data)
+										onload: (res) => setKaraoke(res),
+										onerror: (err) => console.log(err.response.data),
 									},
 									revert: {
 										url: `/${karaoke}`,
-										onload: res => {
+										onload: (res) => {
 											props.setMessages([res])
 										},
 									},
-								}} />
+								}}
+							/>
 
-							{karaoke &&
+							{karaoke && (
 								<Button
 									btnClass="mysonar-btn mb-4"
 									btnText="next"
-									onClick={() => setShowForm(true)} />}
-						</div>}
+									onClick={() => setShowForm(true)}
+								/>
+							)}
+						</div>
+					)}
 					{/* Upload Input End */}
 
 					{/* Karaoke Form */}
-					{showForm &&
-						<div className="contact-form text-center call-to-action-content wow fadeInUp" data-wow-delay="0.5s">
+					{showForm && (
+						<div
+							className="contact-form text-center call-to-action-content wow fadeInUp"
+							data-wow-delay="0.5s">
 							<div className="form-group">
 								<form onSubmit={onSubmit}>
 									<input
@@ -543,16 +565,21 @@ const KaraokeCreate = (props) => {
 										className="form-control"
 										placeholder="Karaoke description"
 										required={true}
-										onChange={(e) => { setDescription(e.target.value) }} />
+										onChange={(e) => {
+											setDescription(e.target.value)
+										}}
+									/>
 									<br />
 
 									<Button
 										btnClass="mysonar-btn"
 										btnText="upload video"
-										loading={loadingBtn} />
+										loading={loadingBtn}
+									/>
 								</form>
 							</div>
-						</div>}
+						</div>
+					)}
 					{/* Karaoke Form End */}
 
 					{/* Filters */}
@@ -568,14 +595,14 @@ const KaraokeCreate = (props) => {
 											src="/storage/img/slide2.jpg"
 											imgClass={item}
 											width="40px"
-											height="80px" />
+											height="80px"
+										/>
 									</span>
 									<h6 className="mt-1">{item}</h6>
 								</span>
 							))}
 					</div>
 					{/* Filters End */}
-
 				</div>
 			</div>
 			{/* Sliding Bottom Nav End */}
@@ -589,8 +616,9 @@ export async function getServerSideProps() {
 	var karaokeAudio
 
 	// Fetch Karaoke Audios
-	await axios.get(`/api/karaoke-audios/1`)
-		.then((res) => karaokeAudio = res.data[0])
+	await axios
+		.get(`/api/karaoke-audios/1`)
+		.then((res) => (karaokeAudio = res.data.data))
 
 	// Pass data to the page via props
 	return { props: { karaokeAudio } }

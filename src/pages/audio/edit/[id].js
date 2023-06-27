@@ -113,7 +113,7 @@ const AudioEdit = (props) => {
 			axios
 				.post(`/api/audios/${id}`, formData)
 				.then((res) => {
-					props.setMessages([res.data])
+					props.setMessages([res.data.message])
 					// Update Audios
 					props.get("audios", props.setAudios, "audios")
 					// Remove loader for button
@@ -350,7 +350,7 @@ export async function getServerSideProps(context) {
 	var audio
 
 	// Fetch Post Comments
-	await ssrAxios.get(`/api/audios/${id}`).then((res) => (audio = res.data[0]))
+	await ssrAxios.get(`/api/audios/${id}`).then((res) => (audio = res.data.data))
 
 	// Pass data to the page via props
 	return { props: { audio } }

@@ -47,7 +47,7 @@ export async function getServerSideProps(context) {
 	}
 
 	// Fetch Newly Released
-	await ssrAxios.get(`/api/karaokes`).then((res) => (data.karaokes = res.data))
+	await ssrAxios.get(`/api/karaokes`).then((res) => (data.karaokes = res.data.data))
 
 	return { props: data }
 }

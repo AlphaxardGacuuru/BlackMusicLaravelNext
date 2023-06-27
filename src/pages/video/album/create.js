@@ -51,7 +51,7 @@ const VideoAlbumCreate = (props) => {
 		axios
 			.post(`${props.url}/api/video-albums`, formData)
 			.then((res) => {
-				props.setMessages([res.data])
+				props.setMessages([res.data.message])
 				props.get("video-albums", props.setVideoAlbums, "videoAlbums")
 				// Remove loader for button
 				setLoadingBtn(false)

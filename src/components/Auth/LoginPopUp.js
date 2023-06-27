@@ -46,7 +46,7 @@ const LoginPopUp = (props) => {
 		// window.location.href = `${props.url}/api/login/${website}`
 
 		// axios.get(`${props.url}/api/login/${website}`)
-		// .then((res) => console.log(res.data))
+		// .then((res) => console.log(res.data.data))
 
 		// register({ name, username, email, phone, password, password_confirmation: password, setErrors })
 

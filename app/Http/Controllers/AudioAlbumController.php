@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AudioAlbum;
 use App\Http\Services\AudioAlbumService;
+use App\Models\AudioAlbum;
 use Illuminate\Http\Request;
 
 class AudioAlbumController extends Controller
@@ -37,7 +37,9 @@ class AudioAlbumController extends Controller
             'cover' => 'required|image|max:1999',
         ]);
 
-        return $this->service->store($request);
+        [$saved, $message] = $this->service->store($request);
+
+        return response(["message" => $message], 200);
     }
 
     /**
@@ -64,7 +66,9 @@ class AudioAlbumController extends Controller
             'cover' => 'nullable|image|max:1999',
         ]);
 
-        return $this->service->update($request, $id);
+        [$saved, $message] = $this->service->update($request, $id);
+
+        return response(["message" => $message], 200);
     }
 
     /**
@@ -78,10 +82,10 @@ class AudioAlbumController extends Controller
         //
     }
 
-	/*
-	* Artist's Audio Albums */
-	public function artistAudioAlbums($username)
-	{
-		return $this->service->artistAudioAlbums($username);
-	} 
+    /*
+     * Artist's Audio Albums */
+    public function artistAudioAlbums($username)
+    {
+        return $this->service->artistAudioAlbums($username);
+    }
 }

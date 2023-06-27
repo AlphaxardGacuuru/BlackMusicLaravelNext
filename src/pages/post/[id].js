@@ -54,7 +54,7 @@ const PostShow = (props) => {
 		axios
 			.delete(`/api/posts/${id}`)
 			.then((res) => {
-				props.setMessages([res.data])
+				props.setMessages([res.data.message])
 				// Redirect to home
 				router.push("/")
 			})
@@ -68,7 +68,7 @@ const PostShow = (props) => {
 		axios
 			.post(`/api/post-comment-likes`, { comment: comment })
 			.then((res) => {
-				props.setMessages([res.data])
+				props.setMessages([res.data.message])
 				// Update Post Comments to update like counter
 				props.get(`post-comments/${id}`, setPostComments)
 			})
@@ -83,7 +83,7 @@ const PostShow = (props) => {
 
 		axios
 			.delete(`/api/post-comments/${comment}`)
-			.then((res) => props.setMessages([res.data]))
+			.then((res) => props.setMessages([res.data.message]))
 			.catch((err) => props.getErrors(err))
 	}
 
@@ -176,10 +176,10 @@ export async function getServerSideProps(context) {
 	var data = { post: {}, comments: {} }
 
 	// Fetch Post Comments
-	await ssrAxios.get(`/api/posts/${id}`).then((res) => (data.post = res.data))
+	await ssrAxios.get(`/api/posts/${id}`).then((res) => (data.post = res.data.data))
 	await ssrAxios
 		.get(`/api/post-comments/${id}`)
-		.then((res) => (data.comments = res.data))
+		.then((res) => (data.comments = res.data.data))
 
 	// Pass data to the page via props
 	return { props: data }

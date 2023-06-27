@@ -49,7 +49,7 @@ const StoryShow = (props) => {
 export async function getServerSideProps(context) {
 	var stories
 
-	await ssrAxios.get(`/api/stories`).then((res) => (stories = res.data))
+	await ssrAxios.get(`/api/stories`).then((res) => (stories = res.data.data))
 
 	return { props: { stories } }
 }

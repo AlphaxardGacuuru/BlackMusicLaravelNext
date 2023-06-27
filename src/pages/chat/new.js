@@ -118,7 +118,7 @@ export async function getServerSideProps(context) {
 
 	await ssrAxios
 		.get(`http://localhost:8000/api/users`)
-		.then((res) => (data.users = res.data))
+		.then((res) => (data.users = res.data.data))
 
 	// Pass data to the page via props
 	return { props: data }

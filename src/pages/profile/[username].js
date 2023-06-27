@@ -48,7 +48,7 @@ const Profile = (props) => {
 		axios
 			.post(`/api/follows`, { musician: user.username })
 			.then((res) => {
-				props.setMessages([res.data])
+				props.setMessages([res.data.message])
 				// Update User info
 				props.get(`users/${username}`, setUser)
 				props.get(`artist/posts/${username}`, setArtistPosts)
@@ -63,7 +63,7 @@ const Profile = (props) => {
 
 		axios
 			.delete(`/api/posts/${id}`)
-			.then((res) => props.setMessages([res.data]))
+			.then((res) => props.setMessages([res.data.message]))
 			.catch((err) => props.getErrors(err, true))
 	}
 
@@ -344,32 +344,32 @@ export async function getServerSideProps(context) {
 	// Fetch User
 	await ssrAxios
 		.get(`/api/users/${username}`)
-		.then((res) => (data.user = res.data))
+		.then((res) => (data.user = res.data.data))
 
 	// Fetch Artist's Video Albums
 	await ssrAxios
 		.get(`/api/artist/video-albums/${username}`)
-		.then((res) => (data.artistVideoAlbums = res.data))
+		.then((res) => (data.artistVideoAlbums = res.data.data))
 
 	// Fetch Artist's Videos
 	await ssrAxios
 		.get(`/api/artist/videos/${username}`)
-		.then((res) => (data.artistVideos = res.data))
+		.then((res) => (data.artistVideos = res.data.data))
 
 	// Fetch Artist's Posts
 	await ssrAxios
 		.get(`/api/artist/posts/${username}`)
-		.then((res) => (data.artistPosts = res.data))
+		.then((res) => (data.artistPosts = res.data.data))
 
 	// Fetch Artist's Audio Albums
 	await ssrAxios
 		.get(`/api/artist/audio-albums/${username}`)
-		.then((res) => (data.artistAudioAlbums = res.data))
+		.then((res) => (data.artistAudioAlbums = res.data.data))
 
 	// Fetch Artist's Audios
 	await ssrAxios
 		.get(`/api/artist/audios/${username}`)
-		.then((res) => (data.artistAudios = res.data))
+		.then((res) => (data.artistAudios = res.data.data))
 
 	return { props: data }
 }

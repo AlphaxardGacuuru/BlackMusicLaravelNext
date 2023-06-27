@@ -70,14 +70,14 @@ const Search = (props) => {
 	const onSearch = (keyword) => {
 		axios
 			.post(`/api/search`, { keyword: keyword })
-			.then((res) => props.setMessages([res.data]))
+			.then((res) => props.setMessages([res.data.message]))
 	}
 
 	// Delete search item
 	const onDeleteSearch = (id) => {
 		axios.delete(`api/search/${id}`).then((res) => {
 			// Update search
-			axios.get(`/api/search`).then((res) => setSearchHistory(res.data))
+			axios.get(`/api/search`).then((res) => setSearchHistory(res.data.data))
 		})
 	}
 
@@ -129,7 +129,7 @@ const Search = (props) => {
 									<span
 										style={{ cursor: "pointer" }}
 										onClick={() => onDeleteSearch(search.id)}>
-											<CloseSVG />
+										<CloseSVG />
 									</span>
 								</div>
 							</div>

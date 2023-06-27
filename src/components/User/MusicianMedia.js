@@ -24,7 +24,7 @@ const MusiciansMedia = (props) => {
 		axios
 			.post(`/api/follows`, { musician: props.user.username })
 			.then((res) => {
-				props.setMessages([res.data])
+				props.setMessages([res.data.message])
 				// Update users
 				props.get("users", props.setUsers, "users")
 				// Update posts

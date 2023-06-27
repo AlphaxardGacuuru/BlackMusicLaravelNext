@@ -39,7 +39,7 @@ const VideoShow = (props) => {
 		if (id) {
 			axios
 				.get(`/api/videos/${id}`)
-				.then((res) => setVideo(res.data[0]))
+				.then((res) => setVideo(res.data.data))
 				.catch(() => props.setErrors([`Failed to fetch video`]))
 
 			props.get(`video-comments/${id}`, setVideoComments)
@@ -60,12 +60,12 @@ const VideoShow = (props) => {
 		axios
 			.post(`/api/video-likes`, { video: id })
 			.then((res) => {
-				props.setMessages([res.data])
+				props.setMessages([res.data.message])
 
 				// Fetch Audio
 				axios
 					.get(`api/videos/${id}`)
-					.then((res) => setVideo(res.data[0]))
+					.then((res) => setVideo(res.data.data))
 					.catch((err) => props.getErrors(err))
 			})
 			.catch((err) => props.getErrors(err))
@@ -86,7 +86,7 @@ const VideoShow = (props) => {
 		// Add Video to Cart
 		axios
 			.post(`/api/cart-videos`, { video: props.video.id })
-			.then((res) => props.setMessages([res.data]))
+			.then((res) => props.setMessages([res.data.message]))
 			.catch((err) => props.getErrors(err, true))
 	}
 
@@ -106,7 +106,7 @@ const VideoShow = (props) => {
 		// Add follow
 		axios
 			.post(`/api/follows`, { musician: video.username })
-			.then((res) => props.setMessages([res.data]))
+			.then((res) => props.setMessages([res.data.message]))
 			.catch((err) => props.getErrors(err, true))
 	}
 
@@ -119,7 +119,7 @@ const VideoShow = (props) => {
 				comment: comment,
 			})
 			.then((res) => {
-				props.setMessages([res.data])
+				props.setMessages([res.data.message])
 				props.get(`video-comments/${id}`, setVideoComments)
 			})
 			.catch((err) => props.getErrors(err))
@@ -133,7 +133,7 @@ const VideoShow = (props) => {
 
 		axios
 			.delete(`/api/video-comments/${comment}`)
-			.then((res) => props.setMessages([res.data]))
+			.then((res) => props.setMessages([res.data.message]))
 			.catch((err) => props.getErrors(err))
 	}
 
@@ -554,11 +554,11 @@ export async function getServerSideProps(context) {
 	// Fetch Post Comments
 	await ssrAxios
 		.get(`/api/videos/${id}`)
-		.then((res) => (data.video = res.data[0]))
+		.then((res) => (data.video = res.data.data))
 	await ssrAxios
 		.get(`/api/video-comments/${id}`)
-		.then((res) => (data.videoComments = res.data))
-	await ssrAxios.get(`/api/videos`).then((res) => (data.videos = res.data))
+		.then((res) => (data.videoComments = res.data.data))
+	await ssrAxios.get(`/api/videos`).then((res) => (data.videos = res.data.data))
 
 	// Pass data to the page via props
 	return { props: data }

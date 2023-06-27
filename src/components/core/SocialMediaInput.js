@@ -89,7 +89,7 @@ const SocialMediaInput = (props) => {
 				// Hide loader
 				setLoading(false)
 				// Messages
-				props.setMessages([res.data])
+				props.setMessages([res.data.message])
 				// Clear Media
 				setMedia("")
 				// Update State

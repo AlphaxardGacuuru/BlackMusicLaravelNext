@@ -42,10 +42,10 @@ export default function Home(props) {
 		props.auth?.accountType == "musician" && setShowPostBtn(true)
 
 		// Fetch data
-		// props.get("posts", setPosts, "posts")
-		// props.get("videos", setVideos, "videos")
-		// props.get("users", setUsers, "users")
-		// props.get("stories", setStories, "stories")
+		props.get("posts", setPosts, "posts")
+		props.get("videos", setVideos, "videos")
+		props.get("users", setUsers, "users")
+		props.get("stories", setStories, "stories")
 	}, [props.auth])
 
 	/*
@@ -67,7 +67,7 @@ export default function Home(props) {
 
 		axios
 			.delete(`/api/posts/${id}`)
-			.then((res) => props.setMessages([res.data]))
+			.then((res) => props.setMessages([res.data.message]))
 			.catch((err) => props.getErrors(err, true))
 	}
 
@@ -331,13 +331,13 @@ export async function getServerSideProps(context) {
 		.then((res) => (data.posts = res.data.data))
 	await ssrAxios
 		.get(`http://localhost:8000/api/users`)
-		.then((res) => (data.users = res.data))
+		.then((res) => (data.users = res.data.data))
 	await ssrAxios
 		.get(`http://localhost:8000/api/videos`)
-		.then((res) => (data.videos = res.data))
+		.then((res) => (data.videos = res.data.data))
 	await ssrAxios
 		.get(`http://localhost:8000/api/stories`)
-		.then((res) => (data.stories = res.data))
+		.then((res) => (data.stories = res.data.data))
 
 	// Pass data to the page via props
 	return { props: data }

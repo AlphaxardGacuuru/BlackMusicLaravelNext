@@ -96,7 +96,7 @@ const ChatThread = (props) => {
 
 		axios
 			.delete(`/api/chats/${id}`)
-			.then((res) => props.setMessages([res.data]))
+			.then((res) => props.setMessages([res.data.message]))
 			.catch((err) => props.getErrors(err))
 	}
 

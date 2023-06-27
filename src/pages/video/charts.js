@@ -249,19 +249,19 @@ export async function getServerSideProps(context) {
 	// Fetch Newly Released
 	await ssrAxios
 		.get(`/api/video-charts/newly-released`)
-		.then((res) => (data.newlyReleased = res.data))
+		.then((res) => (data.newlyReleased = res.data.data))
 	// Fetch Trending
 	await ssrAxios
 		.get(`/api/video-charts/trending`)
-		.then((res) => (data.trending = res.data))
+		.then((res) => (data.trending = res.data.data))
 	// Fetch Top Downloaded
 	await ssrAxios
 		.get(`/api/video-charts/top-downloaded`)
-		.then((res) => (data.topDownloaded = res.data))
+		.then((res) => (data.topDownloaded = res.data.data))
 	// Fetch Top Downloaded
 	await ssrAxios
 		.get(`/api/video-charts/top-liked`)
-		.then((res) => (data.topLiked = res.data))
+		.then((res) => (data.topLiked = res.data.data))
 
 	// Pass data to the page via props
 	return { props: data }

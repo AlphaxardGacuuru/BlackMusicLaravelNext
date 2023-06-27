@@ -142,7 +142,7 @@ const Story = (props) => {
 
 		axios
 			.post(`/api/stories/mute/${props.story.username}`, { _method: "PUT" })
-			.then((res) => props.setMessages([res.data]))
+			.then((res) => props.setMessages([res.data.message]))
 			.catch((err) => props.getErrors(err, true))
 	}
 

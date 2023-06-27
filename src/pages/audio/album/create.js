@@ -51,7 +51,7 @@ const AudioAlbumCreate = (props) => {
 		axios
 			.post(`/api/audio-albums`, formData)
 			.then((res) => {
-				props.setMessages([res.data])
+				props.setMessages([res.data.message])
 				// Remove loader for button
 				setLoadingBtn(false)
 				setTimeout(() => router.push("/audio"), 500)
@@ -127,7 +127,7 @@ const AudioAlbumCreate = (props) => {
 												cursor: "pointer",
 											}}
 											onClick={() => mediaInput.current.click()}>
-												<ImageSVG />
+											<ImageSVG />
 										</div>
 
 										<br />

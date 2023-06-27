@@ -53,9 +53,12 @@ class AudioAlbumService extends Service
         $aAlbum->username = auth('sanctum')->user()->username;
         $aAlbum->cover = $aCover;
         $aAlbum->released = $request->input('released');
-        $aAlbum->save();
+        $saved = $aAlbum->save();
 
-        return response('Audio Album Created', 200);
+		// Message
+		$message = "Audio Album " . $aAlbum->name . " created.";
+
+		return [$saved, $message];
     }
 
     /**
@@ -96,9 +99,12 @@ class AudioAlbumService extends Service
             $aAlbum->released = $request->input('released');
         }
 
-        $aAlbum->save();
+        $saved = $aAlbum->save();
 
-        return response('Audio Album Edited', 200);
+		// Message
+		$message = $aAlbum->name . " updated";
+
+		return [$saved, $message];
     }
 
     /*

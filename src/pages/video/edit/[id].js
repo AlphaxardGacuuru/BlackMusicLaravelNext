@@ -116,7 +116,7 @@ const VideoEdit = (props) => {
 		axios
 			.post(`${props.url}/api/videos/${id}`, formData)
 			.then((res) => {
-				props.setMessages([res.data])
+				props.setMessages([res.data.message])
 				// Update Videos
 				props.get("videos", props.setVideos, "videos")
 				// Remove loader for button
@@ -348,7 +348,7 @@ export async function getServerSideProps(context) {
 	var video
 
 	// Fetch Post Comments
-	await ssrAxios.get(`/api/videos/${id}`).then((res) => (video = res.data[0]))
+	await ssrAxios.get(`/api/videos/${id}`).then((res) => (video = res.data.data))
 
 	// Pass data to the page via props
 	return { props: { video } }

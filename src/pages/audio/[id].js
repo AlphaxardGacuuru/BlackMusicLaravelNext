@@ -56,7 +56,7 @@ const AudioShow = (props) => {
 		if (id) {
 			axios
 				.get(`/api/audios/${id}`)
-				.then((res) => setAudio(res.data[0]))
+				.then((res) => setAudio(res.data))
 				.catch(() => props.setErrors([`Failed to fetch audio`]))
 
 			props.get(`audio-comments/${id}`, setAudioComments)
@@ -77,11 +77,11 @@ const AudioShow = (props) => {
 		axios
 			.post(`/api/audio-likes`, { audio: id })
 			.then((res) => {
-				props.setMessages([res.data])
+				props.setMessages([res.data.message])
 				// Fetch Audio
 				axios
 					.get(`api/audios/${id}`)
-					.then((res) => setAudio(res.data[0]))
+					.then((res) => setAudio(res.data.data))
 					.catch((err) => props.getErrors(err))
 			})
 			.catch((err) => props.getErrors(err))
@@ -102,7 +102,7 @@ const AudioShow = (props) => {
 		// Add Audio to Cart
 		axios
 			.post(`/api/cart-audios`, { audio: props.audio.id })
-			.then((res) => props.setMessages([res.data]))
+			.then((res) => props.setMessages([res.data.message]))
 			.catch((err) => props.getErrors(err, true))
 	}
 
@@ -122,7 +122,7 @@ const AudioShow = (props) => {
 		// Add follow
 		axios
 			.post(`/api/follows`, { musician: audio.username })
-			.then((res) => props.setMessages([res.data]))
+			.then((res) => props.setMessages([res.data.message]))
 			.catch((err) => props.getErrors(err, true))
 	}
 
@@ -135,7 +135,7 @@ const AudioShow = (props) => {
 				comment: comment,
 			})
 			.then((res) => {
-				props.setMessages([res.data])
+				props.setMessages([res.data.message])
 				props.get(`audio-comments/${id}`, setAudioComments)
 			})
 			.catch((err) => props.getErrors(err))
@@ -149,7 +149,7 @@ const AudioShow = (props) => {
 
 		axios
 			.delete(`/api/audio-comments/${comment}`)
-			.then((res) => props.setMessages([res.data]))
+			.then((res) => props.setMessages([res.data.message]))
 			.catch((err) => props.getErrors(err))
 	}
 
@@ -669,11 +669,11 @@ export async function getServerSideProps(context) {
 	// Fetch Post Comments
 	await ssrAxios
 		.get(`/api/audios/${id}`)
-		.then((res) => (data.audio = res.data[0]))
+		.then((res) => (data.audio = res.data.data))
 	await ssrAxios
 		.get(`/api/audio-comments/${id}`)
-		.then((res) => (data.audioComments = res.data))
-	await ssrAxios.get(`/api/audios`).then((res) => (data.audios = res.data))
+		.then((res) => (data.audioComments = res.data.data))
+	await ssrAxios.get(`/api/audios`).then((res) => (data.audios = res.data.data))
 
 	// Pass data to the page via props
 	return { props: data }

@@ -50,7 +50,7 @@ const Karaoke = (props) => {
 				karaoke: props.karaoke.id,
 			})
 			.then((res) => {
-				props.setMessages([res.data])
+				props.setMessages([res.data.message])
 				// Update karaoke
 				props.get("karaokes", props.setKaraokes)
 			})
@@ -64,7 +64,7 @@ const Karaoke = (props) => {
 		// Save Karaoke
 		axios
 			.post("api/saved-karaokes", { id: props.karaoke.id })
-			.then((res) => props.setMessages([res.data]))
+			.then((res) => props.setMessages([res.data.message]))
 			.catch((err) => props.getErrors(err))
 	}
 

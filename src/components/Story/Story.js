@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
+import { useRouter } from "next/router"
 import Link from "next/link"
 import axios from "@/lib/axios"
 
@@ -8,6 +9,8 @@ import CloseSVG from "@/svgs/CloseSVG"
 import StoryProgressBar from "./StoryProgressBar"
 
 const Story = (props) => {
+	const router = useRouter()
+
 	const [timer, setTimer] = useState()
 	const [sendSeenAt, setSendSeenAt] = useState()
 	const [hasMuted, setHasMuted] = useState(props.story.hasMuted)
@@ -53,7 +56,11 @@ const Story = (props) => {
 	const onDelete = () => {
 		axios
 			.delete(`/api/stories/${props.story.id}`)
-			.then((res) => props.setMessages([res.data.message]))
+			.then((res) => {
+				props.setMessages([res.data.message])
+				// Redirect to home page
+				router.push("/")
+			})
 			.catch((err) => props.getErrors(err))
 	}
 
@@ -120,6 +127,7 @@ const Story = (props) => {
 						</h6>
 					</div>
 					{/* Name End */}
+					{/* Options */}
 					{/* Avatar */}
 					<div className="py-2 me-3" style={{ minWidth: "40px" }}>
 						<div className="dropdown-center">
@@ -141,6 +149,8 @@ const Story = (props) => {
 									loading="lazy"
 								/>
 							</a>
+							{/* Avatar End */}
+							{/* View Profile */}
 							<div
 								style={{ backgroundColor: "#232323" }}
 								className="dropdown-menu rounded-0 m-0 p-0">
@@ -149,17 +159,27 @@ const Story = (props) => {
 										<h6>View profile</h6>
 									</a>
 								</Link>
-								<Link href={`/chat/${props.story.username}`}>
-									<a className="dropdown-item border-bottom border-dark">
-										<h6>Message</h6>
+								{/* View Profile End */}
+								{/* Message */}
+								{props.story.username != props.auth?.username && (
+									<Link href={`/chat/${props.story.username}`}>
+										<a className="dropdown-item border-bottom border-dark">
+											<h6>Message</h6>
+										</a>
+									</Link>
+								)}
+								{/* Message End */}
+								{/* Mute */}
+								{props.story.username != props.auth?.username && (
+									<a
+										href="#"
+										className="dropdown-item border-bottom border-dark"
+										onClick={onMute}>
+										<h6>{hasMuted ? "Unmute" : "Mute"}</h6>
 									</a>
-								</Link>
-								<a
-									href="#"
-									className="dropdown-item border-bottom border-dark"
-									onClick={onMute}>
-									<h6>{hasMuted ? "Unmute" : "Mute"}</h6>
-								</a>
+								)}
+								{/* Mute End */}
+								{/* Delete */}
 								{props.story.username == props.auth?.username && (
 									<a
 										href="#"
@@ -168,10 +188,11 @@ const Story = (props) => {
 										<h6>Delete</h6>
 									</a>
 								)}
+								{/* Delete End */}
 							</div>
 						</div>
 					</div>
-					{/* Avatar End */}
+					{/* Options End */}
 				</div>
 				{/* Click fields */}
 				<div className="d-flex justify-content-between">
@@ -183,6 +204,9 @@ const Story = (props) => {
 							console.log("2 segment is " + segment)
 						}}>
 						<span className="invisible">left</span>
+					</div>
+					<div className="p-3" style={{ minHeight: "90vh" }} onClick={onFreeze}>
+						<span className="invisible">center center</span>
 					</div>
 					<div
 						className="p-3"

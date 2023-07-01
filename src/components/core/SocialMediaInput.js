@@ -41,6 +41,7 @@ const SocialMediaInput = (props) => {
 
 	const [text, setText] = useState(props.text ? props.text : "")
 	const [media, setMedia] = useState("")
+	const [storyMedia, setStoryMedia] = useState([])
 	const [para1, setPara1] = useState("")
 	const [para2, setPara2] = useState("")
 	const [para3, setPara3] = useState("")
@@ -49,6 +50,7 @@ const SocialMediaInput = (props) => {
 	const [showMentionPicker, setShowMentionPicker] = useState(false)
 	const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 	const [showImagePicker, setShowImagePicker] = useState(false)
+	const [showStoryPicker, setShowStoryPicker] = useState(props.showStory ? true : false)
 	const [showPollPicker, setShowPollPicker] = useState(false)
 	const [loading, setLoading] = useState(false)
 	const [formData, setFormData] = useState()
@@ -59,55 +61,29 @@ const SocialMediaInput = (props) => {
 	const [display4, setDisplay4] = useState("none")
 	const [display5, setDisplay5] = useState("none")
 
-	useEffect(() => {
-		// Declare new FormData object for form data
-		setFormData(new FormData())
-	}, [])
+	const [revertUrl, setRevertUrl] = useState("stories/")
 
-	// Handle form submit for Social Input
-	const onSubmit = (e) => {
-		e.preventDefault()
-		// Show loader
-		setLoading(true)
+	/*
+	 * Set Revert Url for story */
+	useEffect(() => generateRevertUrl(), [storyMedia])
 
-		// Add form data to FormData object
-		formData.append("text", text)
-		props.id && formData.append("id", props.id)
-		props.to && formData.append("to", props.to)
-		media && formData.append("media", media)
-		para1 && formData.append("para1", para1)
-		para2 && formData.append("para2", para2)
-		para3 && formData.append("para3", para3)
-		para4 && formData.append("para4", para4)
-		para5 && formData.append("para5", para5)
-		props.editing && formData.append("_method", "PUT")
-
-		// Get csrf cookie from Laravel inorder to send a POST request
-		axios
-			.post(`/api/${props.urlTo}`, formData)
-			.then((res) => {
-				// Hide loader
-				setLoading(false)
-				// Messages
-				props.setMessages([res.data.message])
-				// Clear Media
-				setMedia("")
-				// Update State
-				props.stateToUpdate && props.stateToUpdate()
-				// Clear text unless editing
-				!props.editing && setText("")
-				// Hide Pickers
-				setShowMentionPicker(false)
-				setShowEmojiPicker(false)
-				setShowImagePicker(false)
-				setShowPollPicker(false)
-				// Redirect
-				props.redirect && router.push(props.redirect)
-			})
-			.catch((err) => {
-				setLoading(false)
-				props.getErrors(err)
-			})
+	// For multiple uploads
+	const generateRevertUrl = () => {
+		console.log("gen 1 " + storyMedia.length)
+		if (storyMedia.length) {
+			console.log("gen 2")
+			// Get media
+			var media = storyMedia
+			// Reverse array to always have to latest first
+			media = media.reverse()
+			// Parse string to JSON and get first element
+			const parsed = JSON.parse(media[0])
+			// const parsed = media[0]
+			// Get name of key
+			const key = Object.keys(parsed)
+			// Get value by key
+			setRevertUrl(parsed[key])
+		}
 	}
 
 	const Picker = dynamic(
@@ -135,6 +111,59 @@ const SocialMediaInput = (props) => {
 		setDoNotShowMentionPicker(false)
 	}
 
+	useEffect(() => {
+		// Declare new FormData object for form data
+		setFormData(new FormData())
+	}, [])
+
+	// Handle form submit for Social Input
+	const onSubmit = (e) => {
+		e.preventDefault()
+		// Show loader
+		setLoading(true)
+
+		// Add form data to FormData object
+		text && formData.append("text", text)
+		props.id && formData.append("id", props.id)
+		props.to && formData.append("to", props.to)
+		media && formData.append("media", media)
+		storyMedia && formData.append("media", storyMedia)
+		para1 && formData.append("para1", para1)
+		para2 && formData.append("para2", para2)
+		para3 && formData.append("para3", para3)
+		para4 && formData.append("para4", para4)
+		para5 && formData.append("para5", para5)
+		props.editing && formData.append("_method", "PUT")
+
+		// Get csrf cookie from Laravel inorder to send a POST request
+		axios
+			.post(`/api/${props.urlTo}`, formData)
+			.then((res) => {
+				// Hide loader
+				setLoading(false)
+				// Messages
+				props.setMessages([res.data.message])
+				// Clear Media
+				setMedia("")
+				// Update State
+				props.stateToUpdate && props.stateToUpdate()
+				// Clear text unless editing
+				!props.editing && setText("")
+				// Hide Pickers
+				setShowMentionPicker(false)
+				setShowEmojiPicker(false)
+				setShowImagePicker(false)
+				setShowStoryPicker(false)
+				setShowPollPicker(false)
+				// Redirect
+				props.redirect && router.push(props.redirect)
+			})
+			.catch((err) => {
+				setLoading(false)
+				props.getErrors(err)
+			})
+	}
+
 	return (
 		<form
 			onSubmit={onSubmit}
@@ -154,6 +183,7 @@ const SocialMediaInput = (props) => {
 							alt="Avatar"
 						/>
 					</div>
+					{/* Profile pic End */}
 					{/* Input */}
 					<div className="flex-grow-1">
 						<textarea
@@ -169,8 +199,9 @@ const SocialMediaInput = (props) => {
 							value={text}
 							row="1"
 							onChange={(e) => setText(e.target.value)}
-							required={true}></textarea>
+							required={props.required}></textarea>
 					</div>
+					{/* Input End */}
 					{/* Emoji icon */}
 					<div className="pt-2 px-1">
 						<div
@@ -180,12 +211,14 @@ const SocialMediaInput = (props) => {
 								if (!media && !para1) {
 									setShowEmojiPicker(!showEmojiPicker)
 									setShowImagePicker(true && false)
+									setShowStoryPicker(true && false)
 									setShowPollPicker(true && false)
 								}
 							}}>
 							<EmojiSVG />
 						</div>
 					</div>
+					{/* Emoji icon End */}
 					{/* Image icon */}
 					{props.showImage && (
 						<div
@@ -194,6 +227,7 @@ const SocialMediaInput = (props) => {
 								if (!media && !para1) {
 									setShowEmojiPicker(true && false)
 									setShowImagePicker(!showImagePicker)
+									setShowStoryPicker(true && false)
 									setShowPollPicker(true && false)
 								}
 							}}>
@@ -202,6 +236,25 @@ const SocialMediaInput = (props) => {
 							</div>
 						</div>
 					)}
+					{/* Image icon End */}
+					{/* Story icon */}
+					{props.showStory && (
+						<div
+							className="pt-2 px-1 text-light"
+							onClick={() => {
+								if (!media && !para1) {
+									setShowEmojiPicker(true && false)
+									setShowImagePicker(true && false)
+									setShowStoryPicker(!showStoryPicker)
+									setShowPollPicker(true && false)
+								}
+							}}>
+							<div className="fs-5" style={{ cursor: "pointer" }}>
+								<ImageSVG />
+							</div>
+						</div>
+					)}
+					{/* Story icon End  */}
 					{/* Poll icon */}
 					{props.showPoll && (
 						<div
@@ -211,6 +264,7 @@ const SocialMediaInput = (props) => {
 									setShowEmojiPicker(true && false)
 									setShowPollPicker(!showPollPicker)
 									setShowImagePicker(true && false)
+									setShowStoryPicker(true && false)
 								}
 							}}>
 							<div className="fs-5" style={{ cursor: "pointer" }}>
@@ -218,15 +272,17 @@ const SocialMediaInput = (props) => {
 							</div>
 						</div>
 					)}
+					{/* Poll icon End */}
 					{/* Button */}
 					<div className="p-1">
 						<Button
 							type="submit"
 							btnClass="mysonar-btn white-btn"
-							btnText="send"
+							btnText={props.btnText}
 							loading={loading}
 						/>
 					</div>
+					{/* Button End */}
 				</div>
 
 				{/* Show Emoji Picker */}
@@ -244,8 +300,9 @@ const SocialMediaInput = (props) => {
 						<br />
 					</div>
 				)}
+				{/* Show Emoji Picker End */}
 
-				{/* Show Filepond */}
+				{/* Show Image Filepond */}
 				{showImagePicker && (
 					<div>
 						<FilePond
@@ -272,6 +329,40 @@ const SocialMediaInput = (props) => {
 						<br />
 					</div>
 				)}
+				{/* Show Image Filepond End */}
+
+				{/* Show Story Filepond */}
+				{showStoryPicker && (
+					<div className="">
+						<center>
+							<FilePond
+								name="filepond-media"
+								className="m-2 w-75"
+								labelIdle='Drag & Drop your Image or <span class="filepond--label-action text-dark"> Browse </span>'
+								acceptedFileTypes={["image/*"]}
+								stylePanelAspectRatio="9:16"
+								allowRevert={true}
+								allowMultiple={false}
+								server={{
+									url: `${props.url}/api/filepond/`,
+									process: {
+										url: props.urlTo,
+										onload: (res) => setStoryMedia([...storyMedia, res]),
+									},
+									revert: {
+										url: revertUrl,
+										onload: (res) => {
+											props.setMessages([res])
+											setStoryMedia([storyMedia.shift()])
+										},
+									},
+								}}
+							/>
+						</center>
+						<br />
+					</div>
+				)}
+				{/* Show Story Filepond End */}
 
 				{/* Show Mention Picker */}
 				{showMentionPicker && doNotShowMentionPicker ? (
@@ -324,6 +415,7 @@ const SocialMediaInput = (props) => {
 				) : (
 					""
 				)}
+				{/* Show Mention Picker End */}
 
 				{/* Show Polls */}
 				{showPollPicker && (
@@ -378,9 +470,15 @@ const SocialMediaInput = (props) => {
 						/>
 					</center>
 				)}
+				{/* Show Polls End */}
 			</center>
 		</form>
 	)
+}
+
+SocialMediaInput.defaultProps = {
+	required: true,
+	btnText: "send",
 }
 
 export default SocialMediaInput

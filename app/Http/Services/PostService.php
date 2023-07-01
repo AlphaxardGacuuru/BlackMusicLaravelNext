@@ -58,7 +58,7 @@ class PostService extends Service
 
         $saved = $post->save();
 
-        return [$saved, "Post sent", $post];
+        return [$saved, "Post posted", $post];
     }
 
     // Update Post

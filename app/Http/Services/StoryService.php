@@ -7,6 +7,7 @@ use App\Models\Follow;
 use App\Models\SeenStory;
 use App\Models\Story;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class StoryService extends Service
 {
@@ -24,7 +25,7 @@ class StoryService extends Service
                     ->where("follows.username", "=", "@blackmusic");
             })
             ->where("follows.muted->stories", false)
-            ->orderBy("stories.id", "ASC")
+            ->orderBy("stories.id", "DESC")
             ->get();
 
         return StoryResource::collection($getStories);
@@ -54,7 +55,7 @@ class StoryService extends Service
         $story->text = $request->input("text");
         $saved = $story->save();
 
-        return [$saved, "Story sent", $story];
+        return [$saved, "Story posted", $story];
     }
 
     /**
@@ -78,7 +79,15 @@ class StoryService extends Service
      */
     public function destroy($id)
     {
-        //
+        $story = Story::find($id);
+        // Delete media
+		foreach ($story->media as $media) {
+			Storage::delete('public/' . $media["image"]);
+		}
+
+        $deleted = $story->delete();
+
+        return [$deleted, "Story deleted"];
     }
 
     /*

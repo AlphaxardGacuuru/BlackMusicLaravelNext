@@ -24,7 +24,7 @@ class StorySeeder extends Seeder
         $story2 = Story::factory()
             ->state(new Sequence(
                 ["media" => [["image" => "stories/3.jpg"]]],
-                ["media" => [["image" => "stories/4.jpg"], ["image" => "stories/5.jpg"]]]));
+                ["media" => [["image" => "stories/4.jpg"]]]));
 
         // Create one post for @blackmusic
         $story1->create(['username' => "@blackmusic"]);

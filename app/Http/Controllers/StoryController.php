@@ -34,7 +34,7 @@ class StoryController extends Controller
     {
         $this->validate($request, [
             "media" => "required|string",
-            "text" => "string",
+            "text" => "nullable|string",
         ]);
 
         [$saved, $message, $story] = $this->service->store($request);
@@ -81,9 +81,11 @@ class StoryController extends Controller
      * @param  \App\Models\Story  $story
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Story $story)
+    public function destroy($id)
     {
-        //
+        [$deleted, $message] = $this->service->destroy($id);
+
+        return response(["message" => $message], 200);
     }
 
     /*

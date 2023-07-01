@@ -55,7 +55,7 @@ class VideoService extends Service
         $video->released = $request->input('released');
         $saved = $video->save();
 
-		$message = "Video " . $video->name . " created";
+		$message = "Video " . $video->name . " uploaded";
 
 		return [$saved, $message, $video];
     }

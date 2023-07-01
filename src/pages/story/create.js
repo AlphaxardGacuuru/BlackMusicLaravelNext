@@ -31,46 +31,6 @@ registerPlugin(
 )
 
 const create = (props) => {
-	const [revertUrl, setRevertUrl] = useState()
-
-	// Set states
-	useEffect(() => {
-		setTimeout(() => {
-			setRevertUrl(props.urlTo + "/")
-			props.setPlaceholder("What's on your mind")
-			props.setText("")
-			// props.setMedia([])
-			props.setShowImage(false)
-			props.setShowPoll(false)
-			props.setShowEmojiPicker(false)
-			props.setShowImagePicker(false)
-			props.setShowPollPicker(false)
-			props.setUrlTo("stories")
-			props.setStateToUpdate(() => props.setStories)
-			props.setEditing(false)
-		}, 100)
-	}, [])
-
-	useEffect(() => generateRevertUrl(), [props.media])
-
-	const generateRevertUrl = () => {
-		if (props.media.length > 0) {
-			// Get media
-			var media = props.media
-			// Reverse array to always have to latest first
-			media = media.reverse()
-			// Parse string to JSON and get first element
-			const parsed = JSON.parse(media[0])
-			// const parsed = media[0]
-			// Get name of key
-			const key = Object.keys(parsed)
-			// Get value by key
-			setRevertUrl(parsed[key])
-		}
-	}
-	console.log(revertUrl)
-	console.log(props.media)
-
 	return (
 		<div className="row">
 			<div className="col-sm-4"></div>
@@ -79,54 +39,32 @@ const create = (props) => {
 					<div className="d-flex justify-content-between my-2">
 						{/* <!-- Close Icon --> */}
 						<div className="text-white">
-							{props.media ? (
-								<span style={{ fontSize: "1.2em" }}>
+							<Link href="/">
+								<a style={{ fontSize: "1.2em" }}>
 									<CloseSVG />
-								</span>
-							) : (
-								<Link href="/">
-									<a style={{ fontSize: "1.2em" }}>
-										<CloseSVG />
-									</a>
-								</Link>
-							)}
+								</a>
+							</Link>
 						</div>
 						<h1>Create Story</h1>
 						<a className="invisible">
 							<CloseSVG />
 						</a>
 					</div>
-
-					{/* Filepond */}
-					<div className="">
-						<center>
-							<FilePond
-								name="filepond-media"
-								className="m-2 w-75"
-								labelIdle='Drag & Drop your Image or <span class="filepond--label-action text-dark"> Browse </span>'
-								acceptedFileTypes={["image/*"]}
-								stylePanelAspectRatio="9:16"
-								allowRevert={true}
-								server={{
-									url: `${props.url}/api/filepond/`,
-									process: {
-										url: props.urlTo,
-										onload: (res) => props.setMedia([...props.media, res]),
-									},
-									revert: {
-										url: revertUrl,
-										onload: (res) => {
-											props.setMessages([res])
-											props.setMedia([props.media.shift()])
-										},
-									},
-								}}
-							/>
-						</center>
-						<br />
-					</div>
-					{/* Filepond End */}
 				</div>
+
+				{/* Social Media Input */}
+				<div className="bottomNav">
+					<SocialMediaInput
+						{...props}
+						placeholder="What's on your mind"
+						showStory={true}
+						urlTo="stories"
+						required={false}
+						btnText="post"
+						redirect="/"
+					/>
+				</div>
+				{/* Social Media Input End */}
 			</div>
 			<div className="col-sm-4"></div>
 		</div>

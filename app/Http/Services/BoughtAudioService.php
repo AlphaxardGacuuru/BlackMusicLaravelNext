@@ -37,7 +37,8 @@ class BoughtAudioService extends Service
         $decoArtists = [];
 
         /* Fetch songs from Cart Audios */
-        $cartAudios = CartAudio::where('username', auth('sanctum')->user()->username)->get();
+        $cartAudios = CartAudio::where('username', auth('sanctum')->user()->username)
+		->get();
 
         foreach ($cartAudios as $cartAudio) {
             // Get Cost of Bought Videos and Audios

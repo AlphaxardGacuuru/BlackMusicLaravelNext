@@ -47,7 +47,7 @@ class UserTest extends TestCase
         $this->put('/api/users/' . $user->id, $data);
 
         // Get the new resource
-        $this->get('api/users/' . $user->id)
+        $this->get('api/users/' . $user->username)
             ->assertJsonFragment($data, $escape = true);
 
         Storage::assertExists('public/avatars/' . $avatar->hashName());
@@ -150,7 +150,9 @@ class UserTest extends TestCase
             ['*']
         );
 
-        $musician = Video::all()->random();
+        $musician = Video::where("username", "!=", "@blackmusic")
+            ->get()
+            ->random();
 
         $response = $this->post("api/follows", [
             "musician" => $musician->username,
@@ -178,14 +180,14 @@ class UserTest extends TestCase
 
         $response = $this->post("api/users/" . $user->id, [
             "accountType" => "musician",
-            "_method" => "put",
+            "_method" => "PUT",
         ]);
 
         $response->assertStatus(200);
 
         $this->assertDatabaseHas("users", [
             "id" => $user->id,
-            "accountType" => "musician",
+            "account_type" => "musician",
         ]);
     }
 }

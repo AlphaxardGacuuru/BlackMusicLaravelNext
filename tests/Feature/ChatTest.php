@@ -30,8 +30,6 @@ class ChatTest extends TestCase
         $response = $this->get('api/chats');
 
         $response->assertStatus(200);
-
-        $response->assertJsonIsArray();
     }
 
     /**
@@ -75,7 +73,7 @@ class ChatTest extends TestCase
      *
      * @return void
      */
-    public function test_user_view_one_chat()
+    public function test_user_can_view_one_chat()
     {
         Sanctum::actingAs(
             $user = User::factory()->black()->create(),
@@ -95,7 +93,7 @@ class ChatTest extends TestCase
 
         $response->assertStatus(200);
 
-        $this->assertDatabaseHas("chats", ["id" => $response[0]["id"]]);
+        $this->assertDatabaseHas("chats", ["id" => $response["data"][0]["id"]]);
     }
 
     /**
@@ -121,10 +119,10 @@ class ChatTest extends TestCase
 
         $chat = $this->get("api/chats/" . $user->username);
 
-        $response = $this->delete('api/chats/' . $chat[0]["id"]);
+        $response = $this->delete('api/chats/' . $chat["data"][0]["id"]);
 
         $this->assertDatabaseMissing("chats", [
-            "id" => $chat[0]["id"],
+            "id" => $chat["data"][0]["id"],
         ]);
 
         $response->assertStatus(200);

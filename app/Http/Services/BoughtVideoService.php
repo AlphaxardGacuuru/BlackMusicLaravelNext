@@ -3,7 +3,6 @@
 namespace App\Http\Services;
 
 use App\Http\Resources\BoughtVideoResource;
-use App\Http\Resources\VideoResource;
 use App\Models\BoughtAudio;
 use App\Models\BoughtVideo;
 use App\Models\CartVideo;
@@ -34,6 +33,7 @@ class BoughtVideoService extends Service
     public function store($request)
     {
         $canBuy = "";
+        $StructuredBoughtVideos = [];
         $boughtVideos = [];
         $decoArtists = [];
 
@@ -79,8 +79,10 @@ class BoughtVideoService extends Service
                         return $artist;
                     });
 
-                    // Update array
-                    array_push($boughtVideos,
+                    // Update array for use in Event
+					array_push($boughtVideos, $cartVideo->video);
+                    // Update array for use in Receipt
+                    array_push($StructuredBoughtVideos,
                         $this->structure(
                             $cartVideo->video,
                             auth('sanctum')->user()->username
@@ -92,7 +94,7 @@ class BoughtVideoService extends Service
             }
         }
 
-        return [$boughtVideos, $decoArtists];
+        return [$StructuredBoughtVideos, $boughtVideos, $decoArtists];
     }
 
     // Store Bought Video

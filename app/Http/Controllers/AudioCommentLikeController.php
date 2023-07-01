@@ -34,13 +34,15 @@ class AudioCommentLikeController extends Controller
      */
     public function store(Request $request)
     {
-        [$saved, $message, $audioComment] = $this->service->store($request);
+        [$saved, $message, $audioCommentLike] = $this->service->store($request);
+
+		$audioComment = AudioComment::find($request->input("comment"));
 
         AudioCommentLikedEvent::dispatchIf($saved, $audioComment);
 
         return response([
             "message" => $message,
-            "data" => $audioComment,
+            "data" => $audioCommentLike,
         ], 200);
     }
 

@@ -58,7 +58,7 @@ class AudioAlbumService extends Service
 		// Message
 		$message = "Audio Album " . $aAlbum->name . " created.";
 
-		return [$saved, $message];
+		return [$saved, $message, $aAlbum];
     }
 
     /**

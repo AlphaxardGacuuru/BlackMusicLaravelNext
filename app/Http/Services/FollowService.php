@@ -16,6 +16,8 @@ class FollowService extends Service
      */
     public function store($request)
     {
+		$follow = "data";
+
         // Check if user has bought video or audio
         $hasBoughtVideo = BoughtVideo::where("username", auth("sanctum")->user()->username)
             ->where("artist", $request->input("musician"))
@@ -49,11 +51,11 @@ class FollowService extends Service
                 $added = true;
             }
 
-            return [$added, $message];
+            return [$added, $message, $follow];
         }
 
         $message = "You must have bought atleast one song by " . $request->musician;
 
-        return [false, $message];
+        return [false, $message, $follow];
     }
 }

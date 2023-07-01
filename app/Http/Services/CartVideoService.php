@@ -29,6 +29,8 @@ class CartVideoService extends Service
      */
     public function store($request)
     {
+		$cartVideo = "data";
+		
         /* Check if item is already in cart */
         $inCart = CartVideo::where('video_id', $request->input('video'))
             ->where('username', auth('sanctum')->user()->username)

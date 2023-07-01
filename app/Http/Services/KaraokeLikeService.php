@@ -14,6 +14,8 @@ class KaraokeLikeService extends Service
      */
     public function store($request)
     {
+		$karaokeLike = "data";
+		
         $hasLiked = KaraokeLike::where('karaoke_id', $request->input('karaoke'))
             ->where('username', auth('sanctum')->user()->username)
             ->exists();

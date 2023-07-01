@@ -14,7 +14,9 @@ class VideoCommentLikeService extends Service
      */
     public function store($request)
     {
-        $hasLiked = VideoCommentLike::where('video_comment_id', $request->input('comment'))
+		$videoCommentLike = "data";
+        
+		$hasLiked = VideoCommentLike::where('video_comment_id', $request->input('comment'))
             ->where('username', auth('sanctum')->user()->username)
             ->exists();
 
@@ -35,6 +37,6 @@ class VideoCommentLikeService extends Service
             $added = true;
         }
 
-        return [$added, $message];
+        return [$added, $message, $videoCommentLike];
     }
 }

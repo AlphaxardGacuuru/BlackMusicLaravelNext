@@ -14,6 +14,8 @@ class PostCommentLikeService extends Service
      */
     public function store($request)
     {
+		$postCommentLike = "data";
+		
         $hasLiked = PostCommentLike::where('post_comment_id', $request->input('comment'))
             ->where('username', auth('sanctum')->user()->username)
             ->exists();

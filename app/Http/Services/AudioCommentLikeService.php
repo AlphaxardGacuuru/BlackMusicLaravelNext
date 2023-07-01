@@ -14,6 +14,8 @@ class AudioCommentLikeService extends Service
      */
     public function store($request)
     {
+		$audioCommentLike = "data";
+		
         $hasLiked = AudioCommentLike::where('audio_comment_id', $request->input('comment'))
             ->where('username', auth('sanctum')->user()->username)
             ->exists();
@@ -35,6 +37,6 @@ class AudioCommentLikeService extends Service
             $added = true;
         }
 
-        return [$added, $message];
+        return [$added, $message, $audioCommentLike];
     }
 }

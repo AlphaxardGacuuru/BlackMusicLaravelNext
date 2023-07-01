@@ -29,6 +29,8 @@ class CartAudioService extends Service
      */
     public function store($request)
     {
+		$cartAudio = "data";
+		
         /* Check if item is already in cart */
         $inCart = CartAudio::where('audio_id', $request->input('audio'))
             ->where('username', auth('sanctum')->user()->username)

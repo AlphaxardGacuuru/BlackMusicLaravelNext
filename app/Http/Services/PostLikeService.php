@@ -14,6 +14,8 @@ class PostLikeService extends Service
      */
     public function store($request)
     {
+		$postLike = "data";
+		
         $hasLiked = PostLike::where('post_id', $request->input('post'))
             ->where('username', auth('sanctum')->user()->username)
             ->exists();

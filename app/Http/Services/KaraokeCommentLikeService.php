@@ -14,6 +14,8 @@ class KaraokeCommentLikeService extends Service
      */
     public function store($request)
     {
+		$karaokeCommentLike = "data";
+		
         $hasLiked = KaraokeCommentLike::where('karaoke_comment_id', $request->input('comment'))
             ->where('username', auth('sanctum')->user()->username)
             ->exists();

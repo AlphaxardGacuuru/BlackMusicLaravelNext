@@ -30,7 +30,9 @@ class SavedKaraokeService extends Service
      */
     public function store($request)
     {
-        $hasSaved = SavedKaraoke::where('karaoke_id', $request->input('id'))
+		$savedKaraoke = "data";
+        
+		$hasSaved = SavedKaraoke::where('karaoke_id', $request->input('id'))
             ->where('username', auth('sanctum')->user()->username)
             ->exists();
 

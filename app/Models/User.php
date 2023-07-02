@@ -262,7 +262,8 @@ class User extends Authenticatable
      *    Custom Functions
      */
 
-    // Check if user has followed User
+    /*
+	* Check if user has followed User */
     public function hasFollowed($username)
     {
         return Follow::where('username', $username)
@@ -270,13 +271,15 @@ class User extends Authenticatable
             ->count() > 0 ? true : false;
     }
 
-    // Get user's fans
+    /*
+	* Get user's fans */
     public function fans()
     {
         return Follow::where('followed', $this->username)->count() - 1;
     }
 
-    // Check if auth user has bought user's video
+    /*
+	* Check if auth user has bought user's video */
     public function hasBoughtVideo($username)
     {
         return BoughtVideo::where('username', $username)
@@ -284,7 +287,8 @@ class User extends Authenticatable
             ->count();
     }
 
-    // Check if auth user has bought user's audio
+    /*
+	 * Check if auth user has bought user's audio */
     public function hasBoughtAudio($username)
     {
         return BoughtAudio::where('username', $username)
@@ -292,16 +296,18 @@ class User extends Authenticatable
             ->count();
     }
 
-    // Check if user has bought atleast 1 song
+    /*
+	* Check if user has bought atleast 1 song */
     public function hasBought1($username)
     {
         $hasBoughtVideo = $this->hasBoughtVideo($username);
         $hasBoughtAudio = $this->hasBoughtAudio($username);
 
-        return $hasBoughtVideo + $hasBoughtAudio > 1 ? true : false;
+        return $hasBoughtVideo + $hasBoughtAudio > 0 ? true : false;
     }
 
-    // Get balance
+    /*
+	* Get balance */
     public function balance()
     {
         // Get Cost of Bought Videos at each price

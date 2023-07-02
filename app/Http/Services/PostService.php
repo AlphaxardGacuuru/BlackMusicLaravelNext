@@ -81,8 +81,8 @@ class PostService extends Service
         Storage::delete("public/" . $media);
 
         $deleted = Post::find($id)->delete();
-		
-		return [$deleted, "Post deleted"];
+
+        return [$deleted, "Post deleted"];
     }
 
     /*

@@ -23,7 +23,6 @@ return new class extends Migration
             $table->string('parameter_3')->nullable();
             $table->string('parameter_4')->nullable();
             $table->string('parameter_5')->nullable();
-			$table->boolean('is_within_24_hrs')->virtualAs('(created_at >= NOW() - INTERVAL 1 DAY)');
             $table->boolean('has_edited')->storedAs('created_at != updated_at');
             $table->timestamps();
 

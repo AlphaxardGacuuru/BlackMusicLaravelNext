@@ -40,7 +40,12 @@ class PostComment extends Model
 		return $this->hasMany(PostCommentLike::class);
 	}
 
-    // Check if user has liked post
+	/*
+	* Custom functions
+	*/ 
+
+    /*
+	* Check if user has liked post */
     public function hasLiked($username)
     {
         return $this->likes

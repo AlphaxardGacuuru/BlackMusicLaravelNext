@@ -64,7 +64,7 @@ class PostResource extends JsonResource
             "percentage5" => $percentage5,
             "winner" => $winner,
             "totalVotes" => $this->polls->count(),
-            "isWithin24Hrs" => filter_var($this->is_within_24_hrs, FILTER_VALIDATE_BOOLEAN),
+            "isWithin24Hrs" => $this->isWithin24Hrs(),
             "hasMuted" => filter_var($this->hasMuted($this, $username), FILTER_VALIDATE_BOOLEAN),
             "hasFollowed" => $this->hasFollowed($this, $username),
             "hasLiked" => $this->hasLiked($this, $username),

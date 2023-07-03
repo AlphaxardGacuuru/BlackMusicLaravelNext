@@ -49,7 +49,7 @@ class MyDocument extends Document {
 				<body className="antialiased">
 					<noscript>
 						<center>
-							<h2 class="m-5">
+							<h2 className="m-5">
 								We're sorry but Black Music
 								doesn't work properly without JavaScript enabled.
 								Please enable it to continue.

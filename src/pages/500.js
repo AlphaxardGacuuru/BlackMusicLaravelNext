@@ -1,6 +1,6 @@
 import SadEmojiSVG from "@/svgs/SadEmojiSVG"
 
-const NotFoundPage = () => {
+const ServerError = () => {
 	return (
 		<div
 			style={{
@@ -12,9 +12,7 @@ const NotFoundPage = () => {
 				minHeight: "100vh",
 			}}>
 			<center>
-				<h1>404</h1>
-				<hr className="text-white" />
-				<h2>PAGE NOT FOUND</h2>
+				<h1>500</h1>
 				<hr className="text-white" />
 				<h3>
 					SORRY <SadEmojiSVG />
@@ -24,4 +22,4 @@ const NotFoundPage = () => {
 	)
 }
 
-export default NotFoundPage
+export default ServerError

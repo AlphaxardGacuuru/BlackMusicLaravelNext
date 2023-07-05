@@ -2,7 +2,7 @@
 	"pets.settings.prettierEnabled": true,
 	"arrowParens": "always",
 	"bracketSpacing": true,
-	"endOfLine": "crlf",
+	"endOfLine": "auto",
 	"htmlWhitespaceSensitivity": "ignore",
 	"insertPragma": false,
 	"singleAttributePerLine": true,

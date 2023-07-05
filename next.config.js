@@ -1,5 +1,6 @@
 const nextConfig = {
-	export: true,
+	output: "export",
+	// export: true,
 	images: {
 		domains: ["img.youtube.com"],
 	},

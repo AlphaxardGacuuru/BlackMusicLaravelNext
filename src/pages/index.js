@@ -327,16 +327,16 @@ export async function getServerSideProps(context) {
 
 	// Fetch Posts
 	await ssrAxios
-		.get(`https://localhost:8000/api/posts`)
+		.get(`http://localhost:8000/api/posts`)
 		.then((res) => (data.posts = res.data.data))
 	await ssrAxios
-		.get(`https://localhost:8000/api/users`)
+		.get(`http://localhost:8000/api/users`)
 		.then((res) => (data.users = res.data.data))
 	await ssrAxios
-		.get(`https://localhost:8000/api/videos`)
+		.get(`http://localhost:8000/api/videos`)
 		.then((res) => (data.videos = res.data.data))
 	await ssrAxios
-		.get(`https://localhost:8000/api/stories`)
+		.get(`http://localhost:8000/api/stories`)
 		.then((res) => (data.stories = res.data.data))
 
 	// Pass data to the page via props

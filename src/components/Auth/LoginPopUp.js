@@ -1,55 +1,51 @@
-import { useState } from 'react'
-import { useRouter } from 'next/router';
-import axios from '@/lib/axios'
-import { useAuth } from '@/hooks/auth'
+import { useState } from "react"
+import { useRouter } from "next/router"
+import axios from "@/lib/axios"
+import { useAuth } from "@/hooks/auth"
 
-import Btn from '@/components/Core/Btn'
+import Btn from "@/components/Core/Btn"
 
-import CloseSVG from '@/svgs/CloseSVG';
+import CloseSVG from "@/svgs/CloseSVG"
 
 import {
 	GoogleLoginButton,
 	FacebookLoginButton,
-	TwitterLoginButton
-} from "react-social-login-buttons";
+	TwitterLoginButton,
+} from "react-social-login-buttons"
 
 const LoginPopUp = (props) => {
-
 	const { register, authenticated } = useAuth({
-		middleware: 'guest',
-		redirectIfAuthenticated: '/',
+		middleware: "guest",
+		redirectIfAuthenticated: "/",
 	})
 
 	const { login } = useAuth({
-		middleware: 'guest',
-		redirectIfAuthenticated: '/',
-		setLogin: props.setLogin
+		middleware: "guest",
+		redirectIfAuthenticated: "/",
+		setLogin: props.setLogin,
 	})
 
 	const router = useRouter()
 
 	// const [name, setName] = useState('Alphaxard Gacuuru')
-	const [name, setName] = useState('Black Music')
+	const [name, setName] = useState("Black Music")
 	// const [username, setUsername] = useState('@alphaxardG')
-	const [username, setUsername] = useState('@blackmusic')
+	const [username, setUsername] = useState("@blackmusic")
 	// const [email, setEmail] = useState('alphaxardgacuuru47@gmail.com')
-	const [email, setEmail] = useState('al@black.co.ke')
+	const [email, setEmail] = useState("al@black.co.ke")
 	// const [phone, setPhone] = useState('0700364446')
-	const [phone, setPhone] = useState('')
+	const [phone, setPhone] = useState("")
 	// const [password, setPassword] = useState('0700364446')
-	const [password, setPassword] = useState('0700000000')
+	const [password, setPassword] = useState("0700000000")
 	const [shouldRemember, setShouldRemember] = useState()
 	const [status, setStatus] = useState()
 	const [errors, setErrors] = useState([])
 
 	const onSocial = (website) => {
 		// window.location.href = `${props.url}/api/login/${website}`
-
 		// axios.get(`${props.url}/api/login/${website}`)
 		// .then((res) => console.log(res.data.data))
-
 		// register({ name, username, email, phone, password, password_confirmation: password, setErrors })
-
 		// login({ username, phone, email, password, remember: shouldRemember, setErrors, setStatus })
 	}
 
@@ -59,22 +55,27 @@ const LoginPopUp = (props) => {
 	const onSubmit = (e) => {
 		e.preventDefault()
 
-		axios.post(`/login`, {
-			phone: phone,
-			password: phone,
-			device_name: "deviceName",
-			remember: 'checked'
-		}).then((res) => {
-			props.setLogin(false)
-			props.setLocalStorage("sanctumToken", res.data)
-			// Update Logged in user
-			props.get(`auth`, props.setAuth, 'auth', false)
-			props.setMessages(["Logged in"])
-			// Reload page
-			setTimeout(() => location.reload(), 1000)
-		}).catch((err) => props.getErrors(err, true));
+		axios.get("/sanctum/csrf-cookie").then(() => {
+			axios
+				.post(`/login`, {
+					phone: phone,
+					password: phone,
+					device_name: "deviceName",
+					remember: "checked",
+				})
+				.then((res) => {
+					props.setLogin(false)
+					props.setLocalStorage("sanctumToken", res.data)
+					// Update Logged in user
+					props.get(`auth`, props.setAuth, "auth", false)
+					props.setMessages(["Logged in"])
+					// Reload page
+					setTimeout(() => location.reload(), 1000)
+				})
+				.catch((err) => props.getErrors(err, true))
 
-		setPhone('07')
+			setPhone("07")
+		})
 	}
 
 	return (
@@ -84,7 +85,9 @@ const LoginPopUp = (props) => {
 					{/* <div id="sonar-load"></div> */}
 				</div>
 			</div>
-			<div className="menu-open" style={{ display: props.login ? "block" : "none" }}>
+			<div
+				className="menu-open"
+				style={{ display: props.login ? "block" : "none" }}>
 				<div className="bottomMenu">
 					<div className="d-flex align-items-center justify-content-between">
 						{/* <!-- Logo Area --> */}
@@ -103,7 +106,7 @@ const LoginPopUp = (props) => {
 						</div>
 					</div>
 					<div className="p-2">
-						{phoneLogin ?
+						{phoneLogin ? (
 							<center>
 								<div className="contact-form">
 									<form method="POST" action="" onSubmit={onSubmit}>
@@ -116,38 +119,48 @@ const LoginPopUp = (props) => {
 											onChange={(e) => setPhone(e.target.value)}
 											required={true}
 											autoComplete="phone"
-											autoFocus />
+											autoFocus
+										/>
 										<br />
 
-										<Btn type="submit"
+										<Btn
+											type="submit"
 											btnClass="mysonar-btn float-right"
-											btnText="Login" />
+											btnText="Login"
+										/>
 									</form>
 									<br />
 
 									<Btn
 										btnClass="mysonar-btn"
 										btnText="back"
-										onClick={() => setPhoneLogin(false)} />
+										onClick={() => setPhoneLogin(false)}
+									/>
 								</div>
-							</center> :
+							</center>
+						) : (
 							<>
 								<GoogleLoginButton
 									className="mt-2 rounded-0"
-									onClick={() => onSocial("google")} />
+									onClick={() => onSocial("google")}
+								/>
 								<FacebookLoginButton
 									className="mt-2 rounded-0"
-									onClick={() => onSocial("facebook")} />
+									onClick={() => onSocial("facebook")}
+								/>
 								<TwitterLoginButton
 									className="mt-2 rounded-0"
-									onClick={() => onSocial("twitter")} />
+									onClick={() => onSocial("twitter")}
+								/>
 								<br />
 
 								<Btn
 									btnClass="mysonar-btn"
 									btnText="login with number"
-									onClick={() => setPhoneLogin(true)} />
-							</>}
+									onClick={() => setPhoneLogin(true)}
+								/>
+							</>
+						)}
 					</div>
 				</div>
 			</div>

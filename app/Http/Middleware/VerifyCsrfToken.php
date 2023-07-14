@@ -14,6 +14,6 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         "api/kopokopo",
 		"api/filepond/*",
-		"api/*"
+		"login"
     ];
 }

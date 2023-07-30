@@ -10,8 +10,8 @@ class UserController extends Controller
 {
     public function __construct(protected UserService $service)
     {
-        //
-    }
+		// 
+	}
 
     /**
      * Display a listing of the resource.
@@ -90,5 +90,12 @@ class UserController extends Controller
     public function auth()
     {
         return $this->service->auth();
+    }
+
+    /*
+     * Artists */
+    public function artists()
+    {
+        return $this->service->artists();
     }
 }

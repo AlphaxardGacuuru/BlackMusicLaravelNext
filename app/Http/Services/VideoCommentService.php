@@ -15,8 +15,8 @@ class VideoCommentService extends Service
     public function index()
     {
         $getVideoComments = VideoComment::orderBy('id', 'DESC')->get();
-		
-		return VideoCommentResource::collection($getVideoComments);
+
+        return VideoCommentResource::collection($getVideoComments);
     }
 
     /**
@@ -29,9 +29,9 @@ class VideoCommentService extends Service
     {
         $getVideoComments = VideoComment::where("video_id", $id)
             ->orderBy('id', 'DESC')
-            ->get();
-			
-			return VideoCommentResource::collection($getVideoComments);
+            ->paginate(10);
+
+        return VideoCommentResource::collection($getVideoComments);
     }
 
     /**
@@ -49,8 +49,12 @@ class VideoCommentService extends Service
         $videoComment->text = $request->input('text');
 
         $saved = $videoComment->save();
+		// Check if commenter is owner of videos
+		$notCurrentUser = $videoComment->video->username != $this->username;
+		// Dispatch if comment is saved successfully and commenter is not owner of audio
+		$canDispatch = $notCurrentUser && $saved;
 
-		return [$saved, "Comment posted", $videoComment];
+        return [$canDispatch, "Comment posted", $videoComment];
     }
 
     /**
@@ -62,7 +66,7 @@ class VideoCommentService extends Service
     public function destroy($id)
     {
         $deleted = VideoComment::find($id)->delete();
-		
-		return [$deleted, "Comment deleted"];
+
+        return [$deleted, "Comment deleted"];
     }
 }

@@ -12,15 +12,17 @@ class PostCommentedNotification extends Notification implements ShouldBroadcast
     use Queueable;
 
     public $post;
+	public $username;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($post)
+    public function __construct($post, $username)
     {
         $this->post = $post;
+        $this->username = $username;
     }
 
     /**
@@ -58,8 +60,8 @@ class PostCommentedNotification extends Notification implements ShouldBroadcast
     {
         return [
             'url' => '/post/' . $this->post->id,
-            'from' => auth('sanctum')->user()->username,
-            'message' => auth('sanctum')->user()->username . ' commented on ' . $this->post->text,
+            'from' => $this->username,
+            'message' => $this->username . ' commented on ' . $this->post->text,
         ];
     }
 }

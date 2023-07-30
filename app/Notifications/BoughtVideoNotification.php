@@ -15,15 +15,17 @@ class BoughtVideoNotification extends Notification implements ShouldBroadcast
     use Queueable;
 
     public $video;
+	public $username;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Video $video)
+    public function __construct(Video $video, $username)
     {
         $this->video = $video;
+        $this->username = $username;
     }
 
     /**
@@ -57,10 +59,10 @@ class BoughtVideoNotification extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-            'url' => '/profile/' . auth('sanctum')->user()->username,
-            'from' => auth('sanctum')->user()->username,
+            'url' => '/profile/' . $this->username,
+            'from' => $this->username,
             'id' => $this->video->username,
-            'message' => auth('sanctum')->user()->username . ' bought ' . $this->video->name,
+            'message' => $this->username . ' bought ' . $this->video->name,
         ];
     }
 }

@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class VideoCommentLike extends Model
 {
     use HasFactory;
+	
+	public function comment()
+	{
+		return $this->belongsTo(VideoComment::class);
+	}
 }

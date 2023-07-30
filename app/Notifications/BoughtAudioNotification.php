@@ -13,15 +13,17 @@ class BoughtAudioNotification extends Notification implements ShouldBroadcast
     use Queueable;
 
 	public $audio;
+	public $username;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($audio)
+    public function __construct($audio, $username)
     {
         $this->audio = $audio;
+        $this->username = $username;
     }
 
     /**
@@ -55,10 +57,10 @@ class BoughtAudioNotification extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-			'url' => '/profile/' . auth('sanctum')->user()->username,
-			'from' => auth('sanctum')->user()->username,
+			'url' => '/profile/' . $this->username,
+			'from' => $this->username,
 			'id' => $this->audio->username,
-			'message' => auth('sanctum')->user()->username . ' bought ' . $this->audio->name,
+			'message' => $this->username . ' bought ' . $this->audio->name,
         ];
     }
 }

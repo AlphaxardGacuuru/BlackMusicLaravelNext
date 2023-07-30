@@ -13,15 +13,17 @@ class StoryCreatedNotification extends Notification implements ShouldBroadcast
     use Queueable;
 
 	public $story;
+	public $username;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($story)
+    public function __construct($story, $username)
     {
         $this->story;
+        $this->username = $username;
     }
 
     /**
@@ -59,8 +61,8 @@ class StoryCreatedNotification extends Notification implements ShouldBroadcast
     {
         return [
             'url' => '/story/' . $this->story->id,
-            'from' => auth('sanctum')->user()->username,
-            'message' => auth('sanctum')->user()->username . ' posted a story.',
+            'from' => $this->username,
+            'message' => $this->username . ' posted a story.',
         ];
     }
 }

@@ -21,7 +21,7 @@ class Video extends Model
     protected function video(): Attribute
     {
         return Attribute::make(
-            get:fn($value) => "/storage/" . $value
+            get:fn($value) => "storage/" . $value
         );
     }
 

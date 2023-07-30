@@ -13,15 +13,17 @@ class PostLikedNotification extends Notification implements ShouldBroadcast
     use Queueable;
 
     public $post;
+	public $username;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($post)
+    public function __construct($post, $username)
     {
         $this->post = $post;
+        $this->username = $username;
     }
 
     /**
@@ -59,8 +61,8 @@ class PostLikedNotification extends Notification implements ShouldBroadcast
     {
         return [
             'url' => '/post/' . $this->post->id,
-            'from' => auth('sanctum')->user()->username,
-            'message' => auth('sanctum')->user()->username . ' liked your post.',
+            'from' => $this->username,
+            'message' => $this->username . ' liked your post.',
         ];
     }
 }

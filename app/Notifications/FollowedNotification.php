@@ -12,12 +12,14 @@ class FollowedNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;
 
+	public $username;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($username)
     {
         //
     }
@@ -56,9 +58,9 @@ class FollowedNotification extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-			'url' => '/profile/' . auth('sanctum')->user()->username,
-			'from' => auth('sanctum')->user()->username,
-			'message' => auth('sanctum')->user()->username . ' followed you.'
+			'url' => '/profile/' . $this->username,
+			'from' => $this->username,
+			'message' => $this->username . ' followed you.'
         ];
     }
 }

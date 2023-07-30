@@ -14,17 +14,17 @@ class AudioLikeService extends Service
      */
     public function store($request)
     {
-        $audioLike = "data";
+        $query = AudioLike::where('audio_id', $request->input('audio'))
+            ->where('username', auth('sanctum')->user()->username);
 
-        $hasLiked = AudioLike::where('audio_id', $request->input('audio'))
-            ->where('username', auth('sanctum')->user()->username)
-            ->exists();
+        $hasLiked = $query->exists();
 
         if ($hasLiked) {
-            AudioLike::where('audio_id', $request->input('audio'))
-                ->where('username', auth('sanctum')->user()->username)
-                ->delete();
-
+			// Get Like
+            $audioLike = $query->first();
+			// Delete Like
+            $query->delete();
+			// Set Message
             $message = "Like removed";
             $added = false;
         } else {

@@ -27,8 +27,12 @@ class PostCommentedListener implements ShouldQueue
     public function handle(PostCommentedEvent $event)
     {
         // Send Notification
-        if ($event->post->username != auth('sanctum')->user()->username) {
-            $event->post->user->notify(new PostCommentedNotification($event->comment, $event->post));
-        }
+        $event
+            ->post
+            ->user
+            ->notify(new PostCommentedNotification(
+                $event->post,
+                $event->user
+            ));
     }
 }

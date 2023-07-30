@@ -19,33 +19,38 @@ class PostComment extends Model
     protected function media(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value ? "/storage/" . $value : $value,
+            get: fn($value) => $value ? "/storage/" . $value : $value,
         );
     }
 
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => Carbon::parse($value)->format('d M Y'),
+            get: fn($value) => Carbon::parse($value)->format('d M Y'),
         );
     }
 
-	public function user()
-	{
-		return $this->belongsTo(User::class, "username", "username");
-	}
+    public function user()
+    {
+        return $this->belongsTo(User::class, "username", "username");
+    }
 
-	public function likes()
-	{
-		return $this->hasMany(PostCommentLike::class);
-	}
+    public function post()
+    {
+        return $this->belongsTo(Post::class, "post_id");
+    }
 
-	/*
-	* Custom functions
-	*/ 
+    public function likes()
+    {
+        return $this->hasMany(PostCommentLike::class);
+    }
 
     /*
-	* Check if user has liked post */
+     * Custom functions
+     */
+
+    /*
+     * Check if user has liked post */
     public function hasLiked($username)
     {
         return $this->likes

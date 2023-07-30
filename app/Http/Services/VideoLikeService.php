@@ -14,17 +14,17 @@ class VideoLikeService extends Service
      */
     public function store($request)
     {
-		$videoLike = "data";
-		
-        $hasLiked = VideoLike::where('video_id', $request->input('video'))
-            ->where('username', auth('sanctum')->user()->username)
-            ->exists();
+        $query = VideoLike::where('video_id', $request->input('video'))
+            ->where('username', auth('sanctum')->user()->username);
+
+        $hasLiked = $query->exists();
 
         if ($hasLiked) {
-            VideoLike::where('video_id', $request->input('video'))
-                ->where('username', auth('sanctum')->user()->username)
-                ->delete();
-
+            // Get Like
+            $videoLike = $query->first();
+            // Delete Like
+            $query->delete();
+            // Set Message
             $message = "Like removed";
             $added = false;
         } else {
@@ -37,10 +37,10 @@ class VideoLikeService extends Service
             $added = true;
         }
 
-		// Check if user is owner of video
-		$notCurrentUser = $videoLike->video->username != $this->username;
-		// Dispatch if like is saved successfully and user is not owner of video
-		$canDispatch = $notCurrentUser && $added;
+        // Check if user is owner of video
+        $notCurrentUser = $videoLike->video->username != $this->username;
+        // Dispatch if like is saved successfully and user is not owner of video
+        $canDispatch = $notCurrentUser && $added;
 
         return [$canDispatch, $message, $videoLike];
     }

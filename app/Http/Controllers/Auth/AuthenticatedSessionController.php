@@ -41,10 +41,19 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-		// Delete Current Access Token
-		$request->user()->currentAccessToken()->delete();
+        // Delete Current Access Token
+        $hasLoggedOut = auth("sanctum")
+            ->user()
+            ->currentAccessToken()
+            ->delete();
 
-        return response()->noContent();
+        if ($hasLoggedOut) {
+            $message = "Logged Out";
+        } else {
+            $message = "Failed to log out";
+        }
+
+        return response(["message" => $message], 200);
     }
 
     /*
@@ -73,6 +82,9 @@ class AuthenticatedSessionController extends Controller
             $token = $user->createToken($request->device_name)->plainTextToken;
         }
 
-        return $token;
+        return response([
+            "message" => "Logged in",
+            "data" => $token,
+        ], 200);
     }
 }

@@ -14,17 +14,17 @@ class PostCommentLikeService extends Service
      */
     public function store($request)
     {
-		$postCommentLike = "data";
-		
-        $hasLiked = PostCommentLike::where('post_comment_id', $request->input('comment'))
-            ->where('username', auth('sanctum')->user()->username)
-            ->exists();
+        $query = PostCommentLike::where('post_comment_id', $request->input('comment'))
+            ->where('username', auth('sanctum')->user()->username);
+
+        $hasLiked = $query->exists();
 
         if ($hasLiked) {
-            PostCommentLike::where('post_comment_id', $request->input('comment'))
-                ->where('username', auth('sanctum')->user()->username)
-                ->delete();
-
+            // Get Like
+            $postCommentLike = $query->first();
+            // Delete Like
+            $query->delete();
+            // Set Message
             $message = 'Like removed';
             $added = false;
         } else {
@@ -37,6 +37,11 @@ class PostCommentLikeService extends Service
             $added = true;
         }
 
-        return [$added, $message, $postCommentLike];
+        // Check if current user is owner of post
+        $notCurrentUser = $postCommentLike->comment->username != $this->username;
+        // Dispatch if comment is saved successfully and current user is not owner of audio
+        $canDispatch = $notCurrentUser && $added;
+
+        return [$canDispatch, $message, $postCommentLike];
     }
 }

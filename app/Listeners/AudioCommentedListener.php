@@ -29,6 +29,6 @@ class AudioCommentedListener implements ShouldQueue
         $event
             ->audio
             ->user
-            ->notify(new AudioCommentedNotification($event->audio, $event->username));
+            ->notify(new AudioCommentedNotification($event->audio, $event->user));
     }
 }

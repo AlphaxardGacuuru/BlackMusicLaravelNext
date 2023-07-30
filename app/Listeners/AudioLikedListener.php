@@ -29,6 +29,6 @@ class AudioLikedListener implements ShouldQueue
         $event
             ->audio
             ->user
-            ->notify(new AudioLikedNotification($event->audio, $event->username));
+            ->notify(new AudioLikedNotification($event->audio, $event->user));
     }
 }

@@ -13,17 +13,17 @@ class VideoLikedNotification extends Notification implements ShouldBroadcast
     use Queueable;
 
     public $video;
-	public $username;
+	public $user;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($video, $username)
+    public function __construct($video, $user)
     {
         $this->video = $video;
-        $this->username = $username;
+        $this->user = $user;
     }
 
     /**
@@ -61,8 +61,8 @@ class VideoLikedNotification extends Notification implements ShouldBroadcast
     {
         return [
             'url' => '/video/' . $this->video->id,
-            'from' => $this->username,
-            'message' => $this->username . ' liked ' . $this->video->name,
+            'from' => $this->user->username,
+            'message' => $this->user->username . ' liked ' . $this->video->name,
         ];
     }
 }

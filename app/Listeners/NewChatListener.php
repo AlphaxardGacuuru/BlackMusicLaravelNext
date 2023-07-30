@@ -27,6 +27,6 @@ class NewChatListener
      */
     public function handle(NewChatEvent $event)
     {
-        $event->user->notify(new NewChatNotification($event->chat));
+        $event->user->notify(new NewChatNotification($event->chat, $event->user));
     }
 }

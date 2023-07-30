@@ -15,15 +15,17 @@ class VideoLikedEvent
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
 	public $video;
+	public $user;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($video)
+    public function __construct($video, $user)
     {
         $this->video = $video;
+        $this->user = $user;
     }
 
     /**

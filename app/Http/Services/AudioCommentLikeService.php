@@ -14,17 +14,17 @@ class AudioCommentLikeService extends Service
      */
     public function store($request)
     {
-		$audioCommentLike = "data";
-		
-        $hasLiked = AudioCommentLike::where('audio_comment_id', $request->input('comment'))
-            ->where('username', auth('sanctum')->user()->username)
-            ->exists();
+        $query = AudioCommentLike::where('audio_comment_id', $request->input('comment'))
+            ->where('username', auth('sanctum')->user()->username);
+
+        $hasLiked = $query->exists();
 
         if ($hasLiked) {
-            AudioCommentLike::where('audio_comment_id', $request->input('comment'))
-                ->where('username', auth('sanctum')->user()->username)
-                ->delete();
-
+			// Get Like
+            $audioCommentLike = $query->first();
+            // Delete Like
+            $query->delete();
+			// Set Message
             $message = "Like removed";
             $added = false;
         } else {
@@ -37,10 +37,10 @@ class AudioCommentLikeService extends Service
             $added = true;
         }
 
-		// Check if user is owner of audio comment
-		$notCurrentUser = $audioCommentLike->comment->username != $this->username;
-		// Dispatch if comment is saved successfully and user is not owner of audio comment
-		$canDispatch = $notCurrentUser && $added;
+        // Check if user is owner of audio comment
+        $notCurrentUser = $audioCommentLike->comment->username != $this->username;
+        // Dispatch if comment is saved successfully and user is not owner of audio comment
+        $canDispatch = $notCurrentUser && $added;
 
         return [$canDispatch, $message, $audioCommentLike];
     }

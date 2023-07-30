@@ -13,17 +13,17 @@ class NewChatNotification extends Notification implements ShouldBroadcast
     use Queueable;
 
 	public $chat;
-	public $username;
+	public $user;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($chat, $username)
+    public function __construct($chat, $user)
     {
         $this->chat = $chat;
-        $this->username = $username;
+        $this->user = $user;
     }
 
     /**
@@ -60,9 +60,9 @@ class NewChatNotification extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-            'url' => '/chat/' . $this->username,
-            'from' => $this->username,
-            'message' => $this->username . ' sent you a message: ' . $this->chat->text,
+            'url' => '/chat/' . $this->user->username,
+            'from' => $this->user->username,
+            'message' => $this->user->username . ' sent you a message: ' . $this->chat->text,
         ];
     }
 }

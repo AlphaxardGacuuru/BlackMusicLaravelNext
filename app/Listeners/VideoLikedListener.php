@@ -26,8 +26,9 @@ class VideoLikedListener implements ShouldQueue
      */
     public function handle(VideoLikedEvent $event)
     {
-        if ($event->video->user->username != auth("sanctum")->user()->username) {
-            $event->video->user->notify(new VideoLikedNotification($event->video));
-        }
+        $event
+            ->video
+            ->user
+            ->notify(new VideoLikedNotification($event->video, $event->user));
     }
 }

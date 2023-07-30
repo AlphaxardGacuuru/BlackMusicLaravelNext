@@ -9,8 +9,13 @@ class VideoCommentLike extends Model
 {
     use HasFactory;
 	
+    public function user()
+    {
+        return $this->belongsTo(User::class, "username", "username");
+    }
+	
 	public function comment()
 	{
-		return $this->belongsTo(VideoComment::class);
+		return $this->belongsTo(VideoComment::class, "video_comment_id");
 	}
 }

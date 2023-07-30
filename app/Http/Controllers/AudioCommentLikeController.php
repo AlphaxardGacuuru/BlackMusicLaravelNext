@@ -22,7 +22,7 @@ class AudioCommentLikeController extends Controller
      */
     public function index()
     {
-		// 
+        //
     }
 
     /**
@@ -35,7 +35,11 @@ class AudioCommentLikeController extends Controller
     {
         [$saved, $message, $audioCommentLike] = $this->service->store($request);
 
-        AudioCommentLikedEvent::dispatchIf($saved, $audioCommentLike->comment);
+        AudioCommentLikedEvent::dispatchIf(
+            $saved,
+            $audioCommentLike->comment,
+            $audioCommentLike->user
+        );
 
         return response([
             "message" => $message,

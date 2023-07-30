@@ -38,7 +38,7 @@ class AudioLikeController extends Controller
         AudioLikedEvent::dispatchIf(
             $canDispatch,
             $audioLike->audio,
-            $audioLike->username
+            $audioLike->user
         );
 
         return response([

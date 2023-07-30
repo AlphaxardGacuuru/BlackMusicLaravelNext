@@ -14,18 +14,18 @@ class PostCommentLikedNotification extends Notification implements ShouldBroadca
 
 	public $comment;
 	public $post;
-	public $username;
+	public $user;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($comment, $post, $username)
+    public function __construct($comment, $post, $user)
     {
         $this->comment = $comment;
         $this->post = $post;
-        $this->username = $username;
+        $this->user = $user;
     }
 
     /**
@@ -63,8 +63,8 @@ class PostCommentLikedNotification extends Notification implements ShouldBroadca
     {
         return [
 			'url' => '/post/' . $this->post->id,
-			'from' => $this->username,
-			'message' => $this->username . ' liked your comment on ' . $this->post->text,
+			'from' => $this->user->username,
+			'message' => $this->user->username . ' liked your comment on ' . $this->post->text,
         ];
     }
 }

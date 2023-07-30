@@ -29,6 +29,6 @@ class VideoCommentLikedListener implements ShouldQueue
         $event
             ->comment
             ->user
-            ->notify(new VideoCommentLikedNotification($event->comment, $event->username));
+            ->notify(new VideoCommentLikedNotification($event->comment, $event->user));
     }
 }

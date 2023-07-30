@@ -13,17 +13,17 @@ class VideoCommentLikedNotification extends Notification implements ShouldBroadc
     use Queueable;
 
 	public $comment;
-	public $username;
+	public $user;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($comment, $username)
+    public function __construct($comment, $user)
     {
         $this->comment = $comment;
-        $this->username = $username;
+        $this->user = $user;
     }
 
     /**
@@ -61,8 +61,8 @@ class VideoCommentLikedNotification extends Notification implements ShouldBroadc
     {
         return [
 			'url' => '/video/' . $this->comment->video->id,
-			'from' => $this->username,
-			'message' => $this->username . ' liked your comment on ' . $this->comment->video->name,
+			'from' => $this->user->username,
+			'message' => $this->user->username . ' liked your comment on ' . $this->comment->video->name,
         ];
     }
 }

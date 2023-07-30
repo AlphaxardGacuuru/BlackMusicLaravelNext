@@ -13,17 +13,17 @@ class AudioCommentedNotification extends Notification implements ShouldBroadcast
     use Queueable;
 
     public $audio;
-	public $username;
+	public $user;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($audio, $username)
+    public function __construct($audio, $user)
     {
         $this->audio = $audio;
-        $this->username = $username;
+        $this->user = $user;
     }
 
     /**
@@ -61,8 +61,8 @@ class AudioCommentedNotification extends Notification implements ShouldBroadcast
     {
         return [
 			'url' => '/audio/' . $this->audio->id,
-			'from' => $this->username,
-			'message' => $this->username . ' commented on ' . $this->audio->name
+			'from' => $this->user->username,
+			'message' => $this->user->username . ' commented on ' . $this->audio->name
         ];
     }
 }

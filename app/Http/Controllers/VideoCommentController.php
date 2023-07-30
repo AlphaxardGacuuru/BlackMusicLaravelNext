@@ -42,7 +42,7 @@ class VideoCommentController extends Controller
         VideoCommentedEvent::dispatchIf(
             $canDispatch,
             $videoComment->video,
-            $videoComment->username
+            $videoComment->user
         );
 
         return response([

@@ -38,7 +38,7 @@ class VideoLikeController extends Controller
         VideoLikedEvent::dispatchIf(
             $canDispatch,
             $videoLike->video,
-            $videoLike->username
+            $videoLike->user
         );
 
         return response([

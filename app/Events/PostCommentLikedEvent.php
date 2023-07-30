@@ -17,16 +17,18 @@ class PostCommentLikedEvent
 
 	public $comment;
 	public $post;
+	public $user;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($comment, $post)
+    public function __construct($comment, $post, $user)
     {
 		$this->comment = $comment;
 		$this->post = $post;
+		$this->user = $user;
     }
 
     /**

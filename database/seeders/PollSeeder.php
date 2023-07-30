@@ -21,6 +21,7 @@ class PollSeeder extends Seeder
         // Create Post
         $post = Post::factory()
             ->create([
+				'media' => null,
                 'parameter_1' => 'A',
                 'parameter_2' => 'B',
                 'parameter_3' => 'C',

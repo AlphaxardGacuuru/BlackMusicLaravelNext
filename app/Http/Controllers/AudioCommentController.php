@@ -42,7 +42,7 @@ class AudioCommentController extends Controller
         AudioCommentedEvent::dispatchIf(
 			$canDispatch, 
 			$audioComment->audio, 
-			$audioComment->username
+			$audioComment->user
 		);
 
         return response([

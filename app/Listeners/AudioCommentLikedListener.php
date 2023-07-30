@@ -29,6 +29,6 @@ class AudioCommentLikedListener implements ShouldQueue
         $event
             ->comment
             ->user
-            ->notify(new AudioCommentLikedNotification($event->comment, $event->username));
+            ->notify(new AudioCommentLikedNotification($event->comment, $event->user));
     }
 }

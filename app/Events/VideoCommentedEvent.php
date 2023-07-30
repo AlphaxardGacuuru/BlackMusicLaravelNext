@@ -13,17 +13,17 @@ class VideoCommentedEvent
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $video;
-    public $username;
+    public $user;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($video, $username)
+    public function __construct($video, $user)
     {
         $this->video = $video;
-        $this->username = $username;
+        $this->user = $user;
     }
 
     /**

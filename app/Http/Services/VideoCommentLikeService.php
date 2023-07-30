@@ -14,17 +14,17 @@ class VideoCommentLikeService extends Service
      */
     public function store($request)
     {
-		$videoCommentLike = "data";
-        
-		$hasLiked = VideoCommentLike::where('video_comment_id', $request->input('comment'))
-            ->where('username', auth('sanctum')->user()->username)
-            ->exists();
+        $query = VideoCommentLike::where('video_comment_id', $request->input('comment'))
+            ->where('username', auth('sanctum')->user()->username);
+
+        $hasLiked = $query->exists();
 
         if ($hasLiked) {
-            VideoCommentLike::where('video_comment_id', $request->input('comment'))
-                ->where('username', auth('sanctum')->user()->username)
-                ->delete();
-
+            // Get Like
+            $videoCommentLike = $query->first();
+            // Delete
+            $query->delete();
+			// Set Message
             $message = "Like removed";
             $added = false;
         } else {
@@ -37,10 +37,10 @@ class VideoCommentLikeService extends Service
             $added = true;
         }
 
-		// Check if current user is owner of videos
-		$notCurrentUser = $videoCommentLike->comment->username != $this->username;
-		// Dispatch if comment is saved successfully and current user is not owner of audio
-		$canDispatch = $notCurrentUser && $added;
+        // Check if current user is owner of videos
+        $notCurrentUser = $videoCommentLike->comment->username != $this->username;
+        // Dispatch if comment is saved successfully and current user is not owner of audio
+        $canDispatch = $notCurrentUser && $added;
 
         return [$canDispatch, $message, $videoCommentLike];
     }

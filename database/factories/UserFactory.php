@@ -21,6 +21,8 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $accountType = ["normal", "musician"];
+
         return [
             'name' => fake()->name(),
             'username' => '@' . fake()->unique()->firstName(),
@@ -32,6 +34,7 @@ class UserFactory extends Factory
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
             'bio' => fake()->catchPhrase(),
+            'account_type' => $accountType[rand(0, 1)],
         ];
     }
 

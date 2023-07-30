@@ -16,22 +16,9 @@ class StorySeeder extends Seeder
      */
     public function run()
     {
-        $story1 = Story::factory()
-            ->state(new Sequence(
-                ["media" => [["image" => "stories/1.jpg"]]],
-                ["media" => [["image" => "stories/2.jpg"]]]));
-
-        $story2 = Story::factory()
-            ->state(new Sequence(
-                ["media" => [["image" => "stories/3.jpg"]]],
-                ["media" => [["image" => "stories/4.jpg"]]]));
-
         // Create one post for @blackmusic
-        $story1->create(['username' => "@blackmusic"]);
+        Story::factory()->create(["username" => "@blackmusic"]);
 
-        for ($i = 0; $i < 4; $i++) {
-            $story1->create(["username" => User::all()->random()->username]);
-            $story2->create(["username" => User::all()->random()->username]);
-        }
+        Story::factory()->count(10)->create();
     }
 }

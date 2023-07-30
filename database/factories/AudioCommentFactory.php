@@ -21,6 +21,7 @@ class AudioCommentFactory extends Factory
     {
         return [
             'text' => fake()->realText($maxNbChars = 20, $indexSize = 2),
+            'username' => User::all()->random()->username,
         ];
     }
 

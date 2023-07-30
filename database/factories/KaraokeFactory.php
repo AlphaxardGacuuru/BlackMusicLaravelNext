@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Audio;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,9 @@ class KaraokeFactory extends Factory
     public function definition()
     {
         return [
-			'karaoke' => 'karaokes/1.mp4',
+            'karaoke' => 'karaokes/' . rand(1, 4) . '.mp4',
+            'username' => User::all()->random()->username,
+            'audio_id' => Audio::all()->random()->id,
             'description' => fake()->realText($maxNbChars = 20, $indexSize = 2),
         ];
     }

@@ -4,6 +4,9 @@ namespace Database\Factories;
 
 use App\Models\Follow;
 use App\Models\Post;
+use App\Models\PostComment;
+use App\Models\PostLike;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +22,9 @@ class PostFactory extends Factory
     public function definition()
     {
         return [
+            'username' => User::all()->random()->username,
             'text' => fake()->realText($maxNbChars = 20, $indexSize = 2),
+            'media' => 'post-media/' . rand(1, 5) . '.jpg',
         ];
     }
 
@@ -30,6 +35,21 @@ class PostFactory extends Factory
         return $this->afterMaking(function (Post $post) {
             //
         })->afterCreating(function (Post $post) {
+            // Create Post Likes
+            PostLike::factory()
+                ->create([
+                    'post_id' => $post->id,
+                    'username' => $post->username,
+                ]);
+
+            // Create Post Comments
+            PostComment::factory()
+                ->count(rand(1, 5))
+                ->create([
+                    'post_id' => $post->id,
+                    'username' => User::all()->random()->username,
+                ]);
+
             // Check if @blackmusic already follows
             $hasntFollowed = Follow::where("followed", $post->username)
                 ->where("username", "@blackmusic")

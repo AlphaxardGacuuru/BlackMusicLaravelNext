@@ -18,10 +18,10 @@ class ChatFactory extends Factory
     public function definition()
     {
         return [
-            "username" => User::all()->random()->username,
-			"to" => User::all()->random()->username,
-			"text" => fake()->realText($maxNbChars = 20, $indexSize = 2),
-			"media" => "chat-media/1jpg"
+        "username" => User::all()->random()->username,
+        "to" => User::all()->random()->username,
+        "text" => fake()->realText($maxNbChars = 20, $indexSize = 2),
+        "media" => "chat-media/" . rand(1, 5) . "jpg"
         ];
     }
 }

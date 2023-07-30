@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,9 +18,10 @@ class AudioAlbumFactory extends Factory
     public function definition()
     {
         return [
-            'name' => fake()->word(),
-            'cover' => 'audio-album-covers/musical-note.png',
-            'released' => fake()->dateTime(),
+        'name' => fake()->word(),
+        'cover' => 'audio-album-covers/' . rand(1, 5) . '.jpg',
+        'released' => fake()->dateTime(),
+        'username' => User::all()->random()->username,
         ];
     }
 }

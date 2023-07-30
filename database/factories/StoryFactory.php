@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Follow;
 use App\Models\Story;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,9 +20,9 @@ class StoryFactory extends Factory
     public function definition()
     {
         return [
-            "username" => fake()->name(),
+            "username" => User::all()->random()->username,
             "text" => fake()->realText($maxNbChars = 20, $indexSize = 2),
-            "media" => [["image" => "stories/1.jpg"]],
+            "media" => [["image" => "stories/" . rand(1, 5) . ".jpg"]],
         ];
     }
 
@@ -32,7 +33,7 @@ class StoryFactory extends Factory
         return $this->afterMaking(function (Story $story) {
             //
         })->afterCreating(function (Story $story) {
-			// Check if @blackmusic already follows
+            // Check if @blackmusic already follows
             $hasntFollowed = Follow::where("followed", $story->username)
                 ->where("username", "@blackmusic")
                 ->doesntExist();

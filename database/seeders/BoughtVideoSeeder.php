@@ -2,10 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Audio;
+use App\Models\BoughtVideo;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class AudioSeeder extends Seeder
+class BoughtVideoSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +15,6 @@ class AudioSeeder extends Seeder
      */
     public function run()
     {
-        Audio::factory()->count(10)->create();
+        BoughtVideo::factory()->count(10)->create();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -17,8 +18,12 @@ class PollFactory extends Factory
      */
     public function definition()
     {
+        $parameters = ["A", "B", "C", "D", "E"];
+
         return [
+            'post_id' => Post::all()->random()->id,
             'username' => User::all()->random()->username,
+            'parameter' => $parameters[rand(0, 4)],
         ];
     }
 }

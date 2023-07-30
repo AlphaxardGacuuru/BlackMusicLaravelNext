@@ -105,6 +105,13 @@ Route::apiResources([
 // });
 
 /*
+* User
+*/ 
+
+// Musicians
+Route::get('artists', [UserController::class, 'artists']);
+
+/*
  * Post
  */
 
@@ -192,3 +199,15 @@ Route::prefix('filepond')->group(function () {
 Route::post('stk-push', [KopokopoController::class, 'stkPush']);
 
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
+
+/*
+ * Admin
+ */
+Route::prefix('admin')->group(function () {
+    Route::get('admin', [AdminController::class, 'admin']);
+    Route::get('users', [AdminController::class, 'users']);
+    Route::get('videos', [AdminController::class, 'videos']);
+    Route::get('audios', [AdminController::class, 'audios']);
+    Route::get('kopokopo-recipients', [AdminController::class, 'kopokopoRecipients']);
+    Route::get('song-payouts', [AdminController::class, 'songPayouts']);
+});

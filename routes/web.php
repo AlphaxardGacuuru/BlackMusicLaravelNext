@@ -53,7 +53,4 @@ Route::get('/mailable/deco', function () {
     return new App\Mail\DecoMail($user->username, $user2->username);
 });
 
-
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

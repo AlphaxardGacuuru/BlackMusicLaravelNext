@@ -56,17 +56,17 @@ window.Echo = new Echo({
 	cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 	wsHost: window.location.hostname,
 	wsPort: 6001,
-	forceTLS: true,
+	forceTLS: false,
 	disableStats: true,
 	authorizer: (channel, options) => {
 		return {
 			authorize: (socketId, callback) => {
-				Axios
+				window.Axios
 					.post("/api/broadcasting/auth", {
 						socket_id: socketId,
 						channel_name: channel.name,
 					})
-					.then((response) => callback(null, response.data))
+					.then((res) => callback(null, res.data))
 					.catch((error) => callback(error))
 			},
 		}

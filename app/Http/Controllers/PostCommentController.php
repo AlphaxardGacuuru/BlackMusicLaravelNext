@@ -38,7 +38,12 @@ class PostCommentController extends Controller
 
         [$saved, $message, $postComment] = $this->service->store($request);
 
-        PostCommentedEvent::dispatchif($saved, $postComment->post, $postComment->user);
+        PostCommentedEvent::dispatchif(
+			$saved, 
+			$postComment, 
+			$postComment->post, 
+			$postComment->user
+		);
 
         return response([
             "message" => $message,

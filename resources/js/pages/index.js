@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 // import Axios from "axios"
-// import Echo from "Echo"
+// import Echo from "@/lib/Echo"
 
 import Img from "@/components/Core/Img"
 import LoadingMusicianMedia from "@/components/User/LoadingMusicianMedia"
@@ -27,6 +27,8 @@ export default function Home(props) {
 	const [deletedIds, setDeletedIds] = useState([])
 
 	useEffect(() => {
+		// EchoConfig()
+
 		Echo.private(`post-created`).listen("PostedEvent", (e) => {
 			setNewPosts(e.post)
 		})
@@ -101,14 +103,10 @@ export default function Home(props) {
 			)}
 
 			{/* Chat button */}
-			<Link
-				to="/chat"
-				id="chatFloatBtn"
-				className={raise ? "mb-5" : undefined}>
+			<Link to="/chat" id="chatFloatBtn" className={raise ? "mb-5" : undefined}>
 				<ChatSVG />
 			</Link>
 
-			{/* <!-- Profile info area --> */}
 			<div className="row">
 				{/* New Posts Snackbar */}
 				<center>
@@ -122,11 +120,10 @@ export default function Home(props) {
 				</center>
 				{/* New Posts Snackbar End */}
 
+			{/* Profile info area */}
 				<div className="col-sm-1 hidden"></div>
 				<div className="col-sm-3 hidden">
-					<div
-						className="d-flex p-4"
-						style={{ backgroundColor: "#232323" }}>
+					<div className="d-flex p-4" style={{ backgroundColor: "#232323" }}>
 						{/* Avatar */}
 						<div
 							className="avatar-thumbnail-sm"
@@ -208,7 +205,8 @@ export default function Home(props) {
 						{/* Loading Musician items */}
 						{dummyArray
 							.filter(
-								() => props.artists.filter((user) => user.accountType).length < 1
+								() =>
+									props.artists.filter((user) => user.accountType).length < 1
 							)
 							.map((item, key) => (
 								<LoadingMusicianMedia key={key} />
@@ -232,9 +230,7 @@ export default function Home(props) {
 				<div className="col-sm-4">
 					<div className="mb-2 border-bottom border-dark">
 						<h5>Stories</h5>
-						<div
-							className="hidden-scroll pb-2"
-							onScroll={handleScroll}>
+						<div className="hidden-scroll pb-2" onScroll={handleScroll}>
 							{/* Create Story */}
 							{/* <CreateStoryMedia {...props} /> */}
 							{/* Create Story End */}
@@ -248,11 +244,7 @@ export default function Home(props) {
 
 							{/* Real Story items */}
 							{props.stories.slice(0, storySlice).map((story, key) => (
-								<StoryMedia
-									{...props}
-									key={key}
-									story={story}
-								/>
+								<StoryMedia {...props} key={key} story={story} />
 							))}
 						</div>
 					</div>
@@ -304,11 +296,7 @@ export default function Home(props) {
 							.filter((video) => !video.hasBoughtVideo)
 							.slice(0, 10)
 							.map((video, key) => (
-								<VideoMedia
-									{...props}
-									key={key}
-									video={video}
-								/>
+								<VideoMedia {...props} key={key} video={video} />
 							))}
 					</div>
 				</div>

@@ -71,7 +71,6 @@ const SocialMediaInput = (props) => {
 
 	// For multiple uploads
 	const generateRevertUrl = () => {
-		console.log("gen 1 " + storyMedia.length)
 		if (storyMedia.length) {
 			console.log("gen 2")
 			// Get media

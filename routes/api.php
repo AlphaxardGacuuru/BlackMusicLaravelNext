@@ -64,7 +64,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 // Route::middleware(['auth:sanctum'])->group(function () {
 Route::apiResources([
-    'admin' => AdminController::class,
     'audios' => AudioController::class,
     'audio-likes' => AudioLikeController::class,
     'audio-comments' => AudioCommentController::class,

@@ -27,8 +27,6 @@ export default function Home(props) {
 	const [deletedIds, setDeletedIds] = useState([])
 
 	useEffect(() => {
-		// EchoConfig()
-
 		Echo.private(`post-created`).listen("PostedEvent", (e) => {
 			setNewPosts(e.post)
 		})
@@ -103,9 +101,14 @@ export default function Home(props) {
 			)}
 
 			{/* Chat button */}
-			<Link to="/chat" id="chatFloatBtn" className={raise ? "mb-5" : undefined}>
-				<ChatSVG />
-			</Link>
+			{props.auth?.username != "@guest" && (
+				<Link
+					to="/chat"
+					id="chatFloatBtn"
+					className={raise ? "mb-5" : undefined}>
+					<ChatSVG />
+				</Link>
+			)}
 
 			<div className="row">
 				{/* New Posts Snackbar */}
@@ -120,7 +123,7 @@ export default function Home(props) {
 				</center>
 				{/* New Posts Snackbar End */}
 
-			{/* Profile info area */}
+				{/* Profile info area */}
 				<div className="col-sm-1 hidden"></div>
 				<div className="col-sm-3 hidden">
 					<div className="d-flex p-4" style={{ backgroundColor: "#232323" }}>

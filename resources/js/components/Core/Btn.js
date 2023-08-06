@@ -1,27 +1,24 @@
-import React from "react";
+import React from "react"
 
-const Btn = ({ btnStyle, btnClass, btnText, onClick, loading }) => (
-    <button style={btnStyle} className={btnClass} onClick={onClick}>
-        {btnText}
-        {loading && (
-            <div
-                className="spinner-border ms-2 my-auto"
-                style={{
-                    borderTopWidth: "2px",
-                    borderBottomWidth: "2px",
-                    borderLeftWidth: "2px",
-                    width: "15px",
-                    height: "15px",
-                    color: "inherit"
-                }}
-            ></div>
-        )}
-    </button>
-);
+const Btn = ({ btnStyle, btnClass, btnText, onClick, loading, disabled }) => (
+	<button
+		style={btnStyle}
+		className={btnClass}
+		onClick={onClick}
+		disabled={disabled}>
+		{btnText}
+		{loading && (
+			<div
+				className="spinner-border ms-2 my-auto"
+				style={{ color: "inherit" }}></div>
+		)}
+	</button>
+)
 
 Btn.defaultProps = {
-    btnClass: "sonar-btn white-btn",
-    loading: false
-};
+	btnClass: "sonar-btn white-btn",
+	loading: false,
+	disabled: false,
+}
 
-export default Btn;
+export default Btn

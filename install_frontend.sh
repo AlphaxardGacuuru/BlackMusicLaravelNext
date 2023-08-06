@@ -1,4 +1,4 @@
 # First run install_backend
 
 npm install &&
-npm run dev
+npm run watch

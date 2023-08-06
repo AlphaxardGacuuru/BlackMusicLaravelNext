@@ -18,17 +18,23 @@ class StoryService extends Service
      */
     public function index()
     {
-        // Get Posts if user has followed musician and is not muted
-        $getStories = Story::select("stories.*", "follows.muted->stories as muted", "follows.blocked")
-            ->join("follows", function ($join) {
-                $join->on("follows.followed", "=", "stories.username")
-                    ->where("follows.username", "=", "@blackmusic");
-            })
-            ->where("follows.muted->stories", false)
+        if ($this->username != "@guest") {
+            // Get Posts if user has followed musician and is not muted
+            $getStories = Story::select("stories.*", "follows.muted->stories as muted", "follows.blocked")
+                ->join("follows", function ($join) {
+                    $join->on("follows.followed", "=", "stories.username")
+                        ->where("follows.username", "=", "@blackmusic");
+                })
+                ->where("follows.muted->stories", false);
+        } else {
+            $getStories = Story::where("username", "@blackmusic");
+        }
+
+        $stories = $getStories
             ->orderBy("stories.id", "DESC")
             ->paginate(10);
 
-        return StoryResource::collection($getStories);
+        return StoryResource::collection($stories);
     }
 
     /**

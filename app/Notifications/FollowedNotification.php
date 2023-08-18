@@ -58,7 +58,7 @@ class FollowedNotification extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-			'url' => '/profile/' . $this->username,
+			'url' => '/profile/show/' . $this->username,
 			'from' => $this->username,
 			'message' => $this->username . ' followed you.'
         ];

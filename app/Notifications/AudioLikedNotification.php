@@ -60,7 +60,7 @@ class AudioLikedNotification extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-			'url' => '/audio/' . $this->audio->id,
+			'url' => '/audio/show' . $this->audio->id,
 			'from' => $this->user->username,
 			'message' => $this->user->username . ' liked ' . $this->audio->name
         ];

@@ -23,7 +23,7 @@ const LoginPopUp = (props) => {
 	// const [email, setEmail] = useState('alphaxardgacuuru47@gmail.com')
 	const [email, setEmail] = useState("al@black.co.ke")
 	// const [phone, setPhone] = useState('0700364446')
-	const [phone, setPhone] = useState("")
+	const [phone, setPhone] = useState("0700000000")
 	// const [password, setPassword] = useState('0700364446')
 	const [password, setPassword] = useState("0700000000")
 	const [shouldRemember, setShouldRemember] = useState()

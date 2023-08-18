@@ -60,7 +60,7 @@ class VideoCommentLikedNotification extends Notification implements ShouldBroadc
     public function toArray($notifiable)
     {
         return [
-			'url' => '/video/' . $this->comment->video->id,
+			'url' => '/video/show/' . $this->comment->video->id,
 			'from' => $this->user->username,
 			'message' => $this->user->username . ' liked your comment on ' . $this->comment->video->name,
         ];

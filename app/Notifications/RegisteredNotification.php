@@ -57,7 +57,7 @@ class RegisteredNotification extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-			'url' => '/profile/@blackmusic',
+			'url' => '/profile/show/@blackmusic',
 			'from' => '@blackmusic',
 			'message' => 'Welcome ' . $this->user->username . ' to Black Music.',
         ];

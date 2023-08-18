@@ -27,7 +27,10 @@ const PostMedia = (props) => {
 	// Function for voting in poll
 	const onPoll = (post, parameter) => {
 		Axios.post(`/api/polls`, { post: post, parameter: parameter })
-			.then((res) => props.setMessages([res.data.message]))
+			.then((res) => {
+				props.setMessages([res.data.message])
+				// Fetch polls
+			})
 			.catch((err) => props.getErrors(err, true))
 	}
 
@@ -152,95 +155,95 @@ const PostMedia = (props) => {
 					{/* Parameter 1 */}
 					<Poll
 						{...props}
-						parameter={props.post.parameter_1}
+						parameter={props.post.parameter1}
 						hasVoted={props.post.hasVoted1}
 						width={`${props.post.percentage1}%`}
 						bgColor={
-							props.post.parameter_1 == props.post.winner
+							props.post.parameter1 == props.post.winner
 								? "#FFD700"
 								: "#232323"
 						}
 						bgColor2={
-							props.post.parameter_1 == props.post.winner ? "#FFD700" : "grey"
+							props.post.parameter1 == props.post.winner ? "#FFD700" : "grey"
 						}
-						text={`${props.post.parameter_1} - ${props.post.percentage1} %`}
+						text={`${props.post.parameter1} - ${props.post.percentage1} %`}
 						onPoll={onPoll}
 					/>
 
 					{/* Parameter 2 */}
 					<Poll
 						{...props}
-						parameter={props.post.parameter_2}
+						parameter={props.post.parameter2}
 						hasVoted={props.post.hasVoted2}
 						width={`${props.post.percentage2}%`}
 						bgColor={
-							props.post.parameter_2 == props.post.winner
+							props.post.parameter2 == props.post.winner
 								? "#FFD700"
 								: "#232323"
 						}
 						bgColor2={
-							props.post.parameter_2 == props.post.winner ? "#FFD700" : "grey"
+							props.post.parameter2 == props.post.winner ? "#FFD700" : "grey"
 						}
-						text={`${props.post.parameter_2} - ${props.post.percentage2} %`}
+						text={`${props.post.parameter2} - ${props.post.percentage2} %`}
 						onPoll={onPoll}
 					/>
 
 					{/* Parameter 3 */}
 					<Poll
 						{...props}
-						parameter={props.post.parameter_3}
+						parameter={props.post.parameter3}
 						hasVoted={props.post.hasVoted3}
 						width={`${props.post.percentage3}%`}
 						bgColor={
-							props.post.parameter_3 == props.post.winner
+							props.post.parameter3 == props.post.winner
 								? "#FFD700"
 								: "#232323"
 						}
 						bgColor2={
-							props.post.parameter_3 == props.post.winner ? "#FFD700" : "grey"
+							props.post.parameter3 == props.post.winner ? "#FFD700" : "grey"
 						}
-						text={`${props.post.parameter_3} - ${props.post.percentage3} %`}
+						text={`${props.post.parameter3} - ${props.post.percentage3} %`}
 						onPoll={onPoll}
 					/>
 
 					{/* Parameter 4 */}
 					<Poll
 						{...props}
-						parameter={props.post.parameter_4}
+						parameter={props.post.parameter4}
 						hasVoted={props.post.hasVoted4}
 						width={`${props.post.percentage4}%`}
 						bgColor={
-							props.post.parameter_4 == props.post.winner
+							props.post.parameter4 == props.post.winner
 								? "#FFD700"
 								: "#232323"
 						}
 						bgColor2={
-							props.post.parameter_4 == props.post.winner ? "#FFD700" : "grey"
+							props.post.parameter4 == props.post.winner ? "#FFD700" : "grey"
 						}
-						text={`${props.post.parameter_4} - ${props.post.percentage4} %`}
+						text={`${props.post.parameter4} - ${props.post.percentage4} %`}
 						onPoll={onPoll}
 					/>
 
 					{/* Parameter 5 */}
 					<Poll
 						{...props}
-						parameter={props.post.parameter_5}
+						parameter={props.post.parameter5}
 						hasVoted={props.post.hasVoted5}
 						width={`${props.post.percentage5}%`}
 						bgColor={
-							props.post.parameter_4 == props.post.winner
+							props.post.parameter5 == props.post.winner
 								? "#FFD700"
 								: "#232323"
 						}
 						bgColor2={
-							props.post.parameter_4 == props.post.winner ? "#FFD700" : "grey"
+							props.post.parameter5 == props.post.winner ? "#FFD700" : "grey"
 						}
-						text={`${props.post.parameter_5} - ${props.post.percentage5} %`}
+						text={`${props.post.parameter5} - ${props.post.percentage5} %`}
 						onPoll={onPoll}
 					/>
 
 					{/* Total votes */}
-					{props.post.parameter_1 ? (
+					{props.post.parameter1 ? (
 						props.post.username == props.auth?.username ||
 						!props.post.isWithin24Hrs ? (
 							<small style={{ color: "grey" }}>

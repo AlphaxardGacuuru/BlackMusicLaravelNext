@@ -34,6 +34,7 @@ class PollController extends Controller
         [$saved, $message, $audio] = $this->service->store($request);
 
         return response([
+			"status" => $saved,
             "message" => $message,
         ], 200);
     }

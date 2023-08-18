@@ -9,11 +9,21 @@ class PollService extends Service
     public function store($request)
     {
         // Check if user has voted
-        $checkPoll = Poll::where('username', auth('sanctum')->user()->username)
-            ->where('post_id', $request->input('post'))
-            ->exists();
+        $getPoll = Poll::where('username', auth('sanctum')->user()->username)
+            ->where('post_id', $request->input('post'));
 
-        if (!$checkPoll) {
+        $hasVoted = $getPoll->exists();
+
+        // Check if poll exists
+        if ($hasVoted) {
+            // Get Poll
+            $poll = $getPoll->first();
+            // Delete Poll
+            $getPoll->delete();
+
+            $message = "Vote removed";
+            $saved = false;
+        } else {
             $poll = new Poll;
             $poll->post_id = $request->input('post');
             $poll->username = auth('sanctum')->user()->username;
@@ -21,16 +31,9 @@ class PollService extends Service
             $poll->save();
 
             $message = "Voted";
-			$added = true;
-        } else {
-			Poll::where('username', auth('sanctum')->user()->username)
-			->where('post_id', $request->input('post'))
-			->delete();
-			
-            $message = "Vote removed";
-			$added = false;
+            $saved = true;
         }
 
-		return [$added, $message, $poll];
+        return [$saved, $message, $poll];
     }
 }

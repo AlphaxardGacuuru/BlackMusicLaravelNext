@@ -108,25 +108,22 @@ const ChatThread = (props) => {
 		window.scrollTo(0, document.body.scrollHeight)
 	}, [chats])
 
+	// Check if chat is user's
+	const isUser = (username) => username == props.auth.username
+
 	return (
 		<div className="row">
 			<div className="col-sm-4"></div>
 			<div className="col-sm-4">
 				{/* <!-- ***** Header Area Start ***** --> */}
-				<header
-					style={{ backgroundColor: "#232323" }}
-					className="header-area">
+				<header style={{ backgroundColor: "#232323" }} className="header-area">
 					<div className="container-fluid p-0">
 						<div className="row">
-							<div
-								className="col-12"
-								style={{ padding: "0" }}>
+							<div className="col-12" style={{ padding: "0" }}>
 								<div className="menu-area d-flex justify-content-between">
 									{/* <!-- Logo Area  --> */}
 									<div className="logo-area">
-										<Link
-											to="/chat"
-											className="fs-6">
+										<Link to="/chat" className="fs-6">
 											<BackSVG />
 										</Link>
 									</div>
@@ -183,9 +180,7 @@ const ChatThread = (props) => {
 				{/* <!-- ***** Chats ***** --> */}
 				<div className="sonar-call-to-action-area section-padding-0-100">
 					<div className="backEnd-content">
-						<h2
-							className="p-2"
-							style={{ color: "rgba(255,255,255,0.1)" }}>
+						<h2 className="p-2" style={{ color: "rgba(255,255,255,0.1)" }}>
 							Chat
 						</h2>
 					</div>
@@ -195,22 +190,17 @@ const ChatThread = (props) => {
 						.map((chatItem, key) => (
 							<div
 								key={key}
-								className={`d-flex
+								className={`d-flex chat
 								${
-									chatItem.username == props.auth.username
+									isUser(chatItem.username)
 										? "flex-row-reverse"
 										: "text-light"
 								}`}>
 								{/* Trash */}
-								{chatItem.username == props.auth.username &&
+								{isUser(chatItem.username) &&
 									toDeleteIds.includes(chatItem.id) && (
 										<div
-											style={{
-												cursor: "pointer",
-												backgroundColor:
-													chatItem.username == props.auth.username && "gold",
-											}}
-											className="rounded-0 border border-secondary border-right-0 border-top-0 border-bottom-0 p-2 my-1 mx-0"
+											className="chat-item-trash"
 											onClick={() => onDeleteChat(chatItem.id)}>
 											<span style={{ color: "#232323" }}>
 												<TrashSVG />
@@ -221,27 +211,20 @@ const ChatThread = (props) => {
 
 								{/* Chat */}
 								<div
-									className="rounded-0 border-0 p-2 my-1 m-0 pb-0"
-									style={{
-										backgroundColor:
-											chatItem.username == props.auth.username
-												? "#FFD700"
-												: "#232323",
-										maxWidth: "90%",
-										wordWrap: "break-word",
-										cursor: "pointer",
-									}}
+									className={
+										isUser(chatItem.username)
+											? "chat-item"
+											: "chat-item-reverse"
+									}
 									onClick={() => {
-										if (chatItem.username == props.auth.username) {
+										if (isUser(chatItem.username)) {
 											showDelete(chatItem.id)
 										}
 									}}>
 									{chatItem.text}
 
 									{/* Media */}
-									<div
-										className="mb-1"
-										style={{ overflow: "hidden" }}>
+									<div className="mb-1" style={{ overflow: "hidden" }}>
 										{chatItem.media && (
 											<Img
 												src={chatItem.media}
@@ -256,7 +239,7 @@ const ChatThread = (props) => {
 									{/* Created At */}
 									<small
 										className={
-											chatItem.username == props.auth.username
+											isUser(chatItem.username)
 												? "text-dark m-0 p-1"
 												: "text-muted m-0 p-1"
 										}>

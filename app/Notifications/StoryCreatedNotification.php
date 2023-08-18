@@ -60,7 +60,7 @@ class StoryCreatedNotification extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-            'url' => '/story/' . $this->story->id,
+            'url' => '/story/show/' . $this->story->id,
             'from' => $this->username,
             'message' => $this->username . ' posted a story.',
         ];

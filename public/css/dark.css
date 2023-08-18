@@ -2327,3 +2327,31 @@ div.hidden-scroll span {
 }
 
 /* Spinner loader End */
+
+/* Chat */
+.chat div {
+	border: 0px;
+	margin: 2px 0px;
+	max-width: 90%;
+	word-wrap: break-word;
+	cursor: pointer;
+}
+
+.chat-item {
+	background-color: #FFD700;
+	padding: 5px 5px 0px 20px;
+}
+
+.chat-item-reverse {
+	background-color: #232323;
+	padding: 5px 20px 0px 5px;
+}
+
+.chat-item-trash {
+	background-color: #FFD700;
+	border-radius: 0px;
+	margin: 2px 0px;
+	padding: 10px 5px 0px 5px;
+}
+
+/* Chat End */

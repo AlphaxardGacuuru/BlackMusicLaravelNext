@@ -229,7 +229,7 @@ export default function Home(props) {
 				</div>
 				{/* <!-- Musician suggestion area end --> */}
 
-				{/* <!-- ****** Srories Area ****** --> */}
+				{/* <!-- ****** Stories Area ****** --> */}
 				<div className="col-sm-4">
 					<div className="mb-2 border-bottom border-dark">
 						<h5>Stories</h5>
@@ -251,7 +251,7 @@ export default function Home(props) {
 							))}
 						</div>
 					</div>
-					{/* <!-- ****** Srories Area End ****** --> */}
+					{/* <!-- ****** Stories Area End ****** --> */}
 
 					{/* <!-- Posts area --> */}
 					<div className="m-0 p-0">

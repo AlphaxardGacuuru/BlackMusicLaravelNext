@@ -9,6 +9,11 @@ class BoughtVideo extends Model
 {
     use HasFactory;
 
+	public function user()
+	{
+		return $this->belongsTo(Video::class);
+	}
+
 	public function video()
 	{
 		return $this->belongsTo(Video::class);

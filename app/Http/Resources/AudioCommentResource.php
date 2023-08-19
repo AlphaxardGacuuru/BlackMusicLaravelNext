@@ -26,7 +26,7 @@ class AudioCommentResource extends JsonResource
                 "username" => $this->username,
                 "name" => $this->user->name,
                 "avatar" => $this->user->avatar,
-                "decos" => $this->user->decos->count(),
+                "decos" => $this->user->decos,
                 "hasLiked" => $this->hasLiked($username),
                 "likes" => $this->likes->count(),
                 "createdAt" => $this->created_at,

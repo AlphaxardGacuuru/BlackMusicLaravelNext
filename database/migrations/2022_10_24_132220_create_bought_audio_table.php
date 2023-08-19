@@ -15,27 +15,19 @@ return new class extends Migration
     {
         Schema::create('bought_audios', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('audio_id')
-                ->constrained('audios')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-            $table->string('price');
+            $table->foreignId('audio_id')->constrained('audios');
             $table->string('username');
-            $table->string('name');
             $table->string('artist');
+            $table->string('price');
             $table->timestamps();
 
             $table->foreign('username')
                 ->references('username')
-                ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->on('users');
 
             $table->foreign('artist')
                 ->references('username')
-                ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->on('users');
 
             $table->unique(['audio_id', 'username']);
         });

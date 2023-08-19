@@ -28,7 +28,7 @@ class KaraokeResource extends JsonResource
             "name" => $this->user->name,
             "username" => $this->user->username,
             "avatar" => $this->user->avatar,
-            "decos" => $this->user->decos->count(),
+            "decos" => $this->user->decos,
             "description" => $this->description,
             "hasLiked" => $this->hasLiked($username),
             "hasSaved" => $this->hasSaved($username),

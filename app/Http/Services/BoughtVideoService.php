@@ -80,7 +80,7 @@ class BoughtVideoService extends Service
                     });
 
                     // Update array for use in Event
-					array_push($boughtVideos, $cartVideo->video);
+                    array_push($boughtVideos, $cartVideo->video);
                     // Update array for use in Receipt
                     array_push($StructuredBoughtVideos,
                         $this->structure(
@@ -157,7 +157,7 @@ class BoughtVideoService extends Service
             "artistName" => $video->user->name,
             "username" => $video->username,
             "avatar" => $video->user->avatar,
-            "artistDecos" => $video->user->decos->count(),
+            "artistDecos" => $video->user->decos,
             "ft" => $video->ft,
             "videoAlbumId" => $video->video_album_id,
             "album" => $video->album->name,

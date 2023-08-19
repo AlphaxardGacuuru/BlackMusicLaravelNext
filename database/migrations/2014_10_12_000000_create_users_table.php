@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('dob')->nullable();
             $table->string('location')->nullable();
             $table->string('withdrawal')->nullable();
+            $table->integer('decos')->default(0)->nullable();
             $table->timestamps();
         });
     }

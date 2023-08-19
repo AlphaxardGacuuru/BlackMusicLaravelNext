@@ -24,7 +24,7 @@ class PostCommentResource extends JsonResource
             "post_id" => $this->post_id,
             "name" => $this->user->name,
             "username" => $this->user->username,
-            "decos" => $this->user->decos->count(),
+            "decos" => $this->user->decos,
             "avatar" => $this->user->avatar,
             "text" => $this->text,
             "likes" => $this->likes->count(),

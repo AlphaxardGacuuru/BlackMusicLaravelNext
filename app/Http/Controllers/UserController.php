@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Services\UserService;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
     public function __construct(protected UserService $service)
     {
-		// 
-	}
+        //
+    }
 
     /**
      * Display a listing of the resource.
@@ -20,6 +21,25 @@ class UserController extends Controller
      */
     public function index()
     {
+		$getReferrals = DB::table("referrals2")
+		// ->distinct()
+		->get();
+
+        $referrals = [];
+
+        foreach ($getReferrals as $item) {
+
+            $doesntExist = User::where("username", $item->referee)
+                ->doesntExist();
+
+            if ($doesntExist) {
+				
+                array_push($referrals, $item);
+            }
+        }
+
+        return $referrals;
+
         return $this->service->index();
     }
 

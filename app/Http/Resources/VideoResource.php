@@ -26,7 +26,7 @@ class VideoResource extends JsonResource
             "artistName" => $this->user->name,
             "username" => $this->username,
             "avatar" => $this->user->avatar,
-            "artistDecos" => $this->user->decos->count(),
+            "artistDecos" => $this->user->decos,
             "ft" => $this->ft,
             "videoAlbumId" => $this->video_album_id,
             "album" => $this->album->name,

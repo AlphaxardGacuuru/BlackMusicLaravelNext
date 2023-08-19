@@ -44,7 +44,7 @@ class PostResource extends JsonResource
             "name" => $this->user->name,
             "username" => $this->user->username,
             "avatar" => $this->user->avatar,
-            "decos" => $this->user->decos->count(),
+            "decos" => $this->user->decos,
             "text" => $this->text,
             "media" => $this->media,
             "parameter1" => $this->parameter_1,

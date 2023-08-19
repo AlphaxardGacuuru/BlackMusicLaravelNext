@@ -27,7 +27,7 @@ class CartAudioResource extends JsonResource
             "artistName" => $this->audio->user->name,
             "username" => $this->audio->username,
             "avatar" => $this->audio->user->avatar,
-            "artistDecos" => $this->audio->user->decos->count(),
+            "artistDecos" => $this->audio->user->decos,
             "ft" => $this->audio->ft,
             "audioAlbumId" => $this->audio->audio_album_id,
             "album" => $this->audio->album->name,

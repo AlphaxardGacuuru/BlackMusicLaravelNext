@@ -36,7 +36,7 @@ class UserResource extends JsonResource
             "fans" => $this->fans(),
             "hasFollowed" => $this->hasFollowed($username),
             "hasBought1" => $this->hasBought1($username),
-            "decos" => $this->decos->count(),
+            "decos" => $this->decos,
             "balance" => $this->balance(),
             "videos" => $this->videos->count(),
             "boughtVideos" => $this->boughtVideos->count(),

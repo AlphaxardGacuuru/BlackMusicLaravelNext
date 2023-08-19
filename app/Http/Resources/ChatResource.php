@@ -20,7 +20,7 @@ class ChatResource extends JsonResource
             "username" => $this->user->username,
             "to" => $this->to,
             "avatar" => $this->user->avatar,
-            "decos" => $this->user->decos->count(),
+            "decos" => $this->user->decos,
             "text" => $this->text,
             "media" => $this->media,
             "createdAt" => $this->created_at,

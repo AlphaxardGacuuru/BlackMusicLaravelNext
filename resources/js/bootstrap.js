@@ -28,6 +28,18 @@ const getLocalStorage = (state) => {
 	}
 }
 
+// Decrypt Sanctum Token
+const decryptedToken = () => {
+	var CryptoJS = require("crypto-js")
+
+	const secretKey = "BlackMusicAuthorizationToken"
+
+	// Decrypt
+	var bytes = CryptoJS.AES.decrypt(getLocalStorage("sanctumToken"), secretKey)
+
+	return bytes.toString(CryptoJS.enc.Utf8)
+}
+
 window.Axios = require("axios")
 
 // window.Axios.defaults.baseURL = process.env.MIX_APP_URL
@@ -36,7 +48,7 @@ window.Axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest"
 
 window.Axios.defaults.headers.common[
 	"Authorization"
-] = `Bearer ${getLocalStorage("sanctumToken")}`
+] = `Bearer ${decryptedToken()}`
 
 Axios.defaults.withCredentials = true
 

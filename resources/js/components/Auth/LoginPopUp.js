@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { useHistory } from "react-router-dom"
+import CryptoJS from "crypto-js"
 // import Axios from "axios"
 // import { useAuth } from "@/hooks/auth";
 
@@ -42,6 +43,13 @@ const LoginPopUp = (props) => {
 	// const [phone, setPhone] = useState('07')
 	const [phoneLogin, setPhoneLogin] = useState(false)
 
+	// Encrypt Token
+	const encryptedToken = (token) => {
+		const secretKey = "BlackMusicAuthorizationToken"
+		// Encrypt
+		return CryptoJS.AES.encrypt(token, secretKey).toString()
+	}
+
 	const onSubmit = (e) => {
 		setLoading(true)
 		e.preventDefault()
@@ -59,8 +67,8 @@ const LoginPopUp = (props) => {
 					setLoading(false)
 					// Hide Login Pop Up
 					props.setLogin(false)
-					// Save Sanctum Token to Local Storage
-					props.setLocalStorage("sanctumToken", res.data.data)
+					// Encrypt and Save Sanctum Token to Local Storage
+					props.setLocalStorage("sanctumToken", encryptedToken(res.data.data))
 					// Update Logged in user
 					props.get(`auth`, props.setAuth, "auth", false)
 					// Reload page
@@ -78,9 +86,7 @@ const LoginPopUp = (props) => {
 
 	return (
 		<>
-			<div
-				id="preloader"
-				style={{ display: props.login ? "block" : "none" }}>
+			<div id="preloader" style={{ display: props.login ? "block" : "none" }}>
 				<div className="preload-content">
 					{/* <div id="sonar-load"></div> */}
 				</div>
@@ -109,10 +115,7 @@ const LoginPopUp = (props) => {
 						{phoneLogin ? (
 							<center>
 								<div className="mycontact-form">
-									<form
-										method="POST"
-										action=""
-										onSubmit={onSubmit}>
+									<form method="POST" action="" onSubmit={onSubmit}>
 										<input
 											id="phone"
 											type="text"

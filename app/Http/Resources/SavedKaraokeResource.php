@@ -19,22 +19,22 @@ class SavedKaraokeResource extends JsonResource
         ? auth('sanctum')->user()->username
         : '@guest';
 
-		 return [
-                "id" => $this->karaoke->id,
-                "karaoke" => $this->karaoke->karaoke,
-                "audioId" => $this->karaoke->audio_id,
-                "audioName" => $this->karaoke->audio->name,
-                "audioThumbnail" => $this->karaoke->audio->thumbnail,
-                "name" => $this->karaoke->user->name,
-                "username" => $this->karaoke->user->username,
-                "avatar" => $this->karaoke->user->avatar,
-                "decos" => $this->karaoke->user->decos->count(),
-                "description" => $this->karaoke->description,
-                "hasLiked" => $this->karaoke->hasLiked($username),
-                "hasSaved" => $this->karaoke->hasSaved($username),
-                "likes" => $this->karaoke->likes->count(),
-                "comments" => $this->karaoke->comments->count(),
-                "createdAt" => $this->karaoke->created_at,
-		 ];
+        return [
+            "id" => $this->karaoke->id,
+            "karaoke" => $this->karaoke->karaoke,
+            "audioId" => $this->karaoke->audio_id,
+            "audioName" => $this->karaoke->audio->name,
+            "audioThumbnail" => $this->karaoke->audio->thumbnail,
+            "name" => $this->karaoke->user->name,
+            "username" => $this->karaoke->user->username,
+            "avatar" => $this->karaoke->user->avatar,
+            "decos" => $this->karaoke->user->decos,
+            "description" => $this->karaoke->description,
+            "hasLiked" => $this->karaoke->hasLiked($username),
+            "hasSaved" => $this->karaoke->hasSaved($username),
+            "likes" => $this->karaoke->likes->count(),
+            "comments" => $this->karaoke->comments->count(),
+            "createdAt" => $this->karaoke->created_at,
+        ];
     }
 }

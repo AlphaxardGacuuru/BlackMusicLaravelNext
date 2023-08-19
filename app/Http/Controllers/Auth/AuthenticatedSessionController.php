@@ -27,35 +27,6 @@ class AuthenticatedSessionController extends Controller
         return response()->noContent();
     }
 
-    /**
-     * Destroy an authenticated session.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request)
-    {
-        Auth::guard('web')->logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-
-        // Delete Current Access Token
-        $hasLoggedOut = auth("sanctum")
-            ->user()
-            ->currentAccessToken()
-            ->delete();
-
-        if ($hasLoggedOut) {
-            $message = "Logged Out";
-        } else {
-            $message = "Failed to log out";
-        }
-
-        return response(["message" => $message], 200);
-    }
-
     /*
      * Token Based Login
      */
@@ -86,5 +57,34 @@ class AuthenticatedSessionController extends Controller
             "message" => "Logged in",
             "data" => $token,
         ], 200);
+    }
+
+    /**
+     * Destroy an authenticated session.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request)
+    {
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        // Delete Current Access Token
+        $hasLoggedOut = auth("sanctum")
+            ->user()
+            ->currentAccessToken()
+            ->delete();
+
+        if ($hasLoggedOut) {
+            $message = "Logged Out";
+        } else {
+            $message = "Failed to log out";
+        }
+
+        return response(["message" => $message], 200);
     }
 }

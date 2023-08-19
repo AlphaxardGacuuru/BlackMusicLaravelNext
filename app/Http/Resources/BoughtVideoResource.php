@@ -18,7 +18,7 @@ class BoughtVideoResource extends JsonResource
         $username = auth('sanctum')->user()
         ? auth('sanctum')->user()->username
         : '@guest';
-		
+
         return [
             "id" => $this->video->id,
             "video" => $this->video->video,
@@ -26,7 +26,7 @@ class BoughtVideoResource extends JsonResource
             "artistName" => $this->video->user->name,
             "username" => $this->video->username,
             "avatar" => $this->video->user->avatar,
-            "artistDecos" => $this->video->user->decos->count(),
+            "artistDecos" => $this->video->user->decos,
             "ft" => $this->video->ft,
             "videoAlbumId" => $this->video->video_album_id,
             "album" => $this->video->album->name,

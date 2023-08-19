@@ -65,28 +65,28 @@ class User extends Authenticatable
     protected function avatar(): Attribute
     {
         return Attribute::make(
-            get:fn($value) => preg_match("/http/", $value) ? $value : "/storage/" . $value
+            get: fn($value) => preg_match("/http/", $value) ? $value : "/storage/" . $value
         );
     }
 
     protected function backdrop(): Attribute
     {
         return Attribute::make(
-            get:fn($value) => "/storage/" . $value
+            get: fn($value) => "/storage/" . $value
         );
     }
 
     protected function updatedAt(): Attribute
     {
         return Attribute::make(
-            get:fn($value) => Carbon::parse($value)->format('d M Y'),
+            get: fn($value) => Carbon::parse($value)->format('d M Y'),
         );
     }
 
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get:fn($value) => Carbon::parse($value)->format('d M Y'),
+            get: fn($value) => Carbon::parse($value)->format('d M Y'),
         );
     }
 
@@ -125,9 +125,19 @@ class User extends Authenticatable
         return $this->hasMany(BoughtAudio::class, 'username', 'username');
     }
 
+    public function artistsBoughtAudios()
+    {
+        return $this->hasMany(BoughtAudio::class, 'artist', 'username');
+    }
+
     public function boughtVideos()
     {
         return $this->hasMany(BoughtVideo::class, 'username', 'username');
+    }
+
+    public function artistsBoughtVideos()
+    {
+        return $this->hasMany(BoughtVideo::class, 'artist', 'username');
     }
 
     public function cartAudios()
@@ -145,7 +155,7 @@ class User extends Authenticatable
         return $this->hasMany(Chat::class, 'username', 'username');
     }
 
-    public function decos()
+    public function decorations()
     {
         return $this->hasMany(Deco::class, 'username', 'username');
     }
@@ -270,7 +280,7 @@ class User extends Authenticatable
      */
 
     /*
-	* Check if user has followed User */
+     * Check if user has followed User */
     public function hasFollowed($username)
     {
         return Follow::where('username', $username)
@@ -279,32 +289,30 @@ class User extends Authenticatable
     }
 
     /*
-	* Get user's fans */
+     * Get user's fans */
     public function fans()
     {
         return Follow::where('followed', $this->username)->count() - 1;
     }
 
     /*
-	* Check if auth user has bought user's video */
+     * Check if auth user has bought user's video */
     public function hasBoughtVideo($username)
     {
-        return BoughtVideo::where('username', $username)
-            ->where('artist', $this->username)
+        return $this->artistsBoughtVideos->where('username', $username)
             ->count();
     }
 
     /*
-	 * Check if auth user has bought user's audio */
+     * Check if auth user has bought user's audio */
     public function hasBoughtAudio($username)
     {
-        return BoughtAudio::where('username', $username)
-            ->where('artist', $this->username)
+        return $this->artistsBoughtAudios->where('username', $username)
             ->count();
     }
 
     /*
-	* Check if user has bought atleast 1 song */
+     * Check if user has bought atleast 1 song */
     public function hasBought1($username)
     {
         $hasBoughtVideo = $this->hasBoughtVideo($username);
@@ -314,7 +322,7 @@ class User extends Authenticatable
     }
 
     /*
-	* Get balance */
+     * Get balance */
     public function balance()
     {
         // Get Cost of Bought Videos at each price

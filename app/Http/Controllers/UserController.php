@@ -21,25 +21,6 @@ class UserController extends Controller
      */
     public function index()
     {
-		$getReferrals = DB::table("referrals2")
-		// ->distinct()
-		->get();
-
-        $referrals = [];
-
-        foreach ($getReferrals as $item) {
-
-            $doesntExist = User::where("username", $item->referee)
-                ->doesntExist();
-
-            if ($doesntExist) {
-				
-                array_push($referrals, $item);
-            }
-        }
-
-        return $referrals;
-
         return $this->service->index();
     }
 

@@ -14,17 +14,15 @@ class VideoReceiptNotification extends Notification implements ShouldBroadcast
     use Queueable;
 
 	public $videos;
-	public $username;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($videos, $username)
+    public function __construct($videos)
     {
         $this->videos = $videos;
-        $this->username = $username;
     }
 
     /**

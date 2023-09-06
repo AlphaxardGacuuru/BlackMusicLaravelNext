@@ -34,14 +34,7 @@ class BoughtVideoResource extends JsonResource
             "thumbnail" => $this->video->thumbnail,
             "description" => $this->video->description,
             "released" => $this->video->released,
-            "hasLiked" => $this->video->hasLiked($username),
-            "likes" => $this->video->likes->count(),
-            "comments" => $this->video->comments->count(),
-            "inCart" => $this->video->inCart($username),
-            "hasBoughtVideo" => $this->video->hasBoughtVideo($username),
-            "hasBought1" => $this->video->user->hasBought1($username),
-            "hasFollowed" => $this->video->user->hasFollowed($username),
-            "downloads" => $this->video->bought->count(),
+            "hasBoughtVideo" => true,
             "createdAt" => $this->video->created_at,
         ];
     }

@@ -7,7 +7,6 @@ use App\Notifications\AudioReceiptNotification;
 use App\Notifications\BoughtAudioNotification;
 use App\Notifications\DecoNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class AudioBoughtListener implements ShouldQueue
 {
@@ -35,11 +34,11 @@ class AudioBoughtListener implements ShouldQueue
         }
 
         // Notify Current user
-        auth('sanctum')->user()->notify(new AudioReceiptNotification($event->audios));
+        $event->user->notify(new AudioReceiptNotification($event->audios));
 
         /* Add deco notification */
         foreach ($event->decoArtists as $artist) {
-            auth('sanctum')->user()->notify(new DecoNotification($artist));
+            $event->user->notify(new DecoNotification($artist));
         }
     }
 }

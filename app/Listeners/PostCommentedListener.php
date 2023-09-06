@@ -30,9 +30,6 @@ class PostCommentedListener implements ShouldQueue
         $event
             ->post
             ->user
-            ->notify(new PostCommentedNotification(
-                $event->post,
-                $event->user
-            ));
+            ->notify(new PostCommentedNotification($event->post, $event->user));
     }
 }

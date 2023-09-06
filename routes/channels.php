@@ -17,9 +17,6 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-Broadcast::channel('post.created', fn() => true);
-Broadcast::channel('post.commented', fn() => true);
-Broadcast::channel('kopokopo-received', fn() => true);
 Broadcast::channel('chat-created', fn() => true);
 Broadcast::channel('chat-deleted', fn() => true);
 Broadcast::channel('chat', function ($user) {
@@ -31,3 +28,9 @@ Broadcast::channel('chat', function ($user) {
     ];
     // }
 });
+
+Broadcast::channel('post.created', fn() => true);
+Broadcast::channel('post.commented', fn() => true);
+Broadcast::channel('kopokopo-created', fn() => true);
+Broadcast::channel('video-bought', fn() => true);
+Broadcast::channel('audio-bought', fn() => true);

@@ -5,6 +5,7 @@ import React, { useState, Suspense, useEffect } from "react"
 import VideoMedia from "@/components/Video/VideoMedia"
 import AudioMedia from "@/components/Audio/AudioMedia"
 import Btn from "@/components/Core/Btn"
+
 import CloseSVG from "@/svgs/CloseSVG"
 
 const Cart = (props) => {
@@ -22,61 +23,65 @@ const Cart = (props) => {
 	const total = videoTotalCash + audioTotalCash
 
 	useEffect(() => {
-		Echo.private(`kopokopo-received`).listen("KopokopoCreatedEvent", (e) => {
-			setMessages(["Payment received"])
-			buyVideos()
-			buyAudios()
+		/*
+		 * Listen to Kopokopo Payments
+		 */
+		Echo.private(`kopokopo-created`).listen("KopokopoCreatedEvent", (e) => {
+			setMessages([`Payment of KES ${e.kopokopo.amount} received`])
+			setBottomMenu("")
+		})
+
+		/*
+		 * Listen to Bought Videos
+		 */
+		Echo.private(`video-bought`).listen("VideoBoughtEvent", (e) => {
+			setReceiptVideos(e.structuredVideos)
+			setBottomMenu()
+			setReceipt("menu-open-comment")
+			// Show message
+			var message = `${e.structuredVideos.length} Video${
+				e.structuredVideos.length > 1 ? "s" : ""
+			} bought`
+			setMessages([...messages, message])
+			// Update state
+			props.get("cart-videos", props.setCartVideos)
+		})
+
+		/*
+		 * Listen to Bought Audios
+		 */
+		Echo.private(`audio-bought`).listen("AudioBoughtEvent", (e) => {
+			setReceiptAudios(e.structuredAudios)
+			setBottomMenu()
+			setReceipt("menu-open-comment")
+			var message = `${e.structuredAudios.length} Audio${
+				e.structuredAudios.length > 1 ? "s" : ""
+			} bought`
+			setMessages([...messages, message])
+			// Update states
+			props.get("cart-audios", props.setCartAudios, "cartAudios")
 		})
 
 		props.get("cart-videos", props.setCartVideos)
 		props.get("cart-audios", props.setCartAudios)
+
+		return () => {
+			Echo.leave("kopokopo-created")
+			Echo.leave("video-bought")
+			Echo.leave("audio-bought")
+		}
 	}, [])
+
+	// Reset Messages to null after 5 seconds
+	if (messages.length > 0) {
+		setTimeout(() => setMessages([]), 5000)
+	}
 
 	// Send STKPush
 	const STKPush = (amount) => {
 		Axios.post(`/api/stk-push`, { amount: amount })
 			.then((res) => props.setMessages([res.data.message]))
 			.catch((err) => props.getErrors(err, true))
-	}
-
-	// Buy Videos
-	const buyVideos = () => {
-		// Try and buy videos if any are in cart
-		props.cartVideos.length > 0 &&
-			Axios.post(`/api/bought-videos`)
-				.then((res) => {
-					// If videos are bought stop checking
-					setReceiptVideos(res.data.data)
-					setBottomMenu()
-					setReceipt("menu-open")
-					// Show message
-					var message = `${res.data.data.length} Video${
-						res.data.data.length > 1 ? "s" : ""
-					} bought`
-					setMessages([...messages, message])
-					// Update state
-					props.get("cart-videos", props.setCartVideos)
-				})
-				.catch((err) => props.getErrors(err))
-	}
-
-	// Buy Audios
-	const buyAudios = () => {
-		// Try and buy audios if any are in cart
-		props.cartAudios.length > 0 &&
-			Axios.post(`/api/bought-audios`)
-				.then((res) => {
-					setReceiptAudios(res.data.data)
-					setBottomMenu()
-					setReceipt("menu-open")
-					var message = `${res.data.data.length} Audio${
-						res.data.data.length > 1 ? "s" : ""
-					} bought`
-					setMessages([...messages, message])
-					// Update states
-					props.get("cart-audios", props.setCartAudios, "cartAudios")
-				})
-				.catch((err) => props.getErrors(err))
 	}
 
 	return (
@@ -87,7 +92,7 @@ const Cart = (props) => {
 						<h6
 							id="snackbar-up"
 							style={{ cursor: "pointer" }}
-							className="show"
+							className="show bg-success"
 							onClick={() => setMessages([])}>
 							<div>{message}</div>
 						</h6>
@@ -118,7 +123,6 @@ const Cart = (props) => {
 									{...props}
 									key={key}
 									video={cartVideo}
-									setCartVideos={props.setCartVideos}
 								/>
 							))}
 							{props.cartVideos.length > 0 && (
@@ -180,7 +184,7 @@ const Cart = (props) => {
 							</h5>
 							<br />
 
-							{/* {{-- Collapse --}} */}
+							{/* Next Collapse End */}
 							{videoTotal + audioTotal > 0 && (
 								<>
 									<button
@@ -221,7 +225,7 @@ const Cart = (props) => {
 									</div>
 								</>
 							)}
-							{/* {{-- Collapse End --}} */}
+							{/* Next Collapse End */}
 							<br />
 							<br />
 
@@ -233,7 +237,7 @@ const Cart = (props) => {
 									btnStyle={{ width: "80%" }}
 									onClick={(e) => {
 										e.preventDefault()
-										setReceipt("menu-open")
+										setReceipt("menu-open-comment")
 									}}
 								/>
 							)}
@@ -262,8 +266,8 @@ const Cart = (props) => {
 
 					<center>
 						<h5>
-							Request was sent to{" "}
-							<span style={{ color: "dodgerblue" }}>{props.auth.phone}</span>
+							Request was sent to
+							<span style={{ color: "dodgerblue" }}> {props.auth.phone}</span>
 						</h5>
 						<br />
 

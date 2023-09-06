@@ -32,13 +32,13 @@ class BoughtVideoController extends Controller
      */
     public function store(Request $request)
     {
-        [$StructuredBoughtVideos, $boughtVideos, $decoArtists] = $this->service->store($request);
+        // [$structuredBoughtVideos, $boughtVideos, $decoArtists] = $this->service->store();
 
-        $hasBought = count($boughtVideos) > 0;
+        // $hasBought = count($boughtVideos) > 0;
 
-        VideoBoughtEvent::dispatchIf($hasBought, $boughtVideos, $decoArtists);
+        // VideoBoughtEvent::dispatchIf($hasBought, $boughtVideos, $decoArtists);
 
-        return response(["data" => $StructuredBoughtVideos], 200);
+        // return response(["data" => $structuredBoughtVideos], 200);
     }
 
     /**

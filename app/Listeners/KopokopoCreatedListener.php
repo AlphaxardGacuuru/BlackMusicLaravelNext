@@ -3,8 +3,8 @@
 namespace App\Listeners;
 
 use App\Events\KopokopoCreatedEvent;
+use App\Notifications\KopokopoReceivedNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class KopokopoCreatedListener implements ShouldQueue
 {
@@ -26,6 +26,6 @@ class KopokopoCreatedListener implements ShouldQueue
      */
     public function handle(KopokopoCreatedEvent $event)
     {
-        //
+        $event->user->notify(new KopokopoReceivedNotification($event->kopokopo));
     }
 }

@@ -34,14 +34,7 @@ class BoughtAudioResource extends JsonResource
             "thumbnail" => $this->audio->thumbnail,
             "description" => $this->audio->description,
             "released" => $this->audio->released,
-            "hasLiked" => $this->audio->hasLiked($username),
-            "likes" => $this->audio->likes->count(),
-            "comments" => $this->audio->comments->count(),
-            "inCart" => $this->audio->inCart($username),
-            "hasBoughtAudio" => $this->audio->hasBoughtAudio($username),
-            "hasBought1" => $this->audio->user->hasBought1($username),
-            "hasFollowed" => $this->audio->user->hasFollowed($username),
-            "downloads" => $this->audio->bought->count(),
+            "hasBoughtAudio" => true,
             "createdAt" => $this->audio->created_at,
         ];
     }

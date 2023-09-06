@@ -45,7 +45,7 @@ class VideoReceiptMail extends Mailable
     public function content()
     {
         return new Content(
-            markdown: 'emails.video-reciept',
+            markdown: 'emails.video-receipt',
         );
     }
 

@@ -34,11 +34,11 @@ class VideoBoughtListener implements ShouldQueue
         }
 
         // Notify Current user
-        auth('sanctum')->user()->notify(new VideoReceiptNotification($event->videos));
+        $event->user->notify(new VideoReceiptNotification($event->videos));
 
         /* Add deco notification */
         foreach ($event->decoArtists as $artist) {
-            auth('sanctum')->user()->notify(new DecoNotification($artist));
+            $event->user->notify(new DecoNotification($artist));
         }
     }
 }

@@ -2,11 +2,9 @@
 
 namespace App\Notifications;
 
-use App\Mail\VideoReceiptMail;
 use App\Models\Video;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -15,17 +13,15 @@ class BoughtVideoNotification extends Notification implements ShouldBroadcast
     use Queueable;
 
     public $video;
-	public $username;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Video $video, $username)
+    public function __construct(Video $video)
     {
         $this->video = $video;
-        $this->username = $username;
     }
 
     /**
@@ -47,7 +43,7 @@ class BoughtVideoNotification extends Notification implements ShouldBroadcast
      */
     public function toMail($notifiable)
     {
-		// 
+        //
     }
 
     /**
@@ -59,10 +55,10 @@ class BoughtVideoNotification extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-            'url' => '/profile/show/' . $this->username,
-            'from' => $this->username,
+            'url' => '/profile/show/' . $this->video->user->username,
+            'from' => $this->video->user->username,
             'id' => $this->video->username,
-            'message' => $this->username . ' bought ' . $this->video->name,
+            'message' => $this->video->user->username . ' bought ' . $this->video->name,
         ];
     }
 }

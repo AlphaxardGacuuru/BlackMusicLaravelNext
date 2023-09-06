@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Events\KopokopoCreatedEvent;
 use App\Models\Kopokopo;
 use App\Models\User;
 use Kopokopo\SDK\K2;
@@ -39,14 +40,14 @@ class KopokopoService extends Service
 
         // Do not hard code these values
         $options = [
-            // 'clientId' => env('KOPOKOPO_CLIENT_ID_SANDBOX'),
-            'clientId' => env('KOPOKOPO_CLIENT_ID'),
-            // 'clientSecret' => env('KOPOKOPO_CLIENT_SECRET_SANDBOX'),
-            'clientSecret' => env('KOPOKOPO_CLIENT_SECRET'),
-            // 'apiKey' => env('KOPOKOPO_API_KEY_SANDBOX'),
-            'apiKey' => env('KOPOKOPO_API_KEY'),
-            // 'baseUrl' => env('KOPOKOPO_BASE_URL_SANDBOX'),
-            'baseUrl' => env('KOPOKOPO_BASE_URL'),
+            'clientId' => env('KOPOKOPO_CLIENT_ID_SANDBOX'),
+            // 'clientId' => env('KOPOKOPO_CLIENT_ID'),
+            'clientSecret' => env('KOPOKOPO_CLIENT_SECRET_SANDBOX'),
+            // 'clientSecret' => env('KOPOKOPO_CLIENT_SECRET'),
+            'apiKey' => env('KOPOKOPO_API_KEY_SANDBOX'),
+            // 'apiKey' => env('KOPOKOPO_API_KEY'),
+            'baseUrl' => env('KOPOKOPO_BASE_URL_SANDBOX'),
+            // 'baseUrl' => env('KOPOKOPO_BASE_URL'),
         ];
 
         $K2 = new K2($options);
@@ -71,7 +72,6 @@ class KopokopoService extends Service
             'lastName' => $lastname,
             'phoneNumber' => $betterPhone,
             'amount' => $request->input('amount'),
-            'amount' => '+254700364446',
             'currency' => 'KES',
             'email' => auth('sanctum')->user()->email,
             'callbackUrl' => 'https://music.black.co.ke/api/kopokopo',
@@ -106,9 +106,7 @@ class KopokopoService extends Service
         // Get username
         $betterPhone = substr_replace($resource['sender_phone_number'], '0', 0, -9);
 
-        $username = User::where('phone', $betterPhone)
-            ->first()
-            ->username;
+        $user = User::where('phone', $betterPhone)->first();
 
         $kopokopo = new Kopokopo;
         $kopokopo->kopokopo_id = $request->data['id'];
@@ -120,7 +118,7 @@ class KopokopoService extends Service
         $kopokopo->reference = $resource['reference'];
         $kopokopo->origination_time = $resource['origination_time'];
         $kopokopo->sender_phone_number = $resource['sender_phone_number'];
-        $kopokopo->amount = $resource['amount'];
+        $kopokopo->amount = round($resource['amount'], 0);
         $kopokopo->currency = $resource['currency'];
         $kopokopo->till_number = $resource['till_number'];
         $kopokopo->system = $resource['system'];
@@ -128,7 +126,9 @@ class KopokopoService extends Service
         $kopokopo->sender_first_name = $resource['sender_first_name'];
         $kopokopo->sender_middle_name = $resource['sender_middle_name'];
         $kopokopo->sender_last_name = $resource['sender_last_name'];
-        $kopokopo->username = $username;
-        $kopokopo->save();
+        $kopokopo->username = $user->username;
+        $saved = $kopokopo->save();
+
+		return [$saved, $kopokopo, $user];
     }
 }

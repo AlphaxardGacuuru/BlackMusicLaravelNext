@@ -10,22 +10,26 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class AudioBoughtEvent
+class AudioBoughtEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+	public $structuredAudios;
 	public $audios;
 	public $decoArtists;
+	public $user;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($audios, $decoArtists)
+    public function __construct($structuredAudios, $audios, $decoArtists, $user)
     {
+        $this->structuredAudios = $structuredAudios;
         $this->audios = $audios;
 		$this->decoArtists = $decoArtists;
+		$this->user = $user;
     }
 
     /**
@@ -35,6 +39,6 @@ class AudioBoughtEvent
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new PrivateChannel('audio-bought');
     }
 }

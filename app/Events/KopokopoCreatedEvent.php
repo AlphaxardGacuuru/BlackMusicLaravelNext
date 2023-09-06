@@ -14,14 +14,18 @@ class KopokopoCreatedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+	public $kopokopo;
+	public $user;
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($kopokopo, $user)
     {
-        //
+        $this->kopokopo = $kopokopo;
+        $this->user = $user;
     }
 
     /**
@@ -31,6 +35,6 @@ class KopokopoCreatedEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('kopokopo-received');
+        return new PrivateChannel('kopokopo-created');
     }
 }

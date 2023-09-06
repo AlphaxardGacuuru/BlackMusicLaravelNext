@@ -72,7 +72,6 @@ const SocialMediaInput = (props) => {
 	// For multiple uploads
 	const generateRevertUrl = () => {
 		if (storyMedia.length) {
-			console.log("gen 2")
 			// Get media
 			var media = storyMedia
 			// Reverse array to always have to latest first

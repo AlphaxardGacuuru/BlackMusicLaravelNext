@@ -20,8 +20,8 @@ class BoughtAudioService extends Service
     public function index()
     {
         $getBoughtAudios = BoughtAudio::where("username", $this->username)->get();
-		
-		return BoughtAudioResource::collection($getBoughtAudios);
+
+        return BoughtAudioResource::collection($getBoughtAudios);
     }
 
     /**
@@ -30,49 +30,50 @@ class BoughtAudioService extends Service
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($request)
+    public function store($user)
     {
         $canBuy = "";
+        $structuredBoughtAudios = [];
         $boughtAudios = [];
         $decoArtists = [];
 
         /* Fetch songs from Cart Audios */
-        $cartAudios = CartAudio::where('username', auth('sanctum')->user()->username)
-		->get();
+        $cartAudios = CartAudio::where('username', $user->username)
+            ->get();
 
         foreach ($cartAudios as $cartAudio) {
             // Get Cost of Bought Videos and Audios
-            $totalVideos = BoughtVideo::where('username', auth('sanctum')->user()->username)
+            $totalVideos = BoughtVideo::where('username', $user->username)
                 ->count() * 20;
-            $totalAudios = BoughtAudio::where('username', auth('sanctum')->user()->username)
+            $totalAudios = BoughtAudio::where('username', $user->username)
                 ->count() * 10;
 
             // Get Total Cash paid
-            $kopokopo = Kopokopo::where('username', auth('sanctum')->user()->username);
+            $kopokopo = Kopokopo::where('username', $user->username);
             $kopokopoSum = $kopokopo->sum('amount');
             $balance = $kopokopoSum - ($totalVideos + $totalAudios);
 
             // Check if user can buy songs in cart
-            $canBuy = intval($balance / 20);
+            $canBuy = intval($balance / 10);
 
             if ($canBuy >= 1) {
-                $notBought = BoughtAudio::where('username', auth('sanctum')->user()->username)
+                $notBought = BoughtAudio::where('username', $user->username)
                     ->where('audio_id', $cartAudio->audio_id)
                     ->doesntExist();
 
                 if ($notBought) {
 
                     // Transaction to make sure a video is bought and remove from cart and if user qualifies, a deco is saved
-                    $artist = DB::transaction(function () use ($cartAudio) {
+                    $artist = DB::transaction(function () use ($cartAudio, $user) {
 
-                        $this->storeBoughtAudio($cartAudio);
+                        $this->storeBoughtAudio($cartAudio, $user->username);
 
                         /* Add deco if necessary */
-                        $artist = $this->storeDeco($cartAudio);
+                        $artist = $this->storeDeco($cartAudio, $user->username);
 
                         /* Delete from cart */
                         CartAudio::where('audio_id', $cartAudio->audio_id)
-                            ->where('username', auth('sanctum')->user()->username)
+                            ->where('username', $user->username)
                             ->delete();
 
                         return $artist;
@@ -80,36 +81,40 @@ class BoughtAudioService extends Service
 
                     // Update array
                     array_push($boughtAudios, $cartAudio->audio);
+					// Array for showing receipt
+                    array_push($structuredBoughtAudios, $cartAudio);
+
                     $artist && array_push($decoArtists, $artist);
                 }
             }
         }
 
-        return [$boughtAudios, $decoArtists];
+		$structuredBoughtAudios = BoughtAudioResource::collection($structuredBoughtAudios);
+
+        return [$structuredBoughtAudios, $boughtAudios, $decoArtists];
     }
 
     // Store Bought Audio
-    private function storeBoughtAudio($cartAudio)
+    private function storeBoughtAudio($cartAudio, $username)
     {
         /* Add song to audios_bought */
         $boughtAudio = new BoughtAudio;
         $boughtAudio->audio_id = $cartAudio->audio_id;
-        $boughtAudio->price = 20;
-        $boughtAudio->username = auth('sanctum')->user()->username;
-        $boughtAudio->name = $cartAudio->audio->name;
+        $boughtAudio->price = 10;
+        $boughtAudio->username = $username;
         $boughtAudio->artist = $cartAudio->audio->username;
         $boughtAudio->save();
     }
 
     // Store Deco
-    public function storeDeco($cartAudio)
+    public function storeDeco($cartAudio, $username)
     {
         /* Check if songs are 10 */
-        $userDecos = Deco::where('username', auth('sanctum')->user()->username)
+        $userDecos = Deco::where('username', $username)
             ->where('artist', $cartAudio->audio->username)
             ->count();
 
-        $userAudios = BoughtAudio::where('username', auth('sanctum')->user()->username)
+        $userAudios = BoughtAudio::where('username', $username)
             ->where('artist', $cartAudio->audio->username)
             ->count();
 
@@ -120,7 +125,7 @@ class BoughtAudioService extends Service
         /* If deco balance >= 1 then add deco */
         if ($canAddDeco >= 1) {
             $deco = new Deco;
-            $deco->username = auth('sanctum')->user()->username;
+            $deco->username = $username;
             $deco->artist = $cartAudio->audio->username;
             $deco->save();
 
@@ -133,7 +138,7 @@ class BoughtAudioService extends Service
     public function artistBoughtAudios($username)
     {
         $getArtistBoughtAudios = BoughtAudio::where("artist", $username)->get();
-		
-		return BoughtAudioResource::collection($getArtistBoughtAudios);
+
+        return BoughtAudioResource::collection($getArtistBoughtAudios);
     }
 }

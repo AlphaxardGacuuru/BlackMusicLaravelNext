@@ -30,26 +30,26 @@ class BoughtVideoService extends Service
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($request)
+    public function store($user)
     {
         $canBuy = "";
-        $StructuredBoughtVideos = [];
+        $structuredBoughtVideos = [];
         $boughtVideos = [];
         $decoArtists = [];
 
         /* Fetch songs from Cart Videos */
-        $cartVideos = CartVideo::where('username', auth('sanctum')->user()->username)
+        $cartVideos = CartVideo::where('username', $user->username)
             ->get();
 
         foreach ($cartVideos as $cartVideo) {
             // Get Cost of Bought Videos and Audios
-            $totalVideos = BoughtVideo::where('username', auth('sanctum')->user()->username)
+            $totalVideos = BoughtVideo::where('username', $user->username)
                 ->count() * 20;
-            $totalAudios = BoughtAudio::where('username', auth('sanctum')->user()->username)
+            $totalAudios = BoughtAudio::where('username', $user->username)
                 ->count() * 10;
 
             // Get Total Cash paid
-            $kopokopo = Kopokopo::where('username', auth('sanctum')->user()->username);
+            $kopokopo = Kopokopo::where('username', $user->username);
             $kopokopoSum = $kopokopo->sum('amount');
             $balance = $kopokopoSum - ($totalVideos + $totalAudios);
 
@@ -57,23 +57,23 @@ class BoughtVideoService extends Service
             $canBuy = intval($balance / 20);
 
             if ($canBuy >= 1) {
-                $notBought = BoughtVideo::where('username', auth('sanctum')->user()->username)
+                $notBought = BoughtVideo::where('username', $user->username)
                     ->where('video_id', $cartVideo->video_id)
                     ->doesntExist();
 
                 if ($notBought) {
 
                     // Transaction to make sure a video is bought and remove from cart and if user qualifies, a deco is saved
-                    $artist = DB::transaction(function () use ($cartVideo) {
+                    $artist = DB::transaction(function () use ($cartVideo, $user) {
 
-                        $this->storeBoughtVideo($cartVideo);
+                        $this->storeBoughtVideo($cartVideo, $user->username);
 
                         /* Add deco if necessary */
-                        $artist = $this->storeDeco($cartVideo);
+                        $artist = $this->storeDeco($cartVideo, $user->username);
 
                         /* Delete from cart */
                         CartVideo::where('video_id', $cartVideo->video_id)
-                            ->where('username', auth('sanctum')->user()->username)
+                            ->where('username', $user->username)
                             ->delete();
 
                         return $artist;
@@ -81,44 +81,41 @@ class BoughtVideoService extends Service
 
                     // Update array for use in Event
                     array_push($boughtVideos, $cartVideo->video);
-                    // Update array for use in Receipt
-                    array_push($StructuredBoughtVideos,
-                        $this->structure(
-                            $cartVideo->video,
-                            auth('sanctum')->user()->username
-                        ));
+					// Array for showing receipt
+                    array_push($structuredBoughtVideos, $cartVideo);
 
-                    // Update Deco arry
+                    // Update Deco array
                     $artist && array_push($decoArtists, $artist);
                 }
             }
         }
 
-        return [$StructuredBoughtVideos, $boughtVideos, $decoArtists];
+        $structuredBoughtVideos = BoughtVideoResource::collection($structuredBoughtVideos);
+
+        return [$structuredBoughtVideos, $boughtVideos, $decoArtists];
     }
 
     // Store Bought Video
-    private function storeBoughtVideo($cartVideo)
+    private function storeBoughtVideo($cartVideo, $username)
     {
         /* Add song to videos_bought */
         $boughtVideo = new BoughtVideo;
         $boughtVideo->video_id = $cartVideo->video_id;
         $boughtVideo->price = 20;
-        $boughtVideo->username = auth('sanctum')->user()->username;
-        $boughtVideo->name = $cartVideo->video->name;
+        $boughtVideo->username = $username;
         $boughtVideo->artist = $cartVideo->video->username;
         $boughtVideo->save();
     }
 
     // Store Deco
-    public function storeDeco($cartVideo)
+    public function storeDeco($cartVideo, $username)
     {
         /* Check if songs are 10 */
-        $userDecos = Deco::where('username', auth('sanctum')->user()->username)
+        $userDecos = Deco::where('username', $username)
             ->where('artist', $cartVideo->video->username)
             ->count();
 
-        $userVideos = BoughtVideo::where('username', auth('sanctum')->user()->username)
+        $userVideos = BoughtVideo::where('username', $username)
             ->where('artist', $cartVideo->video->username)
             ->count();
 
@@ -129,7 +126,7 @@ class BoughtVideoService extends Service
         /* If deco balance >= 1 then add deco */
         if ($canAddDeco >= 1) {
             $deco = new Deco;
-            $deco->username = auth('sanctum')->user()->username;
+            $deco->username = $username;
             $deco->artist = $cartVideo->video->username;
             $deco->save();
 
@@ -144,36 +141,5 @@ class BoughtVideoService extends Service
         $getArtistBoughtVideos = BoughtVideo::where("artist", $username)->get();
 
         return BoughtVideoResource::collection($getArtistBoughtVideos);
-    }
-
-    /*
-     * Structure for video */
-    public function structure($video, $username)
-    {
-        return [
-            "id" => $video->id,
-            "video" => $video->video,
-            "name" => $video->name,
-            "artistName" => $video->user->name,
-            "username" => $video->username,
-            "avatar" => $video->user->avatar,
-            "artistDecos" => $video->user->decos,
-            "ft" => $video->ft,
-            "videoAlbumId" => $video->video_album_id,
-            "album" => $video->album->name,
-            "genre" => $video->genre,
-            "thumbnail" => $video->thumbnail,
-            "description" => $video->description,
-            "released" => $video->released,
-            "hasLiked" => $video->hasLiked($username),
-            "likes" => $video->likes->count(),
-            "comments" => $video->comments->count(),
-            "inCart" => $video->inCart($username),
-            "hasBoughtVideo" => $video->hasBoughtVideo($username),
-            "hasBought1" => $video->user->hasBought1($username),
-            "hasFollowed" => $video->user->hasFollowed($username),
-            "downloads" => $video->bought->count(),
-            "createdAt" => $video->created_at,
-        ];
     }
 }

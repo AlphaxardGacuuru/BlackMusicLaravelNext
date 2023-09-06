@@ -73,14 +73,14 @@ const TopNavLinks = (props) => {
 				</Link>
 				{/* For smaller screens */}
 				<span
-					className="anti-hidden m-2"
+					className="anti-hidden ms-3 me-1"
 					style={{
 						textAlign: "center",
 						fontWeight: "100",
 						position: "relative",
 					}}
 					onClick={() => {
-						props.setNMenu("menu-open")
+						props.setNMenu("menu-open-comment")
 						props.setAvatarVisibility("none")
 						props.onNotification()
 					}}>
@@ -111,7 +111,7 @@ const TopNavLinks = (props) => {
 						{props.notifications.map((notification, key) => (
 							<Link
 								key={key}
-								href={notification.url}
+								to={notification.url}
 								className="p-2 dropdown-item border-bottom text-dark border-dark text-wrap"
 								onClick={() => props.onDeleteNotifications(notification.id)}>
 								<small>{notification.message}</small>

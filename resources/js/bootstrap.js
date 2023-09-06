@@ -73,11 +73,10 @@ window.Echo = new Echo({
 	authorizer: (channel, options) => {
 		return {
 			authorize: (socketId, callback) => {
-				window.Axios
-					.post("/api/broadcasting/auth", {
-						socket_id: socketId,
-						channel_name: channel.name,
-					})
+				window.Axios.post("/api/broadcasting/auth", {
+					socket_id: socketId,
+					channel_name: channel.name,
+				})
 					.then((res) => callback(null, res.data))
 					.catch((error) => callback(error))
 			},

@@ -8,20 +8,20 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class BoughtAudioNotification extends Notification implements ShouldBroadcast
+class KopokopoReceivedNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;
 
-	public $audio;
+	public $kopokopo;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($audio)
+    public function __construct($kopokopo)
     {
-        $this->audio = $audio;
+        $this->kopokopo = $kopokopo;
     }
 
     /**
@@ -43,7 +43,10 @@ class BoughtAudioNotification extends Notification implements ShouldBroadcast
      */
     public function toMail($notifiable)
     {
-		// 
+        return (new MailMessage)
+                    ->line('The introduction to the notification.')
+                    ->action('Notification Action', url('/'))
+                    ->line('Thank you for using our application!');
     }
 
     /**
@@ -55,10 +58,9 @@ class BoughtAudioNotification extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-			'url' => '/profile/show/' . $this->audio->user->username,
-			'from' => $this->audio->user->username,
-			'id' => $this->audio->username,
-			'message' => $this->audio->user->username . ' bought ' . $this->audio->name,
+			"url" => "/library",
+			"from" => "@blackmusic",
+			"message" => "Payment of KES " . $this->kopokopo->amount . " received."
         ];
     }
 }

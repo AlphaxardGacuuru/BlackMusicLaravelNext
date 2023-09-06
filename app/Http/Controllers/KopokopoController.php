@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kopokopo;
+use App\Events\AudioBoughtEvent;
+use App\Events\KopokopoCreatedEvent;
+use App\Events\VideoBoughtEvent;
+use App\Http\Services\BoughtAudioService;
+use App\Http\Services\BoughtVideoService;
 use App\Http\Services\KopokopoService;
+use App\Models\Kopokopo;
 use Illuminate\Http\Request;
 
 class KopokopoController extends Controller
@@ -31,7 +36,43 @@ class KopokopoController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->service->store($request);
+        [$saved, $kopokopo, $user] = $this->service->store($request);
+
+        KopokopoCreatedEvent::dispatchIf($saved, $kopokopo, $user);
+
+        //  Buy Videos
+        $boughtVideoService = new BoughtVideoService;
+
+        [$structuredBoughtVideos, $boughtVideos, $decoArtists] = $boughtVideoService->store($user);
+
+        // Check if Videos were actually bought
+        $hasBought = count($boughtVideos) > 0;
+
+        VideoBoughtEvent::dispatchIf(
+            $hasBought,
+            $structuredBoughtVideos,
+            $boughtVideos,
+            $decoArtists,
+            $user
+        );
+
+        //  Buy Audios
+        $boughtAudioService = new BoughtAudioService;
+
+        [$structuredBoughtAudios, $boughtAudios, $decoArtists] = $boughtAudioService->store($user);
+
+        // Check if Audios were actually bought
+        $hasBought = count($boughtAudios) > 0;
+
+        AudioBoughtEvent::dispatchIf(
+            $hasBought,
+			$structuredBoughtAudios,
+            $boughtAudios,
+            $decoArtists,
+            $user
+        );
+
+        return response(["status" => "OK"], 200);
     }
 
     /**

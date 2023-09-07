@@ -24,7 +24,7 @@ const LoginPopUp = (props) => {
 	// const [email, setEmail] = useState('alphaxardgacuuru47@gmail.com')
 	const [email, setEmail] = useState("al@black.co.ke")
 	// const [phone, setPhone] = useState('0700364446')
-	const [phone, setPhone] = useState("0700000000")
+	const [phone, setPhone] = useState("")
 	// const [password, setPassword] = useState('0700364446')
 	const [password, setPassword] = useState("0700000000")
 	const [shouldRemember, setShouldRemember] = useState()
@@ -33,7 +33,7 @@ const LoginPopUp = (props) => {
 	const [loading, setLoading] = useState(false)
 
 	const onSocial = (website) => {
-		window.location.href = `${props.url}/api/login/${website}`
+		window.location.href = `api/login/${website}`
 		// Axios.get(`${props.url}/api/login/${website}`)
 		// .then((res) => console.log(res.data.data))
 		// register({ name, username, email, phone, password, password_confirmation: password, setErrors })

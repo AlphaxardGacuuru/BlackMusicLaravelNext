@@ -33,7 +33,7 @@ const LoginPopUp = (props) => {
 	const [loading, setLoading] = useState(false)
 
 	const onSocial = (website) => {
-		// window.location.href = `${props.url}/api/login/${website}`
+		window.location.href = `${props.url}/api/login/${website}`
 		// Axios.get(`${props.url}/api/login/${website}`)
 		// .then((res) => console.log(res.data.data))
 		// register({ name, username, email, phone, password, password_confirmation: password, setErrors })

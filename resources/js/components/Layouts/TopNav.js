@@ -103,7 +103,7 @@ const TopNav = (props) => {
 				<header
 					style={{
 						backgroundColor: "#232323",
-						boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 1)",
+						// boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 1)",
 					}}
 					className="header-area">
 					<div className="container-fluid p-0">

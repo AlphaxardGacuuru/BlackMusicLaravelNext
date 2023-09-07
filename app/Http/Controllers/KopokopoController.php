@@ -66,13 +66,13 @@ class KopokopoController extends Controller
 
         AudioBoughtEvent::dispatchIf(
             $hasBought,
-			$structuredBoughtAudios,
+            $structuredBoughtAudios,
             $boughtAudios,
             $decoArtists,
             $user
         );
 
-        return response(["status" => "OK"], 200);
+        return response(["status" => $saved ? "success" : "failed"], 200);
     }
 
     /**

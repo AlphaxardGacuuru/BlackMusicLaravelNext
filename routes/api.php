@@ -62,50 +62,50 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('auth', [UserController::class, 'auth']);
 });
 
-// Route::middleware(['auth:sanctum'])->group(function () {
-Route::apiResources([
-    'audios' => AudioController::class,
-    'audio-likes' => AudioLikeController::class,
-    'audio-comments' => AudioCommentController::class,
-    'audio-comment-likes' => AudioCommentLikeController::class,
-    'audio-albums' => AudioAlbumController::class,
-    'bought-audios' => BoughtAudioController::class,
-    'bought-videos' => BoughtVideoController::class,
-    'cart-audios' => CartAudioController::class,
-    'cart-videos' => CartVideoController::class,
-    'chats' => ChatController::class,
-    'decos' => DecoController::class,
-    'follows' => FollowController::class,
-    'karaokes' => KaraokeController::class,
-    'karaoke-comments' => KaraokeCommentController::class,
-    'karaoke-comment-likes' => KaraokeCommentLikeController::class,
-    'karaoke-likes' => KaraokeLikeController::class,
-    'karaoke-audios' => KaraokeAudioController::class,
-    'kopokopo' => KopokopoController::class,
-    'kopokopo-recipients' => KopokopoRecipientController::class,
-    'notifications' => NotificationController::class,
-    'posts' => PostController::class,
-    'post-likes' => PostLikeController::class,
-    'post-comments' => PostCommentController::class,
-    'post-comment-likes' => PostCommentLikeController::class,
-    'polls' => PollController::class,
-    'referrals' => ReferralController::class,
-    'saved-karaokes' => SavedKaraokeController::class,
-    'search' => SearchController::class,
-    'song-payouts' => SongPayoutController::class,
-    'stories' => StoryController::class,
-    'users' => UserController::class,
-    'videos' => VideoController::class,
-    'video-likes' => VideoLikeController::class,
-    'video-comments' => VideoCommentController::class,
-    'video-comment-likes' => VideoCommentLikeController::class,
-    'video-albums' => VideoAlbumController::class,
-]);
-// });
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::apiResources([
+        'audios' => AudioController::class,
+        'audio-likes' => AudioLikeController::class,
+        'audio-comments' => AudioCommentController::class,
+        'audio-comment-likes' => AudioCommentLikeController::class,
+        'audio-albums' => AudioAlbumController::class,
+        'bought-audios' => BoughtAudioController::class,
+        'bought-videos' => BoughtVideoController::class,
+        'cart-audios' => CartAudioController::class,
+        'cart-videos' => CartVideoController::class,
+        'chats' => ChatController::class,
+        'decos' => DecoController::class,
+        'follows' => FollowController::class,
+        'karaokes' => KaraokeController::class,
+        'karaoke-comments' => KaraokeCommentController::class,
+        'karaoke-comment-likes' => KaraokeCommentLikeController::class,
+        'karaoke-likes' => KaraokeLikeController::class,
+        'karaoke-audios' => KaraokeAudioController::class,
+        'kopokopo' => KopokopoController::class,
+        'kopokopo-recipients' => KopokopoRecipientController::class,
+        'notifications' => NotificationController::class,
+        'posts' => PostController::class,
+        'post-likes' => PostLikeController::class,
+        'post-comments' => PostCommentController::class,
+        'post-comment-likes' => PostCommentLikeController::class,
+        'polls' => PollController::class,
+        'referrals' => ReferralController::class,
+        'saved-karaokes' => SavedKaraokeController::class,
+        'search' => SearchController::class,
+        'song-payouts' => SongPayoutController::class,
+        'stories' => StoryController::class,
+        'users' => UserController::class,
+        'videos' => VideoController::class,
+        'video-likes' => VideoLikeController::class,
+        'video-comments' => VideoCommentController::class,
+        'video-comment-likes' => VideoCommentLikeController::class,
+        'video-albums' => VideoAlbumController::class,
+    ]);
+});
 
 /*
-* User
-*/ 
+ * User
+ */
 
 // Musicians
 Route::get('artists', [UserController::class, 'artists']);

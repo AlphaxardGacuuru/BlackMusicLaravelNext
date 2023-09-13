@@ -51,19 +51,21 @@ const TopNav = (props) => {
 	}, [])
 
 	const logout = () => {
-		Axios.post(`/logout`).then((res) => {
-			props.setMessages([res.data.message])
-			// Remove phone from localStorage
-			localStorage.clear()
-			// Reload
-			window.location.reload()
-		}).catch((err) => {
-			props.getErrors(err)
-			// Remove phone from localStorage
-			localStorage.clear()
-			// Reload
-			window.location.reload()
-		})
+		Axios.post(`/logout`)
+			.then((res) => {
+				props.setMessages([res.data.message])
+				// Remove phone from localStorage
+				localStorage.clear()
+				// Reload
+				window.location.reload()
+			})
+			.catch((err) => {
+				props.getErrors(err)
+				// Remove phone from localStorage
+				localStorage.clear()
+				// Reload
+				window.location.reload()
+			})
 	}
 
 	const onNotification = () => {

@@ -1,5 +1,5 @@
 // cacheName needs to be changed after any of the assets are changed
-const cacheName = 'BlackMusicLaravelNextCache1';
+const cacheName = 'BlackMusicLaravelNextCache2';
 
 const cacheAssets = [
 	'/js/app.js'

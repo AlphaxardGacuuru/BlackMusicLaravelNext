@@ -57,12 +57,10 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware(['auth:sanctum'])->group(function () {
+// Route::middleware(['auth:sanctum'])->group(function () {
     // Authenticated User
     Route::get('auth', [UserController::class, 'auth']);
-});
 
-Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResources([
         'audios' => AudioController::class,
         'audio-likes' => AudioLikeController::class,
@@ -101,7 +99,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         'video-comment-likes' => VideoCommentLikeController::class,
         'video-albums' => VideoAlbumController::class,
     ]);
-});
+// });
 
 /*
  * User
@@ -200,13 +198,14 @@ Route::post('stk-push', [KopokopoController::class, 'stkPush']);
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
 /*
- * Admin
- */
-Route::prefix('admin')->group(function () {
-    Route::get('admin', [AdminController::class, 'admin']);
-    Route::get('users', [AdminController::class, 'users']);
-    Route::get('videos', [AdminController::class, 'videos']);
-    Route::get('audios', [AdminController::class, 'audios']);
-    Route::get('kopokopo-recipients', [AdminController::class, 'kopokopoRecipients']);
-    Route::get('song-payouts', [AdminController::class, 'songPayouts']);
+ * Admin  */
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::prefix('admin')->group(function () {
+        Route::get('admin', [AdminController::class, 'admin']);
+        Route::get('users', [AdminController::class, 'users']);
+        Route::get('videos', [AdminController::class, 'videos']);
+        Route::get('audios', [AdminController::class, 'audios']);
+        Route::get('kopokopo-recipients', [AdminController::class, 'kopokopoRecipients']);
+        Route::get('song-payouts', [AdminController::class, 'songPayouts']);
+    });
 });

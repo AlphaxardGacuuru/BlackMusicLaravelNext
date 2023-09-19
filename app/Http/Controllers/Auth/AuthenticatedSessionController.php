@@ -9,9 +9,65 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthenticatedSessionController extends Controller
 {
+    /*
+     * Social Logins*/
+    public function redirectToProvider($website)
+    {
+        return Socialite::driver($website)->redirect();
+
+        // return Socialite::driver($website)->stateless()->redirect()->getTargetUrl();
+    }
+
+    /**
+     * Obtain the user information from GitHub/Google/Twitter/Facebook.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function handleProviderCallback($website)
+    {
+        $user = Socialite::driver($website)->user();
+
+        $name = $user->getName() ? $user->getName() : " ";
+
+        $email = $user->getEmail() ? $user->getEmail() : redirect('/');
+
+        $avatar = $user->getAvatar() ? $user->getAvatar() : "avatar/male-avatar.png";
+
+        // Get Database User
+        $dbUser = User::where('email', $user->getEmail());
+
+        // Check if user exists
+        if ($dbUser->exists()) {
+            if ($dbUser->first()->phone) {
+
+                $token = $dbUser
+                    ->first()
+                    ->createToken("deviceName")
+                    ->plainTextToken;
+
+                return response([
+                    "message" => "Logged in",
+                    "data" => $token,
+                ], 200);
+
+            } else {
+                // Remove forward slashes
+                $avatar = str_replace("/", " ", $avatar);
+
+                return redirect('/#/register/' . $name . '/' . $email . '/' . $avatar);
+            }
+        } else {
+            // Remove forward slashes
+            $avatar = str_replace("/", " ", $avatar);
+
+            return redirect('/#/register/' . $name . '/' . $email . '/' . $avatar);
+        }
+    }
+
     /**
      * Handle an incoming authentication request.
      *

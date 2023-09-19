@@ -39,3 +39,11 @@ Route::get('/verify-email/{id}/{hash}', [VerifyEmailController::class, '__invoke
 Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
     ->middleware(['auth', 'throttle:6,1'])
     ->name('verification.send');
+
+/*
+ * Social logins */
+Route::get('login/{website}', [AuthenticatedSessionController::class, 'redirectToProvider'])
+    ->middleware('guest');
+
+Route::get('login/{website}/callback', [AuthenticatedSessionController::class, 'handleProviderCallback'])
+    ->middleware('guest');

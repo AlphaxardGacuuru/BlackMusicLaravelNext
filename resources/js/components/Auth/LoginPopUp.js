@@ -33,7 +33,7 @@ const LoginPopUp = (props) => {
 	const [loading, setLoading] = useState(false)
 
 	const onSocial = (website) => {
-		window.location.href = `api/login/${website}`
+		window.location.href = `/login/${website}`
 		// Axios.get(`${props.url}/api/login/${website}`)
 		// .then((res) => console.log(res.data.data))
 		// register({ name, username, email, phone, password, password_confirmation: password, setErrors })
@@ -75,103 +75,100 @@ const LoginPopUp = (props) => {
 					setTimeout(() => window.location.reload(), 1000)
 				})
 				.catch((err) => {
+					props.getErrors(err, true)
 					// Remove loader
 					setLoading(false)
-					props.getErrors(err, true)
 				})
 
 			setPhone("07")
 		})
 	}
-
+	
 	return (
-		<>
-			<div id="preloader" style={{ display: props.login ? "block" : "none" }}>
-				<div className="preload-content">
-					{/* <div id="sonar-load"></div> */}
-				</div>
-			</div>
+		<div className={props.login ? "menu-open" : ""}>
+			{/* Background Blur */}
 			<div
-				className="menu-open"
-				style={{ display: props.login ? "block" : "none" }}>
-				<div className="bottomMenu">
-					<div className="d-flex align-items-center justify-content-between">
-						{/* <!-- Logo Area --> */}
-						<div className="logo-area p-2">
-							<a href="#">Login</a>
-						</div>
-						{/* <!-- Close Icon --> */}
-						<div
-							className="closeIcon float-end"
-							style={{ fontSize: "1em" }}
-							onClick={() => {
-								props.setLogin(false)
-								history.push("/")
-							}}>
-							<CloseSVG />
-						</div>
-					</div>
-					<div className="p-2">
-						{phoneLogin ? (
-							<center>
-								<div className="mycontact-form">
-									<form method="POST" action="" onSubmit={onSubmit}>
-										<input
-											id="phone"
-											type="text"
-											className="my-form"
-											name="phone"
-											value={phone}
-											onChange={(e) => setPhone(e.target.value)}
-											required={true}
-											autoFocus
-										/>
-										<br />
-										<br />
+				className="background-blur"
+				style={{ visibility: props.login ? "visible" : "hidden" }}></div>
+			{/* Background Blur End */}
 
-										<Btn
-											type="submit"
-											btnClass="mysonar-btn white-btn float-right"
-											btnText="Login"
-											loading={loading}
-										/>
-									</form>
+			<div className="bottomMenu">
+				<div className="d-flex align-items-center justify-content-between">
+					{/* <!-- Logo Area --> */}
+					<div className="logo-area p-2">
+						<a href="#">Login</a>
+					</div>
+					{/* <!-- Close Icon --> */}
+					<div
+						className="closeIcon float-end"
+						style={{ fontSize: "1em" }}
+						onClick={() => {
+							props.setLogin(false)
+							history.push("/")
+						}}>
+						<CloseSVG />
+					</div>
+				</div>
+				<div className="p-2">
+					{phoneLogin ? (
+						<center>
+							<div className="mycontact-form">
+								<form method="POST" action="" onSubmit={onSubmit}>
+									<input
+										id="phone"
+										type="text"
+										className="my-form"
+										name="phone"
+										value={phone}
+										onChange={(e) => setPhone(e.target.value)}
+										required={true}
+										autoFocus
+									/>
+									<br />
 									<br />
 
 									<Btn
-										btnClass="mysonar-btn white-btn"
-										btnText="back"
-										onClick={() => setPhoneLogin(false)}
+										type="submit"
+										btnClass="mysonar-btn white-btn float-right"
+										btnText="Login"
+										loading={loading}
 									/>
-								</div>
-							</center>
-						) : (
-							<>
-								<GoogleLoginButton
-									className="mt-2 rounded-0"
-									onClick={() => onSocial("google")}
-								/>
-								<FacebookLoginButton
-									className="mt-2 rounded-0"
-									onClick={() => onSocial("facebook")}
-								/>
-								<TwitterLoginButton
-									className="mt-2 rounded-0"
-									onClick={() => onSocial("twitter")}
-								/>
+								</form>
 								<br />
 
 								<Btn
 									btnClass="mysonar-btn white-btn"
-									btnText="login with number"
-									onClick={() => setPhoneLogin(true)}
+									btnText="back"
+									onClick={() => setPhoneLogin(false)}
 								/>
-							</>
-						)}
-					</div>
+							</div>
+						</center>
+					) : (
+						<>
+							<GoogleLoginButton
+								className="mt-2 rounded-0"
+								onClick={() => onSocial("google")}
+							/>
+							<FacebookLoginButton
+								className="mt-2 rounded-0"
+								onClick={() => onSocial("facebook")}
+							/>
+							<TwitterLoginButton
+								className="mt-2 rounded-0"
+								onClick={() => onSocial("twitter")}
+							/>
+							<br />
+
+							<Btn
+								btnClass="mysonar-btn white-btn"
+								btnText="login with number"
+								onClick={() => setPhoneLogin(true)}
+							/>
+						</>
+					)}
 				</div>
 			</div>
-		</>
+		</div>
 	)
 }
 

@@ -99,6 +99,7 @@ const TopNav = (props) => {
 		location.pathname.match("/post/create") ||
 		location.pathname.match("/post/show/") ||
 		location.pathname.match("/referral") ||
+		location.pathname.match("/socialite") ||
 		location.pathname.match("/login") ||
 		location.pathname.match("/register")
 			? "d-none"

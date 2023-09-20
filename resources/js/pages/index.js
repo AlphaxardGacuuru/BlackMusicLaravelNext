@@ -232,7 +232,7 @@ export default function Home(props) {
 				{/* <!-- ****** Stories Area ****** --> */}
 				<div className="col-sm-4">
 					<div className="mb-2 border-bottom border-dark">
-						<h5>Storiesss</h5>
+						<h5>Stories</h5>
 						<div className="hidden-scroll pb-2" onScroll={handleScroll}>
 							{/* Create Story */}
 							{/* <CreateStoryMedia {...props} /> */}

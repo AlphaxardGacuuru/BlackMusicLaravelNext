@@ -18,8 +18,6 @@ class AuthenticatedSessionController extends Controller
     public function redirectToProvider($website)
     {
         return Socialite::driver($website)->redirect();
-
-        // return Socialite::driver($website)->stateless()->redirect()->getTargetUrl();
     }
 
     /**
@@ -49,10 +47,7 @@ class AuthenticatedSessionController extends Controller
                     ->createToken("deviceName")
                     ->plainTextToken;
 
-                return response([
-                    "message" => "Logged in",
-                    "data" => $token,
-                ], 200);
+                return redirect("/#/socialite/Logged in/" . $token);
 
             } else {
                 // Remove forward slashes

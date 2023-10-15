@@ -306,7 +306,6 @@ const TopNav = (props) => {
 							<CloseSVG />
 						</div>
 					</div>
-					<br />
 
 					{/* Avatar Bottom */}
 					<div className="m-0 p-0" style={{ display: avatarVisibility }}>

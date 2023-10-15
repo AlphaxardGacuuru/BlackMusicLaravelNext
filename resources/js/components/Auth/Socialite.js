@@ -31,7 +31,7 @@ const Socialite = (props) => {
 				backgroundSize: "cover",
 			}}>
 			<center className="bg-dark bg-opacity-75 p-5">
-				<h1 className="text-white mb-5">Welcome</h1>
+				<h1 className="text-white mb-5">Welcome to Black Music</h1>
 				<div id="sonar-load"></div>
 				<div className="text-white mt-5">Redirecting...</div>
 			</center>
